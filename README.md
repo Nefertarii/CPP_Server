@@ -1,7 +1,6 @@
 # httpweb
 ### 更新日志/新计划/Change log
 自己用于测试的服务器网站 http://159.75.51.91/ (仍在完善中 仅在调试时才启动访问)  
-创建了新的项目 该已移至 [此处](https://github.com/Nefertarii/WebServer)
 
 ### 项目背景/Background
 在学习完相关知识后，想将其整合，于是想到制作一个有交互功能,且考虑使用mysql数据库存储相关数据的web服务器  
