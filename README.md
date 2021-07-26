@@ -54,4 +54,4 @@
 
 ### License
 
-[MIT](https://github.com/Nefertarii/httpweb/blob/main/LICENSE) © Richard Littauer
+[MIT](https://github.com/Nefertarii/WebServer/blob/master/LICENSE) © Richard Littauer
