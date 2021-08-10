@@ -1,20 +1,19 @@
-#include "vector.h"
 #include "list.h"
+#include "stack.h"
+#include "vector.h"
+#include "queue.h"
 #include <iostream>
 
 using namespace std;
 
 int main()
 {
-    List<int> A;
-    A.push_back(1);
-    A.push_back(2);
-    A.push_back(3);
-    A.pop_back();
-    cout << A.size() << " ";
-    List<int>::iterator it = A.begin();
-    it++;
-    cout << *it << "\n";
-
+    Queue<int> A;
+    A.push(1);
+    A.push(2);
+    A.push(3);
+    A.push(4);
+    A.pop();
+    cout << A.front();
     return 0;
 }

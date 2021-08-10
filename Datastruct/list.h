@@ -1,3 +1,8 @@
+#ifndef LIST_H_
+#define LIST_H_
+
+#include <algorithm>
+
 template <typename T>
 class List
 {
@@ -219,3 +224,6 @@ List<T>::~List()
     delete head;
     delete tail;
 }
+
+
+#endif
