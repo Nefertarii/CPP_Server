@@ -1,19 +1,17 @@
-#include "list.h"
-#include "stack.h"
-#include "vector.h"
-#include "queue.h"
-#include <iostream>
+#include "tree.h"
 
 using namespace std;
 
 int main()
 {
-    Queue<int> A;
-    A.push(1);
-    A.push(2);
-    A.push(3);
-    A.push(4);
-    A.pop();
-    cout << A.front();
+    BinarySearchTree<int> bintree;
+    bintree.insert(1);
+    bintree.insert(5);
+    bintree.insert(3);
+
+    bintree.insert(6);
+    bintree.insert(2);
+    bintree.insert(4);
+    bintree.print_tree();
     return 0;
 }
