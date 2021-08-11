@@ -1,8 +1,9 @@
+#ifndef LOG_H_
+#define LOG_H_
+
 #include "Gstring.h"
 #include <fstream>
 #include <vector>
-
-std::vector<std::string> Templog;
 
 int saveLog(std::string logstr)
 {
@@ -46,3 +47,6 @@ int saveLog(std::vector<std::string> logvec)
         return -1;
     }
 }
+
+
+#endif

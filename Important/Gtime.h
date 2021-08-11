@@ -1,53 +1,84 @@
-#include <ctime>
+#ifndef GTIME_H_
+#define GTIME_H_
+
 #include <chrono>
+#include <ctime>
 #include <signal.h>
+#include <string>
+#include <unistd.h>
 
-using msTime = std::chrono::time_point<std::chrono::system_clock, std::chrono::system_clock::duration>;
+using ms = std::chrono::milliseconds;
+using sec = std::chrono::seconds;
 using Clock = std::chrono::system_clock;
+using Timepoint = std::chrono::time_point<Clock>;
 
-//using Ms = std::chrono::milliseconds;
-//using Sec = std::chrono::seconds;
-//template<class Duration>
-//using TimePoint = std::chrono::time_point<Clock, Duration>;
-//TimePoint<Ms> time_ms;
-//inline void print_ms(const msTime &time_point)
-//{ std::cout << time_point.time_since_epoch().count() << " ms\n"; }
+template <typename type>
+using Time = std::chrono::time_point<Clock, type>;
 
 class Timer
 {
 private:
     Clock clock;
-    msTime begintime;
+    Timepoint begintime;
+    ms begintime_ms;
+    sec begintime_sec;
+    ms nowtime_ms();
+    sec nowtime_sec();
 
 public:
     Timer();
-    msTime createTime();
-    void nowTime(char *time_c);
-    void runTime(int *time_i);
-    ~Timer();
+    long Nowtime_ms();
+    long Nowtime_sec();
+    std::string Nowtime_str();
+    long Runtime_ms() { return Nowtime_ms() - begintime_ms.count(); }
+    long Runtime_sec() { return Nowtime_sec() - begintime_sec.count(); }
+    std::string Runtime_str();
+    ~Timer() {}
 };
+
+ms Timer::nowtime_ms()
+{
+    Time<ms> now_ms = std::chrono::time_point_cast<ms>(Clock::now());
+    ms time_ms = now_ms.time_since_epoch();
+    return time_ms;
+}
+sec Timer::nowtime_sec()
+{
+    Time<sec> now_sec = std::chrono::time_point_cast<sec>(Clock::now());
+    sec time_sec = now_sec.time_since_epoch();
+    return time_sec;
+}
+
 Timer::Timer()
 {
-    begintime = clock.now();
+    begintime_ms = nowtime_ms();
+    begintime_sec = nowtime_sec();
 }
-
-msTime Timer::createTime() { return begintime; }
-
-void Timer::nowTime(char *time_c)
+long Timer::Nowtime_ms()
 {
-    msTime nowtime(std::chrono::system_clock::now());
-    const time_t time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+    ms time_ms = nowtime_ms();
+    return time_ms.count();
+}
+long Timer::Nowtime_sec()
+{
+    sec time_sec = nowtime_sec();
+    return time_sec.count();
+}
+std::string Timer::Nowtime_str()
+{
+    char temp[80];
+    const time_t time = clock.to_time_t(clock.now());
     struct tm *time_tm = localtime(&time);
-    strftime(time_c, 80, "Data:%a, %b %m %Y %H:%M:%S GMT\n", time_tm);
+    strftime(temp, 80, "Data:%a, %b %m %Y %H:%M:%S GMT", time_tm);
+    std::string str = temp;
+    return str;
 }
-
-void Timer::runTime(int *time_i)
+std::string Timer::Runtime_str()
 {
-    msTime endtime = clock.now();
-    //time_i = begintime - endtime;
+    sec time_sec = nowtime_sec();
+    long time_long = time_sec.count() - begintime_sec.count();
+    std::string time_str = std::to_string(time_long);
+    return time_str;
 }
 
-Timer::~Timer()
-{
-
-}
+#endif

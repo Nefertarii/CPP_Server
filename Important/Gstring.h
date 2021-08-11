@@ -1,3 +1,6 @@
+#ifndef GSTRING_H_
+#define GSTRING_H_
+
 #include <string.h>
 #include <string>
 
@@ -10,3 +13,6 @@ inline char *sToc(std::string str)
 }
 
 // ... ///
+
+
+#endif
