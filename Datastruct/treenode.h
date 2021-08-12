@@ -25,4 +25,20 @@ public:
     binarynode(T &&element, binarynode *lc, binarynode *rc) : element_(std::move(element)), left(lc), right(rc){}
 };
 
+template <typename T>
+class avlnode
+{
+public:
+    T element_;
+    avlnode *left;
+    avlnode *right;
+    int height;
+    avlnode(const T &element, avlnode *lc, avlnode *rc, int h = 0) : element_(element), left(lc), right(rc), height(h){}
+    avlnode(const T &&element, avlnode *lc, avlnode *rc, int h = 0) : element_(std::move(element)), left(lc), right(rc), height(h){}
+};
+int height(avlnode *t)const
+{
+    return t == nullptr : ? -1 : t->height;
+}
+
 #endif

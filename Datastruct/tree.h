@@ -160,4 +160,101 @@ BinarySearchTree &BinarySearchTree<T>::operator=(const BinarySearchTree &rhs)
 template <typename T>
 BinarySearchTree &BinarySearchTree<T>::operator=(BinarySearchTree &&rhs)*/
 
+template <typename T>
+class AvlTree
+{
+private:
+    static const int ALLOWED_IMBALANCE = 1;
+    void insert(const T &value, avlnode *&t);
+    void balance(avlnode *&t);
+    void rotate_withleftchild(avlnode *&k2);
+    void rotate_withrightchild(avlnode *&k2);
+    void double_withleftchild(avlnode *&k3);
+    void remove(const T &x, avlnode *&t);
+
+public:
+};
+template <typename T>
+void AvlTree::insert(const T &value, avlnode<T> *&t)
+{
+    if (t == nullptr)
+        t = new avlnode(value, nullptr, nullptr);
+    else if (value < t->element_)
+        insert(value, t->left);
+    else
+        (t->element_ < value)
+            insert(value, t->right);
+    balance(t);
+}
+
+template <typename T>
+void AvlTree::balance(avlnode<T> *&t)
+{
+    if (t == nullptr)
+        return;
+    if (height(t->left) - height(t->right) > ALLOWED_IMBALANCE)
+        if (height(t->right->right) >= height(t->right->left))
+            rotate_withleftchild(t);
+        else
+            double_withleftchild(t);
+    else if (height(t->right) - height(t->left) > ALLOWED_IMBALANCE)
+        if (height(t->right->right) >= height(t->right->left))
+            rotate_withrightchild(t);
+        else
+            double_withleftchild(t);
+    t->height = max(height(t->left), height(t->right)) + 1;
+}
+
+template <typename T>
+void AvlTree::rotate_withleftchild(avlnode<T> *&k2)
+{
+    avlnode<T> *k1 = k2->left;
+    k2->left = k1->right;
+    k1->right = k2;
+    k2->height = max(height(k2->left), height(k2->right)) + 1;
+    k1->height = max(height(k1->left), k2->height) + 1;
+    k2 = k1;
+}
+
+template <typename T>
+void AvlTree::rotate_withrightchild(avlnode < Tleft * &k2)
+{
+    avlnode<T> *k1 = k2->right;
+    k2->left = k1->right;
+    k1->right = k2;
+    k2->height = max(height(k2->left), height(k2->right)) + 1;
+    k1->height = max(height(k1->right), k2->height) + 1;
+    k2 = k1;
+}
+
+template <typename T>
+void AvlTree::double_withleftchild(avlnode *&k3)
+{
+    rotate_withrightchild(k3->left);
+    rotate_withleftchild(k3);
+}
+
+template <typename T>
+void AvlTree::remove(const T &value, avlnode<T> *&t)
+{
+    if (t == nullptr)
+        return;
+    if (value < t->element_)
+        remove(value, t->left);
+    else if (t->element_ < value)
+        remove(value, t->right);
+    else if (t->left != nullptr && t->right != nullptr)
+    {
+        t->element_ = findmin(t->right)->element;
+        remove(t->element, t->right);
+    }
+    else
+    {
+        avlnode<T> *old = t;
+        t = (t->left != nullptr) ? t->left : t->right;
+        delete old;
+    }
+    balance(t);
+}
+
 #endif
