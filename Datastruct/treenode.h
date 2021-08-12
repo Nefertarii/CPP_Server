@@ -36,9 +36,5 @@ public:
     avlnode(const T &element, avlnode *lc, avlnode *rc, int h = 0) : element_(element), left(lc), right(rc), height(h){}
     avlnode(const T &&element, avlnode *lc, avlnode *rc, int h = 0) : element_(std::move(element)), left(lc), right(rc), height(h){}
 };
-int height(avlnode *t)const
-{
-    return t == nullptr : ? -1 : t->height;
-}
 
 #endif
