@@ -33,8 +33,8 @@ public:
     avlnode *left;
     avlnode *right;
     int height;
-    avlnode(const T &element, avlnode *lc, avlnode *rc, int h = 0) : element_(element), left(lc), right(rc), height(h){}
-    avlnode(const T &&element, avlnode *lc, avlnode *rc, int h = 0) : element_(std::move(element)), left(lc), right(rc), height(h){}
+    explicit avlnode(const T &element, avlnode *lc, avlnode *rc, int h = 0) : element_(element), left(lc), right(rc), height(h){}
+    explicit avlnode(const T &&element, avlnode *lc, avlnode *rc, int h = 0) : element_(std::move(element)), left(lc), right(rc), height(h) {}
 };
 
 #endif
