@@ -5,15 +5,15 @@
 #include <fstream>
 #include <vector>
 
-int saveLog(std::string logstr)
+int Savelog(std::string *logstr)
 {
     std::fstream log;
     log.open("Log/log.txt", std::ios::in | std::ios::app);
     if (log)
     {
         log.write("\n", 1);
-        logstr += "\n";
-        log.write(sToc(logstr), logstr.length());
+        *logstr += "\n";
+        log.write(sToc(*logstr), logstr->length());
         log.close();
         return 0;
     }
@@ -24,7 +24,7 @@ int saveLog(std::string logstr)
     }
 }
 
-int saveLog(std::vector<std::string> logvec)
+int Savelog(std::vector<std::string> logvec)
 {
     std::fstream log;
     log.open("Log/log.txt", std::ios::in | std::ios::app);

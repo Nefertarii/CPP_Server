@@ -9,12 +9,12 @@
 #include <algorithm>
 
 
-class Lock
+/*class Lock
 {
 public:
     void operator=() = delete;
     //void std::unique_lock(std::mutex) lock(std::mutex resource);
-}
+}*/
 
 
 #endif

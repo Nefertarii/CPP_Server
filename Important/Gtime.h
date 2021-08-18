@@ -7,11 +7,10 @@
 #include <string>
 #include <unistd.h>
 
-using ms = std::chrono::milliseconds;
-using sec = std::chrono::seconds;
+using Ms = std::chrono::milliseconds;
+using Sec = std::chrono::seconds;
 using Clock = std::chrono::system_clock;
 using Timepoint = std::chrono::time_point<Clock>;
-
 template <typename type>
 using Time = std::chrono::time_point<Clock, type>;
 
@@ -20,10 +19,10 @@ class Timer
 private:
     Clock clock;
     Timepoint begintime;
-    ms begintime_ms;
-    sec begintime_sec;
-    ms nowtime_ms();
-    sec nowtime_sec();
+    Ms begintime_ms;
+    Sec begintime_sec;
+    Ms nowtime_ms();
+    Sec nowtime_sec();
 
 public:
     Timer();
@@ -36,16 +35,16 @@ public:
     ~Timer() {}
 };
 
-ms Timer::nowtime_ms()
+Ms Timer::nowtime_ms()
 {
-    Time<ms> now_ms = std::chrono::time_point_cast<ms>(Clock::now());
-    ms time_ms = now_ms.time_since_epoch();
+    Time<Ms> now_ms = std::chrono::time_point_cast<Ms>(Clock::now());
+    Ms time_ms = now_ms.time_since_epoch();
     return time_ms;
 }
-sec Timer::nowtime_sec()
+Sec Timer::nowtime_sec()
 {
-    Time<sec> now_sec = std::chrono::time_point_cast<sec>(Clock::now());
-    sec time_sec = now_sec.time_since_epoch();
+    Time<Sec> now_sec = std::chrono::time_point_cast<Sec>(Clock::now());
+    Sec time_sec = now_sec.time_since_epoch();
     return time_sec;
 }
 
@@ -56,12 +55,12 @@ Timer::Timer()
 }
 long Timer::Nowtime_ms()
 {
-    ms time_ms = nowtime_ms();
+    Ms time_ms = nowtime_ms();
     return time_ms.count();
 }
 long Timer::Nowtime_sec()
 {
-    sec time_sec = nowtime_sec();
+    Sec time_sec = nowtime_sec();
     return time_sec.count();
 }
 std::string Timer::Nowtime_str()
@@ -75,7 +74,7 @@ std::string Timer::Nowtime_str()
 }
 std::string Timer::Runtime_str()
 {
-    sec time_sec = nowtime_sec();
+    Sec time_sec = nowtime_sec();
     long time_long = time_sec.count() - begintime_sec.count();
     std::string time_str = std::to_string(time_long);
     return time_str;
