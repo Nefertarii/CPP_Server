@@ -5,45 +5,37 @@
 #include <fstream>
 #include <vector>
 
-int Savelog(std::string *logstr)
-{
-    std::fstream log;
-    log.open("Log/log.txt", std::ios::in | std::ios::app);
-    if (log)
-    {
-        log.write("\n", 1);
-        *logstr += "\n";
-        log.write(sToc(*logstr), logstr->length());
-        log.close();
+static std::vector<std::string> LOG(200, "empty");
+
+int Savelog(const char *logstring, int index) {
+    std::string tmp = logstring;
+    if(index % index) {
+        LOG[index] = tmp;
         return 0;
     }
-    else
-    {
-        log.close();
-        return -1;
+    else {
+        LOG[index] = tmp;
+        Savelog(LOG);
+        return 1;
     }
 }
 
-int Savelog(std::vector<std::string> logvec)
-{
-    std::fstream log;
-    log.open("Log/log.txt", std::ios::in | std::ios::app);
-    if (log)
-    {
-        log.write("\n", 1);
+int Savelog(std::vector<std::string> logvec) {
+    std::fstream file;
+    file.open("Log/log.txt", std::ios::in | std::ios::app);
+    if (file) {
+        file.write("\n", 1);
         int size = logvec.size();
-        for (int i = 0; i != size; i++)
-        {
+        for (int i = 0; i != size; i++) {
             std::string tmp = logvec[i];
             tmp += "\n";
-            log.write(sToc(tmp), tmp.length());
+            file.write(sToc(tmp), tmp.length());
         }
-        log.close();
+        file.close();
         return 0;
     }
-    else
-    {
-        log.close();
+    else {
+        file.close();
         return -1;
     }
 }
