@@ -1,11 +1,4 @@
-#ifndef LOG_H_
-#define LOG_H_
-
-#include "Gstring.h"
-#include <fstream>
-#include <vector>
-
-static std::vector<std::string> LOG(200, "empty");
+#include "Glog.h"
 
 int Savelog(const char *logstring, int index) {
     std::string tmp = logstring;
@@ -15,12 +8,13 @@ int Savelog(const char *logstring, int index) {
     }
     else {
         LOG[index] = tmp;
-        Savelog(LOG);
+        if(Savetofile(LOG) < 0)
+            return -1;
         return 1;
     }
 }
 
-int Savelog(std::vector<std::string> logvec) {
+int Savetofile(std::vector<std::string> logvec) {
     std::fstream file;
     file.open("Log/log.txt", std::ios::in | std::ios::app);
     if (file) {
@@ -39,6 +33,3 @@ int Savelog(std::vector<std::string> logvec) {
         return -1;
     }
 }
-
-
-#endif

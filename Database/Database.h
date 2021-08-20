@@ -1,3 +1,3 @@
 #include <iostream>
-#include "../Important/Log.h"
+#include "../Important/GLog.h"
 #include "../Important/Gtime.h"

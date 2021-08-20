@@ -1,3 +1,6 @@
+#ifndef GMANAGE_H_
+#define GMANAGE_H_
+
 /* local variable       |  aa_bb_cc
  * global variable      |  AABBCC
  * function             |  Aa_bb_cc
@@ -6,16 +9,9 @@
  * 
  */
 
-#include "Important/Gthread.h"
-#include "Important/Gstring.h"
-#include "Important/Gtime.h"
-#include "Important/Log.h"
+#include "Mainprocess/Servprocess.h"
 
 
+#endif
 
 
-
-int main()
-{
-    
-}

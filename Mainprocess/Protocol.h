@@ -6,12 +6,12 @@ namespace HTTP
     struct Sender
     {
         int sockfd;
-        std::string *message_head;
-        std::string *message_body;
+        char* message_head;
+        char* message_body;
         int total_length;
         int body_length;
         int sent_length;
-        int Reset()
+        void Reset()
         {
             message_head = nullptr;
             message_body = nullptr;
@@ -20,7 +20,6 @@ namespace HTTP
             sent_length = 0;
         }
     };
-
 }
 
 #endif
