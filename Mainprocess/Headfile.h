@@ -6,6 +6,9 @@
 #include "../Important/Gthread.h"
 #include "../Important/Gtime.h"
 #include "../Important/Glog.h"
+#include "../Important/Gjson.h"
+#include "Serverrno.h"
+
 #include <arpa/inet.h>
 #include <cstdarg>
 #include <iostream>

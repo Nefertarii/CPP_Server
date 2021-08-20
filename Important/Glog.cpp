@@ -23,7 +23,7 @@ int Savetofile(std::vector<std::string> logvec) {
         for (int i = 0; i != size; i++) {
             std::string tmp = logvec[i];
             tmp += "\n";
-            file.write(sToc(tmp), tmp.length());
+            file.write(string_to_char(tmp), tmp.length());
         }
         file.close();
         return 0;

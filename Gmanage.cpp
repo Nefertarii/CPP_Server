@@ -1,4 +1,10 @@
-#include "Gmanage.h"
+/* local variable       |  aa_bb_cc
+ * global variable      |  AABBCC
+ * function             |  Aa_bb_cc
+ * class/struct         |  Aabbcc
+ * Alias(using/define)  |  Aabbcc
+ * 
+ */
 
 int main()
 {
