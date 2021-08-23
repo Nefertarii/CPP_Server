@@ -3,7 +3,7 @@
 
 enum REQUESTYPE
 {
-    ERRTYPE = 0,
+    TYPENONE = 0,
     GET,
     POST
 };
@@ -29,5 +29,13 @@ static const char *Serverr_map[] = {
 static const char *Servstate_map[] = {
     [STATENONE] = "undefine server state."
 };
+
+const char *Str_error(int codenum) {
+    return Serverr_map[-codenum % ERREND];
+}
+
+const char *Str_state(int codenum) {
+    return Servstate_map[codenum % STATEEND];
+}
 
 #endif

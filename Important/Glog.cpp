@@ -1,8 +1,10 @@
 #include "Glog.h"
 
-int Savelog(const char *logstring, int index) {
-    std::string tmp = logstring;
-    if(index % index) {
+int Savelog(LOGLEVEL level, const char *logstring, int index) {
+    std::string tmp = Loglevel_map[level % LOGEND];
+    tmp += logstring;
+    if (index % index)
+    {
         LOG[index] = tmp;
         return 0;
     }
@@ -21,6 +23,7 @@ int Savetofile(std::vector<std::string> logvec) {
         file.write("\n", 1);
         int size = logvec.size();
         for (int i = 0; i != size; i++) {
+            if(!logvec[i].empty())
             std::string tmp = logvec[i];
             tmp += "\n";
             file.write(string_to_char(tmp), tmp.length());
