@@ -15,25 +15,6 @@
 #include <signal.h>
 #include <string>
 #include <sstream>
-#include <sys/epoll.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <vector>
-
-//include head file
-#include "../Important/Gstring.h"
-#include "../Important/Gthread.h"
-#include "../Important/Gtime.h"
-#include "../Important/Glog.h"
-#include "../Important/Gjson.h"
-#include "Serverrno.h"
-
-#include <arpa/inet.h>
-#include <cstdarg>
-#include <iostream>
-#include <signal.h>
-#include <string>
-#include <sstream>
 #include <dirent.h>
 #include <fcntl.h>
 #include <sys/epoll.h>
@@ -45,7 +26,7 @@
 
 //setting
 static const size_t SINGLECLIENTS; //once thread max client
-static const char *DIR;            //Default location for read file
+static const char *FILEDIR;            //Default location for read file
 static const char *PROTOCOL;       //server used protocol
 static const size_t LISTENPORT;    //listen port
 static const size_t READMAX;       //once read max length

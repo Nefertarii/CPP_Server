@@ -29,6 +29,7 @@ static const char *Loglevel_map[] = {
 static std::vector<std::string> LOG(MAXthread * 20, "");
 
 int Savelog(LOGLEVEL level, const char *logstring, int index);
+int Savetofile(std::string str);
 int Savetofile(std::vector<std::string> logvec);
 
 #endif

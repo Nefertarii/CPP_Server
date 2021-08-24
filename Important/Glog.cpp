@@ -2,7 +2,7 @@
 
 int Savelog(LOGLEVEL level, const char *logstring, int index) {
     std::string tmp = Loglevel_map[level % LOGEND];
-    tmp += logstring;
+    tmp += logstring + " " + Timer::Nowtime_str();
     if (index % index)
     {
         LOG[index] = tmp;
@@ -13,6 +13,22 @@ int Savelog(LOGLEVEL level, const char *logstring, int index) {
         if(Savetofile(LOG) < 0)
             return -1;
         return 1;
+    }
+}
+
+int Savetofile(std::string str) {
+    std::fstream file;
+    file.open("Log/log.txt", std::ios::in | std::ios::app);
+    if (file) {
+        file.write("\n", 1);
+        tmp = str + "\n";
+        file.write(string_to_char(tmp), tmp.length());
+        file.close();
+        return 0;
+    }
+    else {
+        file.close();
+        return -1;
     }
 }
 

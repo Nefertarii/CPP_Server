@@ -10,12 +10,29 @@ Httprocess::Httprocess(int socketfd) {
     Client_port = std::to_string(ntohs(client_address.sin_port));
     Client_ip = inet_ntoa(client_address.sin_addr);
 }
+
 void Httprocess::Reset() {
     err_code = ERRNONE;
     state_code = STATENONE;
     requset_type = TYPENONE;
 }
-void Httprocess::Send(std::string message) {
+
+void Httprocess::Set_clientfd(int socketfd) {
+    clientfd = socketfd;
+    Reset();
+    char *tmpip;
+    struct sockaddr_in client_address;
+    socklen_t address_length = sizeof(client_address);
+    getpeername(clientfd, (struct sockaddr *)&client_address, &address_length);
+    Client_port = std::to_string(ntohs(client_address.sin_port));
+    Client_ip = inet_ntoa(client_address.sin_addr);
+}
+
+int Clientfd() { 
+    return clientfd; 
+}
+
+int Httprocess::Send(std::string message) {
     int ret = SERV::Write(clientfd, message);
     if (ret == 0) {
         std::string tmp = "Send for " + Client_ip + " done.";
@@ -34,7 +51,8 @@ void Httprocess::Send(std::string message) {
     Reset();
     return 0;
 }
-void Httprocess::Sendfile(std::string filename) {
+
+int Httprocess::Sendfile(std::string filename) {
     struct Filestate file;
     SERV::Readfile(filename, &file);
     int ret = SERV::Writefile(clientfd, file.filefd, 10);
@@ -55,8 +73,9 @@ void Httprocess::Sendfile(std::string filename) {
     Reset();
     return 0;
 }
-void Httprocess::Sendfile(struct Filestate file) {
-    int ret = SERV::Writefile(clientfd, file.filefd, 10);
+
+int Httprocess::Sendfile(int filefd) {
+    int ret = SERV::Writefile(clientfd, filefd, 10);
     if (ret == 0) {
         std::string tmp = "Send file for " + Client_ip + " done.";
         #ifdef DEBUG
@@ -74,8 +93,9 @@ void Httprocess::Sendfile(struct Filestate file) {
     Reset();
     return 0;
 }
-void Httprocess::Read(std::string *read_buf) {
-    int ret = SERV::Read(clientfd, str);
+
+int Httprocess::Read(std::string *read_buf) {
+    int ret = SERV::Read(clientfd, read_buf);
     if (ret == 0) {
         std::string tmp = "Read for " + Client_ip + " done.";
         #ifdef DEBUG
@@ -91,6 +111,7 @@ void Httprocess::Read(std::string *read_buf) {
         ;
     }
 }
+
 void Httprocess::Disconnect() {
     shutdown(clientfd, SHUT_WR);
     std::string tmp = "Close " + Client_ip + " done.";
@@ -105,12 +126,13 @@ void Httprocess::Disconnect() {
 
 Httpconnect::Httpconnect() {
 #ifdef DEBUG
-    std::cout << "Create HTTP listen server.\n"; 
+    std::cout << "Create HTTP listen.\n"; 
 #else
-    Savelog(INFO, "HTTP listen server running", 0);
+    Savelog(INFO, "HTTP listening", 0);
 #endif
     Connectlisten();
 }
+
 void Httpconnect::Connectlisten() {
     concurrent_count = std::thread::hardware_concurrency();
     thread_manage.resize(concurrent_count);
@@ -124,9 +146,11 @@ void Httpconnect::Connectlisten() {
     SERV::Listen(listenfd, concurrent_count * SINGLECLIENTS);
     signal(SIGPIPE, SIG_IGN);
 }
+
 int Httpconnect::Client_accept() {
-    for (int i = connect_count; i <= concurrent_count * SINGLECLIENTS; i++) {
-        if (i == MAXCLENT) {
+    int MAXCLIENT = concurrent_count * SINGLECLIENTS;
+    for (int i = connect_count; i <= ; i++) {
+        if (i == MAXCLIENT) {
         #ifdef DEBUG
             std::cout << "Too many client\n"; 
         #else
@@ -144,10 +168,22 @@ int Httpconnect::Client_accept() {
         }
     }
 }
-const int Httpconnect::Socketfd() { return socketfd; }
-const int Httpconnect::Listenfd() { return listenfd; }
-const int Httpconnect::Concurrentcount() { return concurrent_count; }
-const int Httpconnect::Clientcount() { return connect_count; }
+
+const int Httpconnect::Socketfd() { 
+    return socketfd; 
+}
+
+const int Httpconnect::Listenfd() { 
+    return listenfd; 
+}
+
+const int Httpconnect::Concurrentcount() { 
+    return concurrent_count; 
+}
+
+const int Httpconnect::Clientcount() { 
+    return connect_count; 
+}
 
 
 

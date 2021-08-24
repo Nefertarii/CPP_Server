@@ -8,6 +8,7 @@ int SERV::Socket(int family, int type, int protocol) {
     }
     return socketfd;
 }
+
 int SERV::Bind(int fd, const struct sockaddr *sa, socklen_t salen) {
     if (bind(fd, sa, salen) < 0) {
         SERV::Syserrlog("Bind error.", errno);
@@ -15,6 +16,7 @@ int SERV::Bind(int fd, const struct sockaddr *sa, socklen_t salen) {
     }
     return 0;
 }
+
 int SERV::Listen(int fd, int backlog) {
     if (listen(fd, backlog) < 0) {
         SERV::Syserrlog("Listen error.", errno);
@@ -22,6 +24,7 @@ int SERV::Listen(int fd, int backlog) {
     }
     return 0;
 }
+
 int SERV::Accept(int listenfd) {
     struct sockaddr_in cliaddr;
     socklen_t cliaddrlen = sizeof(cliaddr);
@@ -40,6 +43,7 @@ int SERV::Accept(int listenfd) {
     }
     return -1;
 }
+
 int SERV::Close(int fd) {
     if (close(fd) < 0) {
         SERV::Syserrlog("Close error.", errno);
@@ -47,6 +51,7 @@ int SERV::Close(int fd) {
     }
     return 0;
 }
+
 int SERV::Read(int socketfd, std::string *str) {
     char readbuf_tmp[READMAX] = {0};
     int readsize = read(socketfd, readbuf_tmp, READMAX);
@@ -70,6 +75,7 @@ int SERV::Read(int socketfd, std::string *str) {
         return 0;
     }
 }
+
 int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
     struct stat file;
     int filefd = 0;
@@ -87,6 +93,7 @@ int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
     filestat_->filelength = file.st_size;
     return 0;
 }
+
 int SERV::Write(int socketfd, std::string str) {
     if(str.length() == 0) {
         return 1;
@@ -118,6 +125,7 @@ int SERV::Write(int socketfd, std::string str) {
     }
     return 0;
 }
+
 int SERV::Writefile(int socketfd, int filefd, off_t offset) {
     int count = 0;
     while(count != REWRITEMAX) {
@@ -145,6 +153,7 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
     }
     return 0;
 }
+
 void SERV::Syserrlog(const char *fmt, int err) {
     const char *tmperr = strerror(err);
     int tid_index = SERV::Pthreadindex();
@@ -156,6 +165,7 @@ void SERV::Syserrlog(const char *fmt, int err) {
         Savelog(ERROR, fmt, 0);
     }
 }
+
 ULL SERV::Pthreadid() {
     std::ostringstream buf;
     buf << std::this_thread::get_id();
@@ -163,6 +173,7 @@ ULL SERV::Pthreadid() {
     ULL tid = std::stoull(stid);
     return tid;
 }
+
 int SERV::Pthreadindex() {
     int tid_index = Pthreadid() % MAXthread;
     return tid_index;

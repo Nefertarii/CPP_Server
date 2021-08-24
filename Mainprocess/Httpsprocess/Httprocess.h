@@ -1,5 +1,5 @@
-#ifndef HTTPPROCESS_H_
-#define HTTPPROCESS_H_
+#ifndef HTTPROCESS_H_
+#define HTTPROCESS_H_
 
 #include "../Servprocess.h"
 #include "../Headfile.h"
@@ -21,28 +21,26 @@ private:
     void Reset();
 
 public:
-    Httprocess(int socketfd_);
+    Httprocess(){};
+    Httprocess(int socketfd);
+    void Set_clientfd(int socketfd);
+    int Clientfd();
     int Send(std::string message);
     int Sendfile(std::string filename);
-    int Sendfile(struct Filestate file);
+    int Sendfile(int filefd);
     int Read(std::string *read_buf);
     void Disconnect();
     ~Httprocess(){};
 };
 
-//only encapsulates network connect operations
-//need other function control
 class Httpconnect : public : Connectaccept {
 private:
     int socketfd;
     int listenfd;
     unsigned concurrent_count;
     unsigned connect_count;
-
 public:
-    Httpconnect();
-    void Connectlisten();
-    int Client_accept();
+    Httpconnprocessnt_accept();
     const int Socketfd();
     const int Listenfd();
     const int Concurrentcount();

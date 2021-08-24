@@ -1,4 +1,4 @@
-#include "Servprocess.h"
+#include "Servercontrol.h"
 
 int main() {
     std::cout << "Server start.\n";
