@@ -3,7 +3,7 @@
 void Epolladd(int socketfd, int epollfd) {
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
-    ev.data.ptr = &epoll_has_connect;
+    ev.data.ptr = Epoll_has_connect;
     epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev);
 }
 
@@ -14,14 +14,14 @@ void Epolldel(int socketfd, int epollfd) {
 void Epollread(int socketfd, int epollfd) {
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
-    ev.data.ptr = &epoll_has_connect;
+    ev.data.ptr = Epoll_has_connect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
 }
 
 void Epollwrite(int socketfd, int epollfd) {
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
-    ev.data.ptr = &epoll_has_connect;
+    ev.data.ptr = Epoll_has_connect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
 }
 
@@ -41,11 +41,11 @@ void Server_start_Epollcontrol() {
 
     int epollfd = epoll_create(MAXCLIENT);
     struct epoll_event event, events[MAXCLIENT];
-    Epolladd(connects.Listenfd(), nullptr);
+    Epolladd(connects.Listenfd(), epollfd);
 #ifdef DEBUG
     std::cout << "Server initialize complete.\n";
 #else
-    savelog(INFO, "Server initialize complete.", 0);
+    Savelog(INFO, "Server initialize complete.", 0);
 #endif
     for (;;) {
         int nfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
@@ -53,12 +53,12 @@ void Server_start_Epollcontrol() {
         #ifdef DEBUG
             std::cout << "Server start fail.\n";
         #else
-            savelog(INFO, "Server start fail.", 0);
+            Savelog(INFO, "Server start fail.", 0);
         #endif
             return; 
         }
         for (int i = 0; i < nfds; i++) {
-            event = event[i];
+            event = events[i];
             if (event.data.ptr == nullptr) {
                 int connectfd = SERV::Accept(connects.Listenfd());
                 if(!connects.Client_accept()) {
@@ -72,12 +72,12 @@ void Server_start_Epollcontrol() {
                 REQUESTYPE request;
                 process[i].Read(&readbuf);
                 if(!readbuf.empty()) {
-                    request = Requestparse(readbuf);
+                    request = Requestparse(&readbuf);
                     switch (request) {
                     case GET: {
                         if(!GETparse(readbuf, &filename)) {
                             GETprocess(filename, &file);
-                            Create_respone_head(respone_head[i], Filetype(filename), 200, file.filelength);
+                            Create_respone_head(&respone_head[i], Filetype(filename), 200, file.filelength);
                             respone_file[i] = file.filefd;
                             Epollwrite(process[i].Clientfd(), epollfd);
                         }

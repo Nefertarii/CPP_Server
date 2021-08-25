@@ -25,14 +25,13 @@
 #include <vector>
 
 //setting
-static const size_t SINGLECLIENTS; //once thread max client
-static const char *FILEDIR;            //Default location for read file
-static const char *PROTOCOL;       //server used protocol
-static const size_t LISTENPORT;    //listen port
-static const size_t READMAX;       //once read max length
-static const size_t WRITEMAX;      //once send max length
-static const size_t REWRITEMAX;    //signle EINTR rewrite nums
-
+static const size_t SINGLECLIENTS = 8;                      //once thread max client
+static const char *FILEDIR = "/home/http/server/";          //Default location for read file
+static const char *PROTOCOL = "HTTP";                       //server used protocol
+static const size_t LISTENPORT = 80;                        //listen port
+static const size_t READMAX = 1024 * 4;                     //once read max length
+static const size_t WRITEMAX = 1024 * 4;                    //once send max length
+static const size_t REWRITEMAX = 10;                        //signle EINTR rewrite nums
 //using
 using ULL = unsigned long long;
 

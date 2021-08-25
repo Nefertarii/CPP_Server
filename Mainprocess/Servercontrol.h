@@ -10,6 +10,7 @@ void Epollread(int socketfd);
 void Epollwrite(int socketfd);
 void Server_start_Epollcontrol();
 
-static const int Epoll_has_connect = 1;
+static int epoll_has_connect = 1;
+static void *Epoll_has_connect = &epoll_has_connect;
 
 #endif
