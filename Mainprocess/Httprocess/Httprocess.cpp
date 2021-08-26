@@ -32,10 +32,10 @@ int Httprocess::Clientfd() {
     return clientfd; 
 }
 
-int Httprocess::Send(std::string message) {
-    int ret = SERV::Write(clientfd, message);
+int Httprocess::Send(std::string message, this) {
+    int ret = SERV::Write(Httprocess::clientfd, message);
     if (ret == 0) {
-        std::string tmp = "Send for " + Client_ip + " done.";
+        std::string tmp = "Send for " + Httprocess::Client_ip  + " done.";
         #ifdef DEBUG
             std::cout << tmp << "\n";
         #else
@@ -48,14 +48,14 @@ int Httprocess::Send(std::string message) {
     else {
         ;
     }
-    Reset();
+    Httprocess::Reset();
     return 0;
 }
 
 int Httprocess::Sendfile(std::string filename) {
     struct Filestate file;
     SERV::Readfile(filename, &file);
-    int ret = SERV::Writefile(clientfd, file.filefd, 10);
+    int ret = SERV::Writefile(Httprocess::clientfd, file.filefd, 10);
     if (ret == 0) {
         std::string tmp = "Send file for " + Client_ip + " done.";
         #ifdef DEBUG
@@ -70,14 +70,14 @@ int Httprocess::Sendfile(std::string filename) {
     else {
         ;
     }
-    Reset();
+    Httprocess::Reset();
     return 0;
 }
 
 int Httprocess::Sendfile(int filefd) {
-    int ret = SERV::Writefile(clientfd, filefd, 10);
+    int ret = SERV::Writefile(Httprocess::clientfd, filefd, 10);
     if (ret == 0) {
-        std::string tmp = "Send file for " + Client_ip + " done.";
+        std::string tmp = "Send file for " + Httprocess::Client_ip + " done.";
         #ifdef DEBUG
             std::cout << tmp << "\n";
         #else
@@ -90,7 +90,7 @@ int Httprocess::Sendfile(int filefd) {
     else {
         ;
     }
-    Reset();
+    Httprocess::Reset();
     return 0;
 }
 

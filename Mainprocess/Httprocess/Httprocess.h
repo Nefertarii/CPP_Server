@@ -25,9 +25,9 @@ public:
     Httprocess(int socketfd);
     void Set_clientfd(int socketfd);
     int Clientfd();
-    int Send(std::string message);
-    int Sendfile(std::string filename);
-    int Sendfile(int filefd);
+    static int Send(std::string message);
+    static int Sendfile(std::string filename);
+    static int Sendfile(int filefd);
     int Read(std::string *read_buf);
     void Disconnect();
     ~Httprocess(){};

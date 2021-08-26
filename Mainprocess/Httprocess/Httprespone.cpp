@@ -99,7 +99,7 @@ int GETparse(std::string readbuf,std::string *filename) { //return GET request f
     #endif
     return 0;
 }
-
+ 
 int GETprocess(std::string filename,Filestate *file) {
     if(!SERV::Readfile(filename, file)) {
         return -1;

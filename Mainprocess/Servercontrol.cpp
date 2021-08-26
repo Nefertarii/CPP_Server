@@ -38,6 +38,7 @@ void Server_start_Epollcontrol() {
     respone_body.resize(MAXCLIENT);
     respone_file.resize(MAXCLIENT);
     Gthreadpool threadpool(MAXCLIENT);
+    threadpool.init();
 
     int epollfd = epoll_create(MAXCLIENT);
     struct epoll_event event, events[MAXCLIENT];
