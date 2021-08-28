@@ -53,7 +53,7 @@ public:
     void init();
     void shutdown();
     // Submit a function to be executed asynchronously by the pool
-    template <typename F, typename... Args>
+    template <class F, class... Args>
     auto submit(F &&f, Args &&...args) -> std::future<decltype(f(args...))>;
 };
 

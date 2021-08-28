@@ -3,7 +3,7 @@
 int Savelog(LOGLEVEL level, const char *logstring, int index) {
     std::string tmp = Loglevel_map[level % LOGEND];
     tmp = logstring;
-    tmp = tmp + " " + server_clock.Nowtime_str();
+    tmp = tmp + " " + Timer::Nowtime_str();
     if (index % index)
     {
         LOG[index] = tmp;

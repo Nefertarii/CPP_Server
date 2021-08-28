@@ -8,14 +8,11 @@ void HTTPhandle();
 
 //only encapsulates read and write operations
 //need other function control
-class Httprocess: public Connectprocess {
+class Httprocess {
 private:
-    int clientfd;
-    std::string Client_ip;
-    std::string Client_port;
-    SERVERR err_code;
-    SERVSTATE state_code;
-    REQUESTYPE requset_type;
+    SERVERR err_code_;
+    SERVSTATE state_code_;
+    REQUESTYPE requset_type_;
     const char *Str_error(int codenum);
     const char *Str_state(int codenum);
     void Reset();
@@ -25,15 +22,24 @@ public:
     Httprocess(int socketfd);
     void Set_clientfd(int socketfd);
     int Clientfd();
-    static int Send(std::string message);
-    static int Sendfile(std::string filename);
-    static int Sendfile(int filefd);
+    int Send(std::string message);
+    static int Send(std::string message, std::string clientip, int clientfd);
+    //static int Send(std::string message, Httprocess client);
+
+    int Sendfile(std::string filename);
+    static int Sendfile(std::string filename, std::string clientip, int clientfd);
+    //static int Sendfile(std::string filename, Httprocess client);
+
+    int Sendfile(int filefd);
+    static int Sendfile(int filefd, std::string clientip, int clientfd);
+    //static int Sendfile(int filefd, Httprocess client);
+
     int Read(std::string *read_buf);
     void Disconnect();
     ~Httprocess(){};
 };
 
-class Httpconnect : public Connectaccept {
+class Httpconnect {
 private:
     int socketfd;
     int listenfd;

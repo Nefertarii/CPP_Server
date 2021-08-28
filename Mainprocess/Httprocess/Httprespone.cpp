@@ -58,7 +58,7 @@ void Create_respone_head(std::string *responehead, std::string filetype, int sta
     *responehead += "Content-Language:zh-CN\r\n";
     *responehead += ("Content-Type:" + filetype + "\r\n");
     *responehead += ("Content-Length:" + std::to_string(bodylength) + "\r\n");
-    *responehead += (server_clock.Nowtime_str() + "\r\n");
+    *responehead += (Timer::Nowtime_str() + "\r\n");
     *responehead += "Server version:Gserver/1.0 (C++) \r\n\r\n";
 }
 

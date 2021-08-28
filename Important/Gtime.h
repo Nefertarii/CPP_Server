@@ -21,14 +21,14 @@ private:
     Timepoint begintime;
     Ms begintime_ms;
     Sec begintime_sec;
-    Ms nowtime_ms();
-    Sec nowtime_sec();
 
 public:
     Timer();
-    long Nowtime_ms();
-    long Nowtime_sec();
-    std::string Nowtime_str();
+    static Ms Nowtime_Ms();
+    static Sec Nowtime_Sec();
+    static long Nowtime_ms();
+    static long Nowtime_sec();
+    static std::string Nowtime_str();
     long Runtime_ms() { return Nowtime_ms() - begintime_ms.count(); }
     long Runtime_sec() { return Nowtime_sec() - begintime_sec.count(); }
     std::string Runtime_str();

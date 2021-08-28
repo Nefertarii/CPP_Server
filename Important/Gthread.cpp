@@ -61,7 +61,7 @@ void Gthreadpool::shutdown() {
     }
 }
 // Submit a function to be executed asynchronously by the pool
-template <typename F, typename... Args>
+template <class F, class... Args>
 auto Gthreadpool::submit(F &&f, Args &&...args) -> std::future<decltype(f(args...))> {
     // Create a function with bounded parameter ready to execute
     std::function<decltype(f(args...))()> func = std::bind(std::forward<F>(f), std::forward<Args>(args)...); // ���Ӻ����Ͳ������壬���⺯�����ͣ���������ֵ����

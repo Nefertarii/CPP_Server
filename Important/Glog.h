@@ -28,7 +28,6 @@ static const char *Loglevel_map[] = {
 //index 0~40 main thread
 //index 40~40+40*thread id
 static std::vector<std::string> LOG(MAXthread * 20, "");
-Timer server_clock;
 
 int Savelog(LOGLEVEL level, const char *logstring, int index);
 int Savelog(LOGLEVEL level, std::string log, int index);
