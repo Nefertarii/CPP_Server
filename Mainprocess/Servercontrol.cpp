@@ -5,10 +5,12 @@ void Epolladd(int socketfd, int epollfd) {
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = Epoll_has_connect;
     epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev);
+    Savelog(INFO,"epoll control add");
 }
 
 void Epolldel(int socketfd, int epollfd) {
     epoll_ctl(epollfd, EPOLL_CTL_DEL, socketfd, nullptr);
+    Savelog(INFO,"epoll control delete");
 }
 
 void Epollread(int socketfd, int epollfd) {
@@ -16,6 +18,7 @@ void Epollread(int socketfd, int epollfd) {
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = Epoll_has_connect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
+    Savelog(INFO,"epoll control read");
 }
 
 void Epollwrite(int socketfd, int epollfd) {
@@ -23,57 +26,44 @@ void Epollwrite(int socketfd, int epollfd) {
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = Epoll_has_connect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
+    Savelog(INFO,"epoll control write");
 }
 
 void Server_start_Epollcontrol() {
     int concurrent = std::thread::hardware_concurrency();
     int MAXCLIENT = concurrent * SINGLECLIENTS;
-    Httpconnect connects;
-    std::vector<Httprocess> process;
-    std::vector<std::string> client_respone_head;
-    std::vector<std::string> client_respone_body;
-    std::vector<std::string> client_ip;
-    std::vector<std::string> client_port;
-    std::vector<int> client_socketfd;
-    std::vector<int> client_respone_filefd;
-    process.resize(MAXCLIENT);
-    client_respone_head.resize(MAXCLIENT);
-    client_respone_body.resize(MAXCLIENT);
-    client_respone_filefd.resize(MAXCLIENT);
-    client_ip.resize(MAXCLIENT);
-    client_port.resize(MAXCLIENT);
-    client_socketfd.resize(MAXCLIENT);
     Gthreadpool threadpool(MAXCLIENT);
-
+    std::vector<Clientinfo> clients;
+    Httpconnect connectctrl;
+    Httprocess processctrl;
+    
+    //initialization
     threadpool.init();
+    clients.resize(MAXCLIENT);
     int epollfd = epoll_create(MAXCLIENT);
     struct epoll_event event, events[MAXCLIENT];
     Epolladd(connects.Listenfd(), epollfd);
-    
-#ifdef DEBUG
-    std::cout << "Server initialize complete.\n";
-#else
-    Savelog(INFO, "Server initialize complete.", 0);
-#endif
+    Savelog(INFO, "Server initialization complete.");
 
-    for (;;) {
+    //main control
+    for (;;)
+    {
         int nfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
-        if(nfds < 0 && errno != EINTR) {
-        #ifdef DEBUG
-            std::cout << "Server start fail.\n";
-        #else
-            Savelog(INFO, "Server start fail.", 0);
-        #endif
+        if(nfds < 0 && errno != EINTR) { //epoll create fail
+            Savelog(FATAL, "Cann't create epoll control.");
             return; 
         }
-        for (int i = 0; i < nfds; i++) {
+        //all set
+        for (int i = 0; i < nfds; i++) { 
             event = events[i];
             if (event.data.ptr == nullptr) {
                 int connectfd = SERV::Accept(connects.Listenfd());
-                if(!connects.Client_accept()) {
-                    process[i].Set_clientfd(connectfd);
+                if(!connectctrl.Client_accept()) {
+                    clients[i].clientfd = connectfd;
+                    processctrl.Set_client(clients[i]);
                     Epolladd(connectfd, epollfd);
                 }
+                //change until here
             }
             else if(event.events & EPOLLIN) {
                 std::string readbuf, filename;

@@ -1,202 +1,109 @@
 #include "Httprocess.h"
 
-Httprocess::Httprocess(int socketfd) {
-    clientfd_ = socketfd;
-    Reset();
+
+
+
+void Httprocess::Reset_client(struct Clientinfo client) {
+    client.port.clear();
+    client.ip.clear();
+    client.respone_head.clear();
+    client.respone_body.clear();
+    client.clientfd = 0;
+    client.socketfd = 0;
+    client.err_code = ERRNONE;
+    client.state_code = STATENONE;
+    client.requset_type = TYPENONE;
+}
+
+Httprocess::Httprocess(int clientfd, std::string *client_port,std::string *client_ip) {
+    char *tmpip;
+    struct sockaddr_in client_address;
+    socklen_t address_length = sizeof(client_address);
+    getpeername(clientfd, (struct sockaddr *)&client_address, &address_length);
+    client_port = std::to_string(ntohs(client_address.sin_port));
+    client_ip = inet_ntoa(client_address.sin_addr);
+}
+
+void Httprocess::Set_client(struct Clientinfo client) {
     char *tmpip;
     struct sockaddr_in client_address;
     socklen_t address_length = sizeof(client_address);
     getpeername(clientfd_, (struct sockaddr *)&client_address, &address_length);
-    Client_port_ = std::to_string(ntohs(client_address.sin_port));
-    Client_ip_ = inet_ntoa(client_address.sin_addr);
+    client.port = std::to_string(ntohs(client_address.sin_port));
+    client.ip = inet_ntoa(client_address.sin_addr);
 }
 
-void Httprocess::Reset() {
-    err_code_ = ERRNONE;
-    state_code_ = STATENONE;
-    requset_type_ = TYPENONE;
-}
-
-void Httprocess::Set_clientfd(int socketfd) {
-    clientfd_ = socketfd;
-    Reset();
-    char *tmpip;
-    struct sockaddr_in client_address;
-    socklen_t address_length = sizeof(client_address);
-    getpeername(clientfd_, (struct sockaddr *)&client_address, &address_length);
-    Client_port_ = std::to_string(ntohs(client_address.sin_port));
-    Client_ip_ = inet_ntoa(client_address.sin_addr);
-}
-
-int Httprocess::Clientfd() { 
-    return clientfd_; 
-}
-
-int Httprocess::Send(std::string message) {
-    int ret = SERV::Write(clientfd_, message);
-    if (ret == 0) {
-        std::string tmp = "Send for " + Client_ip_  + " done.";
-        #ifdef DEBUG
-            std::cout << tmp << "\n";
-        #else
-            Savelog(INFO, tmp, 0);
-        #endif
-    }
-    else if(ret >= 1) {
-        ;
-    }
-    else {
-        ;
-    }
-    Reset();
-    return 0;
-}
-
-int Httprocess::Send(std::string message, std::string clientip, int clientfd) {
+int Httprocess::Send(int clientfd, std::string message) {
     int ret = SERV::Write(clientfd, message);
+    Clear(clientfd);
     if (ret == 0) {
-        std::string tmp = "Send for " + clientip  + " done.";
-        #ifdef DEBUG
-            std::cout << tmp << "\n";
-        #else
-            Savelog(INFO, tmp, 0);
-        #endif
+        return 0;
     }
-    else if(ret >= 1) {
-        ;
+    else if(ret >= 1) {  //error code set
+        return 1;
     }
     else {
-        ;
+        return -1;
     }
-    return 0; 
 }
 
-int Httprocess::Sendfile(std::string filename) {
-    struct Filestate file;
-    SERV::Readfile(filename, &file);
-    int ret = SERV::Writefile(clientfd_, file.filefd, 10);
-    if (ret == 0) {
-        std::string tmp = "Send file for " + Client_ip_ + " done.";
-        #ifdef DEBUG
-            std::cout << tmp << "\n";
-        #else
-            Savelog(INFO, tmp, 0);
-        #endif
-    }
-    else if(ret >= 1) {
-        ;
-    }
-    else {
-        ;
-    }
-    Reset();
-    return 0;
-}
-
-int Httprocess::Sendfile(std::string filename, std::string clientip, int clientfd) {
+int Httprocess::Sendfile(int clientfd, std::string filename) {
     struct Filestate file;
     SERV::Readfile(filename, &file);
     int ret = SERV::Writefile(clientfd, file.filefd, 10);
+    Clear(clientfd);
     if (ret == 0) {
-        std::string tmp = "Send file for " + clientip + " done.";
-        #ifdef DEBUG
-            std::cout << tmp << "\n";
-        #else
-            Savelog(INFO, tmp, 0);
-        #endif
+        return 0;
     }
     else if(ret >= 1) {
-        ;
+        return 1;
     }
     else {
-        ;
+        return -1;
     }
-    return 0;
 }
 
-int Httprocess::Sendfile(int filefd) {
-    int ret = SERV::Writefile(clientfd_, filefd, 10);
-    if (ret == 0) {
-        std::string tmp = "Send file for " + Client_ip_ + " done.";
-        #ifdef DEBUG
-            std::cout << tmp << "\n";
-        #else
-            Savelog(INFO, tmp, 0);
-        #endif
-    }
-    else if(ret >= 1) {
-        ;
-    }
-    else {
-        ;
-    }
-    Reset();
-    return 0;
-}
-
-int Httprocess::Sendfile(int filefd, std::string clientip, int clientfd) {
+int Httprocess::Sendfile(int clientfd, int filefd) {
     int ret = SERV::Writefile(clientfd, filefd, 10);
+    Clear(clientfd);
     if (ret == 0) {
-        std::string tmp = "Send file for " + clientip + " done.";
-        #ifdef DEBUG
-            std::cout << tmp << "\n";
-        #else
-            Savelog(INFO, tmp, 0);
-        #endif
+        return 0;
     }
     else if(ret >= 1) {
-        ;
+        return 1;
     }
     else {
-        ;
+        return -1;
     }
-    return 0;
 }
 
-
-
-
-int Httprocess::Read(std::string *read_buf) {
-    int ret = SERV::Read(clientfd_, read_buf);
+int Httprocess::Read(int clientfd, std::string *read_buf) {
+    int ret = SERV::Read(clientfd, read_buf);
     if (ret == 0) {
-        std::string tmp = "Read for " + Client_ip_ + " done.";
-        #ifdef DEBUG
-            std::cout << tmp << "\n";
-        #else
-            Savelog(INFO, tmp, 0);
-        #endif
-            return 0;
+        return 0;
     }
     else if (ret >= 1) {
-        return -1;
+        return 1;
     }
     else {
         return -1;
     }
 }
 
-void Httprocess::Disconnect() {
-    shutdown(clientfd_, SHUT_WR);
-    std::string tmp = "Close " + Client_ip_ + " done.";
-    #ifdef DEBUG
-        std::cout << tmp << "\n";
-    #else
-        Savelog(INFO, tmp, 0);
-    #endif
-    Reset();
+void Httprocess::Clear(struct Clientinfo client) {
+    client.respone_head.clear();
+    client.respone_body.clear();
+}
+
+void Httprocess::Disconnect(int clientfd) {
+    shutdown(clientfd, SHUT_WR);
+    Reset_client(clientfd);
 }
 
 
-Httpconnect::Httpconnect() {
-#ifdef DEBUG
-    std::cout << "Create HTTP listen.\n"; 
-#else
-    Savelog(INFO, "HTTP listening", 0);
-#endif
-    Connectlisten();
-}
 
-void Httpconnect::Connectlisten() {
+
+void Httpconnect::Connectlisten(int listenfd) {
     concurrent_count = std::thread::hardware_concurrency();
     struct sockaddr_in server_address;
     memset(&server_address, 0, sizeof(server_address));
@@ -209,43 +116,20 @@ void Httpconnect::Connectlisten() {
     signal(SIGPIPE, SIG_IGN);
 }
 
-int Httpconnect::Client_accept() {
-    int MAXCLIENT = concurrent_count * SINGLECLIENTS;
-    if (connect_count == MAXCLIENT) {
-#ifdef DEBUG
-    std::cout << "Too many client\n"; 
-#else
-    Savelog(INFO, "HTTP client is full", 0);
-#endif
+int Httpconnect::Canconnect() {
+    if(connect_nums + 1 > concurrent_count * SINGLECLIENTS) {
         return -1;
-        
     }
     else {
-    connect_count++;
-#ifdef DEBUG
-    std::cout << "Can create client\n"; 
-#else
-    Savelog(INFO, "Request create client", 0);
-#endif
-    return 0;  
+        connect_nums++;
+        return 0;
     }
 }
 
-const int Httpconnect::Socketfd() { 
-    return socketfd; 
+const int Httpconnect::Concurrent_count() {
+    return concurrent_count;
 }
 
-const int Httpconnect::Listenfd() { 
-    return listenfd; 
+const int Httpconnect::Connect_nums() {
+    return connect_nums;
 }
-
-const int Httpconnect::Concurrentcount() { 
-    return concurrent_count; 
-}
-
-const int Httpconnect::Clientcount() { 
-    return connect_count; 
-}
-
-
-

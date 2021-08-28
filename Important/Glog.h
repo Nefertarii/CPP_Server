@@ -3,10 +3,11 @@
 
 #include "Gstring.h"
 #include "Gtime.h"
+#include "iostream"
 #include <fstream>
 #include <vector>
 
-extern const size_t MAXthread;
+extern const size_t MAXLOG;
 
 enum LOGLEVEL {
     DEBUG = 0,
@@ -25,12 +26,11 @@ static const char *Loglevel_map[] = {
     [FATAL] = "FATAL:"
 };
 
-//index 0~40 main thread
-//index 40~40+40*thread id
-static std::vector<std::string> LOG(MAXthread * 20, "");
+static size_t logindex;
+static std::vector<std::string> LOG(MAXLOG, "");
 
-int Savelog(LOGLEVEL level, const char *logstring, int index);
-int Savelog(LOGLEVEL level, std::string log, int index);
+int Savelog(LOGLEVEL level, const char *logstring);
+int Savelog(LOGLEVEL level, std::string log);
 int Savetofile(std::string str);
 int Savetofile(std::vector<std::string> logvec);
 

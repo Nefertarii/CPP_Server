@@ -57,10 +57,10 @@ int SERV::Read(int socketfd, std::string *str) {
     int readsize = read(socketfd, readbuf_tmp, READMAX);
     if (readsize < 0) {
         if (errno == EINTR) {
-            Savelog(ERROR, "Read error, Single break", 0);
+            Savelog(ERROR, "Read error, Single break");
         }
         else if(errno == EPIPE) {
-            Savelog(ERROR, "Read error, Client close", 0);
+            Savelog(ERROR, "Read error, Client close");
         }
         else if(errno != EAGAIN && errno != EWOULDBLOCK) {
             SERV::Syserrlog("Read error", errno);
@@ -104,13 +104,13 @@ int SERV::Write(int socketfd, std::string str) {
         if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
             if (errno == EINTR) {
                 if (count == 0) {
-                    Savelog(WARNING, "Signal interuption", 0);
+                    Savelog(WARNING, "Signal interuption");
                 }
                 count++;
                 continue;  
             }
             else if(errno == EAGAIN || errno == EWOULDBLOCK) {
-                Savelog(WARNING, "kernel cache full", 0);
+                Savelog(WARNING, "kernel cache full");
                 return 1;
             }
             else {
@@ -120,7 +120,7 @@ int SERV::Write(int socketfd, std::string str) {
         }
     }
     if (count >= REWRITEMAX) {
-        Savelog(WARNING, "Write fail, Maximum number of rewrite", 0);
+        Savelog(WARNING, "Write fail, Maximum number of rewrite");
         return 1;
     }
     return 0;
@@ -132,13 +132,13 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
         if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
             if (errno == EINTR) {
                 if (count == 0) {
-                    Savelog(WARNING, "Signal interuption", 0);
+                    Savelog(WARNING, "Signal interuption");
                 }
                 count++;
                 continue;  
             }
             else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                Savelog(WARNING, "kernel cache full", 0);
+                Savelog(WARNING, "kernel cache full");
                 return 1;
             }
             else {
@@ -148,7 +148,7 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
         }
     }
     if (count >= REWRITEMAX) {
-        Savelog(WARNING, "Write file fail, Maximum number of rewrite", 0);
+        Savelog(WARNING, "Write file fail, Maximum number of rewrite");
         return 1;
     }
     return 0;
@@ -158,11 +158,11 @@ void SERV::Syserrlog(const char *fmt, int err) {
     const char *tmperr = strerror(err);
     int tid_index = SERV::Pthreadindex();
     if(err) {
-        Savelog(ERROR, fmt, 0);
-        Savelog(ERROR, tmperr, 0);
+        Savelog(ERROR, fmt);
+        Savelog(ERROR, tmperr);
     }
     else {
-        Savelog(ERROR, fmt, 0);
+        Savelog(ERROR, fmt);
     }
 }
 

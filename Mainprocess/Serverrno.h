@@ -30,12 +30,22 @@ static const char *Servstate_map[] = {
     [STATENONE] = "undefine server state."
 };
 
-const char *Str_error(int codenum) {
+static const char *Request_map[] = {
+    [TYPENONE] = "undefine requeset type.",
+    [GET] = "GET",
+    [POST] = "POST"
+};
+
+const char *Str_error(SERVERR err_code) {
     return Serverr_map[-codenum % ERREND];
 }
 
-const char *Str_state(int codenum) {
+const char *Str_state(SERVSTATE state_code) {
     return Servstate_map[codenum % STATEEND];
+}
+
+const char *Str_type(REQUESTYPE requset_type); {
+    ;
 }
 
 #endif

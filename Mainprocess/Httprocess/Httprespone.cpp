@@ -82,21 +82,12 @@ int GETparse(std::string readbuf,std::string *filename) { //return GET request f
 
     }
     if (request_file == "-1") {
-    #ifdef DEBUG
-        std::cout << "Get request fail\n";
-    #else
-        std::string tmp = "Get request fail";
-        Savelog(INFO, tmp, 0);
-    #endif
+        Savelog(INFO, "Get request fail");
         return -1;
     }
     *filename = filedir + request_file;
-    #ifdef DEBUG
-        std::cout << "Get request:" << request_file << "\n";
-    #else
-        std::string tmp = "Get request:" + request_file;
-        Savelog(INFO, tmp, 0);
-    #endif
+    std::string tmp = "Get request:" + request_file;
+    Savelog(INFO, tmp);
     return 0;
 }
  
@@ -161,102 +152,61 @@ int POSTprocess(std::string post_type, std::string post_data) {
     POSTYPE post = POSTchoose(post_type);
     switch (post) {
     case POSTLogin: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
         std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        Savelog(INFO, tmp);
         break;
     }
 
     case POSTReset: {
-        #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        std::string tmp = "Reset password " + post_data;
+        Savelog(INFO, tmp);
         break;
     }
     
     case POSTRegister: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        std::string tmp = "Register " + post_data;
+        Savelog(INFO, tmp);
         break;
     }
 
     case POSTVoteup: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        std::string tmp = "Vote up " + post_data;
+        Savelog(INFO, tmp);
         break;
     }
 
     case POSTVotedown: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
+        std::string tmp = "Vote down " + post_data;
         Savelog(INFO, tmp, 0);
-    #endif
         break;
     }
 
     case POSTComment: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        std::string tmp = "Comment " + post_data;
+        Savelog(INFO, tmp);
         break;
     }
 
     case POSTContent: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        std::string tmp = "Content " + post_data;
+        Savelog(INFO, tmp);
         break;
     }
     
     case POSTReadcount: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        Savelog(INFO, "Readcount add");
         break;
     }
 
     case POSTVerifi: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
-        std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        std::string tmp = "Verifi " + post_data;
+        Savelog(INFO, tmp);
         break;
     }
 
     default: {
-    #ifdef DEBUG
-        std::cout << "Post Login\n";
-    #else
         std::string tmp = "Login " + post_data;
-        Savelog(INFO, tmp, 0);
-    #endif
+        Savelog(INFO, tmp);
         break;
     }
 

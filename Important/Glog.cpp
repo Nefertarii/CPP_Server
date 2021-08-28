@@ -1,24 +1,27 @@
 #include "Glog.h"
 
-int Savelog(LOGLEVEL level, const char *logstring, int index) {
-    std::string tmp = Loglevel_map[level % LOGEND];
-    tmp = logstring;
-    tmp = tmp + " " + Timer::Nowtime_str();
-    if (index % index)
-    {
-        LOG[index] = tmp;
-        return 0;
+int Savelog(LOGLEVEL level, const char *logstring) {
+    std::string level = Loglevel_map[level % LOGEND];
+    std::string log = logstring;
+    log = level + " " + log + " " + Timer::Nowtime_str();
+#ifdef DEBUG
+    std::cout << Loglevel_map << "\n";
+#else
+    if (logindex + 1 == MAXLOG) {
+        LOG[logindex] = log;
+        logindex = 0;
+        Savetofile(LOG);
     }
     else {
-        LOG[index] = tmp;
-        if(Savetofile(LOG) < 0)
-            return -1;
-        return 1;
+        LOG[logindex] = log;
+        logindex += 1;
     }
+
+#endif
 }
 
-int Savelog(LOGLEVEL level, std::string log, int index) {
-    return Savelog(level, string_to_char(log), index);
+int Savelog(LOGLEVEL level, std::string log) {
+    return Savelog(level, string_to_char(log));
 }
 
 int Savetofile(std::string str) {

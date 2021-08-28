@@ -4,55 +4,50 @@
 #include "../Servprocess.h"
 #include "../Headfile.h"
 
-void HTTPhandle();
+void Http_signal_handle();
+
+struct Clientinfo {
+    std::string port;
+    std::string ip;
+    std::string respone_head;
+    std::string respone_body;
+    int clientfd;
+    int socketfd;
+    SERVERR err_code;
+    SERVSTATE state_code;
+    REQUESTYPE requset_type;
+};
 
 //only encapsulates read and write operations
-//need other function control
-class Httprocess {
+//need other function to control
+class Httprocess
+{
 private:
-    SERVERR err_code_;
-    SERVSTATE state_code_;
-    REQUESTYPE requset_type_;
-    const char *Str_error(int codenum);
-    const char *Str_state(int codenum);
-    void Reset();
+    void Reset_client(struct Clientinfo client);
 
 public:
-    Httprocess(){};
-    Httprocess(int socketfd);
-    void Set_clientfd(int socketfd);
-    int Clientfd();
-    int Send(std::string message);
+    Httprocess();
+    void Set_client(struct Clientinfo client);
     static int Send(std::string message, std::string clientip, int clientfd);
-    //static int Send(std::string message, Httprocess client);
-
-    int Sendfile(std::string filename);
     static int Sendfile(std::string filename, std::string clientip, int clientfd);
-    //static int Sendfile(std::string filename, Httprocess client);
-
-    int Sendfile(int filefd);
     static int Sendfile(int filefd, std::string clientip, int clientfd);
-    //static int Sendfile(int filefd, Httprocess client);
-
     int Read(std::string *read_buf);
+    void Clear(struct Clientinfo client);
     void Disconnect();
     ~Httprocess(){};
 };
 
 class Httpconnect {
 private:
-    int socketfd;
-    int listenfd;
-    unsigned concurrent_count;
-    unsigned connect_count;
+    int concurrent_count;
+    int connect_nums;
+
 public:
-    Httpconnect();
-    void Connectlisten();
-    int Client_accept();
-    const int Socketfd();
-    const int Listenfd();
-    const int Concurrentcount();
-    const int Clientcount();
+    Httpconnect(){}
+    void Connectlisten(int listenfd);
+    int Canconnect();
+    const int Concurrent_count();
+    const int Connect_nums();
     ~Httpconnect(){};
 };
 

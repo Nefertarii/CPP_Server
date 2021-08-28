@@ -27,6 +27,7 @@
 //setting
 static const size_t SINGLECLIENTS = 8;                      //once thread max client
 static const char *FILEDIR = "/home/http/server/";          //Default location for read file
+static const size_t MAXLOG = 16;                            //Log buffer maximum
 static const char *PROTOCOL = "HTTP";                       //server used protocol
 static const size_t LISTENPORT = 80;                        //listen port
 static const size_t READMAX = 1024 * 4;                     //once read max length
