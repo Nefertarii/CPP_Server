@@ -25,14 +25,14 @@
 #include <vector>
 
 //setting
-static const size_t SINGLECLIENTS = 8;                      //once thread max client
-static const char *FILEDIR = "/home/http/server/";          //Default location for read file
-static const size_t MAXLOG = 16;                            //Log buffer maximum
-static const char *PROTOCOL = "HTTP";                       //server used protocol
-static const size_t LISTENPORT = 80;                        //listen port
-static const size_t READMAX = 1024 * 4;                     //once read max length
-static const size_t WRITEMAX = 1024 * 4;                    //once send max length
-static const size_t REWRITEMAX = 10;                        //signle EINTR rewrite nums
+const size_t SINGLECLIENTS = 8;                      //once thread max client
+const char *FILEDIR = "/home/http/server/";          //Default location for read file
+const size_t MAXLOG = 16;                            //Log buffer maximum
+const char *PROTOCOL = "HTTP";                       //server used protocol
+const size_t LISTENPORT = 80;                        //listen port
+const size_t READMAX = 1024 * 4;                     //once read max length
+const size_t WRITEMAX = 1024 * 4;                    //once send max length
+const size_t REWRITEMAX = 10;                        //signle EINTR rewrite nums
 //using
 using ULL = unsigned long long;
 
@@ -56,7 +56,6 @@ namespace SERV
     int Writefile(int socketfd, int filefd, off_t offset);
     void Syserrlog(const char *fmt, int err);
     ULL Pthreadid();
-    int Pthreadindex();
 }
 
 #endif

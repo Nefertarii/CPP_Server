@@ -10,32 +10,23 @@ void Httprocess::Reset_client(struct Clientinfo client) {
     client.respone_body.clear();
     client.clientfd = 0;
     client.socketfd = 0;
+    client.filefd = 0;
     client.err_code = ERRNONE;
     client.state_code = STATENONE;
     client.requset_type = TYPENONE;
-}
-
-Httprocess::Httprocess(int clientfd, std::string *client_port,std::string *client_ip) {
-    char *tmpip;
-    struct sockaddr_in client_address;
-    socklen_t address_length = sizeof(client_address);
-    getpeername(clientfd, (struct sockaddr *)&client_address, &address_length);
-    client_port = std::to_string(ntohs(client_address.sin_port));
-    client_ip = inet_ntoa(client_address.sin_addr);
 }
 
 void Httprocess::Set_client(struct Clientinfo client) {
     char *tmpip;
     struct sockaddr_in client_address;
     socklen_t address_length = sizeof(client_address);
-    getpeername(clientfd_, (struct sockaddr *)&client_address, &address_length);
+    getpeername(client.clientfd, (struct sockaddr *)&client_address, &address_length);
     client.port = std::to_string(ntohs(client_address.sin_port));
     client.ip = inet_ntoa(client_address.sin_addr);
 }
 
 int Httprocess::Send(int clientfd, std::string message) {
     int ret = SERV::Write(clientfd, message);
-    Clear(clientfd);
     if (ret == 0) {
         return 0;
     }
@@ -51,7 +42,6 @@ int Httprocess::Sendfile(int clientfd, std::string filename) {
     struct Filestate file;
     SERV::Readfile(filename, &file);
     int ret = SERV::Writefile(clientfd, file.filefd, 10);
-    Clear(clientfd);
     if (ret == 0) {
         return 0;
     }
@@ -65,7 +55,6 @@ int Httprocess::Sendfile(int clientfd, std::string filename) {
 
 int Httprocess::Sendfile(int clientfd, int filefd) {
     int ret = SERV::Writefile(clientfd, filefd, 10);
-    Clear(clientfd);
     if (ret == 0) {
         return 0;
     }
@@ -93,26 +82,27 @@ int Httprocess::Read(int clientfd, std::string *read_buf) {
 void Httprocess::Clear(struct Clientinfo client) {
     client.respone_head.clear();
     client.respone_body.clear();
+    client.filefd = 0;
 }
 
-void Httprocess::Disconnect(int clientfd) {
-    shutdown(clientfd, SHUT_WR);
-    Reset_client(clientfd);
+void Httprocess::Disconnect(struct Clientinfo client) {
+    shutdown(client.clientfd, SHUT_WR);
+    Reset_client(client);
 }
 
 
 
 
-void Httpconnect::Connectlisten(int listenfd) {
+void Httpconnect::Connectlisten(int *listenfd) {
     concurrent_count = std::thread::hardware_concurrency();
     struct sockaddr_in server_address;
     memset(&server_address, 0, sizeof(server_address));
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(LISTENPORT);
     server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-    listenfd = SERV::Socket(AF_INET, SOCK_STREAM, 0);
-    SERV::Bind(listenfd, (struct sockaddr *)&server_address, sizeof(server_address));
-    SERV::Listen(listenfd, concurrent_count * SINGLECLIENTS);
+    *listenfd = SERV::Socket(AF_INET, SOCK_STREAM, 0);
+    SERV::Bind(*listenfd, (struct sockaddr *)&server_address, sizeof(server_address));
+    SERV::Listen(*listenfd, concurrent_count * SINGLECLIENTS);
     signal(SIGPIPE, SIG_IGN);
 }
 

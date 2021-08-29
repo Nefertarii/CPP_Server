@@ -142,7 +142,7 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
                 return 1;
             }
             else {
-                SERV::Syserrlog("Write error", erron);
+                SERV::Syserrlog("Write error", errno);
                 return -1;
             }
         }
@@ -156,7 +156,6 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
 
 void SERV::Syserrlog(const char *fmt, int err) {
     const char *tmperr = strerror(err);
-    int tid_index = SERV::Pthreadindex();
     if(err) {
         Savelog(ERROR, fmt);
         Savelog(ERROR, tmperr);
@@ -172,9 +171,4 @@ ULL SERV::Pthreadid() {
     std::string stid = buf.str();
     ULL tid = std::stoull(stid);
     return tid;
-}
-
-int SERV::Pthreadindex() {
-    int tid_index = Pthreadid() % MAXthread;
-    return tid_index;
 }

@@ -177,7 +177,7 @@ int POSTprocess(std::string post_type, std::string post_data) {
 
     case POSTVotedown: {
         std::string tmp = "Vote down " + post_data;
-        Savelog(INFO, tmp, 0);
+        Savelog(INFO, tmp);
         break;
     }
 

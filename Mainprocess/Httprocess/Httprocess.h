@@ -13,6 +13,7 @@ struct Clientinfo {
     std::string respone_body;
     int clientfd;
     int socketfd;
+    int filefd;
     SERVERR err_code;
     SERVSTATE state_code;
     REQUESTYPE requset_type;
@@ -26,14 +27,14 @@ private:
     void Reset_client(struct Clientinfo client);
 
 public:
-    Httprocess();
+    Httprocess(){}
     void Set_client(struct Clientinfo client);
-    static int Send(std::string message, std::string clientip, int clientfd);
-    static int Sendfile(std::string filename, std::string clientip, int clientfd);
-    static int Sendfile(int filefd, std::string clientip, int clientfd);
-    int Read(std::string *read_buf);
+    static int Send(int clientfd, std::string message);
+    static int Sendfile(int clientfd, std::string filename);
+    static int Sendfile(int clientfd, int filefd);
+    int Read(int clientfd, std::string *read_buf);
     void Clear(struct Clientinfo client);
-    void Disconnect();
+    void Disconnect(struct Clientinfo client);
     ~Httprocess(){};
 };
 
@@ -44,7 +45,7 @@ private:
 
 public:
     Httpconnect(){}
-    void Connectlisten(int listenfd);
+    void Connectlisten(int *listenfd);
     int Canconnect();
     const int Concurrent_count();
     const int Connect_nums();

@@ -5,20 +5,21 @@ enum REQUESTYPE
 {
     TYPENONE = 0,
     GET,
-    POST
+    POST,
+    TYPEND = (1 << 30)
 };
 
 enum SERVERR
 {
     ERRNONE = 0,
     WRITEFAIL = -1,
-    ERREND = -(1<<30)
+    ERREND = -(1 << 30)
 };
 
 enum SERVSTATE
 {
     STATENONE = 0,
-    STATEEND = (1 << 30)
+    STATEND = (1 << 30)
 };
 
 static const char *Serverr_map[] = {
@@ -33,19 +34,19 @@ static const char *Servstate_map[] = {
 static const char *Request_map[] = {
     [TYPENONE] = "undefine requeset type.",
     [GET] = "GET",
-    [POST] = "POST"
+    [POST] = "POST",
 };
 
 const char *Str_error(SERVERR err_code) {
-    return Serverr_map[-codenum % ERREND];
+    return Serverr_map[-err_code % ERREND];
 }
 
 const char *Str_state(SERVSTATE state_code) {
-    return Servstate_map[codenum % STATEEND];
+    return Servstate_map[state_code % STATEND];
 }
 
-const char *Str_type(REQUESTYPE requset_type); {
-    ;
+const char *Str_type(REQUESTYPE requset_type) {
+    return Servstate_map[requset_type % TYPEND];
 }
 
 #endif

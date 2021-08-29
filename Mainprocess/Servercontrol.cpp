@@ -31,18 +31,20 @@ void Epollwrite(int socketfd, int epollfd) {
 
 void Server_start_Epollcontrol() {
     int concurrent = std::thread::hardware_concurrency();
+    int listenfd = 0;
     int MAXCLIENT = concurrent * SINGLECLIENTS;
     Gthreadpool threadpool(MAXCLIENT);
     std::vector<Clientinfo> clients;
     Httpconnect connectctrl;
     Httprocess processctrl;
+    struct epoll_event event, events[MAXCLIENT];
     
     //initialization
     threadpool.init();
+    connectctrl.Connectlisten(&listenfd);
     clients.resize(MAXCLIENT);
     int epollfd = epoll_create(MAXCLIENT);
-    struct epoll_event event, events[MAXCLIENT];
-    Epolladd(connects.Listenfd(), epollfd);
+    Epolladd(listenfd, epollfd);
     Savelog(INFO, "Server initialization complete.");
 
     //main control
@@ -51,34 +53,34 @@ void Server_start_Epollcontrol() {
         int nfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
         if(nfds < 0 && errno != EINTR) { //epoll create fail
             Savelog(FATAL, "Cann't create epoll control.");
+            //signal notify manage process...
             return; 
         }
         //all set
         for (int i = 0; i < nfds; i++) { 
             event = events[i];
             if (event.data.ptr == nullptr) {
-                int connectfd = SERV::Accept(connects.Listenfd());
-                if(!connectctrl.Client_accept()) {
+                int connectfd = SERV::Accept(listenfd);
+                if(!connectctrl.Canconnect()) {
                     clients[i].clientfd = connectfd;
                     processctrl.Set_client(clients[i]);
                     Epolladd(connectfd, epollfd);
                 }
-                //change until here
             }
             else if(event.events & EPOLLIN) {
                 std::string readbuf, filename;
                 struct Filestate file;
                 REQUESTYPE request;
-                process[i].Read(&readbuf);
-                if(!readbuf.empty()) {
+                processctrl.Read(clients[i].clientfd, &readbuf);
+                if (!readbuf.empty()) {
                     request = Requestparse(&readbuf);
                     switch (request) {
                     case GET: {
                         if(!GETparse(readbuf, &filename)) {
                             GETprocess(filename, &file);
-                            Create_respone_head(&client_respone_head[i], Filetype(filename), 200, file.filelength);
-                            client_respone_filefd[i] = file.filefd;
-                            Epollwrite(process[i].Clientfd(), epollfd);
+                            Create_respone_head(&clients[i].respone_head, Filetype(filename), 200, file.filelength);
+                            clients[i].filefd = file.filefd;
+                            Epollwrite(clients[i].clientfd, epollfd);
                         }
                         else {
                             ;
@@ -100,16 +102,15 @@ void Server_start_Epollcontrol() {
                 }
             }
             else if(event.events & EPOLLOUT) {
-                threadpool.submit(process[i].Send, client_respone_head[i]);
-                if (client_respone_filefd[i]) {
-                    threadpool.submit(process[i].Sendfile, process[i]);
+                threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_head);
+                if (clients[i].filefd) {
+                    //threadpool.submit(processctrl.Sendfile, clients[i].clientfd, clients[i].filefd);
+                    processctrl.Sendfile(clients[i].clientfd, clients[i].filefd);
                 }
-                if (!client_respone_body.empty()) {
-                    threadpool.submit(process[i].Send, process[i]);
+                if (!clients[i].respone_body.empty()) {
+                    //threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_body);
+                    processctrl.Send(clients[i].clientfd, clients[i].respone_body);
                 }
-                client_respone_filefd[i] = 0;
-                client_respone_head[i].clear();
-                client_respone_body[i].clear();
             }
         }
     }

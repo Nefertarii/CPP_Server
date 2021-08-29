@@ -1,9 +1,9 @@
 #include "Glog.h"
 
 int Savelog(LOGLEVEL level, const char *logstring) {
-    std::string level = Loglevel_map[level % LOGEND];
+    std::string strlevel = Loglevel_map[level % LOGEND];
     std::string log = logstring;
-    log = level + " " + log + " " + Timer::Nowtime_str();
+    log = strlevel + " " + log + " " + Timer::Nowtime_str();
 #ifdef DEBUG
     std::cout << Loglevel_map << "\n";
 #else
@@ -16,8 +16,8 @@ int Savelog(LOGLEVEL level, const char *logstring) {
         LOG[logindex] = log;
         logindex += 1;
     }
-
 #endif
+    return 0;
 }
 
 int Savelog(LOGLEVEL level, std::string log) {
