@@ -1,4 +1,9 @@
-#include "Headfile.h"
+#include "Servfunc.h"
+
+int SERV::init() {
+    templog_vec.resize(200);
+    logindex = 0;
+}
 
 int SERV::Socket(int family, int type, int protocol) {
     int socketfd = socket(family, type, protocol);
@@ -154,21 +159,9 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
     return 0;
 }
 
-void SERV::Syserrlog(const char *fmt, int err) {
+void SERV::Syserrlog(const char *log, int err) {
     const char *tmperr = strerror(err);
-    if(err) {
-        Savelog(ERROR, fmt);
-        Savelog(ERROR, tmperr);
-    }
-    else {
-        Savelog(ERROR, fmt);
-    }
-}
-
-ULL SERV::Pthreadid() {
-    std::ostringstream buf;
-    buf << std::this_thread::get_id();
-    std::string stid = buf.str();
-    ULL tid = std::stoull(stid);
-    return tid;
+    std::string strlog = log;
+    std::string strerr = tmperr;
+    templog_vec[logindex] = "[ERROR] " + strlog + strerr;
 }

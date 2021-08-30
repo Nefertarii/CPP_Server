@@ -1,7 +1,7 @@
 #ifndef HTTPRESPONE_H_
 #define HTTPRESPONE_H_
 
-#include "../Headfile.h"
+#include "Servfunc.h"
 
 enum HTTPSTATE {
     OK = 200,

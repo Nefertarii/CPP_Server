@@ -1,7 +1,13 @@
 #ifndef SERVPROCESS_H_
 #define SERVPROCESS_H_
 
-class Connectaccept {
+void Epolladd(int socketfd, int epollfd);
+void Epolldel(int socketfd, int epollfd);
+void Epollread(int socketfd, int epollfd);
+void Epollwrite(int socketfd, int epollfd);
+
+class Connectaccept
+{
 public:
     Connectaccept(){};
     virtual void Connectlisten() = 0;

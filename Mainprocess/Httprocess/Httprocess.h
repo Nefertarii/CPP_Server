@@ -1,8 +1,8 @@
 #ifndef HTTPROCESS_H_
 #define HTTPROCESS_H_
 
-#include "../Servprocess.h"
-#include "../Headfile.h"
+//#include "../Servprocess.h"
+#include "Servfunc.h"
 
 void Http_signal_handle();
 

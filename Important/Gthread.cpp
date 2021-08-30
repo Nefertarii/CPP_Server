@@ -1,5 +1,14 @@
 #include "Gthread.h"
 
+
+ULL Pthreadid() {
+    std::ostringstream buf;
+    buf << std::this_thread::get_id();
+    std::string stid = buf.str();
+    ULL tid = std::stoull(stid);
+    return tid;
+}
+
 template <typename T>
 bool Safequeue<T>::empty() { 
     std::unique_lock<std::mutex> lock(m_mutex); 
@@ -51,6 +60,7 @@ void Gthreadpool::init() {
         threads_.at(i) = std::thread(ThreadWorker(this, i)); 
     }
 }
+
 void Gthreadpool::shutdown() {
     shutdown_ = true;
     conditional_lock_.notify_all(); 

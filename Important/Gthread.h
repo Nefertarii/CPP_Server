@@ -10,6 +10,12 @@
 #include <thread>
 #include <utility>
 #include <vector>
+#include <sstream>
+
+using ULL = unsigned long long
+
+ULL Pthreadid();
+
 
 // Thread safe implementation of a Queue using a std::queue
 template <typename T>
