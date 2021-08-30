@@ -4,7 +4,7 @@
 //#include "../Servprocess.h"
 #include "Servfunc.h"
 
-void Http_signal_handle();
+//void Http_signal_handle();
 
 struct Clientinfo {
     std::string port;
@@ -42,16 +42,33 @@ class Httpconnect {
 private:
     int concurrent_count;
     int connect_nums;
-
+    const size_t SINGLECLIENTS = 8;    
+    const size_t LISTENPORT = 80;   
 public:
     Httpconnect(){}
     void Connectlisten(int *listenfd);
     int Canconnect();
     const int Concurrent_count();
     const int Connect_nums();
+    const int Single_concurrent_client();
     ~Httpconnect(){};
 };
 
+class Httprespone {
+private:
+    const size_t READMAX = 1024 * 4;                      //once read max length;
+    const char *FILEDIR = "/home/http/server/";           //Default location for read file
 
+public:
+    std::string Str_httpstate(int codenum);
+    std::string Filetype(std::string filename);
+    void Create_respone_head(std::string *responehead, std::string filetype, int state, int bodylength);
+    REQUESTYPE Requestparse(std::string *readbuf);
+    int GETparse(std::string readbuf, std::string *filename);
+    int GETprocess(std::string filename, Filestate *file);
+    int POSTparse(std::string request, std::string *post_type, std::string *post_data);
+    POSTYPE POSTchoose(std::string post_type);
+    int POSTprocess(std::string post_type, std::string post_data);
+};
 
 #endif

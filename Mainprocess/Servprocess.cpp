@@ -1,30 +1,26 @@
 #include "Servprocess.h"
 
-void Epolladd(int socketfd, int epollfd) {
+void Epollcontrol::Set_epollfd(int epollfd_) { epollfd = epollfd_; }
+
+void Epollcontrol::Epolladd(int socketfd) {
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
-    ev.data.ptr = Epoll_has_connect;
-    epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev);
-    Savelog(INFO,"epoll control add");
+    ev.data.ptr = hasconnect;
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev); 
 }
 
-void Epolldel(int socketfd, int epollfd) {
-    epoll_ctl(epollfd, EPOLL_CTL_DEL, socketfd, nullptr);
-    Savelog(INFO,"epoll control delete");
-}
+void Epollcontrol::Epolldel(int socketfd) { epoll_ctl(epollfd, EPOLL_CTL_DEL, socketfd, nullptr); }
 
-void Epollread(int socketfd, int epollfd) {
+void Epollcontrol::Epollread(int socketfd) {
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
-    ev.data.ptr = Epoll_has_connect;
+    ev.data.ptr = hasconnect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
-    Savelog(INFO,"epoll control read");
 }
 
-void Epollwrite(int socketfd, int epollfd) {
+void Epollcontrol::Epollwrite(int socketfd) {
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
-    ev.data.ptr = Epoll_has_connect;
+    ev.data.ptr = hasconnect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
-    Savelog(INFO,"epoll control write");
 }

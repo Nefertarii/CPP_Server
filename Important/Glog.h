@@ -3,11 +3,9 @@
 
 #include "Gstring.h"
 #include "Gtime.h"
-#include "iostream"
+#include <iostream>
 #include <fstream>
 #include <vector>
-
-extern const size_t MAXLOG;
 
 enum LOGLEVEL {
     DEBUG = 0,
@@ -15,23 +13,31 @@ enum LOGLEVEL {
     WARNING = 2,
     ERROR = 3,
     FATAL = 4,
-    LOGEND = (1<<30)
+    LEVELEND = (1<<30)
 };
 
-static const char *Loglevel_map[] = {
-    [DEBUG] = "DEBUG:",
-    [INFO] = "INFO:",
-    [WARNING] = "WARNING:",
-    [ERROR] = "ERROR:",
-    [FATAL] = "FATAL:"
-};
-
-static size_t logindex;
-static std::vector<std::string> LOG(MAXLOG, "");
-
+void Set_save_size(int tmpsize);
 int Savelog(LOGLEVEL level, const char *logstring);
 int Savelog(LOGLEVEL level, std::string log);
+int Savelog(std::vector<std::string> logvec);
 int Savetofile(std::string str);
 int Savetofile(std::vector<std::string> logvec);
+inline const char *Strlevel(LOGLEVEL level);
+inline bool Ismaximum();
+inline void Savetotemp(LOGLEVEL level, std::string log, int err);
+void Debuglog(const char *log, int err = 0);
+void Debuglog(std::string log, int err = 0);
+
+void Infolog(const char *log, int err = 0);
+void Infolog(std::string log, int err = 0);
+
+void Warninglog(const char *log, int err = 0);
+void Warninglog(std::string log, int err = 0);
+
+void Errorlog(const char *log, int err = 0);
+void Errorlog(std::string log, int err = 0);
+
+void Fatalog(const char *log, int err = 0);
+void Fatalog(std::string log, int err = 0);
 
 #endif

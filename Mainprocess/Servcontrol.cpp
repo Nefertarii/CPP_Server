@@ -1,29 +1,42 @@
-#include "Servercontrol.h"
+#include "Servcontrol.h"
+
+/*
+    Savelog(INFO,"epoll control add");
+    Savelog(INFO,"epoll control delete");
+    Savelog(INFO,"epoll control read");
+    Savelog(INFO,"epoll control write");
+*/
 
 void Server_start_Epollcontrol() {
-    int concurrent = std::thread::hardware_concurrency();
-    int listenfd = 0;
-    int MAXCLIENT = concurrent * SINGLECLIENTS;
-    Gthreadpool threadpool(MAXCLIENT);
     std::vector<Clientinfo> clients;
     Httpconnect connectctrl;
     Httprocess processctrl;
-    struct epoll_event event, events[MAXCLIENT];
-    
+    Httprespone responectrl;
+    Epollcontrol epollctrl;
+
+    int listenfd = 0;
+    int concurrent = std::thread::hardware_concurrency();
+    int MAXCLIENT = concurrent * connectctrl.Single_concurrent_client();   
+    Gthreadpool threadpool(MAXCLIENT);
+    struct epoll_event event, events[MAXCLIENT]; 
+
     //initialization
     threadpool.init();
     connectctrl.Connectlisten(&listenfd);
     clients.resize(MAXCLIENT);
     int epollfd = epoll_create(MAXCLIENT);
-    Epolladd(listenfd, epollfd);
-    Savelog(INFO, "Server initialization complete.");
+    epollctrl.Set_epollfd(epollfd);
+
+    epollctrl.Epolladd(listenfd);
+    Infolog("epoll control add");
+    Infolog("Server initialization complete.");
 
     //main control
     for (;;)
     {
         int nfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
         if(nfds < 0 && errno != EINTR) { //epoll create fail
-            Savelog(FATAL, "Cann't create epoll control.");
+            Fatalog("Cann't create epoll control.");
             //signal notify manage process...
             return; 
         }
@@ -35,7 +48,8 @@ void Server_start_Epollcontrol() {
                 if(!connectctrl.Canconnect()) {
                     clients[i].clientfd = connectfd;
                     processctrl.Set_client(clients[i]);
-                    Epolladd(connectfd, epollfd);
+                    epollctrl.Epolladd(connectfd);
+                    Infolog("epoll control add");
                 }
             }
             else if(event.events & EPOLLIN) {
@@ -44,14 +58,17 @@ void Server_start_Epollcontrol() {
                 REQUESTYPE request;
                 processctrl.Read(clients[i].clientfd, &readbuf);
                 if (!readbuf.empty()) {
-                    request = Requestparse(&readbuf);
+                    request = responectrl.Requestparse(&readbuf);
                     switch (request) {
                     case GET: {
-                        if(!GETparse(readbuf, &filename)) {
-                            GETprocess(filename, &file);
-                            Create_respone_head(&clients[i].respone_head, Filetype(filename), 200, file.filelength);
+                        if(!responectrl.GETparse(readbuf, &filename)) {
+                            responectrl.GETprocess(filename, &file);
+                            responectrl.Create_respone_head(&clients[i].respone_head, 
+                                                            responectrl.Filetype(filename), 
+                                                            200, file.filelength);
                             clients[i].filefd = file.filefd;
-                            Epollwrite(clients[i].clientfd, epollfd);
+                            epollctrl.Epollwrite(clients[i].clientfd);
+                            Infolog("epoll control write");
                         }
                         else {
                             ;

@@ -12,7 +12,7 @@
 #include <vector>
 #include <sstream>
 
-using ULL = unsigned long long
+using ULL = unsigned long long;
 
 ULL Pthreadid();
 

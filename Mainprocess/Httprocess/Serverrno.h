@@ -22,31 +22,32 @@ enum SERVSTATE
     STATEND = (1 << 30)
 };
 
-static const char *Serverr_map[] = {
-    [-ERRNONE] = "undefine server error.",
-    [-WRITEFAIL] = "send respone fail."
+enum HTTPSTATE {
+    OK = 200,
+    Badrequest = 400,
+    Unauthorized = 401,
+    Forbidden = 403,
+    Notfound = 404
 };
 
-static const char *Servstate_map[] = {
-    [STATENONE] = "undefine server state."
+enum POSTYPE {
+    POSTERR = 0,
+    POSTLogin,
+    POSTReset,
+    POSTRegister,
+    POSTVoteup,
+    POSTVotedown,
+    POSTComment,
+    POSTContent,
+    POSTReadcount,
+    POSTVerifi
 };
 
-static const char *Request_map[] = {
-    [TYPENONE] = "undefine requeset type.",
-    [GET] = "GET",
-    [POST] = "POST",
+class Errnoprint {
+public:
+    const char *Str_error(SERVERR err_code);
+    const char *Str_state(SERVSTATE state_code);
+    const char *Str_type(REQUESTYPE requset_type);
 };
-
-const char *Str_error(SERVERR err_code) {
-    return Serverr_map[-err_code % ERREND];
-}
-
-const char *Str_state(SERVSTATE state_code) {
-    return Servstate_map[state_code % STATEND];
-}
-
-const char *Str_type(REQUESTYPE requset_type) {
-    return Servstate_map[requset_type % TYPEND];
-}
 
 #endif

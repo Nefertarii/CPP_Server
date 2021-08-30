@@ -1,14 +1,13 @@
 #include "Servfunc.h"
 
-int SERV::init() {
-    templog_vec.resize(200);
-    logindex = 0;
-}
+const size_t READMAX = 1024 * 4;
+const size_t WRITEMAX = 1024 * 4; 
+const size_t REWRITEMAX = 4; 
 
 int SERV::Socket(int family, int type, int protocol) {
     int socketfd = socket(family, type, protocol);
     if (socketfd < 0) {
-        SERV::Syserrlog("Socket error.", errno);
+        Errorlog("Socket error.", errno);
         return -1;
     }
     return socketfd;
@@ -16,7 +15,7 @@ int SERV::Socket(int family, int type, int protocol) {
 
 int SERV::Bind(int fd, const struct sockaddr *sa, socklen_t salen) {
     if (bind(fd, sa, salen) < 0) {
-        SERV::Syserrlog("Bind error.", errno);
+        Errorlog("Bind error.", errno);
         return -1;
     }
     return 0;
@@ -24,7 +23,7 @@ int SERV::Bind(int fd, const struct sockaddr *sa, socklen_t salen) {
 
 int SERV::Listen(int fd, int backlog) {
     if (listen(fd, backlog) < 0) {
-        SERV::Syserrlog("Listen error.", errno);
+        Errorlog("Listen error.", errno);
         return -1;
     }
     return 0;
@@ -39,11 +38,11 @@ int SERV::Accept(int listenfd) {
         if (connectfd < 0) {
             if (errno == EINTR)
                 continue;
-            SERV::Syserrlog("Accept error.", errno);
+            Errorlog("Accept error.", errno);
             return -1;
             }
-        Syserrlog("Get accept from", 0);
-        Syserrlog(inet_ntoa(cliaddr.sin_addr), 0);
+        Errorlog("Get accept from", 0);
+        Errorlog(inet_ntoa(cliaddr.sin_addr), 0);
         return 0;
     }
     return -1;
@@ -51,7 +50,7 @@ int SERV::Accept(int listenfd) {
 
 int SERV::Close(int fd) {
     if (close(fd) < 0) {
-        SERV::Syserrlog("Close error.", errno);
+        Errorlog("Close error.", errno);
         return -1;
     }
     return 0;
@@ -62,13 +61,13 @@ int SERV::Read(int socketfd, std::string *str) {
     int readsize = read(socketfd, readbuf_tmp, READMAX);
     if (readsize < 0) {
         if (errno == EINTR) {
-            Savelog(ERROR, "Read error, Single break");
+            Errorlog("Read error, Single break");
         }
         else if(errno == EPIPE) {
-            Savelog(ERROR, "Read error, Client close");
+            Errorlog("Read error, Client close");
         }
         else if(errno != EAGAIN && errno != EWOULDBLOCK) {
-            SERV::Syserrlog("Read error", errno);
+            Errorlog("Read error", errno);
         }
         return -1; // error close
     }
@@ -87,11 +86,11 @@ int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
     const char *filename = filename_.c_str();
     filefd = open(filename, O_RDONLY);
     if(filefd < 0) {
-        SERV::Syserrlog("Readfile error", errno);
+        Errorlog("Readfile error", errno);
         return 1; //local fail
     }
     if(stat(filename, &file) < 0) {
-        SERV::Syserrlog("Readfile error", errno);
+        Errorlog("Readfile error", errno);
         return 1; //local fail
     }
     filestat_->filefd = filefd;
@@ -109,23 +108,23 @@ int SERV::Write(int socketfd, std::string str) {
         if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
             if (errno == EINTR) {
                 if (count == 0) {
-                    Savelog(WARNING, "Signal interuption");
+                    Warninglog("Signal interuption");
                 }
                 count++;
                 continue;  
             }
             else if(errno == EAGAIN || errno == EWOULDBLOCK) {
-                Savelog(WARNING, "kernel cache full");
+                Warninglog("kernel cache full");
                 return 1;
             }
             else {
-                SERV::Syserrlog("write error", errno);
+                Errorlog("write error", errno);
                 return -1;
             }
         }
     }
     if (count >= REWRITEMAX) {
-        Savelog(WARNING, "Write fail, Maximum number of rewrite");
+        Warninglog("Write fail, Maximum number of rewrite");
         return 1;
     }
     return 0;
@@ -137,31 +136,24 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
         if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
             if (errno == EINTR) {
                 if (count == 0) {
-                    Savelog(WARNING, "Signal interuption");
+                    Warninglog("Signal interuption");
                 }
                 count++;
                 continue;  
             }
             else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                Savelog(WARNING, "kernel cache full");
+                Warninglog("kernel cache full");
                 return 1;
             }
             else {
-                SERV::Syserrlog("Write error", errno);
+                Errorlog("Write error", errno);
                 return -1;
             }
         }
     }
     if (count >= REWRITEMAX) {
-        Savelog(WARNING, "Write file fail, Maximum number of rewrite");
+        Warninglog("Write file fail, Maximum number of rewrite");
         return 1;
     }
     return 0;
-}
-
-void SERV::Syserrlog(const char *log, int err) {
-    const char *tmperr = strerror(err);
-    std::string strlog = log;
-    std::string strerr = tmperr;
-    templog_vec[logindex] = "[ERROR] " + strlog + strerr;
 }
