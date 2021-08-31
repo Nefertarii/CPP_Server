@@ -27,7 +27,11 @@ void Server_start_Epollcontrol() {
     int epollfd = epoll_create(MAXCLIENT);
     epollctrl.Set_epollfd(epollfd);
 
-    epollctrl.Epolladd(listenfd);
+    struct epoll_event ev;
+    ev.events = EPOLLIN | EPOLLET;
+    ev.data.ptr = nullptr;
+    
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &ev);
     Infolog("epoll control add");
     Infolog("Server initialization complete.");
 

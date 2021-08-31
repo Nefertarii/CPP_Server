@@ -4,7 +4,7 @@
 //#include "../Servprocess.h"
 #include "Servfunc.h"
 
-//void Http_signal_handle();
+void Http_signal_handle();
 
 struct Clientinfo {
     std::string port;
