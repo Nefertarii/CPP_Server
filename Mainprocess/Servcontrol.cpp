@@ -17,11 +17,11 @@ void Server_start_Epollcontrol() {
     int listenfd = 0;
     int concurrent = std::thread::hardware_concurrency();
     int MAXCLIENT = concurrent * connectctrl.Single_concurrent_client();   
-    Gthreadpool threadpool(MAXCLIENT);
+    //Gthreadpool threadpool(MAXCLIENT);
     struct epoll_event event, events[MAXCLIENT]; 
 
     //initialization
-    threadpool.init();
+    //threadpool.init();
     connectctrl.Connectlisten(&listenfd);
     clients.resize(MAXCLIENT);
     int epollfd = epoll_create(MAXCLIENT);
@@ -90,7 +90,7 @@ void Server_start_Epollcontrol() {
                 }
             }
             else if(event.events & EPOLLOUT) {
-                threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_head);
+                //threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_head);
                 if (clients[i].filefd) {
                     //threadpool.submit(processctrl.Sendfile, clients[i].clientfd, clients[i].filefd);
                     processctrl.Sendfile(clients[i].clientfd, clients[i].filefd);

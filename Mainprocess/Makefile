@@ -4,7 +4,7 @@ OBJECTS1 = Glog.o Gjson.o Gstring.o Gthread.o Gtime.o \
 			Serverrno.o Servfunc.o Httprocess.o \
 			Servprocess.o Protocol.o \
 			Servcontrol.o \
-#			Server.o
+			Server.o
 ifeq ($(MODE),DEBUG)
 $(TARGET1): $(OBJECTS1)
 	g++ -pthread -std=c++17 -O2 -DEBUG -o $(TARGET1) $(OBJECTS1)
@@ -47,8 +47,8 @@ headfile.o : headfile.h
 Servcontrol.o : Servcontrol.h
 	g++ -pthread -std=c++17 -O2 -c Servcontrol.cpp
 
-#Server.o : Server.cpp
-	#g++ -pthread -std=c++17 -O2 -c Server.cpp
+Server.o : Server.cpp
+	g++ -pthread -std=c++17 -O2 -c Server.cpp
 
 
 .PHONY:clean
