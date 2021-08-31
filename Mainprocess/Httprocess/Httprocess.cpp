@@ -17,7 +17,6 @@ void Httprocess::Reset_client(struct Clientinfo client) {
 }
 
 void Httprocess::Set_client(struct Clientinfo client) {
-    char *tmpip;
     struct sockaddr_in client_address;
     socklen_t address_length = sizeof(client_address);
     getpeername(client.clientfd, (struct sockaddr *)&client_address, &address_length);
@@ -93,17 +92,19 @@ void Httprocess::Disconnect(struct Clientinfo client) {
 
 
 
-void Httpconnect::Connectlisten(int *listenfd) {
+int Httpconnect::Connectlisten() {
+    int listenfd = 0;
     concurrent_count = std::thread::hardware_concurrency();
     struct sockaddr_in server_address;
     memset(&server_address, 0, sizeof(server_address));
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(LISTENPORT);
     server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-    *listenfd = SERV::Socket(AF_INET, SOCK_STREAM, 0);
-    SERV::Bind(*listenfd, (struct sockaddr *)&server_address, sizeof(server_address));
-    SERV::Listen(*listenfd, concurrent_count * SINGLECLIENTS);
+    listenfd = SERV::Socket(AF_INET, SOCK_STREAM, 0);
+    SERV::Bind(listenfd, (struct sockaddr *)&server_address, sizeof(server_address));
+    SERV::Listen(listenfd, concurrent_count * SINGLECLIENTS);
     signal(SIGPIPE, SIG_IGN);
+    return listenfd;
 }
 
 int Httpconnect::Canconnect() {

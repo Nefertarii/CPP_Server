@@ -46,7 +46,7 @@ private:
     const size_t LISTENPORT = 80;   
 public:
     Httpconnect(){}
-    void Connectlisten(int *listenfd);
+    int Connectlisten();
     int Canconnect();
     const int Concurrent_count();
     const int Connect_nums();

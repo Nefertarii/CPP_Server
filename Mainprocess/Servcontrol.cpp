@@ -22,30 +22,31 @@ void Server_start_Epollcontrol() {
 
     //initialization
     //threadpool.init();
-    connectctrl.Connectlisten(&listenfd);
     clients.resize(MAXCLIENT);
     int epollfd = epoll_create(MAXCLIENT);
+    listenfd = connectctrl.Connectlisten();
     epollctrl.Set_epollfd(epollfd);
 
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = nullptr;
-    
     epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &ev);
+    
     Infolog("epoll control add");
     Infolog("Server initialization complete.");
 
     //main control
     for (;;)
     {
-        int nfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
-        if(nfds < 0 && errno != EINTR) { //epoll create fail
+        int readyfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
+        if(readyfds < 0 && errno != EINTR) { //epoll create fail
             Fatalog("Cann't create epoll control.");
             //signal notify manage process...
             return; 
         }
         //all set
-        for (int i = 0; i < nfds; i++) { 
+        for (int i = 0; i < readyfds; i++) { 
+            Infolog("Have connecting");
             event = events[i];
             if (event.data.ptr == nullptr) {
                 int connectfd = SERV::Accept(listenfd);

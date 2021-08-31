@@ -103,7 +103,7 @@ int SERV::Write(int socketfd, std::string str) {
         return 1;
     }
     const char *tmpstr = str.c_str();
-    int count = 0; //EINTR rewrite count
+    size_t count = 0; //EINTR rewrite count
     while(count != REWRITEMAX) {
         if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
             if (errno == EINTR) {
