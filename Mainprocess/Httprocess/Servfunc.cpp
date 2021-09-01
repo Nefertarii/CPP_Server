@@ -10,6 +10,7 @@ int SERV::Socket(int family, int type, int protocol) {
         Errorlog("Socket error.", errno);
         return -1;
     }
+    Infolog("Socket ok");
     return socketfd;
 }
 
@@ -18,6 +19,7 @@ int SERV::Bind(int fd, const struct sockaddr *sa, socklen_t salen) {
         Errorlog("Bind error.", errno);
         return -1;
     }
+    Infolog("Bind ok");
     return 0;
 }
 
@@ -26,6 +28,7 @@ int SERV::Listen(int fd, int backlog) {
         Errorlog("Listen error.", errno);
         return -1;
     }
+    Infolog("Listen ok");
     return 0;
 }
 
@@ -41,10 +44,11 @@ int SERV::Accept(int listenfd) {
             Errorlog("Accept error.", errno);
             return -1;
             }
-        Errorlog("Get accept from", 0);
-        Errorlog(inet_ntoa(cliaddr.sin_addr), 0);
+        Errorlog("Get accept from");
+        Errorlog(inet_ntoa(cliaddr.sin_addr));
         return 0;
     }
+    Errorlog("Accept error.");
     return -1;
 }
 
@@ -53,6 +57,7 @@ int SERV::Close(int fd) {
         Errorlog("Close error.", errno);
         return -1;
     }
+    Infolog("Close ok");
     return 0;
 }
 
@@ -155,5 +160,6 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
         Warninglog("Write file fail, Maximum number of rewrite");
         return 1;
     }
+    Infolog("Write file ok");
     return 0;
 }

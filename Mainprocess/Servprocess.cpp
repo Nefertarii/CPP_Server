@@ -1,17 +1,30 @@
 #include "Servprocess.h"
 
-void Epollcontrol::Set_epollfd(int epollfd_) { epollfd = epollfd_; }
+void Epollcontrol::Set_epollfd(int epollfd_) {
+    std::string log = "Epoll set, fd:" + std::to_string(epollfd) + ".";
+    Infolog(log);
+    epollfd = epollfd_;
+    hasconnect = &epollfd;
+}
 
 void Epollcontrol::Epolladd(int socketfd) {
+    std::string log = "Epoll add, fd:" + std::to_string(socketfd) + ".";
+    Infolog(log);
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = hasconnect;
-    epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev); 
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev);
 }
 
-void Epollcontrol::Epolldel(int socketfd) { epoll_ctl(epollfd, EPOLL_CTL_DEL, socketfd, nullptr); }
+void Epollcontrol::Epolldel(int socketfd) { 
+    std::string log = "Epoll del, fd:" + std::to_string(socketfd) + ".";
+    Infolog(log);
+    epoll_ctl(epollfd, EPOLL_CTL_DEL, socketfd, nullptr);
+}
 
 void Epollcontrol::Epollread(int socketfd) {
+    std::string log = "epoll ready read, fd:" + std::to_string(socketfd) + ".";
+    Infolog(log);
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = hasconnect;
@@ -19,8 +32,14 @@ void Epollcontrol::Epollread(int socketfd) {
 }
 
 void Epollcontrol::Epollwrite(int socketfd) {
+    std::string log = "epoll ready write, fd:" + std::to_string(socketfd) + ".";
+    Infolog(log);
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = hasconnect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
+}
+
+const int Epollcontrol::Epollfd() {
+    return epollfd;
 }

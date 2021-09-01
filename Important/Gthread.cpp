@@ -56,7 +56,7 @@ void Gthreadpool::ThreadWorker::operator()() {
 
 
 void Gthreadpool::init() { 
-    for (int i = 0; i < threads_.size(); ++i) {
+    for (uint i = 0; i < threads_.size(); ++i) {
         threads_.at(i) = std::thread(ThreadWorker(this, i)); 
     }
 }
@@ -64,7 +64,7 @@ void Gthreadpool::init() {
 void Gthreadpool::shutdown() {
     shutdown_ = true;
     conditional_lock_.notify_all(); 
-    for (int i = 0; i < threads_.size(); ++i) {
+    for (uint i = 0; i < threads_.size(); ++i) {
         if (threads_.at(i).joinable()) { 
             threads_.at(i).join(); 
         }

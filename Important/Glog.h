@@ -8,11 +8,10 @@
 #include <vector>
 
 enum LOGLEVEL {
-    DEBUG = 0,
-    INFO = 1,
-    WARNING = 2,
-    ERROR = 3,
-    FATAL = 4,
+    INFO = 0,
+    WARNING,
+    ERROR,
+    FATAL,
     LEVELEND = (1<<30)
 };
 
@@ -25,9 +24,6 @@ int Savetofile(std::vector<std::string> logvec);
 inline const char *Strlevel(LOGLEVEL level);
 inline bool Ismaximum();
 inline void Savetotemp(LOGLEVEL level, std::string log, int err);
-void Debuglog(const char *log, int err = 0);
-void Debuglog(std::string log, int err = 0);
-
 void Infolog(const char *log, int err = 0);
 void Infolog(std::string log, int err = 0);
 

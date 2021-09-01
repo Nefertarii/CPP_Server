@@ -19,7 +19,8 @@ public:
     void Epolldel(int socketfd);
     void Epollread(int socketfd);
     void Epollwrite(int socketfd);
-    ~Epollcontrol(){}
+    const int Epollfd();
+    ~Epollcontrol() {}
 };
 
 

@@ -5,7 +5,6 @@ int logindex = 0;
 std::vector<std::string> tmplog_vec(MAXLOG, "");
 
 static const char *Loglevel_map[] = {
-    [DEBUG] = "DEBUG:",
     [INFO] = "INFO:",
     [WARNING] = "WARNING:",
     [ERROR] = "ERROR:",
@@ -61,34 +60,29 @@ inline bool Ismaximum() {
 }
 
 inline void Savetotemp(LOGLEVEL level, const char *log, int err) {
+
+std::string strlevel = Strlevel(level);
+std::string strlog = log;
+std::string strtime = std::to_string(Timer::Nowtime_ms());
 #ifdef DEBUG
-    std::cout << log << "\n";
-#else
-    std::string strlevel = Strlevel(level);
-    std::string strlog = log;
     if(!err) {
-        tmplog_vec[logindex] = strlevel + " " + strlog;
+        strlog = strlevel + "" + strlog + " Data:" + strtime;
+        std::cout << strlog << "\n";
         return;
     }
     const char *tmperr = strerror(err);
-    std::string strerr =tmperr;
-    tmplog_vec[logindex] = strlevel + " " + strlog + strerr;
-#endif
-
-}
-
-void Debuglog(const char *log, int err) {
-    if(!Ismaximum()) {
-        Savetotemp(DEBUG, log, err);
-        logindex++;
+    std::string strerr = tmperr;
+    strlog = strlevel + " " + strlog + " " + strerr + " Data:" + strtime;
+#else
+    if(!err) {
+        tmplog_vec[logindex] = strlevel + " " + strlog + " Data:" + strtime;
         return;
     }
-    Savetotemp(DEBUG, log, err);
-    logindex = 0;
-    Savetofile(tmplog_vec);
+    const char *tmperr = strerror(err);
+    std::string strerr = tmperr;
+    tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + " Data:" + strtime;
+#endif
 }
-
-void Debuglog(std::string log, int err) { Debuglog(string_to_char(log), err); }
 
 void Infolog(const char *log, int err) {
     if(!Ismaximum()) {

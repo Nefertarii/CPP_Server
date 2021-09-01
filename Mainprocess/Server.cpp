@@ -2,5 +2,8 @@
 
 int main() {
     std::cout << "Server start.\n";
-    Server_start_Epollcontrol();
+    Servercontrol_epoll server;
+    signal(SIGINT, server.SIGINT_handler);
+    server.Server_start_Epollcontrol();
+    return 0;
 }
