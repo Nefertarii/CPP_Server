@@ -33,7 +33,6 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
         }
         
         for (int i = 0; i < readyfds; i++) { 
-            Infolog("Have connecting.");
             ev = events[i];
             if (ev.data.ptr == nullptr) {
                 int connectfd = SERV::Accept(listenfd);
@@ -41,7 +40,9 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
                     clients[i].clientfd = connectfd;
                     processctrl.Set_client(clients[i]);
                     epollctrl.Epolladd(connectfd);
-                    Infolog("epoll control add.");
+                    std::string log = clients[i].ip + ":" + clients[i].port;
+                    log = "Accept form " + log;
+                    Infolog(log);
                 }
             }
             else if(ev.events & EPOLLIN) {
@@ -60,7 +61,6 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
                                                             200, file.filelength);
                             clients[i].filefd = file.filefd;
                             epollctrl.Epollwrite(clients[i].clientfd);
-                            Infolog("epoll control write.");
                         }
                         else {
                             ;

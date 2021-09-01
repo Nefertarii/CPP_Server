@@ -44,8 +44,9 @@ int SERV::Accept(int listenfd) {
             Errorlog("Accept error.", errno);
             return -1;
             }
-        Errorlog("Get accept from");
-        Errorlog(inet_ntoa(cliaddr.sin_addr));
+        std::string log = inet_ntoa(cliaddr.sin_addr);
+        log = "Get accept from " + log;
+        Infolog(log);
         return 0;
     }
     Errorlog("Accept error.");
@@ -77,10 +78,19 @@ int SERV::Read(int socketfd, std::string *str) {
         return -1; // error close
     }
     else if (readsize == 0) {
+        std::string log = "client: " + std::to_string(socketfd) + " send close";
+        Infolog(log);
         return 1; // normal close
     }
     else {
+        std::string log = "Read from " + std::to_string(socketfd);
+        Infolog(log);
         *str = readbuf_tmp;
+        #ifdef DEBUG
+            Infolog(*str);
+        #else
+            ;
+        #endif
         return 0;
     }
 }
@@ -109,11 +119,14 @@ int SERV::Write(int socketfd, std::string str) {
     }
     const char *tmpstr = str.c_str();
     size_t count = 0; //EINTR rewrite count
-    while(count != REWRITEMAX) {
+    std::string log = "Write: " + std::to_string(socketfd);
+    Infolog(log);
+    while (count != REWRITEMAX)
+    {
         if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
             if (errno == EINTR) {
                 if (count == 0) {
-                    Warninglog("Signal interuption");
+                    Warninglog("Signal interruption");
                 }
                 count++;
                 continue;  
@@ -132,11 +145,15 @@ int SERV::Write(int socketfd, std::string str) {
         Warninglog("Write fail, Maximum number of rewrite");
         return 1;
     }
+    log += "success.";
+    Infolog(log);
     return 0;
 }
 
 int SERV::Writefile(int socketfd, int filefd, off_t offset) {
     int count = 0;
+    std::string log = "Write file: " + std::to_string(socketfd);
+    Infolog(log);
     while(count != REWRITEMAX) {
         if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
             if (errno == EINTR) {
@@ -160,6 +177,7 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
         Warninglog("Write file fail, Maximum number of rewrite");
         return 1;
     }
-    Infolog("Write file ok");
+    log += "success.";
+    Infolog(log);
     return 0;
 }
