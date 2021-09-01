@@ -107,8 +107,10 @@ void Servercontrol_epoll::Server_stop() {
     SERV::Close(listenfd);
     SERV::Close(epollctrl.Epollfd());
     std::string log = "Server total run time:" + serverclock.Runtime_str() + " sec";
+    Savetofile();
     Infolog(log);
     Infolog("Server is close.");
+    
 }
 
 Servercontrol_epoll::~Servercontrol_epoll() {
