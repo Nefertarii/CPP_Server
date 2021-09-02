@@ -13,6 +13,7 @@ static const char *Loglevel_map[] = {
 
 void Set_save_size(int tmpsize) { tmplog_vec.resize(tmpsize); }
 
+
 int Savetofile(std::string str) {
     std::fstream file;
     file.open("Log/log.txt", std::ios::in | std::ios::app);
@@ -31,8 +32,9 @@ int Savetofile(std::string str) {
 
 int Savetofile(std::vector<std::string> logvec) {
     std::fstream file;
-    file.open("Log/log.txt", std::ios::in | std::ios::app);
+    file.open("../Log/log.txt", std::ios::in | std::ios::app);
     if (file) {
+        std::cout << "\nlog save...\n";
         file.write("\n", 1);
         int size = logvec.size();
         for (int i = 0; i != size; i++) {
@@ -47,8 +49,27 @@ int Savetofile(std::vector<std::string> logvec) {
     }
     else {
         file.close();
+        std::ofstream newfile("log.txt");
+        if(newfile) {
+            std::cout << "\nlog save newfile ...\n";
+            newfile.write("\n", 1);
+            int size = logvec.size();
+            for (int i = 0; i != size; i++) {
+                if(!logvec[i].empty()) {
+                    std::string tmp = logvec[i] + "\n";
+                    newfile.write(string_to_char(tmp), tmp.length());
+                }
+            }
+            newfile.close();
+            return 0;
+        }
+        std::cout << "\nlog save fail!!!\n";
         return -1;
     }
+}
+
+int Savetofile() {
+    return Savetofile(tmplog_vec);
 }
 
 inline const char *Strlevel(LOGLEVEL level) { return Loglevel_map[level % LEVELEND]; }
@@ -66,21 +87,21 @@ std::string strlog = log;
 std::string strtime = std::to_string(Timer::Nowtime_ms());
 #ifdef DEBUG
     if(!err) {
-        strlog = strlevel + "" + strlog + " Data:" + strtime;
+        strlog = strlevel + "" + strlog + "\t Data:" + strtime;
         std::cout << strlog << "\n";
         return;
     }
     const char *tmperr = strerror(err);
     std::string strerr = tmperr;
-    strlog = strlevel + " " + strlog + " " + strerr + " Data:" + strtime;
+    strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
 #else
     if(!err) {
-        tmplog_vec[logindex] = strlevel + " " + strlog + " Data:" + strtime;
+        tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;
         return;
     }
     const char *tmperr = strerror(err);
     std::string strerr = tmperr;
-    tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + " Data:" + strtime;
+    tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
 #endif
 }
 

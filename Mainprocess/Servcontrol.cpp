@@ -38,10 +38,10 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
                 int connectfd = SERV::Accept(listenfd);
                 if(!connectctrl.Canconnect()) {
                     clients[i].clientfd = connectfd;
-                    processctrl.Set_client(clients[i]);
+                    processctrl.Set_client(&clients[i]);
                     epollctrl.Epolladd(connectfd);
                     std::string log = clients[i].ip + ":" + clients[i].port;
-                    log = "Accept form " + log;
+                    log = "Accept success " + log;
                     Infolog(log);
                 }
             }
@@ -83,13 +83,19 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
             }
             else if(ev.events & EPOLLOUT) {
                 //threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_head);
-                if (clients[i].filefd) {
+                if(!clients[i].respone_head.empty()) {
+                    processctrl.Send(clients[i].clientfd, clients[i].respone_head);
+                    clients[i].respone_head.clear();
+                }
+                if (clients[i].filefd)
+                {
                     //threadpool.submit(processctrl.Sendfile, clients[i].clientfd, clients[i].filefd);
                     processctrl.Sendfile(clients[i].clientfd, clients[i].filefd);
                 }
                 if (!clients[i].respone_body.empty()) {
                     //threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_body);
                     processctrl.Send(clients[i].clientfd, clients[i].respone_body);
+                    clients[i].respone_body.clear();
                 }
             }
         }
@@ -100,7 +106,7 @@ void Servercontrol_epoll::Server_stop() {
     Warninglog("Server closeing.");
     for (int i = 0; i != MAXCLIENT; i++) {
         if (clients[i].socketfd > 0) {
-            processctrl.Disconnect(clients[i]);
+            processctrl.Disconnect(&clients[i]);
         }
     }
     //threadpool.shutdown();

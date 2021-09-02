@@ -3,25 +3,25 @@
 
 
 
-void Httprocess::Reset_client(struct Clientinfo client) {
-    client.port.clear();
-    client.ip.clear();
-    client.respone_head.clear();
-    client.respone_body.clear();
-    client.clientfd = 0;
-    client.socketfd = 0;
-    client.filefd = 0;
-    client.err_code = ERRNONE;
-    client.state_code = STATENONE;
-    client.requset_type = TYPENONE;
+void Httprocess::Reset_client(struct Clientinfo *client) {
+    client->port.clear();
+    client->ip.clear();
+    client->respone_head.clear();
+    client->respone_body.clear();
+    client->clientfd = 0;
+    client->socketfd = 0;
+    client->filefd = 0;
+    client->err_code = ERRNONE;
+    client->state_code = STATENONE;
+    client->requset_type = TYPENONE;
 }
 
-void Httprocess::Set_client(struct Clientinfo client) {
+void Httprocess::Set_client(struct Clientinfo *client) {
     struct sockaddr_in client_address;
     socklen_t address_length = sizeof(client_address);
-    getpeername(client.clientfd, (struct sockaddr *)&client_address, &address_length);
-    client.port = std::to_string(ntohs(client_address.sin_port));
-    client.ip = inet_ntoa(client_address.sin_addr);
+    getpeername(client->clientfd, (struct sockaddr *)&client_address, &address_length);
+    client->port = std::to_string(ntohs(client_address.sin_port));
+    client->ip = inet_ntoa(client_address.sin_addr);
 }
 
 int Httprocess::Send(int clientfd, std::string message) {
@@ -84,8 +84,8 @@ void Httprocess::Clear(struct Clientinfo client) {
     client.filefd = 0;
 }
 
-void Httprocess::Disconnect(struct Clientinfo client) {
-    shutdown(client.clientfd, SHUT_WR);
+void Httprocess::Disconnect(struct Clientinfo *client) {
+    shutdown(client->clientfd, SHUT_WR);
     Reset_client(client);
 }
 

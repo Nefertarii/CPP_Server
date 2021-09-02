@@ -35,7 +35,7 @@ void Epollcontrol::Epollwrite(int socketfd) {
     std::string log = "epoll ready write, fd:" + std::to_string(socketfd) + ".";
     Infolog(log);
     struct epoll_event ev;
-    ev.events = EPOLLIN | EPOLLET;
+    ev.events = EPOLLOUT | EPOLLET;
     ev.data.ptr = hasconnect;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
 }

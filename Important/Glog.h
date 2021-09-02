@@ -21,6 +21,7 @@ int Savelog(LOGLEVEL level, std::string log);
 int Savelog(std::vector<std::string> logvec);
 int Savetofile(std::string str);
 int Savetofile(std::vector<std::string> logvec);
+int Savetofile();
 inline const char *Strlevel(LOGLEVEL level);
 inline bool Ismaximum();
 inline void Savetotemp(LOGLEVEL level, std::string log, int err);

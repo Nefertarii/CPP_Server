@@ -35,8 +35,17 @@ Gtime.o : ../Important/Gtime.h
 
 Serverrno.o : Httprocess/Serverrno.h
 	g++ -pthread -Wall -std=c++17 -O2 -c Httprocess/Serverrno.cpp
+	
+ifeq ($(MODE),DEBUG)
+$(TARGET1): $(OBJECTS1)
+Servfunc.o : Httprocess/Servfunc.h 
+	g++ -pthread -Wall -std=c++17 -O2 -DDEBUG -c Httprocess/Servfunc.cpp
+else
+$(TARGET1): $(OBJECTS1)
 Servfunc.o : Httprocess/Servfunc.h 
 	g++ -pthread -Wall -std=c++17 -O2 -c Httprocess/Servfunc.cpp
+endif
+
 Httprocess.o : Httprocess/Httprocess.h
 	g++ -pthread -Wall -std=c++17 -O2 -c Httprocess/Httprocess.cpp
 

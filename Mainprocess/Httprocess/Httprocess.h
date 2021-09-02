@@ -24,17 +24,17 @@ struct Clientinfo {
 class Httprocess
 {
 private:
-    void Reset_client(struct Clientinfo client);
+    void Reset_client(struct Clientinfo *client);
 
 public:
     Httprocess(){}
-    void Set_client(struct Clientinfo client);
+    void Set_client(struct Clientinfo *client);
     static int Send(int clientfd, std::string message);
     static int Sendfile(int clientfd, std::string filename);
     static int Sendfile(int clientfd, int filefd);
     int Read(int clientfd, std::string *read_buf);
     void Clear(struct Clientinfo client);
-    void Disconnect(struct Clientinfo client);
+    void Disconnect(struct Clientinfo *client);
     ~Httprocess(){};
 };
 
@@ -57,7 +57,7 @@ public:
 class Httprespone {
 private:
     const size_t READMAX = 1024 * 4;                      //once read max length;
-    const char *FILEDIR = "/home/http/server/";           //Default location for read file
+    const char *FILEDIR = "/home/Blog/";           //Default location for read file
 
 public:
     std::string Str_httpstate(int codenum);

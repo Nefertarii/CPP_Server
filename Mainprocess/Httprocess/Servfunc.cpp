@@ -47,7 +47,7 @@ int SERV::Accept(int listenfd) {
         std::string log = inet_ntoa(cliaddr.sin_addr);
         log = "Get accept from " + log;
         Infolog(log);
-        return 0;
+        return connectfd;
     }
     Errorlog("Accept error.");
     return -1;
@@ -58,7 +58,8 @@ int SERV::Close(int fd) {
         Errorlog("Close error.", errno);
         return -1;
     }
-    Infolog("Close ok");
+    std::string log = "Close " + std::to_string(fd) + " ok.";
+    Infolog(log);
     return 0;
 }
 

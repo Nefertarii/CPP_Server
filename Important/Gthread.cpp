@@ -70,6 +70,7 @@ void Gthreadpool::shutdown() {
         }
     }
 }
+
 // Submit a function to be executed asynchronously by the pool
 template <class F, class... Args>
 auto Gthreadpool::submit(F &&f, Args &&...args) -> std::future<decltype(f(args...))> {
