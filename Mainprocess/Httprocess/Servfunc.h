@@ -39,6 +39,7 @@ using ULL = unsigned long long;
 struct Filestate {
     int filefd = 0;
     int filelength = 0;
+    int offset = 0;
 };
 
 //System function rewrite
@@ -51,7 +52,7 @@ namespace SERV {
     int Close(int fd);
     int Read(int socketfd, std::string *str);
     int Readfile(std::string filename_,struct Filestate *filestat_);
-    int Write(int socketfd, std::string str);
+    int Write(int socketfd, std::string *str);
     int Writefile(int socketfd, int filefd, off_t offset);
 }
 

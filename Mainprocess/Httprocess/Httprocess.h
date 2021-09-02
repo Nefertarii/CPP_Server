@@ -11,9 +11,9 @@ struct Clientinfo {
     std::string ip;
     std::string respone_head;
     std::string respone_body;
+    //client's socketfd
     int clientfd;
-    int socketfd;
-    int filefd;
+    Filestate fileinfo;
     SERVERR err_code;
     SERVSTATE state_code;
     REQUESTYPE requset_type;
@@ -25,14 +25,16 @@ class Httprocess
 {
 private:
     void Reset_client(struct Clientinfo *client);
-
 public:
     Httprocess(){}
     void Set_client(struct Clientinfo *client);
-    static int Send(int clientfd, std::string message);
-    static int Sendfile(int clientfd, std::string filename);
-    static int Sendfile(int clientfd, int filefd);
-    int Read(int clientfd, std::string *read_buf);
+    static int Send(int socketfd, std::string *message);
+
+    //static int Sendfile(int clientfd, std::string filename);
+
+    static int Sendfile(int socketfd, int filefd, off_t offset);
+    static int Sendfile(int socketfd, Filestate *file);
+    int Read(int socketfd, std::string *read_buf);
     void Clear(struct Clientinfo client);
     void Disconnect(struct Clientinfo *client);
     ~Httprocess(){};

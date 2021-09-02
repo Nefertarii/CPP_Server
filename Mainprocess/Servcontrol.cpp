@@ -47,7 +47,6 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
             }
             else if(ev.events & EPOLLIN) {
                 std::string readbuf, filename;
-                struct Filestate file;
                 REQUESTYPE request;
                 processctrl.Read(clients[i].clientfd, &readbuf);
                 if (!readbuf.empty()) {
@@ -55,11 +54,10 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
                     switch (request) {
                     case GET: {
                         if(!responectrl.GETparse(readbuf, &filename)) {
-                            responectrl.GETprocess(filename, &file);
+                            responectrl.GETprocess(filename, &clients[i].fileinfo);
                             responectrl.Create_respone_head(&clients[i].respone_head, 
                                                             responectrl.Filetype(filename), 
-                                                            200, file.filelength);
-                            clients[i].filefd = file.filefd;
+                                                            200, clients[i].fileinfo.filelength);
                             epollctrl.Epollwrite(clients[i].clientfd);
                         }
                         else {
@@ -82,20 +80,25 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
                 }
             }
             else if(ev.events & EPOLLOUT) {
-                //threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_head);
-                if(!clients[i].respone_head.empty()) {
-                    processctrl.Send(clients[i].clientfd, clients[i].respone_head);
-                    clients[i].respone_head.clear();
-                }
-                if (clients[i].filefd)
+                //threadpool.submit(processctrl.Send, clients[i].clientfd, &clients[i].respone_head);
+                processctrl.Send(clients[i].clientfd, &clients[i].respone_head);
+                if (clients[i].fileinfo.filefd)
                 {
-                    //threadpool.submit(processctrl.Sendfile, clients[i].clientfd, clients[i].filefd);
-                    processctrl.Sendfile(clients[i].clientfd, clients[i].filefd);
+                    //threadpool.submit(processctrl.Sendfile, clients[i].clientfd, &clients[i].fileinfo);
+                    processctrl.Sendfile(clients[i].clientfd, &clients[i].fileinfo);
+                    if(clients[i].fileinfo.filefd) {
+                        epollctrl.Epollwrite(clients[i].clientfd);
+                    }
                 }
-                if (!clients[i].respone_body.empty()) {
-                    //threadpool.submit(processctrl.Send, clients[i].clientfd, clients[i].respone_body);
-                    processctrl.Send(clients[i].clientfd, clients[i].respone_body);
-                    clients[i].respone_body.clear();
+                else if (!clients[i].respone_body.empty()) {
+                    //threadpool.submit(processctrl.Send, clients[i].clientfd, &clients[i].respone_body);
+                    processctrl.Send(clients[i].clientfd, &clients[i].respone_body);
+                    if(!clients[i].respone_body.empty()) {
+                        epollctrl.Epollwrite(clients[i].clientfd);
+                    }
+                }
+                else {
+                    epollctrl.Epollread(clients[i].clientfd);
                 }
             }
         }
@@ -105,7 +108,7 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
 void Servercontrol_epoll::Server_stop() {
     Warninglog("Server closeing.");
     for (int i = 0; i != MAXCLIENT; i++) {
-        if (clients[i].socketfd > 0) {
+        if (clients[i].clientfd > 0) {
             processctrl.Disconnect(&clients[i]);
         }
     }

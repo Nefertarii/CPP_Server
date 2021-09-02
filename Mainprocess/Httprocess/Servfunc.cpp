@@ -87,11 +87,13 @@ int SERV::Read(int socketfd, std::string *str) {
         std::string log = "Read from " + std::to_string(socketfd);
         Infolog(log);
         *str = readbuf_tmp;
+        /*
         #ifdef DEBUG
             Infolog(*str);
         #else
             ;
         #endif
+        */
         return 0;
     }
 }
@@ -111,14 +113,12 @@ int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
     }
     filestat_->filefd = filefd;
     filestat_->filelength = file.st_size;
+    filestat_->offset = 0;
     return 0;
 }
 
-int SERV::Write(int socketfd, std::string str) {
-    if(str.length() == 0) {
-        return 1;
-    }
-    const char *tmpstr = str.c_str();
+int SERV::Write(int socketfd, std::string *str) {
+    const char *tmpstr = str->c_str();
     size_t count = 0; //EINTR rewrite count
     std::string log = "Write: " + std::to_string(socketfd);
     Infolog(log);
@@ -127,14 +127,14 @@ int SERV::Write(int socketfd, std::string str) {
         if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
             if (errno == EINTR) {
                 if (count == 0) {
-                    Warninglog("Signal interruption");
+                    Warninglog("Write error", errno); //Signal interruption: slow system call
                 }
                 count++;
                 continue;  
             }
             else if(errno == EAGAIN || errno == EWOULDBLOCK) {
-                Warninglog("kernel cache full");
-                return 1;
+                Warninglog("write error", errno); //kernel cache full
+                return 2;
             }
             else {
                 Errorlog("write error", errno);
@@ -146,7 +146,7 @@ int SERV::Write(int socketfd, std::string str) {
         Warninglog("Write fail, Maximum number of rewrite");
         return 1;
     }
-    log += "success.";
+    log += " success.";
     Infolog(log);
     return 0;
 }
@@ -178,7 +178,7 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
         Warninglog("Write file fail, Maximum number of rewrite");
         return 1;
     }
-    log += "success.";
+    log += " success.";
     Infolog(log);
     return 0;
 }

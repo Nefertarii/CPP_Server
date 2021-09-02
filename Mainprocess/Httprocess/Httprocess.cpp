@@ -1,7 +1,8 @@
 #include "Httprocess.h"
 
 
-
+const size_t READMAX = 1024 * 4;
+const size_t WRITEMAX = 1024 * 4; 
 
 void Httprocess::Reset_client(struct Clientinfo *client) {
     client->port.clear();
@@ -9,8 +10,9 @@ void Httprocess::Reset_client(struct Clientinfo *client) {
     client->respone_head.clear();
     client->respone_body.clear();
     client->clientfd = 0;
-    client->socketfd = 0;
-    client->filefd = 0;
+    client->fileinfo.filefd = 0;
+    client->fileinfo.filelength = 0;
+    client->fileinfo.offset = 0;
     client->err_code = ERRNONE;
     client->state_code = STATENONE;
     client->requset_type = TYPENONE;
@@ -24,23 +26,59 @@ void Httprocess::Set_client(struct Clientinfo *client) {
     client->ip = inet_ntoa(client_address.sin_addr);
 }
 
-int Httprocess::Send(int clientfd, std::string message) {
-    int ret = SERV::Write(clientfd, message);
-    if (ret == 0) {
-        return 0;
-    }
-    else if(ret >= 1) {  //error code set
+int Httprocess::Send(int socketfd, std::string *message) {
+    if (message->size() == 0) {
+        Warninglog("Empty write.");
         return 1;
     }
+    else if (message->size() > WRITEMAX) {
+        std::string tmp(*message, 0, WRITEMAX);
+        *message = message->substr(WRITEMAX, message->size());
+        int ret = SERV::Write(socketfd, &tmp);
+        if (ret == 0) {
+            return 0;
+        }
+        else if(ret >= 1) {  //error code set
+            return 1;
+        }
+        else {
+            return -1;
+        }
+    }
     else {
-        return -1;
+        std::string tmp(*message, 0, WRITEMAX);
+        int ret = SERV::Write(socketfd, message);
+        message->clear();
+        if (ret == 0) {
+            return 0;
+        }
+        else if(ret >= 1) {  //error code set
+            return 1;
+        }
+        else {
+            return -1;
+        }
     }
 }
 
-int Httprocess::Sendfile(int clientfd, std::string filename) {
+//too bad
+/*int Httprocess::Sendfile(int socketfd, std::string filename) {
     struct Filestate file;
     SERV::Readfile(filename, &file);
-    int ret = SERV::Writefile(clientfd, file.filefd, 10);
+    int ret = SERV::Writefile(socketfd, file.filefd, 10);
+    if (ret == 0) {
+        return 0;
+    }
+    else if(ret >= 1) {
+        return 1;
+    }
+    else {
+        return -1;
+    }
+}*/
+
+int Httprocess::Sendfile(int socketfd, int filefd, off_t offset) {
+    int ret = SERV::Writefile(socketfd, filefd, offset);
     if (ret == 0) {
         return 0;
     }
@@ -52,21 +90,26 @@ int Httprocess::Sendfile(int clientfd, std::string filename) {
     }
 }
 
-int Httprocess::Sendfile(int clientfd, int filefd) {
-    int ret = SERV::Writefile(clientfd, filefd, 10);
-    if (ret == 0) {
-        return 0;
+int Httprocess::Sendfile(int socketfd, Filestate *file) {
+    int ret = 0;
+    if(file->filefd == 0) {
+        Warninglog("Empty write file.");
     }
-    else if(ret >= 1) {
-        return 1;
+    else if((file->filelength - file->offset) > WRITEMAX) {
+        int ret = Sendfile(socketfd, file->filefd, WRITEMAX);
+        file->offset += WRITEMAX;
     }
     else {
-        return -1;
+        int ret = Sendfile(socketfd, file->filefd, file->offset);
+        file->filefd = 0;
+        file->filelength = 0;
+        file->offset = 0;
     }
+    return ret;
 }
 
-int Httprocess::Read(int clientfd, std::string *read_buf) {
-    int ret = SERV::Read(clientfd, read_buf);
+int Httprocess::Read(int socketfd, std::string *read_buf) {
+    int ret = SERV::Read(socketfd, read_buf);
     if (ret == 0) {
         return 0;
     }
@@ -81,7 +124,9 @@ int Httprocess::Read(int clientfd, std::string *read_buf) {
 void Httprocess::Clear(struct Clientinfo client) {
     client.respone_head.clear();
     client.respone_body.clear();
-    client.filefd = 0;
+    client.fileinfo.filefd = 0;
+    client.fileinfo.filelength = 0;
+    client.fileinfo.offset = 0;
 }
 
 void Httprocess::Disconnect(struct Clientinfo *client) {
