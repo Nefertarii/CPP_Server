@@ -22,11 +22,12 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
     struct epoll_event ev, events[MAXCLIENT];
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = nullptr;
-    epoll_ctl(epollctrl.Epollfd(), EPOLL_CTL_ADD, listenfd, &ev);
+    int epollfd = epollctrl.Epollfd();
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &ev);
     //main control
     for (;;)
     {
-        int readyfds = epoll_wait(epollctrl.Epollfd(), events, MAXCLIENT, 0);
+        int readyfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
         if(readyfds < 0 && errno != EINTR) { //epoll create fail
             Fatalog("Cann't create epoll control.");
             //signal notify manage process...
@@ -64,8 +65,9 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
 
 void Servercontrol_epoll::Server_stop() {
     Warninglog("Server closeing.");
-    for (int i = 0; i != MAXCLIENT; i++) {
+    for (size_t i = 0; i != MAXCLIENT; i++) {
         if (clients[i].clientfd > 0) {
+            epollctrl.Epollwrite(clients[i].clientfd);
             processctrl.Disconnect(&clients[i]);
         }
     }
@@ -216,3 +218,4 @@ void Servercontrol_epoll::Send_responebody(Clientinfo *client) {
 Servercontrol_epoll::~Servercontrol_epoll() {
     Server_stop();
 }
+

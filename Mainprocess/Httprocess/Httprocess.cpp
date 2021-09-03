@@ -43,11 +43,8 @@ int Httprocess::Send(int socketfd, std::string *message) {
 
 int Httprocess::Sendfile(int socketfd, Filestate *file) {
     int ret = 0;
-    if(file->filefd == 0) {
-        Warninglog("Empty write file.");
-    }
-    else if((file->filelength - file->offset) > WRITEMAX) {
-        ret = SERV::Writefile(socketfd, file->filefd, WRITEMAX);
+    if((file->filelength - file->offset) > WRITEMAX) {
+        ret = SERV::Writefile(socketfd, file->filefd, file->offset);
         file->offset += WRITEMAX;
     }
     else {
@@ -326,3 +323,4 @@ int Httprespone::POSTprocess(std::string post_type, std::string post_data) {
     }
     return 0;
 }
+

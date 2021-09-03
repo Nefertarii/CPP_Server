@@ -87,13 +87,6 @@ int SERV::Read(int socketfd, std::string *str) {
         std::string log = "Read from " + std::to_string(socketfd);
         Infolog(log);
         *str = readbuf_tmp;
-        /*
-        #ifdef DEBUG
-            Infolog(*str);
-        #else
-            ;
-        #endif
-        */
         return 0;
     }
 }
@@ -119,14 +112,7 @@ int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
 
 int SERV::Write(int socketfd, std::string *str) {
     const char *tmpstr = str->c_str();
-    
-    #ifdef DEBUG
-        Infolog(*str);
-    #else
-        ;
-    #endif
-    
-    std::string log = "Write: " + std::to_string(socketfd);
+    std::string log = "Write to: " + std::to_string(socketfd);
     Infolog(log);
     if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
         if (errno == EINTR) {
@@ -148,16 +134,7 @@ int SERV::Write(int socketfd, std::string *str) {
 }
 
 int SERV::Writefile(int socketfd, int filefd, off_t offset) {
-
-    
-    #ifdef DEBUG
-        Infolog(std::to_string(filefd));
-    #else
-        ;
-    #endif
-    
-
-    std::string log = "Write file: " + std::to_string(socketfd);
+    std::string log = "Write file to: " + std::to_string(socketfd);
     Infolog(log);
     if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
         if (errno == EINTR) {

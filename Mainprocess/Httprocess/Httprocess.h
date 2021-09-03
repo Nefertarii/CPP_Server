@@ -42,8 +42,8 @@ public:
 
 class Httpconnect {
 private:
-    int concurrent_count;
-    int connect_nums;
+    size_t concurrent_count;
+    size_t connect_nums;
     const size_t SINGLECLIENTS = 8;    
     const size_t LISTENPORT = 8000;   
 public:
@@ -59,7 +59,7 @@ public:
 class Httprespone {
 private:
     const size_t READMAX = 1024 * 4;                      //once read max length;
-    const char *FILEDIR = "/home/cs18/vscode/Blog/";           //Default location for read file
+    const char *FILEDIR = "/home/ubuntu/Blog/";           //Default location for read file
 
 public:
     std::string Str_httpstate(int codenum);
