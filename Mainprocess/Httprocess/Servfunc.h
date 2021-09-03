@@ -38,8 +38,8 @@ using ULL = unsigned long long;
 
 struct Filestate {
     int filefd = 0;
-    int filelength = 0;
-    int offset = 0;
+    uint filelength = 0;
+    uint offset = 0;
 };
 
 //System function rewrite

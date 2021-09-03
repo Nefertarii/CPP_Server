@@ -13,6 +13,7 @@ struct Clientinfo {
     std::string respone_body;
     //client's socketfd
     int clientfd;
+    size_t writecount;
     Filestate fileinfo;
     SERVERR err_code;
     SERVSTATE state_code;
@@ -21,8 +22,7 @@ struct Clientinfo {
 
 //only encapsulates read and write operations
 //need other function to control
-class Httprocess
-{
+class Httprocess {
 private:
     void Reset_client(struct Clientinfo *client);
 public:
@@ -31,11 +31,11 @@ public:
     static int Send(int socketfd, std::string *message);
 
     //static int Sendfile(int clientfd, std::string filename);
+    //static int Sendfile(int socketfd, int filefd, off_t offset);
 
-    static int Sendfile(int socketfd, int filefd, off_t offset);
     static int Sendfile(int socketfd, Filestate *file);
     int Read(int socketfd, std::string *read_buf);
-    void Clear(struct Clientinfo client);
+    void Clear(struct Clientinfo *client);
     void Disconnect(struct Clientinfo *client);
     ~Httprocess(){};
 };
@@ -45,7 +45,7 @@ private:
     int concurrent_count;
     int connect_nums;
     const size_t SINGLECLIENTS = 8;    
-    const size_t LISTENPORT = 80;   
+    const size_t LISTENPORT = 8000;   
 public:
     Httpconnect(){}
     int Connectlisten();
@@ -59,7 +59,7 @@ public:
 class Httprespone {
 private:
     const size_t READMAX = 1024 * 4;                      //once read max length;
-    const char *FILEDIR = "/home/Blog/";           //Default location for read file
+    const char *FILEDIR = "/home/cs18/vscode/Blog/";           //Default location for read file
 
 public:
     std::string Str_httpstate(int codenum);

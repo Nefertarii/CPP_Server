@@ -94,14 +94,16 @@ std::string strtime = std::to_string(Timer::Nowtime_ms());
     const char *tmperr = strerror(err);
     std::string strerr = tmperr;
     strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
+    std::cout << strlog << "\n";
 #else
-    if(!err) {
-        tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;
-        return;
-    }
-    const char *tmperr = strerror(err);
-    std::string strerr = tmperr;
-    tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
+if (!err)
+{
+    tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;
+    return;
+}
+const char *tmperr = strerror(err);
+std::string strerr = tmperr;
+tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
 #endif
 }
 

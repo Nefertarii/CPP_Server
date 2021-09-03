@@ -119,32 +119,28 @@ int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
 
 int SERV::Write(int socketfd, std::string *str) {
     const char *tmpstr = str->c_str();
-    size_t count = 0; //EINTR rewrite count
+    
+    #ifdef DEBUG
+        Infolog(*str);
+    #else
+        ;
+    #endif
+    
     std::string log = "Write: " + std::to_string(socketfd);
     Infolog(log);
-    while (count != REWRITEMAX)
-    {
-        if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
-            if (errno == EINTR) {
-                if (count == 0) {
-                    Warninglog("Write error", errno); //Signal interruption: slow system call
-                }
-                count++;
-                continue;  
-            }
-            else if(errno == EAGAIN || errno == EWOULDBLOCK) {
-                Warninglog("write error", errno); //kernel cache full
-                return 2;
-            }
-            else {
-                Errorlog("write error", errno);
-                return -1;
-            }
+    if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
+        if (errno == EINTR) {
+            Errorlog("Write error", errno); //Signal interruption: slow system call
+            return 1;
         }
-    }
-    if (count >= REWRITEMAX) {
-        Warninglog("Write fail, Maximum number of rewrite");
-        return 1;
+        else if(errno == EAGAIN || errno == EWOULDBLOCK) {
+            Warninglog("write error", errno); //kernel cache full
+            return 2;
+        }
+        else {
+            Errorlog("write error", errno);
+            return -1;
+        }
     }
     log += " success.";
     Infolog(log);
@@ -152,31 +148,30 @@ int SERV::Write(int socketfd, std::string *str) {
 }
 
 int SERV::Writefile(int socketfd, int filefd, off_t offset) {
-    int count = 0;
+
+    
+    #ifdef DEBUG
+        Infolog(std::to_string(filefd));
+    #else
+        ;
+    #endif
+    
+
     std::string log = "Write file: " + std::to_string(socketfd);
     Infolog(log);
-    while(count != REWRITEMAX) {
-        if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
-            if (errno == EINTR) {
-                if (count == 0) {
-                    Warninglog("Signal interuption");
-                }
-                count++;
-                continue;  
-            }
-            else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-                Warninglog("kernel cache full");
-                return 1;
-            }
-            else {
-                Errorlog("Write error", errno);
-                return -1;
-            }
+    if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
+        if (errno == EINTR) {
+            Warninglog("Signal interuption");
+            return 1;
         }
-    }
-    if (count >= REWRITEMAX) {
-        Warninglog("Write file fail, Maximum number of rewrite");
-        return 1;
+        else if (errno == EAGAIN || errno == EWOULDBLOCK) {
+            Warninglog("kernel cache full");
+            return 2;
+        } 
+        else {
+            Errorlog("Write error", errno);
+            return -1;
+        }
     }
     log += " success.";
     Infolog(log);

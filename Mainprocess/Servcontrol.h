@@ -14,12 +14,18 @@ private:
     Epollcontrol epollctrl;
     Timer serverclock;
     int listenfd;
-    int concurrent;
-    int MAXCLIENT;
+    size_t concurrent;
+    size_t MAXCLIENT;
+    size_t REWRITEMAX;
     //Gthreadpool threadpool(MAXCLIENT);
 public:
     Servercontrol_epoll();
     void Server_start_Epollcontrol();
+    void Connect_accept(Clientinfo *client);
+    void Connect_getmethod(Clientinfo *client, std::string *readbuf);
+    void Connect_postmethod(Clientinfo *client, std::string *readbuf);
+    void Send_responehead(Clientinfo *client);
+    void Send_responebody(Clientinfo *client);
     void Server_stop();
     ~Servercontrol_epoll();
 };
