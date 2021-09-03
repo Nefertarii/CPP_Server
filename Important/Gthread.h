@@ -40,7 +40,7 @@ private:
         int id_; 
         Gthreadpool *pool_; 
     public:
-        ThreadWorker(Gthreadpool *pool, const int id) : pool_(pool), id_(id){}
+        ThreadWorker(Gthreadpool *pool, const int id) : id_(id), pool_(pool){}
         void operator()();
     };
     bool shutdown_;                          
@@ -51,7 +51,7 @@ private:
 
 public:
     Gthreadpool(const int n_threads = 1) 
-        : threads_(std::vector<std::thread>(n_threads)), shutdown_(false){}
+        :shutdown_(false), threads_(std::vector<std::thread>(n_threads)){}
     Gthreadpool(const Gthreadpool &) = delete;
     Gthreadpool(Gthreadpool &&) = delete;
     Gthreadpool &operator=(const Gthreadpool &) = delete;
