@@ -1,56 +1,33 @@
 
+INFO: Socket ok	 Data:1630740711869
+INFO: Bind ok	 Data:1630740711869
+INFO: Listen ok	 Data:1630740711869
+INFO: Epoll set, fd:0.	 Data:1630740711869
+INFO: epoll control add.	 Data:1630740711869
+INFO: Server initialization complete.	 Data:1630740711869
+INFO: Get accept from 127.0.0.1	 Data:1630740728443
+INFO: Epoll add, fd:5.	 Data:1630740728443
+INFO: Accept success 127.0.0.1:47642	 Data:1630740728443
+INFO: Read from 5	 Data:1630740728445
+INFO: Get request:index.html	 Data:1630740728446
+ERROR: Readfile error No such file or directory	 Data:1630740728446
+INFO: epoll ready write, fd:5.	 Data:1630740728446
+INFO: Write to: 5	 Data:1630740728446
+INFO: Write to: 5 success.	 Data:1630740728446
+INFO: epoll ready read, fd:5.	 Data:1630740728446
+INFO: Read from 5	 Data:1630740730363
+INFO: Get request:favicon.ico	 Data:1630740730363
+ERROR: Readfile error No such file or directory	 Data:1630740730363
+INFO: epoll ready write, fd:5.	 Data:1630740730363
+INFO: Write to: 5	 Data:1630740730363
+INFO: Write to: 5 success.	 Data:1630740730363
+INFO: epoll ready read, fd:5.	 Data:1630740730363
+INFO: capture signal SIGINT.	 Data:1630740741276
+WARNING: Server closeing.	 Data:1630740741276
+INFO: epoll ready write, fd:5.	 Data:1630740741276
+INFO: Close 5 ok.	 Data:1630740741276
+INFO: Close 4 ok.	 Data:1630740741276
+INFO: Close 3 ok.	 Data:1630740741276
 
-INFO: Socket ok	 Data:1630709434656
-INFO: Bind ok	 Data:1630709434656
-INFO: Listen ok	 Data:1630709434656
-INFO: Epoll set, fd:0.	 Data:1630709434656
-INFO: epoll control add.	 Data:1630709434656
-INFO: Server initialization complete.	 Data:1630709434656
-INFO: Get accept from 127.0.0.1	 Data:1630709439460
-INFO: Epoll add, fd:5.	 Data:1630709439460
-INFO: Accept success 127.0.0.1:46998	 Data:1630709439460
-INFO: Read from 5	 Data:1630709439463
-INFO: Get accept from 127.0.0.1	 Data:1630709443076
-INFO: Epoll add, fd:6.	 Data:1630709443076
-INFO: Accept success 127.0.0.1:47000	 Data:1630709443076
-INFO: Read from 6	 Data:1630709443142
-INFO: Get request:index.html	 Data:1630709443142
-INFO: epoll ready write, fd:6.	 Data:1630709443143
-INFO: Write to: 6	 Data:1630709443143
-INFO: Write to: 6 success.	 Data:1630709443143
-INFO: Write file to: 6	 Data:1630709443143
-INFO: Write file to: 6 success.	 Data:1630709443156
-INFO: epoll ready write, fd:6.	 Data:1630709443156
-INFO: Write file to: 6	 Data:1630709443156
-INFO: Write file to: 6 success.	 Data:1630709443156
-INFO: epoll ready write, fd:6.	 Data:1630709443156
-INFO: Write file to: 6	 Data:1630709443156
-INFO: Write file to: 6 success.	 Data:1630709443156
-INFO: epoll ready read, fd:6.	 Data:1630709443156
-INFO: Read from 6	 Data:1630709443784
-INFO: Get request:index.css	 Data:1630709443784
-INFO: epoll ready write, fd:6.	 Data:1630709443784
-INFO: Write to: 6	 Data:1630709443784
-INFO: Write to: 6 success.	 Data:1630709443784
-INFO: Write file to: 6	 Data:1630709443784
-INFO: Write file to: 6 success.	 Data:1630709443809
-INFO: epoll ready write, fd:6.	 Data:1630709443809
-INFO: Write file to: 6	 Data:1630709443809
-INFO: Write file to: 6 success.	 Data:1630709443809
-INFO: epoll ready read, fd:6.	 Data:1630709443809
-INFO: Get accept from 127.0.0.1	 Data:1630709443854
-INFO: Epoll add, fd:9.	 Data:1630709443854
-INFO: Accept success 127.0.0.1:47002	 Data:1630709443854
-INFO: Read from 9	 Data:1630709443855
-INFO: Get request:index.js	 Data:1630709443855
-INFO: epoll ready write, fd:9.	 Data:1630709443855
-INFO: Write to: 9	 Data:1630709443855
-INFO: Write to: 9 success.	 Data:1630709443855
-INFO: Write file to: 9	 Data:1630709443855
-INFO: Write file to: 9 success.	 Data:1630709443869
-INFO: epoll ready read, fd:9.	 Data:1630709443869
-INFO: Epoll del, fd:0.	 Data:1630709443869
-INFO: capture signal SIGINT.	 Data:1630709459089
-WARNING: Server closeing.	 Data:1630709459089
-INFO: Close 4 ok.	 Data:1630709459090
-INFO: Close 3 ok.	 Data:1630709459090
+
+

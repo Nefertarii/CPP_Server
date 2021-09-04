@@ -69,8 +69,10 @@ void Httprocess::Clear(struct Clientinfo *client) {
 }
 
 void Httprocess::Disconnect(struct Clientinfo *client) {
-    shutdown(client->clientfd, SHUT_WR);
+    shutdown(client->clientfd, SHUT_RDWR);
+    SERV::Close(client->clientfd);
     Reset_client(client);
+    
 }
 
 
@@ -189,7 +191,6 @@ int Httprespone::GETparse(std::string readbuf,std::string *filename) { //return 
     std::string request_file = Substr(readbuf, 5, READMAX, ' ');
     if (request_file == "0") {
         request_file = "index.html";
-
     }
     if (request_file == "-1") {
         Infolog("Get request fail");

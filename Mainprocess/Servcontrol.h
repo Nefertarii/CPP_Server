@@ -12,6 +12,7 @@ private:
     Httprocess processctrl;
     Httprespone responectrl;
     Epollcontrol epollctrl;
+    Badrespone badrequest;
     Timer serverclock;
     int listenfd;
     size_t concurrent;
@@ -26,6 +27,7 @@ public:
     void Connect_postmethod(Clientinfo *client, std::string *readbuf);
     void Send_responehead(Clientinfo *client);
     void Send_responebody(Clientinfo *client);
+    void Send_responefile(Clientinfo *client);
     void Server_stop();
     ~Servercontrol_epoll();
 };
