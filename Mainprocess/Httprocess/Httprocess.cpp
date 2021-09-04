@@ -178,7 +178,7 @@ REQUESTYPE Httprespone::Requestparse(std::string *readbuf) {
     if(readbuf->find_first_of("GET") == 0) {
         return GET;
     }
-    else if(readbuf->find_first_of("POST") == 0) {
+    if(readbuf->find_first_of("POST") == 0) {
         return POST;
     }
     else {

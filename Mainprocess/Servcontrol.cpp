@@ -168,9 +168,9 @@ void Servercontrol_epoll::Send_responebody(Clientinfo *client) {
             return;
         } case 0: {
             if(client->respone_body.empty()) {
-                processctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
-                return;
+                //processctrl.Disconnect(client);
+                //epollctrl.Epolldel(socketfd);
+                epollctrl.Epollread(socketfd);
             } else {
                 epollctrl.Epollwrite(socketfd);
             }
@@ -209,8 +209,9 @@ void Servercontrol_epoll::Send_responefile(Clientinfo *client) {
             return;
         } case 0: {
             if(client->fileinfo.filefd == 0) {
-                processctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
+                //processctrl.Disconnect(client);
+                //epollctrl.Epolldel(socketfd);
+                epollctrl.Epollread(socketfd);
             } else {
                 epollctrl.Epollwrite(socketfd);
             }
