@@ -1,24 +1,24 @@
 #ifndef SERVFUNC_H_
 #define SERVFUNC_H_
 
-
-#include "Serverrno.h"
+#include "../../Important/Gstring.h"
 #include "../../Important/Gtime.h"
 #include "../../Important/Glog.h"
+#include "../../Important/Gthread.h"
+#include "Serverrno.h"
+#include <sys/stat.h>
+#include <sys/socket.h>
+#include <sys/sendfile.h>
 #include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <cstdarg>
 #include <iostream>
 #include <signal.h>
-#include <string>
 #include <sstream>
 #include <dirent.h>
-#include <fcntl.h>
 #include <sys/epoll.h>
-#include <sys/socket.h>
 #include <sys/types.h>
-#include <sys/stat.h>
-#include <sys/sendfile.h>
-#include <thread>
 #include <vector>
 
 //setting
@@ -35,12 +35,6 @@
 
 //using
 using ULL = unsigned long long;
-
-struct Filestate {
-    int filefd = 0;
-    uint filelength = 0;
-    uint offset = 0;
-};
 
 //System function rewrite
 namespace SERV {

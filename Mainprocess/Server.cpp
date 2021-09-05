@@ -1,7 +1,5 @@
 #include "Servcontrol.h"
 
-static Servercontrol_epoll server;
-
 void SIG_handler(int sig) {
     if (sig == SIGINT) {
         Infolog("capture signal SIGINT.");
@@ -14,6 +12,7 @@ void SIG_handler(int sig) {
 }
 
 int main() {
+    static Servercontrol_epoll server;
     std::cout << "Server start.\n";
     signal(SIGINT, SIG_handler);
     server.Server_start_Epollcontrol();

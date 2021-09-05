@@ -22,9 +22,9 @@ private:
 public:
     Servercontrol_epoll();
     void Server_start_Epollcontrol();
-    void Connect_accept(Clientinfo *client);
-    void Connect_getmethod(Clientinfo *client, std::string *readbuf);
-    void Connect_postmethod(Clientinfo *client, std::string *readbuf);
+    void Connect_accept();
+    void Connect_method_get(Clientinfo *client, std::string *readbuf);
+    void Connect_method_post(Clientinfo *client, std::string *readbuf);
     void Send_responehead(Clientinfo *client);
     void Send_responebody(Clientinfo *client);
     void Send_responefile(Clientinfo *client);

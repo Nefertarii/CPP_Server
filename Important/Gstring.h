@@ -1,7 +1,7 @@
 #ifndef GSTRING_H_
 #define GSTRING_H_
 
-#include <string.h>
+#include <cstring>
 #include <string>
 
 //string to char*

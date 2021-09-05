@@ -76,7 +76,8 @@ int SERV::Read(int socketfd, std::string *str) {
         else if(errno != EAGAIN && errno != EWOULDBLOCK) {
             Errorlog("Read error", errno);
         }
-        return -1; // error close
+        //error close
+        return -1;
     }
     else if (readsize == 0) {
         std::string log = "client: " + std::to_string(socketfd) + " send close";
@@ -87,7 +88,7 @@ int SERV::Read(int socketfd, std::string *str) {
         std::string log = "Read from " + std::to_string(socketfd);
         Infolog(log);
         *str = readbuf_tmp;
-        return 0;
+        return 0; // success
     }
 }
 

@@ -1,6 +1,9 @@
 #ifndef SERVERRNO_H_
 #define SERVERRNO_H_
 
+#include <cstddef>
+#include <string>
+
 enum REQUESTYPE
 {
     TYPENONE = 0,
@@ -43,7 +46,28 @@ enum POSTYPE {
     POSTVerifi
 };
 
-class Errnoprint {
+struct Filestate {
+    int filefd = 0;
+    uint filelength = 0;
+    uint offset = 0;
+};
+
+struct Clientinfo {
+    std::string port;
+    std::string ip;
+    std::string respone_head;
+    std::string respone_body;
+    //client's socketfd
+    int clientfd;
+    size_t writecount;
+    Filestate fileinfo;
+    SERVERR err_code;
+    SERVSTATE state_code;
+    REQUESTYPE requset_type;
+};
+
+
+class Strerr {
 public:
     const char *Str_error(SERVERR err_code);
     const char *Str_state(SERVSTATE state_code);

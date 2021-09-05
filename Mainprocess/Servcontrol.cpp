@@ -8,7 +8,7 @@ Servercontrol_epoll::Servercontrol_epoll() {
 
     //initialization
     //threadpool.init();
-    clients.resize(MAXCLIENT);
+    clients.resize(MAXCLIENT * 2);
     int epollfd = epoll_create(MAXCLIENT);
     listenfd = connectctrl.Connectlisten();
     epollctrl.Set_epollfd(epollfd);
@@ -24,41 +24,46 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
     ev.data.ptr = nullptr;
     int epollfd = epollctrl.Epollfd();
     epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &ev);
+
     //main control
     for (;;)
     {
         int readyfds = epoll_wait(epollfd, events, MAXCLIENT, 0);
-        if(readyfds < 0 && errno != EINTR) { //epoll create fail
+        if (readyfds < 0 && errno != EINTR) { //epoll create fail
             Fatalog("Cann't create epoll control.");
             //signal notify manage process...
             return; 
         }
-        
         for (int i = 0; i < readyfds; i++) { 
             ev = events[i];
             if (ev.data.ptr == nullptr) {
-                Connect_accept(&clients[i]);
+                Connect_accept();
             }
             else if(ev.events & EPOLLIN) {
+                Clientinfo *client = static_cast<Clientinfo *>(ev.data.ptr);
                 std::string readbuf;
-                processctrl.Read(clients[i].clientfd, &readbuf);
-                if (!readbuf.empty()) {
+                int ret = processctrl.Read(client->clientfd, &readbuf);
+                if (!ret) {
                     switch (responectrl.Requestparse(&readbuf)) {
                     case GET: {
-                        Connect_getmethod(&clients[i], &readbuf);
+                        Connect_method_get(client, &readbuf);
                         break;
                     } case POST: {
-                        Connect_postmethod(&clients[i], &readbuf);
+                        Connect_method_post(client, &readbuf);
                         break;
                     } default: {
                         break;
                     }}//switch end
+                } else if (ret > 0) {
+                    //read error or read FIN
+                    connectctrl.Disconnect(client);
                 }
             }
             else if(ev.events & EPOLLOUT) {
-                Send_responehead(&clients[i]);
-                Send_responefile(&clients[i]);
-                Send_responebody(&clients[i]);
+                Clientinfo *client = static_cast<Clientinfo *>(ev.data.ptr);
+                Send_responehead(client);
+                Send_responefile(client);
+                Send_responebody(client);
             }
         }
     }
@@ -68,8 +73,7 @@ void Servercontrol_epoll::Server_stop() {
     Warninglog("Server closeing.");
     for (size_t i = 0; i != MAXCLIENT; i++) {
         if (clients[i].clientfd > 0) {
-            epollctrl.Epollwrite(clients[i].clientfd);
-            processctrl.Disconnect(&clients[i]);
+            connectctrl.Disconnect(&clients[i]);
         }
     }
     //threadpool.shutdown();
@@ -82,19 +86,22 @@ void Servercontrol_epoll::Server_stop() {
     
 }
 
-void Servercontrol_epoll::Connect_accept(Clientinfo *client) {
+void Servercontrol_epoll::Connect_accept() {
     int connectfd = SERV::Accept(listenfd);
     if(!connectctrl.Canconnect()) {
-        client->clientfd = connectfd;
-        processctrl.Set_client(client);
-        epollctrl.Epolladd(connectfd);
-        std::string log = client->ip + ":" + client->port;
-        log = "Accept success " + log;
+        int index = connectctrl.Connect_nums();
+        clients[index].clientfd = connectfd;
+        processctrl.Set_client(&clients[index]);
+        std::string log = clients[index].ip + ":" + clients[index].port;
+        epollctrl.Epolladd(connectfd, &clients[index]);
+        log = log + " accept success";
         Infolog(log);
+    } else {
+        Infolog("Clients is maximum, Waiting disconnect.");
     }
 }
 
-void Servercontrol_epoll::Connect_getmethod(Clientinfo *client, std::string *readbuf) {
+void Servercontrol_epoll::Connect_method_get(Clientinfo *client, std::string *readbuf) {
     std::string filename;
     if(!responectrl.GETparse(*readbuf, &filename)) {
         responectrl.GETprocess(filename, &client->fileinfo);
@@ -102,16 +109,15 @@ void Servercontrol_epoll::Connect_getmethod(Clientinfo *client, std::string *rea
                                         responectrl.Filetype(filename), 
                                         200, client->fileinfo.filelength);
     } else {
-        badrequest.Respone200(&client->respone_head);
+        badrequest.Respone404(&client->respone_head);
     }
-    epollctrl.Epollwrite(client->clientfd);
-    return;
+    epollctrl.Epollwrite(client->clientfd, client);
 }
 
-void Servercontrol_epoll::Connect_postmethod(Clientinfo *client, std::string *readbuf) {
+void Servercontrol_epoll::Connect_method_post(Clientinfo *client, std::string *readbuf) {
     Infolog("Into post request.");
-    badrequest.Respone200(&client->respone_head);
-    epollctrl.Epollwrite(client->clientfd);
+    badrequest.Respone404(&client->respone_head);
+    epollctrl.Epollwrite(client->clientfd, client);
     return;
 }
 
@@ -128,7 +134,7 @@ void Servercontrol_epoll::Send_responehead(Clientinfo *client) {
         int ret = processctrl.Send(socketfd, &client->respone_head);
         switch (ret) {
         case -1: {
-            processctrl.Disconnect(client);
+            connectctrl.Disconnect(client);
             epollctrl.Epolldel(socketfd);
             return;
         } case 0: {
@@ -137,14 +143,14 @@ void Servercontrol_epoll::Send_responehead(Clientinfo *client) {
         } case 1: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                processctrl.Disconnect(client);
+                connectctrl.Disconnect(client);
                 epollctrl.Epolldel(socketfd);
             }
             return;
         } case 2: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                processctrl.Disconnect(client);
+                connectctrl.Disconnect(client);
                 epollctrl.Epolldel(socketfd);
             }
             return;
@@ -156,37 +162,37 @@ void Servercontrol_epoll::Send_responebody(Clientinfo *client) {
     //can only be send file or info(json/data)
     int socketfd = client->clientfd;
     if(client->respone_body.empty()) {
-        //processctrl.Disconnect(client);
+        //connectctrl.Disconnect(client);
         //epollctrl.Epolldel(client->clientfd);
         return;
     } else {
         int ret = processctrl.Send(socketfd, &client->respone_body);
         switch (ret) {
         case -1: {
-            processctrl.Disconnect(client);
+            connectctrl.Disconnect(client);
             epollctrl.Epolldel(socketfd);
             return;
         } case 0: {
             if(client->respone_body.empty()) {
-                //processctrl.Disconnect(client);
+                //connectctrl.Disconnect(client);
                 //epollctrl.Epolldel(socketfd);
-                epollctrl.Epollread(socketfd);
+                epollctrl.Epollread(socketfd, client);
             } else {
-                epollctrl.Epollwrite(socketfd);
+                epollctrl.Epollwrite(socketfd, client);
             }
             return; 
         } case 1: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                processctrl.Disconnect(client);
+                connectctrl.Disconnect(client);
                 epollctrl.Epolldel(socketfd);
             }
             return;
         } case 2: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                processctrl.Disconnect(client);
-                epollctrl.Epolldel(client->clientfd);
+                connectctrl.Disconnect(client);
+                epollctrl.Epolldel(socketfd);
             }
             return;
         }}//switch end
@@ -197,36 +203,36 @@ void Servercontrol_epoll::Send_responefile(Clientinfo *client) {
     //send file
     int socketfd = client->clientfd;
     if(client->fileinfo.filefd == 0) {
-        processctrl.Disconnect(client);
+        connectctrl.Disconnect(client);
         epollctrl.Epolldel(socketfd);
         return;
     } else {
         int ret = processctrl.Sendfile(socketfd, &client->fileinfo);
         switch (ret) {
         case -1: {
-            processctrl.Disconnect(client);
+            connectctrl.Disconnect(client);
             epollctrl.Epolldel(socketfd);
             return;
         } case 0: {
             if(client->fileinfo.filefd == 0) {
-                //processctrl.Disconnect(client);
+                //connectctrl.Disconnect(client);
                 //epollctrl.Epolldel(socketfd);
-                epollctrl.Epollread(socketfd);
+                epollctrl.Epollread(socketfd, client);
             } else {
-                epollctrl.Epollwrite(socketfd);
+                epollctrl.Epollwrite(socketfd, client);
             }
             return;
         } case 1: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                processctrl.Disconnect(client);
+                connectctrl.Disconnect(client);
                 epollctrl.Epolldel(socketfd);
             }
             return;
         } case 2: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                processctrl.Disconnect(client);
+                connectctrl.Disconnect(client);
                 epollctrl.Epolldel(socketfd);
             }
             return;

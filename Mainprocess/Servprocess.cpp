@@ -40,6 +40,48 @@ void Epollcontrol::Epollwrite(int socketfd) {
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
 }
 
+void Epollcontrol::Epolladd(int socketfd, Clientinfo *client) {
+    std::string log = "epoll add, fd:" + std::to_string(socketfd) + ".";
+    Infolog(log);
+    struct epoll_event ev;
+    ev.events = EPOLLOUT | EPOLLET;
+    ev.data.ptr = client;
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev);
+}
+
+void Epollcontrol::Epollread(int socketfd, Clientinfo *client) {
+    std::string log = "epoll ready read, fd:" + std::to_string(socketfd) + ".";
+    Infolog(log);
+    struct epoll_event ev;
+    ev.events = EPOLLIN | EPOLLET;
+    ev.data.ptr = client;
+    epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
+}
+
+void Epollcontrol::Epollwrite(int socketfd, Clientinfo *client) {
+    std::string log = "epoll ready write, fd:" + std::to_string(socketfd) + ".";
+    Infolog(log);
+    struct epoll_event ev;
+    ev.events = EPOLLOUT | EPOLLET;
+    ev.data.ptr = client;
+    epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const int Epollcontrol::Epollfd() {
     return epollfd;
 }
