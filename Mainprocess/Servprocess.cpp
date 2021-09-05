@@ -44,7 +44,7 @@ void Epollcontrol::Epolladd(int socketfd, Clientinfo *client) {
     std::string log = "epoll add, fd:" + std::to_string(socketfd) + ".";
     Infolog(log);
     struct epoll_event ev;
-    ev.events = EPOLLOUT | EPOLLET;
+    ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = client;
     epoll_ctl(epollfd, EPOLL_CTL_ADD, socketfd, &ev);
 }
