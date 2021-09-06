@@ -16,7 +16,7 @@ void Set_save_size(int tmpsize) { tmplog_vec.resize(tmpsize); }
 
 int Savetofile(std::string str) {
     std::fstream file;
-    file.open("Log/log.txt", std::ios::in | std::ios::app);
+    file.open("../Log/log.txt", std::ios::in | std::ios::app);
     if (file) {
         file.write("\n", 1);
         std::string tmp = str + "\n";
@@ -34,7 +34,7 @@ int Savetofile(std::vector<std::string> logvec) {
     std::fstream file;
     file.open("../Log/log.txt", std::ios::in | std::ios::app);
     if (file) {
-        std::cout << "\nlog save...\n";
+        std::cout << "log save...\n";
         file.write("\n", 1);
         int size = logvec.size();
         for (int i = 0; i != size; i++) {
@@ -42,7 +42,6 @@ int Savetofile(std::vector<std::string> logvec) {
                 std::string tmp = logvec[i] + "\n";
                 file.write(string_to_char(tmp), tmp.length());
             }
-
         }
         file.close();
         return 0;
@@ -51,7 +50,7 @@ int Savetofile(std::vector<std::string> logvec) {
         file.close();
         std::ofstream newfile("log.txt");
         if(newfile) {
-            std::cout << "\nlog save newfile ...\n";
+            std::cout << "log save newfile ...\n";
             newfile.write("\n", 1);
             int size = logvec.size();
             for (int i = 0; i != size; i++) {
@@ -63,7 +62,7 @@ int Savetofile(std::vector<std::string> logvec) {
             newfile.close();
             return 0;
         }
-        std::cout << "\nlog save fail!!!\n";
+        std::cout << "log save fail!!!\n";
         return -1;
     }
 }

@@ -25,6 +25,7 @@ public:
     void Connect_accept();
     void Connect_method_get(Clientinfo *client, std::string *readbuf);
     void Connect_method_post(Clientinfo *client, std::string *readbuf);
+    void Connect_disconnect(Clientinfo *client);
     void Send_responehead(Clientinfo *client);
     void Send_responebody(Clientinfo *client);
     void Send_responefile(Clientinfo *client);

@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link type="text/css" rel="stylesheet" href="index.css">
+		<link rel="icon" href="Image/png/logo_32.png" type="image/x-icon">
+		<title>瓦肆</title>
+	</head>
+	<body>
+
+		<form class="search">
+			<input type="search" class="search_input" placeholder="站内搜索">
+			<button class="search_button" type="button">
+				<span style="display: inline-flex; align-items: center;">​
+					<svg fill="currentColor" viewBox="0 0 24 24" width="18" height="18">
+						<path d="M17.068 15.58a8.377 8.377 0 0 0 1.774-5.159 8.421 8.421
+								0 1 0-8.42 8.421 8.38 8.38 0 0 0 5.158-1.774l3.879 3.88c.957.573
+								2.131-.464 1.488-1.49l-3.879-3.878zm-6.647 1.157a6.323 6.323 0
+								0 1-6.316-6.316 6.323 6.323 0 0 1 6.316-6.316 6.323 6.323 0 0 1
+								6.316 6.316 6.323 6.323 0 0 1-6.316 6.316z"
+						 fill-rule="evenodd">
+						</path>
+					</svg>
+				</span>
+			</button>
+			</input>
+		</form>
+
+
+		<div class="follow_left" id="Follow_left">
+			<div id="left_info_fail">
+				<div class="space"></div>
+				<div class="left_logo" id="avatar_fail"></div>
+				<div class="space"></div>
+				<div>用户名</div>
+				<input class="input_name" id="username" type="text" />
+				<div>密码</div>
+				<input class="input_name" id="password" type="password" />
+				<div class="space"></div>
+				<input class="input_submit" id="login_button" type="submit" value="登录" />
+				<div class="space"></div>
+				<div>还没有账号? <a href="CreateAccount/createaccount.html">点击注册</a></div>
+			</div>
+			<div id="left_info_success">
+				<div class="space"></div>
+				<div class="left_logo" id="avatar_success"></div>
+				<div class="space"></div>
+				<div>用户</div>
+				<div class="space"></div>
+				<div id="left_info_success_username"></div>
+				<div class="space"></div>
+				<div>前往<a href="CreateAccount/createaccount.html">个人中心</a></div>
+				<div class="space"></div>
+				<div class="space"></div>
+			</div>
+			<div class="Yesterday">昨日来访人数</div>
+			<div class="Yesterday_num">0</div>
+			<div class="Before_yesterday">较前日</div>
+			<div class="Before_yesterday_num">0</div>
+		</div>
+
+		<div class="List">
+			<div class="Card">
+				<div class="Card_head">
+					<div class="Card_image">头像</div>
+					<div class="Card_Name">名字</div>
+				</div>
+				<div class="Card_tittle">C++语言知识</div>
+				<div class="Card_main">
+					<div>引用分左值引用和右值引用</div>
+					<div>通常引用指为左值引用，引用即别名，并非一个对象</div>
+					<div>引用必须被初始化 引用的初始值必须是一个对象且类型相同</div>
+					<div>除了两种例外情况 引用的类型与引用的对象的类型必须匹配</div>
+					<div>第一种是在初始化常量引用时 允许用任意表达式作为初始值 只要表达式结果能转换成引用类型即可 也允许为一个常量引用绑定非常量对象...</div>
+				</div>
+				<div class="Card_bottom">
+					<button class="Card_agree">
+						<span style="display: inline-flex; align-items: center;">
+							​<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57
+								11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57
+								.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span> 赞同
+					</button>
+					<button class="Card_disagree">
+						<span style="display: inline-flex; align-items: center;">​
+							<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216
+								 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896
+								  0-1.386-.876-1.9-1.956-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span>
+					</button>
+					<button class="Card_comment">评论</button>
+					<button class="Card_more">阅读全文</button>
+				</div>
+			</div>
+			<div class="Card">
+				<div class="Card_head">
+					<div class="Card_image">头像</div>
+					<div class="Card_Name">名字</div>
+				</div>
+				<div class="Card_tittle">英国一年制硕士真的很水吗？</div>
+				<div class="Card_main">
+					水不水，看你的诉求是什么。 对于没什么后顾之忧的后浪而言，
+					即使不读研也不影响发展，读研只是为了让自己的背景履历看起来好看一点，
+					还能卖个多金+学霸的人设…
+				</div>
+				<div class="Card_bottom">
+					<button class="Card_agree">
+						<span style="display: inline-flex; align-items: center;">
+							​<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57
+								11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57
+								.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span> 赞同
+					</button>
+					<button class="Card_disagree">
+						<span style="display: inline-flex; align-items: center;">​
+							<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216
+								 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896
+								  0-1.386-.876-1.9-1.956-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span>
+					</button>
+					<button class="Card_comment">评论</button>
+					<button class="Card_more">阅读全文</button>
+				</div>
+			</div>
+			<div class="Card">
+				<div class="Card_head">
+					<div class="Card_image">头像</div>
+					<div class="Card_Name">名字</div>
+				</div>
+				<div class="Card_tittle">英国一年制硕士真的很水吗？</div>
+				<div class="Card_main">
+					水不水，看你的诉求是什么。 对于没什么后顾之忧的后浪而言，
+					即使不读研也不影响发展，读研只是为了让自己的背景履历看起来好看一点，
+					还能卖个多金+学霸的人设…
+				</div>
+				<div class="Card_bottom">
+					<button class="Card_agree">
+						<span style="display: inline-flex; align-items: center;">
+							​<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57
+								11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57
+								.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span> 赞同
+					</button>
+					<button class="Card_disagree">
+						<span style="display: inline-flex; align-items: center;">​
+							<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216
+								 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896
+								  0-1.386-.876-1.9-1.956-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span>
+					</button>
+					<button class="Card_comment">评论</button>
+					<button class="Card_more">阅读全文</button>
+				</div>
+			</div>
+			<div class="Card">
+				<div class="Card_head">
+					<div class="Card_image">头像</div>
+					<div class="Card_Name">名字</div>
+				</div>
+				<div class="Card_tittle">英国一年制硕士真的很水吗？</div>
+				<div class="Card_main">
+					水不水，看你的诉求是什么。 对于没什么后顾之忧的后浪而言，
+					即使不读研也不影响发展，读研只是为了让自己的背景履历看起来好看一点，
+					还能卖个多金+学霸的人设…
+				</div>
+				<div class="Card_bottom">
+					<button class="Card_agree">
+						<span style="display: inline-flex; align-items: center;">
+							​<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57
+								11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57
+								.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span> 赞同
+					</button>
+					<button class="Card_disagree">
+						<span style="display: inline-flex; align-items: center;">​
+							<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216
+								 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896
+								  0-1.386-.876-1.9-1.956-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span>
+					</button>
+					<button class="Card_comment">评论</button>
+					<button class="Card_more">阅读全文</button>
+				</div>
+			</div>
+			<div class="Card">
+				<div class="Card_head">
+					<div class="Card_image">头像</div>
+					<div class="Card_Name">名字</div>
+				</div>
+				<div class="Card_tittle">英国一年制硕士真的很水吗？</div>
+				<div class="Card_main">
+					水不水，看你的诉求是什么。 对于没什么后顾之忧的后浪而言，
+					即使不读研也不影响发展，读研只是为了让自己的背景履历看起来好看一点，
+					还能卖个多金+学霸的人设…
+				</div>
+				<div class="Card_bottom">
+					<button class="Card_agree">
+						<span style="display: inline-flex; align-items: center;">
+							​<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M2 18.242c0-.326.088-.532.237-.896l7.98-13.203C10.572 3.57
+								11.086 3 12 3c.915 0 1.429.571 1.784 1.143l7.98 13.203c.15.364.236.57
+								.236.896 0 1.386-.875 1.9-1.955 1.9H3.955c-1.08 0-1.955-.517-1.955-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span>赞同
+					</button>
+					<button class="Card_disagree">
+						<span style="display: inline-flex; align-items: center;">​
+							<svg fill="currentColor" viewBox="0 0 24 24" width="10" height="10">
+								<path d="M20.044 3H3.956C2.876 3 2 3.517 2 4.9c0 .326.087.533.236.896L10.216
+								 19c.355.571.87 1.143 1.784 1.143s1.429-.572 1.784-1.143l7.98-13.204c.149-.363.236-.57.236-.896
+								  0-1.386-.876-1.9-1.956-1.9z"
+								 fill-rule="evenodd">
+								</path>
+							</svg>
+						</span>
+					</button>
+					<button class="Card_comment">评论</button>
+					<button class="Card_more">阅读全文</button>
+				</div>
+			</div>
+		</div>
+		<div class="Bottom">底部
+
+		</div>
+	</body>
+	<script src="index.js"></script>
+</html>

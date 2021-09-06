@@ -1,5 +1,5 @@
 #include "../Mainprocess/Httprocess/Servfunc.h"
-
+#include <stdio.h>
 
 int SERV::Socket(int family, int type, int protocol) {
     int socketfd = socket(family, type, protocol);
@@ -10,7 +10,6 @@ int SERV::Socket(int family, int type, int protocol) {
     std::cout << "Socket ok\n";
     return socketfd;
 }
-
 
 
 int SERV::Read(int socketfd, std::string *str) {
@@ -70,6 +69,8 @@ int SERV::Write(int socketfd, std::string *str) {
 
 
 int main() {
+
+
     int socketfd = 0;
     struct sockaddr_in servaddr;
     std::string recv, send;

@@ -56,7 +56,7 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
                     }}//switch end
                 } else if (ret > 0) {
                     //read error or read FIN
-                    connectctrl.Disconnect(client);
+                    Connect_disconnect(clients);
                 }
             }
             else if(ev.events & EPOLLOUT) {
@@ -73,7 +73,7 @@ void Servercontrol_epoll::Server_stop() {
     Warninglog("Server closeing.");
     for (size_t i = 0; i != MAXCLIENT; i++) {
         if (clients[i].clientfd > 0) {
-            connectctrl.Disconnect(&clients[i]);
+            Connect_disconnect(&clients[i]);
         }
     }
     //threadpool.shutdown();
@@ -121,6 +121,13 @@ void Servercontrol_epoll::Connect_method_post(Clientinfo *client, std::string *r
     return;
 }
 
+void Servercontrol_epoll::Connect_disconnect(Clientinfo *client) {
+    connectctrl.Disconnect(client);
+    epollctrl.Epolldel(client->clientfd);
+}
+
+
+
 void Servercontrol_epoll::Send_responehead(Clientinfo *client) {
     //ret
     //-1 errno
@@ -134,8 +141,7 @@ void Servercontrol_epoll::Send_responehead(Clientinfo *client) {
         int ret = processctrl.Send(socketfd, &client->respone_head);
         switch (ret) {
         case -1: {
-            connectctrl.Disconnect(client);
-            epollctrl.Epolldel(socketfd);
+            Connect_disconnect(client);
             return;
         } case 0: {
             client->respone_head.clear();
@@ -143,15 +149,13 @@ void Servercontrol_epoll::Send_responehead(Clientinfo *client) {
         } case 1: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                connectctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
+                Connect_disconnect(client);
             }
             return;
         } case 2: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                connectctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
+                Connect_disconnect(client);
             }
             return;
         }} //switch end 
@@ -162,20 +166,15 @@ void Servercontrol_epoll::Send_responebody(Clientinfo *client) {
     //can only be send file or info(json/data)
     int socketfd = client->clientfd;
     if(client->respone_body.empty()) {
-        //connectctrl.Disconnect(client);
-        //epollctrl.Epolldel(client->clientfd);
         return;
     } else {
         int ret = processctrl.Send(socketfd, &client->respone_body);
         switch (ret) {
         case -1: {
-            connectctrl.Disconnect(client);
-            epollctrl.Epolldel(socketfd);
+            Connect_disconnect(client);
             return;
         } case 0: {
             if(client->respone_body.empty()) {
-                //connectctrl.Disconnect(client);
-                //epollctrl.Epolldel(socketfd);
                 epollctrl.Epollread(socketfd, client);
             } else {
                 epollctrl.Epollwrite(socketfd, client);
@@ -184,15 +183,13 @@ void Servercontrol_epoll::Send_responebody(Clientinfo *client) {
         } case 1: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                connectctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
+                Connect_disconnect(client);
             }
             return;
         } case 2: {
             client->writecount += 1;
-            if(client->writecount > REWRITEMAX) {
-                connectctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
+            if(client->writecount > REWRITEMAX) {   
+                Connect_disconnect(client);
             }
             return;
         }}//switch end
@@ -203,20 +200,16 @@ void Servercontrol_epoll::Send_responefile(Clientinfo *client) {
     //send file
     int socketfd = client->clientfd;
     if(client->fileinfo.filefd == 0) {
-        connectctrl.Disconnect(client);
-        epollctrl.Epolldel(socketfd);
+        Connect_disconnect(client);
         return;
     } else {
         int ret = processctrl.Sendfile(socketfd, &client->fileinfo);
         switch (ret) {
         case -1: {
-            connectctrl.Disconnect(client);
-            epollctrl.Epolldel(socketfd);
+            Connect_disconnect(client);
             return;
         } case 0: {
             if(client->fileinfo.filefd == 0) {
-                //connectctrl.Disconnect(client);
-                //epollctrl.Epolldel(socketfd);
                 epollctrl.Epollread(socketfd, client);
             } else {
                 epollctrl.Epollwrite(socketfd, client);
@@ -225,15 +218,13 @@ void Servercontrol_epoll::Send_responefile(Clientinfo *client) {
         } case 1: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                connectctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
+                Connect_disconnect(client);
             }
             return;
         } case 2: {
             client->writecount += 1;
             if(client->writecount > REWRITEMAX) {
-                connectctrl.Disconnect(client);
-                epollctrl.Epolldel(socketfd);
+                Connect_disconnect(client);
             }
             return;
         }}//switch end
