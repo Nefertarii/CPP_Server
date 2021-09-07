@@ -4,7 +4,7 @@
 #OBJECTS3 = Gmanage.cpp
 			
 subsystem:
-	cd Mainprocess && $(MAKE)
+	cd Mainprocess/build && $(MAKE)
 	
 
 
@@ -15,9 +15,9 @@ subsystem:
 
 .PHONY:clean
 clean:
-	cd Mainprocess && rm *.o
-	#cd ../Database && rm *.o
-	#cd .. && rm *.o
+	cd Mainprocess/build && rm *.o
+	#cd ../../Database && rm *.o
+	#cd ../../ && rm *.o
 
 
 

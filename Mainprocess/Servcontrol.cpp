@@ -52,11 +52,12 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
                         Connect_method_post(client, &readbuf);
                         break;
                     } default: {
+                        //bad request disconnect;
                         break;
                     }}//switch end
                 } else if (ret > 0) {
                     //read error or read FIN
-                    Connect_disconnect(clients);
+                    Connect_disconnect(client);
                 }
             }
             else if(ev.events & EPOLLOUT) {
@@ -122,8 +123,8 @@ void Servercontrol_epoll::Connect_method_post(Clientinfo *client, std::string *r
 }
 
 void Servercontrol_epoll::Connect_disconnect(Clientinfo *client) {
-    connectctrl.Disconnect(client);
     epollctrl.Epolldel(client->clientfd);
+    connectctrl.Disconnect(client);
 }
 
 
