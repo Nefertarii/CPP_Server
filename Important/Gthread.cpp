@@ -42,7 +42,7 @@ void Gthreadpool::ThreadWorker::operator()() {
     std::function<void()> func;
     bool dequeued;
     while (!pool_->shutdown_) {
-        {
+        { //RAII
             std::unique_lock<std::mutex> lock(pool_->conditional_mutex_);
             if (pool_->queue_.empty()) {
                 pool_->conditional_lock_.wait(lock);
@@ -55,10 +55,17 @@ void Gthreadpool::ThreadWorker::operator()() {
 }
 
 
-void Gthreadpool::init() { 
+void Gthreadpool::init() {
+    shutdown_ = false;
+    threads_ = std::vector<std::thread>(threadnum_);
     for (uint i = 0; i < threads_.size(); ++i) {
-        threads_.at(i) = std::thread(ThreadWorker(this, i)); 
+        threads_.at(i) = std::thread(ThreadWorker(this, i));
     }
+}
+
+void Gthreadpool::init(const size_t threadnum) {
+    threadnum_ = threadnum;
+    init();
 }
 
 void Gthreadpool::shutdown() {

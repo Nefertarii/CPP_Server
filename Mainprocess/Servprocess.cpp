@@ -1,5 +1,7 @@
 #include "Servprocess.h"
 
+extern const size_t WRITEMAX;
+
 void Epollcontrol::Set_epollfd(int epollfd_) {
     std::string log = "Epoll set, fd:" + std::to_string(epollfd) + ".";
     Infolog(log);
@@ -50,8 +52,6 @@ void Epollcontrol::Epolladd(int socketfd, Clientinfo *client) {
 }
 
 void Epollcontrol::Epollread(int socketfd, Clientinfo *client) {
-    std::string log = "epoll ready read, fd:" + std::to_string(socketfd) + ".";
-    Infolog(log);
     struct epoll_event ev;
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = client;
@@ -59,28 +59,15 @@ void Epollcontrol::Epollread(int socketfd, Clientinfo *client) {
 }
 
 void Epollcontrol::Epollwrite(int socketfd, Clientinfo *client) {
-    std::string log = "epoll ready write, fd:" + std::to_string(socketfd) + ".";
-    Infolog(log);
+    if(client->fileinfo.offset == 0) {
+        std::string log = "epoll ready write, fd:" + std::to_string(socketfd) + ".";
+        Infolog(log);
+    }
     struct epoll_event ev;
     ev.events = EPOLLOUT | EPOLLET;
     ev.data.ptr = client;
     epoll_ctl(epollfd, EPOLL_CTL_MOD, socketfd, &ev);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 const int Epollcontrol::Epollfd() {
     return epollfd;

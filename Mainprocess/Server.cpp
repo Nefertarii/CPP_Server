@@ -5,8 +5,7 @@ void SIG_handler(int sig) {
         Infolog("capture signal SIGINT.");
         //server.Server_stop(); auto run
         exit(2);
-    }
-    else {
+    } else {
         exit(0);
     }
 }

@@ -43,20 +43,22 @@ private:
         ThreadWorker(Gthreadpool *pool, const int id) : id_(id), pool_(pool){}
         void operator()();
     };
-    bool shutdown_;                          
+    bool shutdown_;
+    size_t threadnum_;
     Safequeue<std::function<void()>> queue_; 
     std::vector<std::thread> threads_;       
     std::mutex conditional_mutex_;           
     std::condition_variable conditional_lock_;
 
 public:
-    Gthreadpool(const int n_threads = 1) 
-        :shutdown_(false), threads_(std::vector<std::thread>(n_threads)){}
+    Gthreadpool(){}
+    Gthreadpool(const size_t threadnum):threadnum_(threadnum){}
     Gthreadpool(const Gthreadpool &) = delete;
     Gthreadpool(Gthreadpool &&) = delete;
     Gthreadpool &operator=(const Gthreadpool &) = delete;
     Gthreadpool &operator=(Gthreadpool &&) = delete;
     void init();
+    void init(const size_t threadnum);
     void shutdown();
     // Submit a function to be executed asynchronously by the pool
     template <class F, class... Args>

@@ -1,9 +1,5 @@
 #include "Servfunc.h"
 
-const size_t READMAX = 1024 * 4;
-const size_t WRITEMAX = 1024 * 4; 
-const size_t REWRITEMAX = 4; 
-
 int SERV::Socket(int family, int type, int protocol) {
     int socketfd = socket(family, type, protocol);
     if (socketfd < 0) {
@@ -43,7 +39,7 @@ int SERV::Accept(int listenfd) {
                 continue;
             Errorlog("Accept error.", errno);
             return -1;
-            }
+        }
         std::string log = inet_ntoa(cliaddr.sin_addr);
         log = "Get accept from " + log;
         Infolog(log);
@@ -69,22 +65,18 @@ int SERV::Read(int socketfd, std::string *str) {
     if (readsize < 0) {
         if (errno == EINTR) {
             Errorlog("Read error, Single break");
-        }
-        else if(errno == EPIPE) {
+        } else if(errno == EPIPE) {
             Errorlog("Read error, Client close");
-        }
-        else if(errno != EAGAIN && errno != EWOULDBLOCK) {
+        } else if(errno != EAGAIN && errno != EWOULDBLOCK) {
             Errorlog("Read error", errno);
         }
         //error close
         return -1;
-    }
-    else if (readsize == 0) {
+    } else if (readsize == 0) {
         std::string log = "client: " + std::to_string(socketfd) + " send close";
         Infolog(log);
         return 1; // normal close
-    }
-    else {
+    } else {
         std::string log = "Read from " + std::to_string(socketfd);
         Infolog(log);
         *str = readbuf_tmp;
@@ -95,6 +87,7 @@ int SERV::Read(int socketfd, std::string *str) {
 int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
     struct stat file;
     int filefd = 0;
+    filename_ = FILEDIR + filename_;
     const char *filename = filename_.c_str();
     filefd = open(filename, O_RDONLY);
     if(filefd < 0) {
@@ -119,12 +112,10 @@ int SERV::Write(int socketfd, std::string *str) {
         if (errno == EINTR) {
             Errorlog("Write error", errno); //Signal interruption: slow system call
             return 1;
-        }
-        else if(errno == EAGAIN || errno == EWOULDBLOCK) {
+        } else if(errno == EAGAIN || errno == EWOULDBLOCK) {
             Warninglog("write error", errno); //kernel cache full
             return 2;
-        }
-        else {
+        } else {
             Errorlog("write error", errno);
             return -1;
         }
@@ -135,23 +126,17 @@ int SERV::Write(int socketfd, std::string *str) {
 }
 
 int SERV::Writefile(int socketfd, int filefd, off_t offset) {
-    std::string log = "Write file to: " + std::to_string(socketfd);
-    Infolog(log);
     if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
         if (errno == EINTR) {
             Warninglog("Signal interuption");
             return 1;
-        }
-        else if (errno == EAGAIN || errno == EWOULDBLOCK) {
+        } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
             Warninglog("kernel cache full");
             return 2;
-        } 
-        else {
+        } else {
             Errorlog("Write error", errno);
             return -1;
         }
     }
-    log += " success.";
-    Infolog(log);
     return 0;
 }

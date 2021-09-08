@@ -1,5 +1,7 @@
 #include "Httprespone.h"
 
+extern const size_t READMAX;
+
 std::string Httprespone::Str_httpstate(int codenum) {
     switch (codenum) {
     case 200:
@@ -67,17 +69,15 @@ REQUESTYPE Httprespone::Requestparse(std::string *readbuf) {
 }
 
 int Httprespone::GETparse(std::string readbuf,std::string *filename) { //return GET request filename
-    std::string filedir = FILEDIR;
-    std::string request_file = Substr(readbuf, 5, READMAX, ' ');
-    if (request_file == "0") {
-        request_file = "index.html";
+    *filename = Substr(readbuf, 5, READMAX, ' ');
+    if (*filename == "0") {
+        *filename = "index.html";
     }
-    if (request_file == "-1") {
+    if (*filename == "-1") {
         Infolog("Get request fail");
         return -1;
     }
-    *filename = filedir + request_file;
-    std::string tmp = "Get request:" + request_file;
+    std::string tmp = "Get request:" + *filename;
     Infolog(tmp);
     return 0;
 }

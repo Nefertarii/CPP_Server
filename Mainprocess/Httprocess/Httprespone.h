@@ -6,9 +6,7 @@
 
 class Httprespone {
 private:
-    const size_t READMAX = 1024 * 4;                            //once read max length;
-    const char *FILEDIR = "/home/cs18/vscode/Webserver/Blog/";           //Default location for read file
-
+    ;
 public:
     std::string Str_httpstate(int codenum);
     std::string Filetype(std::string filename);

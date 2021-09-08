@@ -7,6 +7,9 @@
 #include "../Important/Gtime.h"
 #include "../Important/Glog.h"
 #include "../Important/Gjson.h"
+#include "Httprocess/Httprocess.h"
+#include "Httprocess/Httpconnect.h"
+#include "Httprocess/Httprespone.h"
 
 
 

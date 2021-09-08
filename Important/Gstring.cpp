@@ -16,11 +16,9 @@ std::string Substr(std::string str,size_t begin,size_t maxlength,char end) {
     }
     if(end_i == 0) { //not found
         return "0";
-    }
-    else if(end_i <= maxlength) { 
+    } else if(end_i <= maxlength) { 
         return str.substr(beg_i, end_i);
-    }
-    else { //out of size
+    } else { //out of size
         return "-1";
     }
 }
@@ -38,11 +36,9 @@ std::string Substr_Revers(std::string str, size_t maxlength,char end) {
     }
     if (end_i == 0) {
         return "0";
-    }
-    else if (end_i <= maxlength) {
+    } else if (end_i <= maxlength) {
         return str.substr(beg_i - end_i + 1, end_i);
-    }
-    else {
+    } else {
         return "-1";
     }
 }

@@ -4,6 +4,7 @@
 
 #include "../Important/Glog.h"
 #include "Httprocess/Serverrno.h"
+#include "Httprocess/Servfunc.h"
 #include <sys/epoll.h>
 #include <vector>
 #include <string>

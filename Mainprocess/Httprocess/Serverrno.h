@@ -59,12 +59,14 @@ struct Clientinfo {
     std::string respone_body;
     //client's socketfd
     int clientfd;
-    size_t writecount;
+    size_t rewrite_count;
     Filestate fileinfo;
     SERVERR err_code;
     SERVSTATE state_code;
     REQUESTYPE requset_type;
 };
+//reset httpconnect
+//clear httprocess
 
 
 class Strerr {

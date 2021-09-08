@@ -7,8 +7,6 @@ class Httpconnect {
 private:
     size_t concurrent_count;
     size_t connect_nums;
-    const size_t SINGLECLIENTS = 8;    
-    const size_t LISTENPORT = 8000;   
     void Reset_client(struct Clientinfo *client);
 
 public:

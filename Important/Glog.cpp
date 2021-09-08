@@ -1,6 +1,6 @@
 #include "Glog.h"
 
-const size_t MAXLOG = 200;
+const size_t MAXLOG = 500;
 int logindex = 0;
 std::vector<std::string> tmplog_vec(MAXLOG, "");
 
@@ -12,7 +12,6 @@ static const char *Loglevel_map[] = {
 };
 
 void Set_save_size(int tmpsize) { tmplog_vec.resize(tmpsize); }
-
 
 int Savetofile(std::string str) {
     std::fstream file;
@@ -46,8 +45,7 @@ int Savetofile(std::vector<std::string> logvec) {
         }
         file.close();
         return 0;
-    }
-    else {
+    } else {
         file.close();
         std::ofstream newfile("log.txt");
         if(newfile) {
@@ -68,9 +66,7 @@ int Savetofile(std::vector<std::string> logvec) {
     }
 }
 
-int Savetofile() {
-    return Savetofile(tmplog_vec);
-}
+int Savetofile() { return Savetofile(tmplog_vec); }
 
 inline const char *Strlevel(LOGLEVEL level) { return Loglevel_map[level % LEVELEND]; }
 
@@ -80,30 +76,28 @@ inline bool Ismaximum() {
     return false;
 }
 
-inline void Savetotemp(LOGLEVEL level, const char *log, int err) {
-
-std::string strlevel = Strlevel(level);
-std::string strlog = log;
-std::string strtime = std::to_string(Timer::Nowtime_ms());
+void Savetotemp(LOGLEVEL level, const char *log, int err) {
+    std::string strlevel = Strlevel(level);
+    std::string strlog = log;
+    std::string strtime = std::to_string(Timer::Nowtime_ms());
 #ifdef DEBUG
-    if(!err) {
-        strlog = strlevel + "" + strlog + "\t Data:" + strtime;
+        if(!err) {
+            strlog = strlevel + "" + strlog + "\t Data:" + strtime;
+            std::cout << strlog << "\n";
+            return;
+        }
+        const char *tmperr = strerror(err);
+        std::string strerr = tmperr;
+        strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
         std::cout << strlog << "\n";
+#else
+    if (!err) {
+        tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;
         return;
     }
     const char *tmperr = strerror(err);
     std::string strerr = tmperr;
-    strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
-    std::cout << strlog << "\n";
-#else
-if (!err)
-{
-    tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;
-    return;
-}
-const char *tmperr = strerror(err);
-std::string strerr = tmperr;
-tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
+    tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
 #endif
 }
 

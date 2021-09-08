@@ -18,7 +18,7 @@ private:
     size_t concurrent;
     size_t MAXCLIENT;
     size_t REWRITEMAX;
-    //Gthreadpool threadpool(MAXCLIENT);
+    Gthreadpool threadpool;
 public:
     Servercontrol_epoll();
     void Server_start_Epollcontrol();

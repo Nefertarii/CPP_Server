@@ -1,6 +1,7 @@
 #ifndef SERVFUNC_H_
 #define SERVFUNC_H_
 
+//headfile include
 #include "../../Important/Gstring.h"
 #include "../../Important/Gtime.h"
 #include "../../Important/Glog.h"
@@ -22,16 +23,15 @@
 #include <vector>
 
 //setting
-/*  Globalvalue 
-    const size_t SINGLECLIENTS = 8;                      //once thread max client
-    const char *FILEDIR = "/home/http/server/";          //Default location for read file
-    const size_t MAXLOG = 16;                            //Log buffer maximum
-    const char *PROTOCOL = "HTTP";                       //server used protocol
-    const size_t LISTENPORT = 80;                        //listen port
-    const size_t READMAX = 1024 * 4;                     //once read max length
-    const size_t WRITEMAX = 1024 * 4;                    //once send max length
-    const size_t REWRITEMAX = 10;                        //signle EINTR rewrite nums
-*/
+//Globalvalue
+static const size_t READMAX = 1024 * 40;                            //Once read max length
+static const size_t WRITEMAX = 1024 * 40;                           //Once write max length
+static const size_t REWRITEMAX = 5;                                 //Error retry max times
+static const size_t LISTENPORT = 8000;                                //listen port
+static const size_t SINGLECLIENTS = 8;                              //once thread max client
+static const std::string FILEDIR = "/home/cs18/vscode/Webserver/Blog/";   //Default location for read file
+//const size_t MAXLOG = 16;                            //Log buffer maximum
+//const char *PROTOCOL = "HTTP";                       //server used protocol
 
 //using
 using ULL = unsigned long long;

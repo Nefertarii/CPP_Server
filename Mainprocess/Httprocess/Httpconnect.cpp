@@ -1,12 +1,15 @@
 #include "Httpconnect.h"
 
+extern const size_t LISTENPORT; //listen port
+extern const size_t SINGLECLIENTS;
+
 void Httpconnect::Reset_client(struct Clientinfo *client) {
     client->port.clear();
     client->ip.clear();
     client->respone_head.clear();
     client->respone_body.clear();
     client->clientfd = 0;
-    client->writecount = 0;
+    client->rewrite_count = 0;
     client->fileinfo.filefd = 0;
     client->fileinfo.filelength = 0;
     client->fileinfo.offset = 0;
