@@ -75,8 +75,8 @@ void Servercontrol_epoll::Server_stop() {
         }
     }
     //threadpool.shutdown();
-    SERV::Close(listenfd);
-    SERV::Close(epollctrl.Epollfd());
+    Servfunc::Close(listenfd);
+    Servfunc::Close(epollctrl.Epollfd());
     std::string log = "Server total run time:" + serverclock.Runtime_str() + " sec";
     Savetofile();
     Infolog(log);
@@ -84,7 +84,7 @@ void Servercontrol_epoll::Server_stop() {
 }
 
 void Servercontrol_epoll::Connect_accept() {
-    int connectfd = SERV::Accept(listenfd);
+    int connectfd = Servfunc::Accept(listenfd);
     if (!connectctrl.Canconnect()) {
         int index = connectctrl.Connect_nums();
         clients[index].clientfd = connectfd;

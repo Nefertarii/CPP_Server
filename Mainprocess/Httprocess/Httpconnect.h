@@ -8,6 +8,7 @@ private:
     size_t concurrent_count;
     size_t connect_nums;
     void Reset_client(struct Clientinfo *client);
+    Log httpconnect_log();
 
 public:
     Httpconnect(){}

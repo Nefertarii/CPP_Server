@@ -1,34 +1,34 @@
 #include "Servfunc.h"
 
-int SERV::Socket(int family, int type, int protocol) {
+int Servfunc::Socket(int family, int type, int protocol) {
     int socketfd = socket(family, type, protocol);
     if (socketfd < 0) {
-        Errorlog("Socket error.", errno);
+        Errorlog("Socket open error.", errno);
         return -1;
     }
-    Infolog("Socket ok");
+    Infolog("Socket open ok");
     return socketfd;
 }
 
-int SERV::Bind(int fd, const struct sockaddr *sa, socklen_t salen) {
+int Servfunc::Bind(int fd, const struct sockaddr *sa, socklen_t salen) {
     if (bind(fd, sa, salen) < 0) {
-        Errorlog("Bind error.", errno);
+        Errorlog("Bind set error.", errno);
         return -1;
     }
-    Infolog("Bind ok");
+    Infolog("Bind set ok");
     return 0;
 }
 
-int SERV::Listen(int fd, int backlog) {
+int Servfunc::Listen(int fd, int backlog) {
     if (listen(fd, backlog) < 0) {
-        Errorlog("Listen error.", errno);
+        Errorlog("Listen set error.", errno);
         return -1;
     }
-    Infolog("Listen ok");
+    Infolog("Listen set ok");
     return 0;
 }
 
-int SERV::Accept(int listenfd) {
+int Servfunc::Accept(int listenfd) {
     struct sockaddr_in cliaddr;
     socklen_t cliaddrlen = sizeof(cliaddr);
     int cnt = 0;
@@ -49,17 +49,19 @@ int SERV::Accept(int listenfd) {
     return -1;
 }
 
-int SERV::Close(int fd) {
+int Servfunc::Close(int fd) {
+    std::string log = "Close " + std::to_string(fd);
     if (close(fd) < 0) {
-        Errorlog("Close error.", errno);
+        log += " error.";
+        Errorlog(log, errno);
         return -1;
     }
-    std::string log = "Close " + std::to_string(fd) + " ok.";
+    log += " ok.";
     Infolog(log);
     return 0;
 }
 
-int SERV::Read(int socketfd, std::string *str) {
+int Servfunc::Read(int socketfd, std::string *str) {
     char readbuf_tmp[READMAX] = {0};
     int readsize = read(socketfd, readbuf_tmp, READMAX);
     if (readsize < 0) {
@@ -84,7 +86,7 @@ int SERV::Read(int socketfd, std::string *str) {
     }
 }
 
-int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
+int Servfunc::Readfile(std::string filename_,struct Filestate *filestat_) {
     struct stat file;
     int filefd = 0;
     filename_ = FILEDIR + filename_;
@@ -92,19 +94,21 @@ int SERV::Readfile(std::string filename_,struct Filestate *filestat_) {
     filefd = open(filename, O_RDONLY);
     if(filefd < 0) {
         Errorlog("Readfile error", errno);
-        return 1; //local fail
+        return -1; //local fail
     }
     if(stat(filename, &file) < 0) {
         Errorlog("Readfile error", errno);
-        return 1; //local fail
+        return -1; //local fail
     }
     filestat_->filefd = filefd;
     filestat_->filelength = file.st_size;
     filestat_->offset = 0;
+    std::string log = "Readfile " + filename_ + " filefd: " + std::to_string(filestat_->filefd) + " success.";
+    Infolog(log);
     return 0;
 }
 
-int SERV::Write(int socketfd, std::string *str) {
+int Servfunc::Write(int socketfd, std::string *str) {
     const char *tmpstr = str->c_str();
     std::string log = "Write to: " + std::to_string(socketfd);
     Infolog(log);
@@ -125,8 +129,8 @@ int SERV::Write(int socketfd, std::string *str) {
     return 0;
 }
 
-int SERV::Writefile(int socketfd, int filefd, off_t offset) {
-    if(sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
+int Servfunc::Writefile(int socketfd, int filefd, off_t offset) {
+    if (sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
         if (errno == EINTR) {
             Warninglog("Signal interuption");
             return 1;
@@ -138,5 +142,10 @@ int SERV::Writefile(int socketfd, int filefd, off_t offset) {
             return -1;
         }
     }
+    if (offset == 0) {
+        std::string log = "Write filefd " + std::to_string(filefd) +
+                          " to: " + std::to_string(socketfd) + " success.";
+        Infolog(log);
+        }
     return 0;
 }

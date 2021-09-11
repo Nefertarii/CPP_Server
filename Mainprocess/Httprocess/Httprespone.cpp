@@ -83,7 +83,7 @@ int Httprespone::GETparse(std::string readbuf,std::string *filename) { //return 
 }
  
 int Httprespone::GETprocess(std::string filename,Filestate *file) {
-    if(!SERV::Readfile(filename, file)) {
+    if(!Servfunc::Readfile(filename, file)) {
         return -1;
     } else {
         return 0;

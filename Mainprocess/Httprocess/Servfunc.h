@@ -37,7 +37,7 @@ static const std::string FILEDIR = "/home/cs18/vscode/Webserver/Blog/";   //Defa
 using ULL = unsigned long long;
 
 //System function rewrite
-namespace SERV {
+namespace Servfunc {
     int Socket(int family, int type, int protocal);
     int Bind(int fd, const struct sockaddr *sa, socklen_t salen);
     //backlog: number of connections successfully established and waiting to be accepted
@@ -48,6 +48,6 @@ namespace SERV {
     int Readfile(std::string filename_,struct Filestate *filestat_);
     int Write(int socketfd, std::string *str);
     int Writefile(int socketfd, int filefd, off_t offset);
-}
+};
 
 #endif

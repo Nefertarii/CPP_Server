@@ -26,9 +26,9 @@ int Httpconnect::Connectlisten() {
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(LISTENPORT);
     server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-    listenfd = SERV::Socket(AF_INET, SOCK_STREAM, 0);
-    SERV::Bind(listenfd, (struct sockaddr *)&server_address, sizeof(server_address));
-    SERV::Listen(listenfd, concurrent_count * SINGLECLIENTS);
+    listenfd = Servfunc::Socket(AF_INET, SOCK_STREAM, 0);
+    Servfunc::Bind(listenfd, (struct sockaddr *)&server_address, sizeof(server_address));
+    Servfunc::Listen(listenfd, concurrent_count * SINGLECLIENTS);
     signal(SIGPIPE, SIG_IGN);
     return listenfd;
 }
@@ -50,7 +50,7 @@ const int Httpconnect::Single_concurrent_client() { return SINGLECLIENTS; }
 
 void Httpconnect::Disconnect(struct Clientinfo *client) {
     shutdown(client->clientfd, SHUT_RDWR);
-    SERV::Close(client->clientfd);
+    Servfunc::Close(client->clientfd);
     Reset_client(client);
     connect_nums -= 1;
 }

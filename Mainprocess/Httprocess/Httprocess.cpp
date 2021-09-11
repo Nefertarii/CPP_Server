@@ -1,7 +1,7 @@
 #include "Httprocess.h"
 
 extern const size_t WRITEMAX;
-
+ 
 void Httprocess::Set_client(struct Clientinfo *client) {
     struct sockaddr_in client_address;
     socklen_t address_length = sizeof(client_address);
@@ -15,9 +15,9 @@ int Httprocess::Send(int socketfd, std::string *message) {
     if (message->size() > WRITEMAX) {
         std::string tmp(*message, 0, WRITEMAX);
         *message = message->substr(WRITEMAX, (message->size() - WRITEMAX));
-        ret = SERV::Write(socketfd, &tmp);
+        ret = Servfunc::Write(socketfd, &tmp);
     } else {
-        ret = SERV::Write(socketfd, message);
+        ret = Servfunc::Write(socketfd, message);
         message->clear();
     }
     return ret;
@@ -25,30 +25,20 @@ int Httprocess::Send(int socketfd, std::string *message) {
 
 int Httprocess::Sendfile(int socketfd, Filestate *file) {
     int ret = 0;
-    std::string log;
     if((file->filelength - file->offset) > WRITEMAX) {
-        std::string log;
-        if (file->offset == 0) {
-            log = "Write file to: " + std::to_string(socketfd);
-            Infolog(log);
-        }
-        ret = SERV::Writefile(socketfd, file->filefd, file->offset);
+        ret = Servfunc::Writefile(socketfd, file->filefd, file->offset);
         file->offset += WRITEMAX;
     } else {
-        ret = SERV::Writefile(socketfd, file->filefd, file->offset);
+        ret = Servfunc::Writefile(socketfd, file->filefd, file->offset);
         file->filefd = 0;
         file->filelength = 0;
         file->offset = 0;
-        if (file->offset == 0) {
-            log = "Write file to: " + std::to_string(socketfd) + " success.";
-            Infolog(log);
-        }
     }
     return ret;
 }
 
 int Httprocess::Read(int socketfd, std::string *read_buf) {
-    return SERV::Read(socketfd, read_buf);
+    return Servfunc::Read(socketfd, read_buf);
 }
 
 void Httprocess::Clear(struct Clientinfo *client) {
