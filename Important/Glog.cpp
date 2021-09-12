@@ -54,7 +54,7 @@ void Log::Set(std::string filedir, size_t MAXLOG_) {
 
 int Log::Savetofile(std::string str) {
     std::fstream file;
-    file.open(logfile, std::ios::in | std::ios::app);
+    file.open(logfile, std::ios::out | std::ios::app);
     if (file) {
         file.write("\n", 1);
         std::string tmp = str + "\n";
@@ -73,7 +73,7 @@ int Log::Savetofile(std::vector<std::string> logvec) {
     logindex = 0;
     file.open(logfile, std::ios::in | std::ios::app);
     if (file) {
-        std::cout << "log :" + logfile + " save...\n";
+        std::cout << "logfile:" + logfile + " save...\n";
         file.write("\n", 1);
         int size = logvec.size();
         for (int i = 0; i != size; i++) {

@@ -1,7 +1,7 @@
 /* local variable       |  aa_bb_cc
  * global variable      |  AABBCC
- * function             |  Aa_bb_cc
- * class/struct         |  Aabbcc
+ * function             |  AaBbCc
+ * class/struct         |  Aa_Bb_Cc
  * Alias(using/define)  |  Aabbcc
  * 
  */

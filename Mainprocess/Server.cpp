@@ -12,7 +12,7 @@ void SIG_handler(int sig) {
 
 int main() {
     static Servercontrol_epoll server;
-    std::cout << "Server start.\n";
+    std::cout << "Http server start.\n";
     signal(SIGINT, SIG_handler);
     server.Server_start_Epollcontrol();
     return 0;

@@ -1,6 +1,0 @@
-root
-123456
-tempaccount1
-abcdefg123
-tempaccount2
-a1b2c3
