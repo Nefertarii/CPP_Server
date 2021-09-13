@@ -207,7 +207,8 @@ int Servfunc::Writefile(int socketfd, int filefd, off_t offset) {
 //class type
 class Socket_Func {
 private:
-    Log Socket_Func_log;
+    Log* socket_func_log;
+    bool have_upper;                            //have upper levels log pointer;
     size_t READMAX;                             //Once read max length
     size_t WRITEMAX;                            //Once write max length
     size_t REWRITEMAX;                          //Error retry max times
@@ -218,8 +219,8 @@ private:
     //const char *PROTOCOL = "HTTP";            //server used protocol
     void Init();
 public:
-    Socket_Func(std::string logfile);
-    Socket_Func(const char* logfile);
+    Socket_Func() { Init(); }
+    void Setlog(Log *upper);
     void SET_READMAX(size_t readmax) { READMAX = readmax; }
     void SET_WRITEMAX(size_t writemax) { WRITEMAX=writemax; }
     void SET_REWRITEMAX(size_t rewritemax)  { REWRITEMAX=rewritemax; }
@@ -248,42 +249,41 @@ void Socket_Func::Init() {
     std::string FILEDIR = "/home/cs18/vscode/Webserver/Blog/";
 }
 
-Socket_Func::Socket_Func(std::string logfile) {
-    Init();
-    Socket_Func_log.Set(logfile, 200);
-}
-
-Socket_Func::Socket_Func(const char* logfile) {
-    Init();
-    std::string logfile_ = logfile;
-    Socket_Func_log.Set(logfile_, 200);
+void Socket_Func::Setlog(Log *upper) {
+    if (upper != nullptr) {
+        socket_func_log = upper;
+        have_upper = true;
+    } else {
+        socket_func_log = new Log(logfile, 200);
+        have_upper = false;
+    }
 }
 
 int Socket_Func::Socket(int family, int type, int protocol) {
     int socketfd = socket(family, type, protocol);
     if (socketfd < 0) {
-        Socket_Func_log.Errorlog("Socket open error.", errno);
+        socket_func_log->Errorlog("Socket open error.", errno);
         return -1;
     }
-    Socket_Func_log.Infolog("Socket open ok");
+    socket_func_log->Infolog("Socket open ok");
     return socketfd;
 }
 
 int Socket_Func::Bind(int fd, const struct sockaddr* sa, socklen_t salen) {
     if (bind(fd, sa, salen) < 0) {
-        Socket_Func_log.Errorlog("Bind set error.", errno);
+        socket_func_log->Errorlog("Bind set error.", errno);
         return -1;
     }
-    Socket_Func_log.Infolog("Bind set ok");
+    socket_func_log->Infolog("Bind set ok");
     return 0;
 }
 
 int Socket_Func::Listen(int fd, int backlog) {
     if (listen(fd, backlog) < 0) {
-        Socket_Func_log.Errorlog("Listen set error.", errno);
+        socket_func_log->Errorlog("Listen set error.", errno);
         return -1;
     }
-    Socket_Func_log.Infolog("Listen set ok");
+    socket_func_log->Infolog("Listen set ok");
     return 0;
 }
 
@@ -296,15 +296,15 @@ int Socket_Func::Accept(int listenfd) {
         if (connectfd < 0) {
             if (errno == EINTR)
                 continue;
-            Socket_Func_log.Errorlog("Accept error.", errno);
+            socket_func_log->Errorlog("Accept error.", errno);
             return -1;
         }
         std::string log = inet_ntoa(cliaddr.sin_addr);
         log = "Get accept from " + log;
-        Socket_Func_log.Infolog(log);
+        socket_func_log->Infolog(log);
         return connectfd;
     }
-    Socket_Func_log.Errorlog("Accept error.");
+    socket_func_log->Errorlog("Accept error.");
     return -1;
 }
 
@@ -312,11 +312,11 @@ int Socket_Func::Close(int fd) {
     std::string log = "Close " + std::to_string(fd);
     if (close(fd) < 0) {
         log += " error.";
-        Socket_Func_log.Errorlog(log, errno);
+        socket_func_log->Errorlog(log, errno);
         return -1;
     }
     log += " ok.";
-    Socket_Func_log.Infolog(log);
+    socket_func_log->Infolog(log);
     return 0;
 }
 
@@ -325,21 +325,21 @@ int Socket_Func::Read(int socketfd, std::string* str) {
     int readsize = read(socketfd, readbuf_tmp, READMAX);
     if (readsize < 0) {
         if (errno == EINTR) {
-            Socket_Func_log.Errorlog("Read error, Single break");
+            socket_func_log->Errorlog("Read error, Single break");
         } else if (errno == EPIPE) {
-            Socket_Func_log.Errorlog("Read error, Client close");
+            socket_func_log->Errorlog("Read error, Client close");
         } else if (errno != EAGAIN && errno != EWOULDBLOCK) {
-            Socket_Func_log.Errorlog("Read error", errno);
+            socket_func_log->Errorlog("Read error", errno);
         }
         //error close
         return -1;
     } else if (readsize == 0) {
         std::string log = "client: " + std::to_string(socketfd) + " send close";
-        Socket_Func_log.Infolog(log);
+        socket_func_log->Infolog(log);
         return 1; // normal close
     } else {
         std::string log = "Read from " + std::to_string(socketfd);
-        Socket_Func_log.Infolog(log);
+        socket_func_log->Infolog(log);
         *str = readbuf_tmp;
         return 0; // success
     }
@@ -352,64 +352,68 @@ int Socket_Func::Readfile(std::string filename_, struct Filestate* filestat_) {
     const char* filename = filename_.c_str();
     filefd = open(filename, O_RDONLY);
     if (filefd < 0) {
-        Socket_Func_log.Errorlog("Readfile error", errno);
+        socket_func_log->Errorlog("Readfile error", errno);
         return -1; //local fail
     }
     if (stat(filename, &file) < 0) {
-        Socket_Func_log.Errorlog("Readfile error", errno);
+        socket_func_log->Errorlog("Readfile error", errno);
         return -1; //local fail
     }
     filestat_->filefd = filefd;
     filestat_->filelength = file.st_size;
     filestat_->offset = 0;
     std::string log = "Readfile " + filename_ + " filefd: " + std::to_string(filestat_->filefd) + " success.";
-    Socket_Func_log.Infolog(log);
+    socket_func_log->Infolog(log);
     return 0;
 }
 
 int Socket_Func::Write(int socketfd, std::string* str) {
     const char* tmpstr = str->c_str();
     std::string log = "Write to: " + std::to_string(socketfd);
-    Socket_Func_log.Infolog(log);
+    socket_func_log->Infolog(log);
     if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
         if (errno == EINTR) {
-            Socket_Func_log.Errorlog("Write error", errno); //Signal interruption: slow system call
+            socket_func_log->Errorlog("Write error", errno); //Signal interruption: slow system call
             return 1;
         } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            Socket_Func_log.Warninglog("write error", errno); //kernel cache full
+            socket_func_log->Warninglog("write error", errno); //kernel cache full
             return 2;
         } else {
-            Socket_Func_log.Errorlog("write error", errno);
+            socket_func_log->Errorlog("write error", errno);
             return -1;
         }
     }
     log += " success.";
-    Socket_Func_log.Infolog(log);
+    socket_func_log->Infolog(log);
     return 0;
 }
 
 int Socket_Func::Writefile(int socketfd, int filefd, off_t offset) {
     if (sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
         if (errno == EINTR) {
-            Socket_Func_log.Warninglog("Signal interuption");
+            socket_func_log->Warninglog("Signal interuption");
             return 1;
         } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            Socket_Func_log.Warninglog("kernel cache full");
+            socket_func_log->Warninglog("kernel cache full");
             return 2;
         } else {
-            Socket_Func_log.Errorlog("Write error", errno);
+            socket_func_log->Errorlog("Write error", errno);
             return -1;
         }
     }
     if (offset == 0) {
         std::string log = "Write filefd " + std::to_string(filefd) +
             " to: " + std::to_string(socketfd) + " success.";
-        Socket_Func_log.Infolog(log);
+        socket_func_log->Infolog(log);
     }
     return 0;
 }
 
-Socket_Func::~Socket_Func() { ; }
+Socket_Func::~Socket_Func() {
+    if (!have_upper) {
+        delete socket_func_log;
+    }
+}
 
 
 #endif
