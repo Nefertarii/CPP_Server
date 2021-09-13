@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" http-equiv="X-UA-Compatible" content="IE=Edge">
+		<title>登录至瓦肆</title>
+		<link type="text/css" rel="stylesheet" href="login.css" />
+	</head>
+	<body>
+		<div class="space"></div><!-- white -->
+		<div class="head">
+			<!-- logo -->
+			<a href="../index.html">
+				<div class="logo"></div>
+			</a>
+		</div>
+		<div class="space"></div><!-- white -->
+		<div>
+			<!-- login table -->
+			<h1>登陆至瓦肆</h1>
+			<div class="login_input">
+				<from action="/login" method="post">
+					<div class="userinput">用户名或邮箱</div>
+					<input type="text" name="username" />
+					<div class="userinput">密码
+						<a class="forget" href="../PasswordReset/PasswordReset.html">忘记密码?</a>
+					</div>
+					<input type="password" name="password" />
+					<input type=submit name="submit" "value=" 登陆" />
+				</from>
+			</div>
+		</div>
+		<div class="space"></div><!-- white -->
+		<div class="creataccount">
+			<!-- new user -->
+			新用户?
+			<a href="../CreateAccount/createaccount.html">创建账户</a>
+		</div>
+		<div class="contact">
+			<!-- Contact -->
+			<ul>
+				<li><a href="">test1</a></li>
+				<li><a href="">test2</a></li>
+				<li><a href="">test3</a></li>
+				<li><a href="../Contact/contactwasi.html">联系我们</a></li>
+			</ul>
+		</div>
+	</body>
+	<link type="text/javascript" href="login.js" />
+</html>

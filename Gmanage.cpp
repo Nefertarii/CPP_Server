@@ -3,7 +3,7 @@
  * function             |  AaBbCc
  * class/struct         |  Aa_Bb_Cc
  * Alias(using/define)  |  Aabbcc
- * 
+ * namespace            |  Aabbcc
  */
 
 int main()

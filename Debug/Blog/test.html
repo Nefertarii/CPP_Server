@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        /*通用*/
+        .popBox-mask{
+            position: fixed;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            opacity: .6;
+            z-index: 999;
+            background-color: #000;
+        }
+        .popBox-content{
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%,-50%);
+            z-index: 999;
+        }
+        /*各个弹框下的样式可以自己更改*/
+        #popBox-demo .popBox-content{
+            width: 600px;
+            height: 400px;
+            background-color: #fff;
+            text-align: center;
+        }
+        #popBox-demo p{
+            line-height: 400px;
+            margin: 0;
+        }
+        #popBox-demo .btn-close{
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+</head>
+<body>
+    <button οnclick="showPopBox()">出现弹框</button>
+    <div class="popBox" id="popBox-demo" style="display:none">
+        <div class="popBox-mask"></div>
+        <div class="popBox-content">
+            <p>很丑的例子</p>
+            <a href="javascript:void(0)" class="btn-close" οnclick="hidePopBox()">关闭</a>
+        </div>
+    </div>
+    <script>
+        //显示弹框
+        function showPopBox(){
+            document.getElementById('popBox-demo').style.display = 'block';
+        }
+        //关闭弹框
+        function hidePopBox(){
+            document.getElementById('popBox-demo').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
