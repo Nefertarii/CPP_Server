@@ -1,7 +1,7 @@
 #ifndef HTTPRESPONE_H_
 #define HTTPRESPONE_H_
 
-#include "../../Important/Gservfunc.h"
+#include "../Gservfunc.h"
 #include "Httperrno.h"
 
 class Httprespone {

@@ -1,8 +1,10 @@
 #ifndef HTTPCONNECT_H_
 #define HTTPCONNECT_H_
 
-#include "../../Important/Gservfunc.h"
+#include "../Gservfunc.h"
+#include "../Gthread.h"
 #include "Httperrno.h"
+
 
 class Httpconnect {
 private:
