@@ -2,7 +2,7 @@
 
 void SIG_handler(int sig) {
     if (sig == SIGINT) {
-        Infolog("capture signal SIGINT.");
+        std::cout << "capture signal SIGINT.\n";
         //server.Server_stop(); auto run
         exit(2);
     } else {
@@ -11,9 +11,9 @@ void SIG_handler(int sig) {
 }
 
 int main() {
-    static Servercontrol_epoll server;
+    static Server_Control_Epoll server;
     std::cout << "Http server start.\n";
     signal(SIGINT, SIG_handler);
-    server.Server_start_Epollcontrol();
+    server.ServerStart();
     return 0;
 }

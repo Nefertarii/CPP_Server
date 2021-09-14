@@ -106,15 +106,16 @@ REQUESTYPE Http_Process::RequestType(std::string* readbuf) {
     return TYPENONE;
 }
 
-int Http_Process::GETParse(std::string readbuf, std::string* filename, Filestate* file) { //return GET request filename
+int Http_Process::GETParse(std::string readbuf, std::string* filename, Filestate* fileinfo) { //return GET request filename
     *filename = Substr(readbuf, 5, readmax, ' ');
-    if (*filename == "0") {
-        *filename = "index.html";
-    }
     if (*filename == "-1") {
         return -1;
     }
-    if (Gsocket::Readfile(*filename, document_root, file, this_log) < 0) {
+    if (*filename == "0") {
+        *filename = "index.html";
+    }
+    *filename = document_root + *filename;
+    if (Gsocket::Readfile(*filename, fileinfo, this_log) < 0) {
         return -1;
     }
     return 0;
@@ -133,33 +134,52 @@ int Http_Process::POSTParse(std::string request, std::string* post_type, std::st
         return -1;
     }
     //Handler post request
-    switch (POSTChoose(*post_type)) {
+    std::string log;
+    switch (POSTChoose(type)) {
     case POSTLogin: {
         //Login
+        log = "Login:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTReset: {
         //Reset password
+        log = "Reset password:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTRegister: {
         //Register
+        log = "Register:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTVoteup: {
         //Vote up
+        log = "Vote up:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTVotedown: {
         //Vote down
+        log = "Vote down:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTComment: {
         //Comment
+        log = "Comment:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTContent: {
         //Content
+        log = "Content:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTReadcount: {
         //Readcount add
+        log = "Readcount add:" + data;
+        this_log->Infolog(log);
         break;
     } case POSTVerifi: {
-        //Verification
+        //Verification code
+        log = "Verification:" + data;
+        this_log->Infolog(log);
         break;
     } default: {
         //Error type
@@ -171,7 +191,7 @@ int Http_Process::POSTParse(std::string request, std::string* post_type, std::st
     *post_type = type;
     *post_data = data;
     return 0;
-    
+
 }
 
 POSTYPE Http_Process::POSTChoose(std::string post_type) {

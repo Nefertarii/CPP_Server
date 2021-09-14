@@ -44,7 +44,7 @@ void Socket_Control::SetLog(Log* upper, size_t buffer_size) {
         this_log = upper;
         have_upper = true;
     } else {
-        this_log = new Log(logfile, 200);
+        this_log = new Log("Socket_Control_Log.txt", 200);
         have_upper = false;
     }
 }

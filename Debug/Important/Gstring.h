@@ -55,11 +55,11 @@ std::string Substr_Revers(std::string str, size_t maxlength, char end) {
         end_i++;
     }
     if (end_i == 0) {
-        return "0";
+        return "0"; //no data
     } else if (end_i <= maxlength) {
         return str.substr(beg_i - end_i + 1, end_i);
     } else {
-        return "-1";
+        return "-1"; //length out range
     }
 }
 

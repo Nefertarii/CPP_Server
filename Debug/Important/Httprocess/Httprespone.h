@@ -19,21 +19,14 @@ public:
     void SetLog(Log* log, size_t buffer_size);
     void SetWritemax(size_t writemax_) { writemax = writemax_; }
     void SetReadmax(size_t readmax_) { readmax = readmax_; }
-    void SetClient(struct Clientinfo* client);
-    int Send(int socketfd, std::string *message);
+    void GetAddress(Clientinfo* client);
+    void BadRequest404(std::string* responehead);
+    int Send(int socketfd, std::string* message);
     int SendFile(int socketfd, Filestate *file);
-    int Read(int socketfd, std::string *read_buf);
-    void Clear(struct Clientinfo *client);
     ~Http_Respone();
     //static int Sendfile(int clientfd, std::string filename);
     //static int Sendfile(int socketfd, int filefd, off_t offset);
 };
-
-
-
-
-
-
 
 void Http_Respone::SetLog(Log* log, size_t buffer_size) {
     if (log == nullptr) {
@@ -45,12 +38,14 @@ void Http_Respone::SetLog(Log* log, size_t buffer_size) {
     }
 }
 
-void Http_Respone::SetClient(struct Clientinfo *client) {
+void Http_Respone::GetAddress(struct Clientinfo *client) {
     struct sockaddr_in client_address;
     socklen_t address_length = sizeof(client_address);
     getpeername(client->clientfd, (struct sockaddr *)&client_address, &address_length);
     client->port = std::to_string(ntohs(client_address.sin_port));
     client->ip = inet_ntoa(client_address.sin_addr);
+    std::string log = "Client IP:" + client->ip + ":" + client->port;
+    this_log->Infolog(log);
 }
 
 int Http_Respone::Send(int socketfd, std::string *message) {
@@ -80,17 +75,14 @@ int Http_Respone::SendFile(int socketfd, Filestate *file) {
     return ret;
 }
 
-int Http_Respone::Read(int socketfd, std::string *read_buf) {
-    return Gsocket::Read(socketfd, read_buf, readmax, this_log);
-}
-
-void Http_Respone::Clear(struct Clientinfo *client) {
-    client->respone_head.clear();
-    client->respone_body.clear();
-    client->rewrite_count = 0;
-    client->fileinfo.filefd = 0;
-    client->fileinfo.filelength = 0;
-    client->fileinfo.offset = 0;
+void Http_Respone::BadRequest404(std::string* responehead) {
+    responehead->clear();
+    *responehead += "HTTP/1.1 404 Bad Request\r\n";
+    *responehead += "Constent_Charset:utf-8\r\n";
+    *responehead += "Content-Language:zh-CN\r\n";
+    *responehead += "Content-Length:0\r\n";
+    *responehead += Timer::Nowtime_str() + "\r\n";
+    *responehead += "Server version:Gserver/1.0 (C++) \r\n\r\n";
 }
 
 Http_Respone::~Http_Respone() {

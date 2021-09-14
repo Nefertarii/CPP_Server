@@ -7,7 +7,7 @@
 class Epoll_Control {
 private:
     int epollfd;
-    Log* epoll_log;
+    Log* this_log;
     bool have_upper;
 public:
     Epoll_Control() { epollfd = -1; }
@@ -36,24 +36,24 @@ public:
 
 void Epoll_Control::SetLog(Log* upper, size_t buffer_size) {
     if (upper != nullptr) {
-        epoll_log = upper;
+        this_log = upper;
         have_upper = true;
     } else {
-        epoll_log = new Log(logfile, buffer_size);
+        this_log = new Log("Epoll_Control_Log.txt", buffer_size);
         have_upper = false;
     }
 }
 
-void Epoll_Control::Set_epollfd(int epollfd_) {
+void Epoll_Control::SetEpollfd(int epollfd_) {
     std::string log = "Epoll set, fd:" + std::to_string(epollfd) + ".";
-    epoll_log->Infolog(log);
+    this_log->Infolog(log);
     epollfd = epollfd_;
 }
 
 void Epoll_Control::Epolldel(int socketfd) {
     if (epollfd >= 0) {
         std::string log = "Epoll del, fd:" + std::to_string(socketfd) + ".";
-        epoll_log->Infolog(log);
+        this_log->Infolog(log);
         epoll_ctl(epollfd, EPOLL_CTL_DEL, socketfd, nullptr);
     }
 }
@@ -61,7 +61,7 @@ void Epoll_Control::Epolldel(int socketfd) {
 void Epoll_Control::Epolladd(int socketfd, void* epolldata) {
     if (epollfd >= 0) {
         std::string log = "epoll add, fd:" + std::to_string(socketfd) + ".";
-        Infolog(log);
+        this_log->Infolog(log);
         struct epoll_event ev;
         ev.events = EPOLLIN | EPOLLET;
         ev.data.ptr = epolldata;
@@ -89,7 +89,7 @@ void Epoll_Control::Epollwrite(int socketfd, void* epolldata) {
 
 Epoll_Control::~Epoll_Control() {
     if (!have_upper) {
-        delete epoll_log;
+        delete this_log;
     }
 }
 

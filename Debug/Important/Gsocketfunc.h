@@ -41,7 +41,7 @@ namespace Gsocket {
     int Accept(int listenfd, Log* log_p);
     int Close(int fd, Log* log_p);
     int Read(int socketfd, std::string* str, size_t readmax, Log* log_p);
-    int Readfile(std::string filename_, std::string filedir, struct Filestate* filestat_, Log* log_p);
+    int Readfile(std::string filename_, struct Filestate* filestat_, Log* log_p);
     int Write(int socketfd, std::string* str, Log* log_p);
     int Writefile(int socketfd, int filefd, off_t offset, size_t writemax ,Log* log_p);
 };
@@ -135,24 +135,25 @@ int Gsocket::Read(int socketfd, std::string* str, size_t readmax, Log* log_p) {
     }
 }
 
-int Gsocket::Readfile(std::string filename_, std::string filedir, struct Filestate* filestat_, Log* log_p) {
+int Gsocket::Readfile(std::string filename, struct Filestate* filestat_, Log* log_p) {
     struct stat file;
     int filefd = 0;
-    filename_ = filedir + filename_;
-    const char* filename = filename_.c_str();
-    filefd = open(filename, O_RDONLY);
+    
+    const char* document = filename.c_str();
+    std::cout << document << "\n";
+    filefd = open(document, O_RDONLY);
     if (filefd < 0) {
         log_p->Errorlog("Readfile error", errno);
         return -1; //local fail
     }
-    if (stat(filename, &file) < 0) {
+    if (stat(document, &file) < 0) {
         log_p->Errorlog("Readfile error", errno);
         return -1; //local fail
     }
     filestat_->filefd = filefd;
     filestat_->filelength = file.st_size;
     filestat_->offset = 0;
-    std::string log = "Readfile " + filename_ + " filefd: " + std::to_string(filestat_->filefd) + " success.";
+    std::string log = "Readfile " + filename + " filefd: " + std::to_string(filestat_->filefd) + " success.";
     log_p->Infolog(log);
     return 0;
 }
