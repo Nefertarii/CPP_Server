@@ -44,17 +44,31 @@ enum POSTYPE {
 };
 
 struct Clientinfo {
-    std::string port;
-    std::string ip;
-    std::string respone_head;
-    std::string respone_body;
+    std::string port = "";
+    std::string ip = "";
+    std::string respone_head = "";
+    std::string respone_body = "";
     //client's socketfd
-    int clientfd;
-    size_t rewrite_count;
+    int clientfd = 0;
+    size_t rewrite_count = 0;
     Filestate fileinfo;
-    SERVERR err_code;
-    SERVSTATE state_code;
-    REQUESTYPE requset_type;
+    SERVERR err_code = ERRNONE;
+    SERVSTATE state_code = STATENONE;
+    REQUESTYPE requset_type = TYPENONE;
+    void Reset() {
+        port.clear();
+        ip.clear();
+        respone_head.clear();
+        respone_body.clear();
+        clientfd = 0;
+        rewrite_count = 0;
+        fileinfo.filefd = 0;
+        fileinfo.filelength = 0;
+        fileinfo.offset = 0;
+        err_code = ERRNONE;
+        state_code = STATENONE;
+        requset_type = TYPENONE;
+    }
 };
 //reset httpconnect
 //clear httprocess

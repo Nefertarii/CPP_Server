@@ -1,100 +1,208 @@
 #ifndef HTTPROCESS_H_
 #define HTTPROCESS_H_
 
-#include "../Gservfunc.h"
+#include "../Gsocketfunc.h"
 #include "Httperrno.h"
 
-void Http_signal_handle();
-
-//only encapsulates read and write operations
-//need other function to control
-class Httprocess {
+class Http_Process {
 private:
-    ;
+    size_t readmax;
+    std::string document_root;
+    Log* this_log;
+    bool have_upper;
 
 public:
-    Httprocess(){}
-    void Set_client(struct Clientinfo *client);
-    static int Send(int socketfd, std::string *message);
+    Http_Process() {}
+    void SetLog(Log* log, size_t buffer_size);
+    void SetReadmax(size_t readmax_) { readmax = readmax_; }
+    void SetDocumentRoot(std::string document_root_) { document_root = document_root_; }
 
-    //static int Sendfile(int clientfd, std::string filename);
-    //static int Sendfile(int socketfd, int filefd, off_t offset);
-
-    static int Sendfile(int socketfd, Filestate *file);
-    int Read(int socketfd, std::string *read_buf);
-    void Clear(struct Clientinfo *client);
-    ~Httprocess(){};
+    std::string StrHttpState(int codenum);
+    std::string FileType(std::string filename);
+    void CreateResponeHead(std::string* responehead, std::string filetype, int state, int bodylength);
+    REQUESTYPE RequestType(std::string* readbuf);
+    //Use GET type parse readbuf and set fileinfo
+    int GETParse(std::string readbuf, std::string* filename, Filestate* file);
+    //Use POST type parse readbuf and set respone data
+    int POSTParse(std::string request, std::string* post_type, std::string* post_data);
+    //string to int for use switch
+    POSTYPE POSTChoose(std::string post_type);
+    ~Http_Process();
 };
 
 
-
-
-
-
-
-
-
-
-#include "Httprocess.h"
-
-extern const size_t WRITEMAX;
- 
-void Httprocess::Set_client(struct Clientinfo *client) {
-    struct sockaddr_in client_address;
-    socklen_t address_length = sizeof(client_address);
-    getpeername(client->clientfd, (struct sockaddr *)&client_address, &address_length);
-    client->port = std::to_string(ntohs(client_address.sin_port));
-    client->ip = inet_ntoa(client_address.sin_addr);
-}
-
-int Httprocess::Send(int socketfd, std::string *message) {
-    int ret = 0;
-    if (message->size() > WRITEMAX) {
-        std::string tmp(*message, 0, WRITEMAX);
-        *message = message->substr(WRITEMAX, (message->size() - WRITEMAX));
-        ret = Servfunc::Write(socketfd, &tmp);
+void Http_Process::SetLog(Log* log, size_t buffer_size) {
+    if (log == nullptr) {
+        this_log = new Log("Http_Process_Log.txt", buffer_size);
+        have_upper = false;
     } else {
-        ret = Servfunc::Write(socketfd, message);
-        message->clear();
+        this_log = log;
+        have_upper = true;
     }
-    return ret;
 }
 
-int Httprocess::Sendfile(int socketfd, Filestate *file) {
-    int ret = 0;
-    if((file->filelength - file->offset) > WRITEMAX) {
-        ret = Servfunc::Writefile(socketfd, file->filefd, file->offset);
-        file->offset += WRITEMAX;
+std::string Http_Process::StrHttpState(int codenum) {
+    switch (codenum) {
+    case 200:
+        return "OK\r\n";
+    case 400:
+        return "Bad Request\r\n";
+    case 401:
+        return "Unauthorized\r\n";
+    case 403:
+        return "Forbidden\r\n";
+    case 404:
+        return "Not Found\r\n";
+    default:
+        return "\r\n";
+    }
+}
+
+std::string Http_Process::FileType(std::string filename) {
+    int i = filename.length();
+    while (i > 0) {
+        if (filename[i] == '.' || i == 0) {
+            break;
+        }
+        i--;
+    }
+    std::string suffix(filename, i, filename.length());
+    if (suffix == ".html") {
+        return "text/html";
+    } else if (suffix == ".css") {
+        return "text/css";
+    } else if (suffix == ".js") {
+        return "text/javascript";
+    } else if (suffix == ".data") {
+        return "application/json";
+    } else if (suffix == ".png") {
+        return "image/png";
+    } else if (suffix == ".svg") {
+        return "image/svg+xml";
+    } else if (suffix == ".ico") {
+        return "image/x-icon";
     } else {
-        ret = Servfunc::Writefile(socketfd, file->filefd, file->offset);
-        file->filefd = 0;
-        file->filelength = 0;
-        file->offset = 0;
+        return "text/plain";
     }
-    return ret;
 }
 
-int Httprocess::Read(int socketfd, std::string *read_buf) {
-    return Servfunc::Read(socketfd, read_buf);
+void Http_Process::CreateResponeHead(std::string* responehead, std::string filetype, int state, int bodylength) {
+    *responehead += ("HTTP/1.1 " + std::to_string(state) + " " + StrHttpState(state));
+    *responehead += "Constent_Charset:utf-8\r\n";
+    *responehead += "Content-Language:zh-CN\r\n";
+    *responehead += ("Content-Type:" + filetype + "\r\n");
+    *responehead += ("Content-Length:" + std::to_string(bodylength) + "\r\n");
+    *responehead += (Timer::Nowtime_str() + "\r\n");
+    *responehead += "Server version:Gserver/1.0 (C++) \r\n\r\n";
 }
 
-void Httprocess::Clear(struct Clientinfo *client) {
-    client->respone_head.clear();
-    client->respone_body.clear();
-    client->rewrite_count = 0;
-    client->fileinfo.filefd = 0;
-    client->fileinfo.filelength = 0;
-    client->fileinfo.offset = 0;
+REQUESTYPE Http_Process::RequestType(std::string* readbuf) {
+    if (readbuf->find_first_of("GET") == 0) {
+        return GET;
+    }
+    if (readbuf->find_first_of("POST") == 0) {
+        return POST;
+    }
+    return TYPENONE;
 }
 
+int Http_Process::GETParse(std::string readbuf, std::string* filename, Filestate* file) { //return GET request filename
+    *filename = Substr(readbuf, 5, readmax, ' ');
+    if (*filename == "0") {
+        *filename = "index.html";
+    }
+    if (*filename == "-1") {
+        return -1;
+    }
+    if (Gsocket::Readfile(*filename, document_root, file, this_log) < 0) {
+        return -1;
+    }
+    return 0;
+}
+
+int Http_Process::POSTParse(std::string request, std::string* post_type, std::string* post_data) { //return POST request type and date
+    //Get POST type
+    std::string type = Substr(request, 5, readmax, ' ');
+    type = Substr_Revers(type, 30, '/');
+    if (type == "-1" || type == "0") {
+        return -1;
+    }
+    //Get readbuf data
+    std::string data = Substr_Revers(request, readmax, '\n');
+    if (data == "-1" || data == "0") {
+        return -1;
+    }
+    //Handler post request
+    switch (POSTChoose(*post_type)) {
+    case POSTLogin: {
+        //Login
+        break;
+    } case POSTReset: {
+        //Reset password
+        break;
+    } case POSTRegister: {
+        //Register
+        break;
+    } case POSTVoteup: {
+        //Vote up
+        break;
+    } case POSTVotedown: {
+        //Vote down
+        break;
+    } case POSTComment: {
+        //Comment
+        break;
+    } case POSTContent: {
+        //Content
+        break;
+    } case POSTReadcount: {
+        //Readcount add
+        break;
+    } case POSTVerifi: {
+        //Verification
+        break;
+    } default: {
+        //Error type
+        break;
+    }
+    } //switch end
+
+
+    *post_type = type;
+    *post_data = data;
+    return 0;
+    
+}
+
+POSTYPE Http_Process::POSTChoose(std::string post_type) {
+    if (post_type == "login") {
+        return POSTLogin;
+    } else if (post_type == "reset") {
+        return POSTReset;
+    } else if (post_type == "register") {
+        return POSTRegister;
+    } else if (post_type == "vote_up") {
+        return POSTVoteup;
+    } else if (post_type == "vote_down") {
+        return POSTVotedown;
+    } else if (post_type == "comment") {
+        return POSTComment;
+    } else if (post_type == "content") {
+        return POSTContent;
+    } else if (post_type == "readcount") {
+        return POSTReadcount;
+    } else if (post_type == "verification") {
+        return POSTVerifi;
+    } else {
+        return POSTERR;
+    }
+}
+
+Http_Process::~Http_Process() {
+    if (!have_upper) {
+        delete this_log;
+        this_log = nullptr;
+    }
+}
 
 #endif
-
-
-
-
-
-
-
-
-

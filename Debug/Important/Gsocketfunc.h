@@ -20,67 +20,64 @@
 
 //setting
 //Globalvalue
-static const size_t READMAX = 1024 * 40;                            //Once read max length
-static const size_t WRITEMAX = 1024 * 40;                           //Once write max length
-static const size_t REWRITEMAX = 5;                                 //Error retry max times
-static const size_t LISTENPORT = 8000;                                //listen port
-static const size_t SINGLECLIENTS = 8;                              //once thread max client
-static const std::string FILEDIR = "/home/cs18/vscode/Webserver/Blog/";   //Default location for read file
 //const size_t MAXLOG = 16;                            //Log buffer maximum
 //const char *PROTOCOL = "HTTP";                       //server used protocol
 
+
 struct Filestate {
     int filefd = 0;
-    uint filelength = 0;
-    uint offset = 0;
+    size_t filelength = 0;
+    size_t offset = 0;
 };
+
 
 //using
-using ULL = unsigned long long;
+//using ULL = unsigned long long;
 
-//System function rewrite
-namespace Servfunc {
-    int Socket(int family, int type, int protocal);
-    int Bind(int fd, const struct sockaddr* sa, socklen_t salen);
-    //backlog: number of connections successfully established and waiting to be accepted
-    int Listen(int fd, int backlog);
-    int Accept(int listenfd);
-    int Close(int fd);
-    int Read(int socketfd, std::string* str);
-    int Readfile(std::string filename_, struct Filestate* filestat_);
-    int Write(int socketfd, std::string* str);
-    int Writefile(int socketfd, int filefd, off_t offset);
+namespace Gsocket {
+    int Socket(int family, int type, int protocal, Log* log_p);
+    int Bind(int fd, const struct sockaddr* sa, socklen_t salen, Log* log_p);
+    int Listen(int fd, int backlog, Log* log_p);
+    int Accept(int listenfd, Log* log_p);
+    int Close(int fd, Log* log_p);
+    int Read(int socketfd, std::string* str, size_t readmax, Log* log_p);
+    int Readfile(std::string filename_, std::string filedir, struct Filestate* filestat_, Log* log_p);
+    int Write(int socketfd, std::string* str, Log* log_p);
+    int Writefile(int socketfd, int filefd, off_t offset, size_t writemax ,Log* log_p);
 };
 
-int Servfunc::Socket(int family, int type, int protocol) {
+
+//function
+
+int Gsocket::Socket(int family, int type, int protocol, Log* log_p) {
     int socketfd = socket(family, type, protocol);
     if (socketfd < 0) {
-        Errorlog("Socket open error.", errno);
+        log_p->Errorlog("Socket open error.", errno);
         return -1;
     }
-    Infolog("Socket open ok");
+    log_p->Infolog("Socket open ok");
     return socketfd;
 }
 
-int Servfunc::Bind(int fd, const struct sockaddr* sa, socklen_t salen) {
+int Gsocket::Bind(int fd, const struct sockaddr* sa, socklen_t salen, Log* log_p) {
     if (bind(fd, sa, salen) < 0) {
-        Errorlog("Bind set error.", errno);
+        log_p->Errorlog("Bind set error.", errno);
         return -1;
     }
-    Infolog("Bind set ok");
+    log_p->Infolog("Bind set ok");
     return 0;
 }
 
-int Servfunc::Listen(int fd, int backlog) {
+int Gsocket::Listen(int fd, int backlog, Log* log_p) {
     if (listen(fd, backlog) < 0) {
-        Errorlog("Listen set error.", errno);
+        log_p->Errorlog("Listen set error.", errno);
         return -1;
     }
-    Infolog("Listen set ok");
+    log_p->Infolog("Listen set ok");
     return 0;
 }
 
-int Servfunc::Accept(int listenfd) {
+int Gsocket::Accept(int listenfd, Log* log_p) {
     struct sockaddr_in cliaddr;
     socklen_t cliaddrlen = sizeof(cliaddr);
     int cnt = 0;
@@ -89,120 +86,127 @@ int Servfunc::Accept(int listenfd) {
         if (connectfd < 0) {
             if (errno == EINTR)
                 continue;
-            Errorlog("Accept error.", errno);
+            log_p->Errorlog("Accept error.", errno);
             return -1;
         }
         std::string log = inet_ntoa(cliaddr.sin_addr);
         log = "Get accept from " + log;
-        Infolog(log);
+        log_p->Infolog(log);
         return connectfd;
     }
-    Errorlog("Accept error.");
+    log_p->Errorlog("Accept error.");
     return -1;
 }
 
-int Servfunc::Close(int fd) {
+int Gsocket::Close(int fd, Log* log_p) {
     std::string log = "Close " + std::to_string(fd);
     if (close(fd) < 0) {
         log += " error.";
-        Errorlog(log, errno);
+        log_p->Errorlog(log, errno);
         return -1;
     }
     log += " ok.";
-    Infolog(log);
+    log_p->Infolog(log);
     return 0;
 }
 
-int Servfunc::Read(int socketfd, std::string* str) {
-    char readbuf_tmp[READMAX] = { 0 };
-    int readsize = read(socketfd, readbuf_tmp, READMAX);
+int Gsocket::Read(int socketfd, std::string* str, size_t readmax, Log* log_p) {
+    char readbuf_tmp[readmax] = { 0 };
+    int readsize = read(socketfd, readbuf_tmp, readmax);
     if (readsize < 0) {
         if (errno == EINTR) {
-            Errorlog("Read error, Single break");
+            log_p->Errorlog("Read error, Single break");
         } else if (errno == EPIPE) {
-            Errorlog("Read error, Client close");
+            log_p->Errorlog("Read error, Client close");
         } else if (errno != EAGAIN && errno != EWOULDBLOCK) {
-            Errorlog("Read error", errno);
+            log_p->Errorlog("Read error", errno);
         }
         //error close
         return -1;
     } else if (readsize == 0) {
         std::string log = "client: " + std::to_string(socketfd) + " send close";
-        Infolog(log);
+        log_p->Infolog(log);
         return 1; // normal close
     } else {
         std::string log = "Read from " + std::to_string(socketfd);
-        Infolog(log);
+        log_p->Infolog(log);
         *str = readbuf_tmp;
         return 0; // success
     }
 }
 
-int Servfunc::Readfile(std::string filename_, struct Filestate* filestat_) {
+int Gsocket::Readfile(std::string filename_, std::string filedir, struct Filestate* filestat_, Log* log_p) {
     struct stat file;
     int filefd = 0;
-    filename_ = FILEDIR + filename_;
+    filename_ = filedir + filename_;
     const char* filename = filename_.c_str();
     filefd = open(filename, O_RDONLY);
     if (filefd < 0) {
-        Errorlog("Readfile error", errno);
+        log_p->Errorlog("Readfile error", errno);
         return -1; //local fail
     }
     if (stat(filename, &file) < 0) {
-        Errorlog("Readfile error", errno);
+        log_p->Errorlog("Readfile error", errno);
         return -1; //local fail
     }
     filestat_->filefd = filefd;
     filestat_->filelength = file.st_size;
     filestat_->offset = 0;
     std::string log = "Readfile " + filename_ + " filefd: " + std::to_string(filestat_->filefd) + " success.";
-    Infolog(log);
+    log_p->Infolog(log);
     return 0;
 }
 
-int Servfunc::Write(int socketfd, std::string* str) {
+int Gsocket::Write(int socketfd, std::string* str, Log* log_p) {
     const char* tmpstr = str->c_str();
     std::string log = "Write to: " + std::to_string(socketfd);
-    Infolog(log);
+    log_p->Infolog(log);
     if (write(socketfd, tmpstr, strlen(tmpstr)) < 0) {
         if (errno == EINTR) {
-            Errorlog("Write error", errno); //Signal interruption: slow system call
+            log_p->Errorlog("Write error", errno); //Signal interruption: slow system call
             return 1;
         } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            Warninglog("write error", errno); //kernel cache full
+            log_p->Warninglog("write error", errno); //kernel cache full
             return 2;
         } else {
-            Errorlog("write error", errno);
+            log_p->Errorlog("write error", errno);
             return -1;
         }
     }
     log += " success.";
-    Infolog(log);
+    log_p->Infolog(log);
     return 0;
 }
 
-int Servfunc::Writefile(int socketfd, int filefd, off_t offset) {
-    if (sendfile(socketfd, filefd, &offset, WRITEMAX) < 0) {
+int Gsocket::Writefile(int socketfd, int filefd, off_t offset, size_t writemax ,Log* log_p) {
+    if (sendfile(socketfd, filefd, &offset, writemax) < 0) {
         if (errno == EINTR) {
-            Warninglog("Signal interuption");
+            log_p->Warninglog("Signal interuption");
             return 1;
         } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
-            Warninglog("kernel cache full");
+            log_p->Warninglog("kernel cache full");
             return 2;
         } else {
-            Errorlog("Write error", errno);
+            log_p->Errorlog("Write error", errno);
             return -1;
         }
     }
     if (offset == 0) {
         std::string log = "Write filefd " + std::to_string(filefd) +
             " to: " + std::to_string(socketfd) + " success.";
-        Infolog(log);
+        log_p->Infolog(log);
     }
     return 0;
 }
 
 
+
+
+
+
+
+
+/* 
 
 //class type
 class Socket_Func {
@@ -220,16 +224,15 @@ private:
     void Init();
 public:
     Socket_Func() { Init(); }
-    void Setlog(Log *upper);
+    void Setlog(Log* upper);
     void SET_READMAX(size_t readmax) { READMAX = readmax; }
-    void SET_WRITEMAX(size_t writemax) { WRITEMAX=writemax; }
-    void SET_REWRITEMAX(size_t rewritemax)  { REWRITEMAX=rewritemax; }
-    void SET_LISTENPORT(size_t listenport)  { LISTENPORT=listenport; }
+    void SET_WRITEMAX(size_t writemax) { WRITEMAX = writemax; }
+    void SET_REWRITEMAX(size_t rewritemax) { REWRITEMAX = rewritemax; }
+    void SET_LISTENPORT(size_t listenport) { LISTENPORT = listenport; }
     void SET_SINGLECLIENTS(size_t single_core_client) { SINGLECLIENTS = single_core_client; }
     void SET_FILEDIR(std::string filedir) { FILEDIR = filedir; }
     int Socket(int family, int type, int protocal);
     int Bind(int fd, const struct sockaddr* sa, socklen_t salen);
-    //backlog: number of connections successfully established and waiting to be accepted
     int Listen(int fd, int backlog);
     int Accept(int listenfd);
     int Close(int fd);
@@ -249,7 +252,7 @@ void Socket_Func::Init() {
     std::string FILEDIR = "/home/cs18/vscode/Webserver/Blog/";
 }
 
-void Socket_Func::Setlog(Log *upper) {
+void Socket_Func::Setlog(Log* upper) {
     if (upper != nullptr) {
         socket_func_log = upper;
         have_upper = true;
@@ -414,6 +417,22 @@ Socket_Func::~Socket_Func() {
         delete socket_func_log;
     }
 }
+
+
+
+
+*/
+
+
+
+
+
+
+
+
+
+
+
 
 
 #endif

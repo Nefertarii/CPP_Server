@@ -11,7 +11,7 @@ private:
     bool have_upper;
 public:
     Epoll_Control() { epollfd = -1; }
-    void SetLog(Log* upper);
+    void SetLog(Log* upper, size_t buffer_size);
     void SetEpollfd(int epollfd_);
     void Epolladd(int socketfd, void* epolldata);
     void Epolldel(int socketfd);
@@ -33,12 +33,13 @@ public:
 
 
 
-void Epoll_Control::SetLog(Log* upper) {
+
+void Epoll_Control::SetLog(Log* upper, size_t buffer_size) {
     if (upper != nullptr) {
         epoll_log = upper;
         have_upper = true;
     } else {
-        epoll_log = new Log(logfile, 200);
+        epoll_log = new Log(logfile, buffer_size);
         have_upper = false;
     }
 }

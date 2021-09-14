@@ -1,69 +1,145 @@
 #ifndef SERVCONTROL_H_
 #define SERVCONTROL_H_
 
-#include "Protocol.h"
-#include "Headfile.h"
-#include "Servprocess.h"
+#include "../Important/Httprocess/Httphandler.h"
+#include "../Important/Gepollcontrol.h"
+#include <fstream>
+#include <map>
 
-class Servercontrol_epoll {
+class Server_Control_Epoll {
 private:
+    Socket_Control socketctrl;
+    Epoll_Control epollctrl;
+    HTTP_Handler httpctrl;
+    Log server_log;
+    std::map<std::string, std::string> global_string_settings;
+    std::map<std::string, size_t> global_value_settings;
     std::vector<Clientinfo> clients;
-    Httpconnect connectctrl;
-    Httprocess processctrl;
-    Httprespone responectrl;
-    Epollcontrol epollctrl;
-    Badrespone badrequest;
-    Timer serverclock;
-    int listenfd;
-    size_t concurrent;
-    size_t MAXCLIENT;
-    size_t REWRITEMAX;
-    Gthreadpool threadpool;
+    Socket_Config socket_settings;
+    size_t logbuf_size;
+    bool ReadConfig();
 public:
-    Servercontrol_epoll();
-    void Server_start_Epollcontrol();
-    void Connect_accept();
-    void Connect_method_get(Clientinfo *client, std::string *readbuf);
-    void Connect_method_post(Clientinfo *client, std::string *readbuf);
-    void Connect_disconnect(Clientinfo *client);
-    void Send_responehead(Clientinfo *client);
-    void Send_responebody(Clientinfo *client);
-    void Send_responefile(Clientinfo *client);
-    void Server_stop();
-    ~Servercontrol_epoll();
+    Server_Control_Epoll();
+    void ServerStart()
+    void ServerStop();
+    ~Server_Control_Epoll();
 };
 
-
-
-
-
-
-#include "Servcontrol.h"
-
-Servercontrol_epoll::Servercontrol_epoll() {
-    listenfd = 0;
-    concurrent = std::thread::hardware_concurrency();
-    MAXCLIENT = concurrent * connectctrl.Single_concurrent_client();
-    REWRITEMAX = 5;
-
-    //initialization
-    //threadpool.init();
-    clients.resize(MAXCLIENT * 2);
-    int epollfd = epoll_create(MAXCLIENT);
-    listenfd = connectctrl.Connectlisten();
-    epollctrl.Set_epollfd(epollfd);
-    //Gthreadpool threadpool(MAXCLIENT);
-
-    Infolog("epoll control add.");
-    Infolog("Server initialization complete.");
+bool Server_Control_Epoll::ReadConfig() {
+    std::fstream file;
+    std::string fileline;
+    std::string key, value_str;
+    size_t value_ul;
+    bool stringdone = false;
+    file.open("Http.conf", std::ios::in);
+    if (file) {
+        while (std::getline(file, fileline)) {
+            if (fileline == "----") {
+                stringdone = true;
+            }
+            if (!stringdone) {
+                for (size_t i = 0; i != fileline.size(); i++) {
+                    if (fileline[i] == ' ') {
+                        key = fileline.substr(0, i);
+                        value_str = fileline.substr(i + 1, fileline.size());
+                        global_string_settings[key] = value_str;
+                    }
+                }
+            } else {
+                for (size_t i = 0; i != fileline.size(); i++) {
+                    if (fileline[i] == ' ') {
+                        key = fileline.substr(0, i);
+                        value_ul = std::stoul(fileline.substr(i + 1, fileline.size()));
+                        global_value_settings[key] = value_ul;
+                    }
+                }
+            }
+        }
+    } else {
+        std::cout<<"Can't open Http.conf."
+    }
+    return false;
 }
 
-void Servercontrol_epoll::Server_start_Epollcontrol() {
-    struct epoll_event ev, events[MAXCLIENT];
+Server_Control_Epoll::Server_Control_Epoll() {
+    if (ReadConfig()) {
+        auto map_it = global_value_settings.find("MaxLogBuffer");
+        logbuf_size = map_it->second;
+        map_it = global_value_settings.find("MaxClients");
+        socket_settings.connect_max = map_it->second;
+        socket_settings.connect_nums = 0;
+        map_it = global_value_settings.find("WriteMax");
+        socket_settings.write_max = map_it->second;
+        map_it = global_value_settings.find("ReadMax");
+        socket_settings.read_max = map_it->second;
+        map_it = global_value_settings.find("Listen");
+        socket_settings.listen_port = map_it->second;
+        socket_settings.listenfd = 0;
+
+        httpctrl.Init(&server_log, logbuf_size, socket_settings);
+        clients.resize(socket_settings.connect_max * 2);
+        //socket
+        socketctrl.SetLog(&server_log, logbuf_size);
+        socketctrl.SetConfig(socket_settings);
+        //epoll
+        epollctrl.SetLog(&server_log, logbuf_size);
+        server_log.Infolog("Server initialization complete.");
+        return;
+    }
+    server_log.Errorlog("Server initialization Fail!");
+}
+
+void Server_Control_Epoll::ServerStart() {
+    struct epoll_event ev, events[socket_settings.connect_max];
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = nullptr;
-    int epollfd = epollctrl.Epollfd();
+    int epollfd = epoll_create(socket_settings.connect_max);
     epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &ev);
+    epollctrl.SetEpollfd(epollfd);
+
+    for (;;) {
+        int readyfds = epoll_wait(epollfd, events, socket_settings.connect_max, 0);
+        if (readyfds < 0 && errno != EINTR) { //epoll create fail
+            server_log.Fatalog("Cann't create epoll control.");
+            //signal notify manage process...
+            return;
+        }
+        for (int i = 0; i < readyfds; i++) {
+            ev = events[i];
+            if (ev.data.ptr == nullptr) {
+                int connectfd;
+                if (connectfd < 0) {
+                    server_log.Errorlog("Bad connect.");
+                } else {
+                    clients[socket_settings.connect_nums].clientfd = connectfd;
+                    epollctrl.Epolladd(connectfd, &clients[i]);
+                    socket_settings.connect_nums += 1;
+                }
+            } else if (ev.events & EPOLLIN) {
+                Clientinfo *client = static_cast<Clientinfo *>(ev.data.ptr);
+                std::string readbuf;
+                int ret = socketctrl.SocketRead(client->clientfd, &readbuf);
+                if (!ret) {
+                    httpctrl.RequestParse(&client, readbuf);
+                } else if (ret > 0) {
+                    //read error or read FIN
+                    socketctrl.Disconnect();
+                }
+            } else if (ev.events & EPOLLOUT) {
+                Clientinfo *client = static_cast<Clientinfo *>(ev.data.ptr);
+                Send_responehead(client);
+                Send_responefile(client);
+                Send_responebody(client);
+            }
+        }
+    }
+}
+void Server_Control_Epoll::ServerStop() {
+    ;
+}
+
+void Server_start_Epollcontrol() {
+
 
     //main control
     for (;;) {
@@ -107,7 +183,7 @@ void Servercontrol_epoll::Server_start_Epollcontrol() {
     }
 }
 
-void Servercontrol_epoll::Server_stop() {
+void Server_stop() {
     Warninglog("Server closeing.");
     for (size_t i = 0; i != MAXCLIENT; i++) {
         if (clients[i].clientfd > 0) {
@@ -123,10 +199,10 @@ void Servercontrol_epoll::Server_stop() {
     Infolog("Server is close.");
 }
 
-void Servercontrol_epoll::Connect_accept() {
+void Connect_accept() {
     int connectfd = Servfunc::Accept(listenfd);
-    if (!connectctrl.Canconnect()) {
-        int index = connectctrl.Connect_nums();
+    if (!socketctrl.Canconnect()) {
+        int index = socketctrl.Connect_nums();
         clients[index].clientfd = connectfd;
         processctrl.Set_client(&clients[index]);
         std::string log = clients[index].ip + ":" + clients[index].port;
@@ -138,7 +214,7 @@ void Servercontrol_epoll::Connect_accept() {
     }
 }
 
-void Servercontrol_epoll::Connect_method_get(Clientinfo *client, std::string *readbuf) {
+void Connect_method_get(Clientinfo *client, std::string *readbuf) {
     std::string filename;
     if (!responectrl.GETparse(*readbuf, &filename)) {
         responectrl.GETprocess(filename, &client->fileinfo);
@@ -151,19 +227,19 @@ void Servercontrol_epoll::Connect_method_get(Clientinfo *client, std::string *re
     epollctrl.Epollwrite(client->clientfd, client);
 }
 
-void Servercontrol_epoll::Connect_method_post(Clientinfo *client, std::string *readbuf) {
+void Connect_method_post(Clientinfo *client, std::string *readbuf) {
     Infolog("Into post request.");
     badrequest.Respone404(&client->respone_head);
     epollctrl.Epollwrite(client->clientfd, client);
     return;
 }
 
-void Servercontrol_epoll::Connect_disconnect(Clientinfo *client) {
+void Connect_disconnect(Clientinfo *client) {
     epollctrl.Epolldel(client->clientfd);
-    connectctrl.Disconnect(client);
+    socketctrl.Disconnect(client);
 }
 
-void Servercontrol_epoll::Send_responehead(Clientinfo *client) {
+void Send_responehead(Clientinfo *client) {
     //ret
     //-1 errno
     // 0 success
@@ -197,7 +273,7 @@ void Servercontrol_epoll::Send_responehead(Clientinfo *client) {
     }
 }
 
-void Servercontrol_epoll::Send_responebody(Clientinfo *client) {
+void Send_responebody(Clientinfo *client) {
     //can only be send file or info(json/data)
     int socketfd = client->clientfd;
     if (client->respone_body.empty()) {
@@ -232,7 +308,7 @@ void Servercontrol_epoll::Send_responebody(Clientinfo *client) {
     }
 }
 
-void Servercontrol_epoll::Send_responefile(Clientinfo *client) {
+void Send_responefile(Clientinfo *client) {
     //send file
     int socketfd = client->clientfd;
     if (client->fileinfo.filefd == 0) {
@@ -273,7 +349,7 @@ void Servercontrol_epoll::Send_responefile(Clientinfo *client) {
     }
 }
 
-Servercontrol_epoll::~Servercontrol_epoll() {
+~Servercontrol_epoll() {
     Server_stop();
 }
 
