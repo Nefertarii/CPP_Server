@@ -11,9 +11,12 @@ void SIG_handler(int sig) {
 }
 
 int main(int argc, const char* argv[]) {
-    std::string config_file = argv[1];
+    //std::string config_file = argv[1];
+    //std::cout << "config_file:" << config_file << "\n";
+    std::string config_file = "/home/cs18/vscode/Webserver/Http.conf";
     static Server_Control_Epoll server(config_file);
     signal(SIGINT, SIG_handler);
+    std::cout << "Server Start.\n";
     server.ServerStart();
     return 0;
 }

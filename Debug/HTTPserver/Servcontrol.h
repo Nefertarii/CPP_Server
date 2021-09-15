@@ -37,8 +37,6 @@ bool Server_Control_Epoll::ReadConfig(std::string config_file) {
     bool stringdone = false;
     file.open(config_file, std::ios::in);
     if (file) {
-        std::string log = "Open config file:" + config_file + "\n";
-        server_log.Infolog(log);
         while (std::getline(file, fileline)) {
             if (fileline == "----") {
                 stringdone = true;
@@ -65,7 +63,7 @@ bool Server_Control_Epoll::ReadConfig(std::string config_file) {
         return true;
     } else {
         std::string log = "Can't open file:" + config_file + "\n";
-        server_log.Errorlog(log);
+        std::cout << log;
     }
     return false;
 }
@@ -84,11 +82,6 @@ void Server_Control_Epoll::ConnectDel(Clientinfo* client) {
     socket_settings.connect_nums -= 1;
 }
 
-
-
-
-
-
 Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
     if (ReadConfig(config_file)) {
         auto map_it = global_value_settings.find("MaxLogBuffer");
@@ -106,13 +99,12 @@ Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
         socket_settings.reuseaddr = map_it->second;
         map_it = global_value_settings.find("ReusePort");
         socket_settings.reuseport = map_it->second;
-
-        
         socket_settings.listenfd = -1;
 
         auto map_it2 = global_string_settings.find("DocumentRoot");
         std::string document_root = map_it2->second;
 
+        server_log.Set("Server_Log.txt", logbuf_size);
         httpctrl.Init(&server_log, logbuf_size, document_root, socket_settings);
         clients.resize(socket_settings.connect_max);
         //socket
@@ -189,7 +181,6 @@ void Server_Control_Epoll::ServerStop() {
     std::string log = "Server total run time:" + server_clock.Runtime_str() + " sec";
     server_log.Infolog(log);
     server_log.Infolog("Server is close now.");
-    server_log.Savetofile();
 }
 
 Server_Control_Epoll::~Server_Control_Epoll() {

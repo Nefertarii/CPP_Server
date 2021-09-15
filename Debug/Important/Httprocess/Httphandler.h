@@ -88,8 +88,7 @@ void HTTP_Handler::RequestParse(Clientinfo* client, std::string readbuf) {
         break;
     } case POST: {
         if (MethodPostParse(client, readbuf) < 0) {
-            this_log->Warninglog("send bad request 403.");
-            responectrl.BadRequest403(&client->respone_head);
+            ;
         }
         this_log->Warninglog("send bad request 403.");
         responectrl.BadRequest403(&client->respone_head); // not use post;
