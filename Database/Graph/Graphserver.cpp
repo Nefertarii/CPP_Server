@@ -1,37 +1,6 @@
-#ifndef SERVCONTROL_H_
-#define SERVCONTROL_H_
+#include "Graphserver.h"
 
-#include "../Important/Httprocess/Httphandler.h"
-#include "../Important/Gsocketctrl.h"
-#include "../Important/Gepollcontrol.h"
-#include <fstream>
-#include <map>
-
-class Server_Control_Epoll {
-private:
-    Socket_Control socketctrl;
-    Epoll_Control epollctrl;
-    HTTP_Handler httpctrl;
-    Log http_server_log;
-    Timer server_clock;
-    std::map<std::string, std::string> global_string_settings;
-    std::map<std::string, size_t> global_value_settings;
-    std::vector<Clientinfo> clients;
-    Socket_Config socket_settings;
-    size_t logbuf_size;
-    bool init_complite;
-    bool ReadConfig(std::string config_file);
-    void ConnectAdd(Clientinfo* client, int connectfd);
-    void ConnectDel(Clientinfo* client);
-public:
-    Server_Control_Epoll(std::string config_file);
-    void ServerStart();
-    void ServerReboot();
-    void ServerStop();
-    ~Server_Control_Epoll();
-};
-
-bool Server_Control_Epoll::ReadConfig(std::string config_file) {
+bool Graph_Server_Control::ReadConfig(std::string config_file) {
     std::fstream file;
     std::string fileline;
     std::string key, value_str;
@@ -66,28 +35,45 @@ bool Server_Control_Epoll::ReadConfig(std::string config_file) {
     } else {
         std::string log = "Can't open file:" + config_file + "\n";
         std::cout << log;
+        return false;
     }
-    return false;
 }
 
-void Server_Control_Epoll::ConnectAdd(Clientinfo* client, int connectfd) {
-    client->clientfd = connectfd;
-    Gsocket::GetAddress(connectfd, &client->ip, &client->port, &http_server_log);
+void Graph_Server_Control::ConnectAccept(Connectinfo* client, int connectfd) {
+    //AES
+    client->socketfd = connectfd;
+    Gsocket::GetAddress(connectfd, &client->ip, &client->port, &graph_server_log);
     epollctrl.Epolladd(connectfd, client);
     socket_settings.connect_nums += 1;
 }
 
-void Server_Control_Epoll::ConnectDel(Clientinfo* client) {
-    epollctrl.Epolldel(client->clientfd);
-    socketctrl.SocketDisconnet(client->clientfd);
+void Graph_Server_Control::ConnectDel(Connectinfo* client) {
+    epollctrl.Epolldel(client->socketfd);
+    socketctrl.SocketDisconnet(client->socketfd);
     client->Reset();
     socket_settings.connect_nums -= 1;
 }
 
-Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
+void Graph_Server_Control::MeassgeParse(Connectinfo* client) {
+    //GQLparse
+    client->meassage = "Get message:" + client->meassage;
+}
+
+void Graph_Server_Control::ResultSend(Connectinfo* client) {
+    if (socketctrl.SocketWrite(client->socketfd, &client->meassage) < 0) {
+        ConnectDel(client);
+    }
+    if (client->meassage.empty()) {
+        epollctrl.Epollread(client->socketfd, client);
+    } else {
+        epollctrl.Epollwrite(client->socketfd, client);
+    }
+}
+
+Graph_Server_Control::Graph_Server_Control(std::string config_file) {
     if (ReadConfig(config_file)) {
         auto map_it = global_value_settings.find("MaxLogBuffer");
-        logbuf_size = map_it->second;
+        size_t logbuf_size = map_it->second;
         map_it = global_value_settings.find("MaxClients");
         socket_settings.connect_max = map_it->second;
         socket_settings.connect_nums = 0;
@@ -103,18 +89,11 @@ Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
         socket_settings.reuseport = map_it->second;
         socket_settings.listenfd = -1;
 
-        auto map_it2 = global_string_settings.find("DocumentRoot");
-        std::string document_root = map_it2->second;
-
-        http_server_log.Set("HTTP_Server_Log.txt", logbuf_size);
-        httpctrl.Init(&http_server_log, logbuf_size, document_root, socket_settings);
-        clients.resize(socket_settings.connect_max);
-        //socket
-        socketctrl.SetLog(&http_server_log, logbuf_size);
+        graph_server_log.Set("Graph_Server_Log.txt", logbuf_size);
+        socketctrl.SetLog(&graph_server_log, logbuf_size);
         socketctrl.SetConfig(&socket_settings);
-        //epoll
-        epollctrl.SetLog(&http_server_log, logbuf_size);
-        http_server_log.Infolog("Server initialization complete.");
+        epollctrl.SetLog(&graph_server_log, logbuf_size);
+        graph_server_log.Infolog("Server initialization complete.");
         init_complite = true;
     } else {
         std::cout << "Server initialization Fail!\n";
@@ -122,10 +101,9 @@ Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
     }
 }
 
-void Server_Control_Epoll::ServerStart() {
+void Graph_Server_Control::ServerStart() {
     if (init_complite == false) {
         std::cout << "Server not initialization, Can't Start.";
-        return;
     }
     socket_settings.listenfd = socketctrl.SocketListen();
     if (socket_settings.listenfd < 0) {
@@ -142,7 +120,7 @@ void Server_Control_Epoll::ServerStart() {
     for (;;) {
         int readyfds = epoll_wait(epollfd, events, (int)socket_settings.connect_max, 0);
         if (readyfds < 0 && errno != EINTR) { //epoll create fail
-            http_server_log.Fatalog("Cann't create epoll control.");
+            graph_server_log.Fatalog("Cann't create epoll control.");
             //signal notify manage process...
             return;
         }
@@ -151,56 +129,40 @@ void Server_Control_Epoll::ServerStart() {
             if (ev.data.ptr == nullptr) {
                 int connectfd = socketctrl.SocketAccept();
                 if (connectfd < 0) {
-                    http_server_log.Errorlog("Bad connect.");
+                    graph_server_log.Errorlog("Bad connect.");
                 } else {
-                    ConnectAdd(&clients[socket_settings.connect_nums], connectfd);
+                    ConnectAccept(&clients[socket_settings.connect_nums], connectfd);
                 }
             } else if (ev.events & EPOLLIN) {
-                Clientinfo* client = static_cast<Clientinfo*>(ev.data.ptr);
-                std::string readbuf;
-                int result = socketctrl.SocketRead(client->clientfd, &readbuf);
-                if (result == 0) {
-                    httpctrl.RequestParse(client, readbuf);
-                    epollctrl.Epollwrite(client->clientfd, client);
-                } else {
-                    ConnectDel(client);
-                }
+                Connectinfo* client = static_cast<Connectinfo*>(ev.data.ptr);
+                MeassgeParse(client);
             } else if (ev.events & EPOLLOUT) {
-                Clientinfo* client = static_cast<Clientinfo*>(ev.data.ptr);
-                int result = httpctrl.SendRespone(client);
-                if (result < 0) {
-                    ConnectDel(client);
-                } else if (result == 0) {
-                    epollctrl.Epollread(client->clientfd, client);
-                } else {
-                    epollctrl.Epollwrite(client->clientfd, client);
-                }
+                Connectinfo* client = static_cast<Connectinfo*>(ev.data.ptr);
+                ResultSend(client);
             }
         }
     }
 }
 
-void Server_Control_Epoll::ServerReboot() {
+void Graph_Server_Control::ServerReboot() {
     ServerStop();
     ServerStart();
 }
 
-void Server_Control_Epoll::ServerStop() {
-    http_server_log.Warninglog("Server closeing.");
+void Graph_Server_Control::ServerStop() {
+    graph_server_log.Warninglog("Server closeing.");
     for (size_t i = 0; i != socket_settings.connect_max; i++) {
-        if (clients[i].clientfd > 0) {
+        if (clients[i].socketfd > 0) {
             ConnectDel(&clients[i]);
         }
     }
     socketctrl.SocketDisconnet(epollctrl.Epollfd());
     socketctrl.SocketDisconnet(socket_settings.listenfd);
     std::string log = "Server total run time:" + server_clock.Runtime_str() + " sec";
-    http_server_log.Infolog(log);
-    http_server_log.Infolog("Server is close now.");
+    graph_server_log.Infolog(log);
+    graph_server_log.Infolog("Server is close now.");
 }
 
-Server_Control_Epoll::~Server_Control_Epoll() {
-    ServerStop();
+Graph_Server_Control::~Graph_Server_Control() {
+    void ServerStop();
 }
-
-#endif

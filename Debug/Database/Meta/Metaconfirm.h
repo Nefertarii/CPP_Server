@@ -69,22 +69,6 @@ void Meta_Parse::SaveAccount() {
     meta_log.Infolog("Account info save.");
 }
 
-bool Meta_Parse::SendGQL() {
-    if (is_connect) {
-        if (write(socketfd, GQL.c_str(), GQL.size()) < 0) {
-            meta_log.Errorlog("Write GQL error.", errno);
-        } else {
-            std::string log = "Send GQL:" + GQL;
-            meta_log.Infolog(log);
-            return true;
-        }
-        GQL.clear();
-    } else {
-        std::cout << "Meta not connect Graph server.\n";
-    }
-    return false;
-}
-
 bool Meta_Parse::ReadResult() {
     if (is_connect) {
         char readbuf[READMAX] = { 0 };
@@ -160,6 +144,7 @@ bool Meta_Parse::MetaLogin(std::string account, std::string password) {
     meta_log.Infolog(log);
     return false; //Not this account.;
 }
+
 bool Meta_Parse::MetaRegsiter(std::string account, std::string password) {
     std::string log = "User:" + account + " regsiter";
     for (size_t i = 0; i != accounts.size(); i++) {

@@ -2,7 +2,7 @@
 
 void SIG_handler(int sig) {
     if (sig == SIGINT) {
-        std::cout << "capture signal SIGINT.\n";
+        std::cout << "\ncapture signal SIGINT.\n";
         //server.Server_stop(); auto run
         exit(2);
     } else {
