@@ -47,11 +47,14 @@
 管理进程中的可用命令 (待完成...)  
 
 ### 项目的安装及使用/Install & Usage
-项目编译使用了 Makefile    
-使用命令 ```make MODE=DEBUG``` 可启动调试模式，该模式下将直接输出各个处理的日志信息  
-直接使用命令 ```make``` 可不调试编译，将会储存日志信息到文件中  
-若不绑定0~1024端口，使用 ```./Server``` 即可启动服务器进程  
-绑定后需要添加权限，使用 ```sudo ./Server``` 才可成功绑定端口  
+项目编译使用了 Makefile      
+在文件夹HTTPserver/build中为HTTP WEB服务器    
+使用命令 ```make MODE=DEBUG``` 可启动调试模式，该模式下将直接输出各个处理的日志信息，且使用-Og编译     
+直接使用命令 ```make``` 将会储存日志信息到文件中，并使用-O2编译    
+启动时会根据目录下的Http.conf来设置相关参数   
+若不绑定0\~1024端口，使用 ```./HTTPserver [conf file]``` 即可启动服务器进程      
+绑定1\~1024端口需要添加权限，需使用 ```sudo ./HTTPserver [conf file]``` 才可成功启动     
+如 ```./HTTPserver /home/ubuntu/Http.conf``` 启动HTTP WEB服务器。     
 
 ### 项目负责人/Maintainers
 [@Nefertarii](https://github.com/Nefertarii)  
