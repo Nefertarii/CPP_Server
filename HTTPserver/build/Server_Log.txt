@@ -1,0 +1,71 @@
+
+INFO: Http handler init complite.	 Data:1631698898490
+INFO: Server initialization complete.	 Data:1631698898490
+INFO: Socket open ok	 Data:1631698898490
+INFO: Set reuse address ok.	 Data:1631698898490
+INFO: Set reuse port ok.	 Data:1631698898490
+INFO: Bind set ok	 Data:1631698898490
+INFO: Listen set, fd:3.	 Data:1631698898490
+INFO: Epoll set, fd:4.	 Data:1631698898490
+WARNING: Server closeing.	 Data:1631698901944
+INFO: Close 4 ok.	 Data:1631698901944
+INFO: Close 3 ok.	 Data:1631698901944
+INFO: Server total run time:3 sec	 Data:1631698901944
+INFO: Server is close now.	 Data:1631698901944
+
+INFO: Http handler init complite.	 Data:1631698964279
+INFO: Server initialization complete.	 Data:1631698964279
+INFO: Socket open ok	 Data:1631698964279
+INFO: Set reuse address ok.	 Data:1631698964279
+INFO: Set reuse port ok.	 Data:1631698964279
+INFO: Bind set ok	 Data:1631698964279
+INFO: Listen set, fd:3.	 Data:1631698964279
+INFO: Epoll set, fd:4.	 Data:1631698964279
+INFO: Get accept from 127.0.0.1	 Data:1631698977398
+INFO: Client IP:127.0.0.1:59820	 Data:1631698977398
+INFO: epoll add, fd:5.	 Data:1631698977398
+INFO: Read from 5	 Data:1631698977792
+INFO: Readfile /home/cs18/vscode/Webserver/Blog/index.html filefd: 6 success.	 Data:1631698977792
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/Blog/index.html.	 Data:1631698977806
+INFO: Write to: 5	 Data:1631698977806
+INFO: Write to: 5 success.	 Data:1631698977806
+INFO: Read from 5	 Data:1631698978827
+INFO: Readfile /home/cs18/vscode/Webserver/Blog/index.css filefd: 7 success.	 Data:1631698978827
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/Blog/index.css.	 Data:1631698978827
+INFO: Get accept from 127.0.0.1	 Data:1631698978827
+INFO: Client IP:127.0.0.1:59826	 Data:1631698978827
+INFO: epoll add, fd:8.	 Data:1631698978827
+INFO: Write to: 5	 Data:1631698978827
+INFO: Write to: 5 success.	 Data:1631698978827
+INFO: Read from 8	 Data:1631698978827
+INFO: Readfile /home/cs18/vscode/Webserver/Blog/index.js filefd: 9 success.	 Data:1631698978827
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/Blog/index.js.	 Data:1631698978827
+INFO: Write to: 8	 Data:1631698978847
+INFO: Write to: 8 success.	 Data:1631698978847
+INFO: Read from 5	 Data:1631698978965
+INFO: Readfile /home/cs18/vscode/Webserver/Blog/Image/svg/glow.svg filefd: 10 success.	 Data:1631698978965
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/Blog/Image/svg/glow.svg.	 Data:1631698978965
+INFO: Write to: 5	 Data:1631698978965
+INFO: Write to: 5 success.	 Data:1631698978965
+INFO: Get accept from 127.0.0.1	 Data:1631698978993
+INFO: Client IP:127.0.0.1:59830	 Data:1631698978993
+INFO: epoll add, fd:11.	 Data:1631698978993
+INFO: Read from 11	 Data:1631698978993
+INFO: Readfile /home/cs18/vscode/Webserver/Blog/Image/png/logo_64.png filefd: 12 success.	 Data:1631698978993
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/Blog/Image/png/logo_64.png.	 Data:1631698978993
+INFO: Write to: 11	 Data:1631698978993
+INFO: Write to: 11 success.	 Data:1631698978993
+INFO: client: 11 send close	 Data:1631698985270
+INFO: Epoll del, fd:11.	 Data:1631698985270
+INFO: Close 11 ok.	 Data:1631698985270
+INFO: client: 8 send close	 Data:1631698985272
+INFO: Epoll del, fd:8.	 Data:1631698985272
+INFO: Close 8 ok.	 Data:1631698985272
+INFO: client: 5 send close	 Data:1631698985272
+INFO: Epoll del, fd:5.	 Data:1631698985272
+INFO: Close 5 ok.	 Data:1631698985272
+WARNING: Server closeing.	 Data:1631698987159
+INFO: Close 4 ok.	 Data:1631698987159
+INFO: Close 3 ok.	 Data:1631698987159
+INFO: Server total run time:23 sec	 Data:1631698987159
+INFO: Server is close now.	 Data:1631698987159

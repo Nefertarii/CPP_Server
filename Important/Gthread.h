@@ -16,7 +16,6 @@ using ULL = unsigned long long;
 
 ULL Pthreadid();
 
-
 // Thread safe implementation of a Queue using a std::queue
 template <typename T>
 class Safequeue {
@@ -64,5 +63,6 @@ public:
     template <class F, class... Args>
     auto submit(F &&f, Args &&...args) -> std::future<decltype(f(args...))>;
 };
+
 
 #endif

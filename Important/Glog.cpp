@@ -1,16 +1,16 @@
 #include "Glog.h"
 
-static const char *Loglevel_map[] = {
+const char* Loglevel_map[] = {
     [INFO] = "INFO:",
     [WARNING] = "WARNING:",
     [ERROR] = "ERROR:",
     [FATAL] = "FATAL:"
 };
 
-inline const char *Log::Strlevel(LOGLEVEL level) { return Loglevel_map[level % LEVELEND]; }
+inline const char* Log::Strlevel(LOGLEVEL level) { return Loglevel_map[level % LEVELEND]; }
 
 inline bool Log::Ismaximum() {
-    if(logindex + 1  == MAXLOG)
+    if (logindex + 1 == MAXLOG)
         return true;
     return false;
 }
@@ -20,21 +20,21 @@ void Log::Savetotemp(LOGLEVEL level, std::string log, int err) {
     std::string strlog = log;
     std::string strtime = std::to_string(Timer::Nowtime_ms());
 #ifdef DEBUG
-        if(!err) {
-            strlog = strlevel + "" + strlog + "\t Data:" + strtime;
-            std::cout << strlog << "\n";
-            return;
-        }
-        const char *tmperr = strerror(err);
-        std::string strerr = tmperr;
-        strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
+    if (!err) {
+        strlog = strlevel + "" + strlog + "\t Data:" + strtime;
         std::cout << strlog << "\n";
+        return;
+    }
+    const char* tmperr = strerror(err);
+    std::string strerr = tmperr;
+    strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
+    std::cout << strlog << "\n";
 #else
     if (!err) {
         tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;
         return;
     }
-    const char *tmperr = strerror(err);
+    const char* tmperr = strerror(err);
     std::string strerr = tmperr;
     tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
 #endif
@@ -61,53 +61,57 @@ int Log::Savetofile(std::string str) {
         file.write(string_to_char(tmp), tmp.length());
         file.close();
         return 0;
-    }
-    else {
+    } else {
         file.close();
         return -1;
     }
 }
 
 int Log::Savetofile(std::vector<std::string> logvec) {
-    std::fstream file;
-    logindex = 0;
-    file.open(logfile, std::ios::in | std::ios::app);
-    if (file) {
-        std::cout << "logfile:" + logfile + " save...\n";
-        file.write("\n", 1);
-        int size = logvec.size();
-        for (int i = 0; i != size; i++) {
-            if(!logvec[i].empty()) {
-                std::string tmp = logvec[i] + "\n";
-                file.write(string_to_char(tmp), tmp.length());
-            }
-        }
-        file.close();
-        return 0;
-    } else {
-        file.close();
-        std::ofstream newfile("log.txt");
-        if(newfile) {
-            std::cout << "log save newfile ...\n";
-            newfile.write("\n", 1);
+    if (logvec.size() >= 1) {
+        std::fstream file;
+        logindex = 0;
+        file.open(logfile, std::ios::in | std::ios::app);
+        if (file) {
+            std::cout << "logfile:" + logfile + " save...\n";
+            file.write("\n", 1);
             int size = logvec.size();
             for (int i = 0; i != size; i++) {
-                if(!logvec[i].empty()) {
+                if (!logvec[i].empty()) {
                     std::string tmp = logvec[i] + "\n";
-                    newfile.write(string_to_char(tmp), tmp.length());
+                    file.write(string_to_char(tmp), tmp.length());
+                    logvec[i].clear();
                 }
             }
-            newfile.close();
+            file.close();
             return 0;
+        } else {
+            file.close();
+            std::ofstream newfile("log.txt");
+            if (newfile) {
+                std::cout << "log save newfile ...\n";
+                newfile.write("\n", 1);
+                int size = logvec.size();
+                for (int i = 0; i != size; i++) {
+                    if (!logvec[i].empty()) {
+                        std::string tmp = logvec[i] + "\n";
+                        newfile.write(string_to_char(tmp), tmp.length());
+                        logvec[i].clear();
+                    }
+                }
+                newfile.close();
+                return 0;
+            }
+            std::cout << "log save fail!!!\n";
+            return -1;
         }
-        std::cout << "log save fail!!!\n";
-        return -1;
     }
+    return 0;
 }
 
 int Log::Savetofile() { return Savetofile(tmplog_vec); }
 
-void Log::Infolog(const char *log, int err) {
+void Log::Infolog(const char* log, int err) {
     if (!Ismaximum()) {
         Savetotemp(INFO, log, err);
         logindex++;
@@ -120,8 +124,8 @@ void Log::Infolog(const char *log, int err) {
 
 void Log::Infolog(std::string log, int err) { Infolog(string_to_char(log), err); }
 
-void Log::Warninglog(const char *log, int err) {
-    if(!Ismaximum()) {
+void Log::Warninglog(const char* log, int err) {
+    if (!Ismaximum()) {
         Savetotemp(WARNING, log, err);
         logindex++;
         return;
@@ -133,8 +137,8 @@ void Log::Warninglog(const char *log, int err) {
 
 void Log::Warninglog(std::string log, int err) { Warninglog(string_to_char(log), err); }
 
-void Log::Errorlog(const char *log, int err) {
-    if(!Ismaximum()) {
+void Log::Errorlog(const char* log, int err) {
+    if (!Ismaximum()) {
         Savetotemp(ERROR, log, err);
         logindex++;
         return;
@@ -146,8 +150,8 @@ void Log::Errorlog(const char *log, int err) {
 
 void Log::Errorlog(std::string log, int err) { Errorlog(string_to_char(log), err); }
 
-void Log::Fatalog(const char *log, int err) {
-    if(!Ismaximum()) {
+void Log::Fatalog(const char* log, int err) {
+    if (!Ismaximum()) {
         Savetotemp(FATAL, log, err);
         logindex++;
         return;
@@ -162,159 +166,3 @@ void Log::Fatalog(std::string log, int err) { Fatalog(string_to_char(log), err);
 Log::~Log() {
     Savetofile();
 }
-
-
-
-
-
-//global log
-static std::string logfile = "log.txt";
-static size_t MAXLOG = 200;
-static size_t logindex = 0;
-static std::vector<std::string> tmplog_vec;
-
-inline const char *Strlevel(LOGLEVEL level) { return Loglevel_map[level % LEVELEND]; }
-
-inline bool Ismaximum() {
-    if(logindex + 1  == MAXLOG)
-        return true;
-    return false;
-}
-
-void Savetotemp(LOGLEVEL level, std::string log, int err) {
-    std::string strlevel = Strlevel(level);
-    std::string strlog = log;
-    std::string strtime = std::to_string(Timer::Nowtime_ms());
-#ifdef DEBUG
-        if(!err) {
-            strlog = strlevel + "" + strlog + "\t Data:" + strtime;
-            std::cout << strlog << "\n";
-            return;
-        }
-        const char *tmperr = strerror(err);
-        std::string strerr = tmperr;
-        strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
-        std::cout << strlog << "\n";
-#else
-    if (!err) {
-        tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;
-        return;
-    }
-    const char *tmperr = strerror(err);
-    std::string strerr = tmperr;
-    tmplog_vec[logindex] = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
-#endif
-}
-
-void Set(std::string filedir, size_t MAXLOG_) {
-    logfile = filedir;
-    MAXLOG = MAXLOG_;
-    tmplog_vec.resize(MAXLOG);
-}
-
-int Savetofile(std::string str) {
-    std::fstream file;
-    file.open(logfile, std::ios::in | std::ios::app);
-    if (file) {
-        file.write("\n", 1);
-        std::string tmp = str + "\n";
-        file.write(string_to_char(tmp), tmp.length());
-        file.close();
-        return 0;
-    }
-    else {
-        file.close();
-        return -1;
-    }
-}
-
-int Savetofile(std::vector<std::string> logvec) {
-    std::fstream file;
-    logindex = 0;
-    file.open(logfile, std::ios::in | std::ios::app);
-    if (file) {
-        std::cout << "log :" + logfile + " save...\n";
-        file.write("\n", 1);
-        int size = logvec.size();
-        for (int i = 0; i != size; i++) {
-            if(!logvec[i].empty()) {
-                std::string tmp = logvec[i] + "\n";
-                file.write(string_to_char(tmp), tmp.length());
-            }
-        }
-        file.close();
-        return 0;
-    } else {
-        file.close();
-        std::ofstream newfile("log.txt");
-        if(newfile) {
-            std::cout << "log save newfile ...\n";
-            newfile.write("\n", 1);
-            int size = logvec.size();
-            for (int i = 0; i != size; i++) {
-                if(!logvec[i].empty()) {
-                    std::string tmp = logvec[i] + "\n";
-                    newfile.write(string_to_char(tmp), tmp.length());
-                }
-            }
-            newfile.close();
-            return 0;
-        }
-        std::cout << "log save fail!!!\n";
-        return -1;
-    }
-}
-
-int Savetofile() { return Savetofile(tmplog_vec); }
-
-void Infolog(const char *log, int err) {
-    if (!Ismaximum()) {
-        Savetotemp(INFO, log, err);
-        logindex++;
-        return;
-    }
-    Savetotemp(INFO, log, err);
-    logindex = 0;
-    Savetofile(tmplog_vec);
-}
-
-void Infolog(std::string log, int err) { Infolog(string_to_char(log), err); }
-
-void Warninglog(const char *log, int err) {
-    if(!Ismaximum()) {
-        Savetotemp(WARNING, log, err);
-        logindex++;
-        return;
-    }
-    Savetotemp(WARNING, log, err);
-    logindex = 0;
-    Savetofile(tmplog_vec);
-}
-
-void Warninglog(std::string log, int err) { Warninglog(string_to_char(log), err); }
-
-void Errorlog(const char *log, int err) {
-    if(!Ismaximum()) {
-        Savetotemp(ERROR, log, err);
-        logindex++;
-        return;
-    }
-    Savetotemp(ERROR, log, err);
-    logindex = 0;
-    Savetofile(tmplog_vec);
-}
-
-void Errorlog(std::string log, int err) { Errorlog(string_to_char(log), err); }
-
-void Fatalog(const char *log, int err) {
-    if(!Ismaximum()) {
-        Savetotemp(FATAL, log, err);
-        logindex++;
-        return;
-    }
-    Savetotemp(FATAL, log, err);
-    logindex = 0;
-    Savetofile(tmplog_vec);
-}
-
-void Fatalog(std::string log, int err) { Fatalog(string_to_char(log), err); }

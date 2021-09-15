@@ -35,5 +35,4 @@ public:
     ~Timer() {}
 };
 
-
 #endif
