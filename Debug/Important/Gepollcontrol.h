@@ -45,9 +45,9 @@ void Epoll_Control::SetLog(Log* upper, size_t buffer_size) {
 }
 
 void Epoll_Control::SetEpollfd(int epollfd_) {
+    epollfd = epollfd_;
     std::string log = "Epoll set, fd:" + std::to_string(epollfd) + ".";
     this_log->Infolog(log);
-    epollfd = epollfd_;
 }
 
 void Epoll_Control::Epolldel(int socketfd) {

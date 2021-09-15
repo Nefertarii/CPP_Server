@@ -31,13 +31,13 @@ int HTTP_Handler::MethodGetParse(Clientinfo* client, std::string readbuf) {
     std::string log;
     std::string filename, filetype;
     if (processctrl.GETParse(readbuf, &filename, &client->fileinfo) < 0) {
-        log = "Request:GET bad requeset.";
+        log = "Request type:GET, Bad requeset.";
         this_log->Infolog(log);
         return -1;
     } else {
         filetype = processctrl.FileType(filename);
         processctrl.CreateResponeHead(&client->respone_head, filetype, 200, client->fileinfo.filelength);
-        log = "Request:GET. Request file:" + filename + ".";
+        log = "Request type:GET, Request file:" + filename + ".";
         this_log->Infolog(log);
         return 0;
     }
@@ -47,11 +47,11 @@ int HTTP_Handler::MethodPostParse(Clientinfo* client, std::string readbuf) {
     std::string log;
     std::string type, data;
     if (processctrl.POSTParse(readbuf, &type, &data) < 0) {
-        log = "Request:POST bad requeset.";
+        log = "Request type:POST, Bad requeset.";
         this_log->Infolog(log);
         return -1;
     } else {
-        log = "Request:POST. Request type:" + type + ".Data:" + data + ".";
+        log = "Request type:POST. Request type:" + type + ".Data:" + data + ".";
         this_log->Infolog(log);
         return 0;
     }
@@ -75,27 +75,30 @@ void HTTP_Handler::Init(Log* log_p, size_t logbuf_size, std::string document_roo
     responectrl.SetReadmax(socket_settings.read_max);
     responectrl.SetWritemax(socket_settings.write_max);
 
-    if (socket_settings.listenfd < 0) {
-        this_log->Infolog("Http handler init fail.");
-        return;
-    }
     this_log->Infolog("Http handler init complite.");
 }
 
 void HTTP_Handler::RequestParse(Clientinfo* client, std::string readbuf) {
     switch (processctrl.RequestType(&readbuf)) {
     case GET: {
-        if (!MethodGetParse(client, readbuf)) {
-            responectrl.BadRequest404(&client->respone_head);
+        if (MethodGetParse(client, readbuf) < 0) {
+            this_log->Warninglog("send bad request 403.");
+            responectrl.BadRequest403(&client->respone_head);
         }
+        break;
     } case POST: {
-        if (!MethodPostParse(client, readbuf)) {
-            responectrl.BadRequest404(&client->respone_head);
+        if (MethodPostParse(client, readbuf) < 0) {
+            this_log->Warninglog("send bad request 403.");
+            responectrl.BadRequest403(&client->respone_head);
         }
-        responectrl.BadRequest404(&client->respone_head); // not use post;
+        this_log->Warninglog("send bad request 403.");
+        responectrl.BadRequest403(&client->respone_head); // not use post;
+        break;
     } default: {
-        responectrl.BadRequest404(&client->respone_head);
+        this_log->Warninglog("send bad request 403.");
+        responectrl.BadRequest403(&client->respone_head);
         this_log->Errorlog("Bad request type.");
+        break;
     }
     }//switch end
 }

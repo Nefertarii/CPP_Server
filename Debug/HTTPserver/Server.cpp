@@ -10,9 +10,9 @@ void SIG_handler(int sig) {
     }
 }
 
-int main() {
-    static Server_Control_Epoll server;
-    std::cout << "Http server start.\n";
+int main(int argc, const char* argv[]) {
+    std::string config_file = argv[1];
+    static Server_Control_Epoll server(config_file);
     signal(SIGINT, SIG_handler);
     server.ServerStart();
     return 0;

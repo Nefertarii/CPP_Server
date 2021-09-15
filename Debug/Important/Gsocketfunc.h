@@ -44,6 +44,9 @@ namespace Gsocket {
     int Readfile(std::string filename_, struct Filestate* filestat_, Log* log_p);
     int Write(int socketfd, std::string* str, Log* log_p);
     int Writefile(int socketfd, int filefd, off_t offset, size_t writemax ,Log* log_p);
+    int ReuseAddress(int socketfd, int *flag, Log* log_p);
+    int ReusePort(int socketfd, int* flag, Log* log_p);
+    void GetAddress(int socketfd, std::string* ip, std::string* port, Log* log_p);
 };
 
 
@@ -73,7 +76,8 @@ int Gsocket::Listen(int fd, int backlog, Log* log_p) {
         log_p->Errorlog("Listen set error.", errno);
         return -1;
     }
-    log_p->Infolog("Listen set ok");
+    std::string log = "Listen set, fd:" + std::to_string(fd) + ".";
+    log_p->Infolog(log);
     return 0;
 }
 
@@ -140,7 +144,6 @@ int Gsocket::Readfile(std::string filename, struct Filestate* filestat_, Log* lo
     int filefd = 0;
     
     const char* document = filename.c_str();
-    std::cout << document << "\n";
     filefd = open(document, O_RDONLY);
     if (filefd < 0) {
         log_p->Errorlog("Readfile error", errno);
@@ -200,9 +203,35 @@ int Gsocket::Writefile(int socketfd, int filefd, off_t offset, size_t writemax ,
     return 0;
 }
 
+int Gsocket::ReuseAddress(int socketfd, int *flag, Log* log_p) {
+    if (setsockopt(socketfd, SOL_SOCKET, SO_REUSEADDR, flag, sizeof(int)) < 0) {
+        log_p->Warninglog("Set reuse address fail.", errno);
+        return -1;
+    } else {
+        log_p->Infolog("Set reuse address ok.");
+        return 0;
+    }
+}
 
+int Gsocket::ReusePort(int socketfd, int *flag, Log* log_p) {
+    if (setsockopt(socketfd, SOL_SOCKET, SO_REUSEPORT, flag, sizeof(int)) < 0) {
+        log_p->Warninglog("Set reuse port fail.", errno);
+        return -1;
+    } else {
+        log_p->Infolog("Set reuse port ok.");
+        return 0;
+    }
+}
 
-
+void Gsocket::GetAddress(int socketfd, std::string* ip, std::string* port, Log* log_p) {
+    struct sockaddr_in client_address;
+    socklen_t address_length = sizeof(client_address);
+    getpeername(socketfd, (struct sockaddr *)&client_address, &address_length);
+    *port = std::to_string(ntohs(client_address.sin_port));
+    *ip = inet_ntoa(client_address.sin_addr);
+    std::string log = "Client IP:" + *ip + ":" + *port;
+    log_p->Infolog(log);
+}
 
 
 

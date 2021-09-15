@@ -10,6 +10,8 @@ struct Socket_Config {
     size_t read_max = 0;
     int listen_port = 0;
     int listenfd = 0;
+    int reuseaddr = 0;
+    int reuseport = 0;
     Socket_Config& operator=(Socket_Config tmp) {
         this->connect_max = tmp.connect_max;
         this->connect_nums = tmp.connect_nums;
@@ -17,6 +19,8 @@ struct Socket_Config {
         this->read_max = tmp.read_max;
         this->listen_port = tmp.listen_port;
         this->listenfd = tmp.listenfd;
+        this->reuseaddr = tmp.reuseaddr;
+        this->reuseport = tmp.reuseport;
         return *this;
     }
 };
@@ -25,11 +29,11 @@ class Socket_Control {
 private:
     Log* this_log;
     bool have_upper;        //have upper levels log pointer;
-    Socket_Config socket_config;
-
+    Socket_Config* socket_config;
+    
 public:
     Socket_Control() {};
-    void SetConfig(Socket_Config config) { socket_config = config; }
+    void SetConfig(Socket_Config* config) { socket_config = config; }
     void SetLog(Log* upper, size_t buffer_size);
     int SocketListen();
     int SocketAccept();
@@ -53,34 +57,44 @@ int Socket_Control::SocketListen() {
     struct sockaddr_in server_address;
     memset(&server_address, 0, sizeof(server_address));
     server_address.sin_family = AF_INET;
-    server_address.sin_port = htons(socket_config.listen_port);
+    server_address.sin_port = htons(socket_config->listen_port);
     server_address.sin_addr.s_addr = htonl(INADDR_ANY);
-    int listenfd = socket_config.listenfd;
+    int listenfd = socket_config->listenfd;
     listenfd = Gsocket::Socket(AF_INET, SOCK_STREAM, 0, this_log);
     if (listenfd < 0) { return -1; }
+    if (socket_config->reuseaddr) {
+        if (Gsocket::ReuseAddress(listenfd, &socket_config->reuseaddr, this_log) < 0) {
+            return -1;
+        }
+    }
+    if (socket_config->reuseport) {
+        if (Gsocket::ReusePort(listenfd, &socket_config->reuseport, this_log) < 0) {
+            return -1;
+        }
+    }
     if (Gsocket::Bind(listenfd, (struct sockaddr*)&server_address,
                       sizeof(server_address), this_log) < 0) { return -1; }
     if (Gsocket::Listen(listenfd, 0, this_log) < 0) { return -1; }
     signal(SIGPIPE, SIG_IGN);
-    socket_config.listenfd = listenfd;
+    socket_config->listenfd = listenfd;
     return listenfd;
 }
 
 int Socket_Control::SocketAccept() {
-    if (socket_config.connect_nums == socket_config.connect_max) {
+    if (socket_config->connect_nums == socket_config->connect_max) {
         return -1;
     } else {
-        return Gsocket::Accept(socket_config.listenfd, this_log);
+        return Gsocket::Accept(socket_config->listenfd, this_log);
     }
 }
 
 int Socket_Control::SocketRead(int socketfd, std::string* readbuf) {
-    return Gsocket::Read(socketfd, readbuf, socket_config.read_max, this_log);
+    return Gsocket::Read(socketfd, readbuf, socket_config->read_max, this_log);
 }
 
 int Socket_Control::SocketWrite(int socketfd, std::string* message) {
     int ret = 0;
-    size_t writemax = socket_config.write_max;
+    size_t writemax = socket_config->write_max;
     if (message->size() > writemax) {
         std::string tmp(*message, 0, writemax);
         *message = message->substr(writemax, (message->size() - writemax));

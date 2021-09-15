@@ -19,22 +19,26 @@ private:
     std::vector<Clientinfo> clients;
     Socket_Config socket_settings;
     size_t logbuf_size;
-    bool ReadConfig();
+    bool ReadConfig(std::string config_file);
+    void ConnectAdd(Clientinfo* client, int connectfd);
+    void ConnectDel(Clientinfo* client);
 public:
-    Server_Control_Epoll();
+    Server_Control_Epoll(std::string config_file);
     void ServerStart();
     void ServerStop();
     ~Server_Control_Epoll();
 };
 
-bool Server_Control_Epoll::ReadConfig() {
+bool Server_Control_Epoll::ReadConfig(std::string config_file) {
     std::fstream file;
     std::string fileline;
     std::string key, value_str;
     size_t value_ul;
     bool stringdone = false;
-    file.open("/home/cs18/vscode/Webserver/Http.conf", std::ios::in);
+    file.open(config_file, std::ios::in);
     if (file) {
+        std::string log = "Open config file:" + config_file + "\n";
+        server_log.Infolog(log);
         while (std::getline(file, fileline)) {
             if (fileline == "----") {
                 stringdone = true;
@@ -60,13 +64,33 @@ bool Server_Control_Epoll::ReadConfig() {
         file.close();
         return true;
     } else {
-        std::cout << "Can't open file \"Http.conf\"\n";
+        std::string log = "Can't open file:" + config_file + "\n";
+        server_log.Errorlog(log);
     }
     return false;
 }
 
-Server_Control_Epoll::Server_Control_Epoll() {
-    if (ReadConfig()) {
+void Server_Control_Epoll::ConnectAdd(Clientinfo* client, int connectfd) {
+    client->clientfd = connectfd;
+    Gsocket::GetAddress(connectfd, &client->ip, &client->port, &server_log);
+    epollctrl.Epolladd(connectfd, client);
+    socket_settings.connect_nums += 1;
+}
+
+void Server_Control_Epoll::ConnectDel(Clientinfo* client) {
+    epollctrl.Epolldel(client->clientfd);
+    socketctrl.SocketDisconnet(client->clientfd);
+    client->Reset();
+    socket_settings.connect_nums -= 1;
+}
+
+
+
+
+
+
+Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
+    if (ReadConfig(config_file)) {
         auto map_it = global_value_settings.find("MaxLogBuffer");
         logbuf_size = map_it->second;
         map_it = global_value_settings.find("MaxClients");
@@ -78,14 +102,22 @@ Server_Control_Epoll::Server_Control_Epoll() {
         socket_settings.read_max = map_it->second;
         map_it = global_value_settings.find("Listen");
         socket_settings.listen_port = map_it->second;
-        socket_settings.listenfd = 0;
+        map_it = global_value_settings.find("ReuseAddress");
+        socket_settings.reuseaddr = map_it->second;
+        map_it = global_value_settings.find("ReusePort");
+        socket_settings.reuseport = map_it->second;
+
+        
+        socket_settings.listenfd = -1;
+
         auto map_it2 = global_string_settings.find("DocumentRoot");
         std::string document_root = map_it2->second;
+
         httpctrl.Init(&server_log, logbuf_size, document_root, socket_settings);
         clients.resize(socket_settings.connect_max);
         //socket
         socketctrl.SetLog(&server_log, logbuf_size);
-        socketctrl.SetConfig(socket_settings);
+        socketctrl.SetConfig(&socket_settings);
         //epoll
         epollctrl.SetLog(&server_log, logbuf_size);
         server_log.Infolog("Server initialization complete.");
@@ -96,16 +128,13 @@ Server_Control_Epoll::Server_Control_Epoll() {
 
 void Server_Control_Epoll::ServerStart() {
     socket_settings.listenfd = socketctrl.SocketListen();
-    if (socket_settings.listenfd < 0) {
-        return;
-    }
-    
+    if (socket_settings.listenfd < 0) { return; }
     struct epoll_event ev, events[socket_settings.connect_max];
     ev.events = EPOLLIN | EPOLLET;
     ev.data.ptr = nullptr;
     int epollfd = epoll_create(socket_settings.connect_max);
-    epoll_ctl(epollfd, EPOLL_CTL_ADD, socket_settings.listenfd, &ev);
     epollctrl.SetEpollfd(epollfd);
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, socket_settings.listenfd, &ev);
 
     for (;;) {
         int readyfds = epoll_wait(epollfd, events, (int)socket_settings.connect_max, 0);
@@ -121,9 +150,7 @@ void Server_Control_Epoll::ServerStart() {
                 if (connectfd < 0) {
                     server_log.Errorlog("Bad connect.");
                 } else {
-                    clients[socket_settings.connect_nums].clientfd = connectfd;
-                    epollctrl.Epolladd(connectfd, &clients[i]);
-                    socket_settings.connect_nums += 1;
+                    ConnectAdd(&clients[socket_settings.connect_nums], connectfd);
                 }
             } else if (ev.events & EPOLLIN) {
                 Clientinfo* client = static_cast<Clientinfo*>(ev.data.ptr);
@@ -133,21 +160,17 @@ void Server_Control_Epoll::ServerStart() {
                     httpctrl.RequestParse(client, readbuf);
                     epollctrl.Epollwrite(client->clientfd, client);
                 } else {
-                    epollctrl.Epolldel(client->clientfd);
-                    socketctrl.SocketDisconnet(client->clientfd);
-                    socket_settings.connect_nums -= 1;
+                    ConnectDel(client);
                 }
             } else if (ev.events & EPOLLOUT) {
                 Clientinfo* client = static_cast<Clientinfo*>(ev.data.ptr);
                 int result = httpctrl.SendRespone(client);
                 if (result < 0) {
-                    epollctrl.Epolldel(client->clientfd);
-                    socketctrl.SocketDisconnet(client->clientfd);
-                    socket_settings.connect_nums -= 1;
+                    ConnectDel(client);
                 } else if (result == 0) {
-                    epollctrl.Epollwrite(client->clientfd, client);
-                } else {
                     epollctrl.Epollread(client->clientfd, client);
+                } else {
+                    epollctrl.Epollwrite(client->clientfd, client);
                 }
             }
         }
@@ -156,10 +179,9 @@ void Server_Control_Epoll::ServerStart() {
 
 void Server_Control_Epoll::ServerStop() {
     server_log.Warninglog("Server closeing.");
-    for (size_t i = 0; i != socket_settings.connect_nums; i++) {
+    for (size_t i = 0; i != socket_settings.connect_max; i++) {
         if (clients[i].clientfd > 0) {
-            epollctrl.Epolldel(clients[i].clientfd);
-            socketctrl.SocketDisconnet(clients[i].clientfd);
+            ConnectDel(&clients[i]);
         }
     }
     socketctrl.SocketDisconnet(epollctrl.Epollfd());

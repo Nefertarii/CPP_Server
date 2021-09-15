@@ -19,8 +19,8 @@ public:
     void SetLog(Log* log, size_t buffer_size);
     void SetWritemax(size_t writemax_) { writemax = writemax_; }
     void SetReadmax(size_t readmax_) { readmax = readmax_; }
-    void GetAddress(Clientinfo* client);
     void BadRequest404(std::string* responehead);
+    void BadRequest403(std::string* responehead);
     int Send(int socketfd, std::string* message);
     int SendFile(int socketfd, Filestate *file);
     ~Http_Respone();
@@ -36,16 +36,6 @@ void Http_Respone::SetLog(Log* log, size_t buffer_size) {
         this_log = log;
         have_upper = true;
     }
-}
-
-void Http_Respone::GetAddress(struct Clientinfo *client) {
-    struct sockaddr_in client_address;
-    socklen_t address_length = sizeof(client_address);
-    getpeername(client->clientfd, (struct sockaddr *)&client_address, &address_length);
-    client->port = std::to_string(ntohs(client_address.sin_port));
-    client->ip = inet_ntoa(client_address.sin_addr);
-    std::string log = "Client IP:" + client->ip + ":" + client->port;
-    this_log->Infolog(log);
 }
 
 int Http_Respone::Send(int socketfd, std::string *message) {
@@ -78,6 +68,16 @@ int Http_Respone::SendFile(int socketfd, Filestate *file) {
 void Http_Respone::BadRequest404(std::string* responehead) {
     responehead->clear();
     *responehead += "HTTP/1.1 404 Bad Request\r\n";
+    *responehead += "Constent_Charset:utf-8\r\n";
+    *responehead += "Content-Language:zh-CN\r\n";
+    *responehead += "Content-Length:0\r\n";
+    *responehead += Timer::Nowtime_str() + "\r\n";
+    *responehead += "Server version:Gserver/1.0 (C++) \r\n\r\n";
+}
+
+void Http_Respone::BadRequest403(std::string* responehead) {
+    responehead->clear();
+    *responehead += "HTTP/1.1 403 Forbidden\r\n";
     *responehead += "Constent_Charset:utf-8\r\n";
     *responehead += "Content-Language:zh-CN\r\n";
     *responehead += "Content-Length:0\r\n";
