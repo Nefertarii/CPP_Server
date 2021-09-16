@@ -1,0 +1,29 @@
+
+INFO: Server initialization complete.	 Data:1631778010258
+INFO: Socket open ok	 Data:1631778010258
+INFO: Set reuse address ok.	 Data:1631778010258
+INFO: Set reuse port ok.	 Data:1631778010258
+INFO: Bind set ok	 Data:1631778010258
+INFO: Listen set, fd:3.	 Data:1631778010258
+INFO: Epoll set, fd:4.	 Data:1631778010258
+INFO: Get accept from 127.0.0.1	 Data:1631778013393
+INFO: Client IP:127.0.0.1:52242	 Data:1631778013393
+
+INFO: epoll add, fd:5.	 Data:1631778013393
+INFO: Read from 5	 Data:1631778014165
+INFO: Write to: 5	 Data:1631778014165
+INFO: Write to: 5 success.	 Data:1631778014165
+INFO: Read from 5	 Data:1631778014793
+INFO: Write to: 5	 Data:1631778014793
+INFO: Write to: 5 success.	 Data:1631778014793
+INFO: Read from 5	 Data:1631778015453
+INFO: Write to: 5	 Data:1631778015453
+INFO: Write to: 5 success.	 Data:1631778015453
+INFO: client: 5 send close	 Data:1631778019945
+INFO: Write to: 5	 Data:1631778019945
+INFO: Write to: 5 success.	 Data:1631778019945
+INFO: client: 5 send close	 Data:1631778019945
+INFO: Write to: 5	 Data:1631778019945
+ERROR: write error Broken pipe	 Data:1631778019945
+INFO: Epoll del, fd:5.	 Data:1631778019945
+INFO: Close 5 ok.	 Data:1631778019945

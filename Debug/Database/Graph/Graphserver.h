@@ -106,6 +106,7 @@ void Graph_Server_Control::ConnectDel(Connectinfo* client) {
 void Graph_Server_Control::MeassgeParse(Connectinfo* client) {
     //GQLparse
     client->meassage = "Get message:" + client->meassage;
+    epollctrl.Epollwrite(client->socketfd, client);
 }
 
 void Graph_Server_Control::ResultSend(Connectinfo* client) {
@@ -143,6 +144,7 @@ Graph_Server_Control::Graph_Server_Control(std::string config_file) {
         socketctrl.SetConfig(&socket_settings);
         epollctrl.SetLog(&graph_server_log, logbuf_size);
         graph_server_log.Infolog("Server initialization complete.");
+        clients.resize(socket_settings.connect_max);
         init_complite = true;
     } else {
         std::cout << "Server initialization Fail!\n";
@@ -153,6 +155,7 @@ Graph_Server_Control::Graph_Server_Control(std::string config_file) {
 void Graph_Server_Control::ServerStart() {
     if (init_complite == false) {
         std::cout << "Server not initialization, Can't Start.";
+        return;
     }
     socket_settings.listenfd = socketctrl.SocketListen();
     if (socket_settings.listenfd < 0) {
@@ -184,6 +187,7 @@ void Graph_Server_Control::ServerStart() {
                 }
             } else if (ev.events & EPOLLIN) {
                 Connectinfo* client = static_cast<Connectinfo*>(ev.data.ptr);
+                socketctrl.SocketRead(client->socketfd, &client->meassage);
                 MeassgeParse(client);
             } else if (ev.events & EPOLLOUT) {
                 Connectinfo* client = static_cast<Connectinfo*>(ev.data.ptr);
