@@ -5,8 +5,19 @@
 #include <map>
 #include <fstream>
 
-bool ReadConfig(std::string config_file_dir, std::map<std::string, std::string>* string_map,
-                std::map<std::string, size_t>* value_map) {
+namespace Gfile {
+    bool ReadConfig(std::string config_file_dir, std::map<std::string, std::string>* string_map,
+                    std::map<std::string, size_t>* value_map);
+    bool ReadConfig(std::string config_file_dir, std::map<std::string, std::string>* string_map);
+    bool SaveData(std::string config_file_dir, std::map<std::string, std::string> string_map);
+}
+
+
+
+
+
+bool Gfile::ReadConfig(std::string config_file_dir, std::map<std::string, std::string>* string_map,
+                        std::map<std::string, size_t>* value_map) {
     std::fstream file;
     std::string fileline;
     std::string key, value_str;
@@ -43,11 +54,10 @@ bool ReadConfig(std::string config_file_dir, std::map<std::string, std::string>*
     return false;
 }
 
-bool ReadConfig(std::string config_file_dir, std::map<std::string, std::string>* string_map) {
+bool Gfile::ReadConfig(std::string config_file_dir, std::map<std::string, std::string>* string_map) {
     std::fstream file;
     std::string fileline;
     std::string key, value_str;
-    size_t value_ul;
     file.open(config_file_dir, std::ios::in);
     if (file) {
         while (std::getline(file, fileline)) {
@@ -66,6 +76,21 @@ bool ReadConfig(std::string config_file_dir, std::map<std::string, std::string>*
     return false;
 }
 
-
+bool Gfile::SaveData(std::string config_file_dir, std::map<std::string, std::string> string_map) {
+    //std::sort(string_map.begin(), string_map.end());
+    std::fstream file;
+    std::string fileline;
+    file.open(config_file_dir, std::ios::out);
+    if (file) {
+        for (auto it : string_map) {
+            fileline = it.first + " " + it.second + "\n";
+            file.write(fileline.c_str(), fileline.size());
+        }
+        file.close();
+        return true;
+    }
+    file.close();
+    return false;
+}
 
 #endif
