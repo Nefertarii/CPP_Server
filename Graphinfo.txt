@@ -1,4 +1,0 @@
-name local_graph
-ip 127.0.0.1
-port 8200
-token GSZ2N932XCA76MHOSKZ4GH2DL1Q42V1

@@ -40,6 +40,7 @@ namespace Gsocket {
     int Listen(int fd, int backlog, Log* log_p);
     int Accept(int listenfd, Log* log_p);
     int Close(int fd, Log* log_p);
+    int Connect(int socketfd, const struct sockaddr* sa, socklen_t salen, Log* log_p);
     int Read(int socketfd, std::string* str, size_t readmax, Log* log_p);
     int Readfile(std::string filename_, struct Filestate* filestat_, Log* log_p);
     int Write(int socketfd, std::string* str, Log* log_p);

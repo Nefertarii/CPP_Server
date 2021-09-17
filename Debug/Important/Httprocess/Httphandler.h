@@ -134,7 +134,7 @@ int HTTP_Handler::SendRespone(Clientinfo* client) {
 }
 
 HTTP_Handler::~HTTP_Handler() {
-    if (!have_upper) {
+    if (have_upper == false && this_log != nullptr) {
         delete this_log;
         this_log = nullptr;
     }

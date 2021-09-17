@@ -56,7 +56,8 @@ void Graph_Server_Control::ConnectDel(Connectinfo* client) {
 
 void Graph_Server_Control::MeassgeParse(Connectinfo* client) {
     //GQLparse
-    client->meassage = "Get message:" + client->meassage;
+    client->meassage = "Get your message\n Is:" + client->meassage;
+    epollctrl.Epollwrite(client->socketfd, client);
 }
 
 void Graph_Server_Control::ResultSend(Connectinfo* client) {
@@ -82,18 +83,20 @@ Graph_Server_Control::Graph_Server_Control(std::string config_file) {
         map_it = global_value_settings.find("ReadMax");
         socket_settings.read_max = map_it->second;
         map_it = global_value_settings.find("Listen");
-        socket_settings.listen_port = map_it->second;
+        socket_settings.port = map_it->second;
         map_it = global_value_settings.find("ReuseAddress");
         socket_settings.reuseaddr = map_it->second;
         map_it = global_value_settings.find("ReusePort");
         socket_settings.reuseport = map_it->second;
-        socket_settings.listenfd = -1;
+        socket_settings.socketfd = -1;
+        socket_settings.is_server = true;
 
         graph_server_log.Set("Graph_Server_Log.txt", logbuf_size);
         socketctrl.SetLog(&graph_server_log, logbuf_size);
         socketctrl.SetConfig(&socket_settings);
         epollctrl.SetLog(&graph_server_log, logbuf_size);
         graph_server_log.Infolog("Server initialization complete.");
+        clients.resize(socket_settings.connect_max);
         init_complite = true;
     } else {
         std::cout << "Server initialization Fail!\n";
@@ -104,9 +107,10 @@ Graph_Server_Control::Graph_Server_Control(std::string config_file) {
 void Graph_Server_Control::ServerStart() {
     if (init_complite == false) {
         std::cout << "Server not initialization, Can't Start.";
+        return;
     }
-    socket_settings.listenfd = socketctrl.SocketListen();
-    if (socket_settings.listenfd < 0) {
+    socket_settings.socketfd = socketctrl.SocketListen();
+    if (socket_settings.socketfd < 0) {
         std::cout << "Server cant't create.\n";
         return;
     }
@@ -115,7 +119,7 @@ void Graph_Server_Control::ServerStart() {
     ev.data.ptr = nullptr;
     int epollfd = epoll_create(socket_settings.connect_max);
     epollctrl.SetEpollfd(epollfd);
-    epoll_ctl(epollfd, EPOLL_CTL_ADD, socket_settings.listenfd, &ev);
+    epoll_ctl(epollfd, EPOLL_CTL_ADD, socket_settings.socketfd, &ev);
 
     for (;;) {
         int readyfds = epoll_wait(epollfd, events, (int)socket_settings.connect_max, 0);
@@ -135,6 +139,7 @@ void Graph_Server_Control::ServerStart() {
                 }
             } else if (ev.events & EPOLLIN) {
                 Connectinfo* client = static_cast<Connectinfo*>(ev.data.ptr);
+                socketctrl.SocketRead(client->socketfd, &client->meassage);
                 MeassgeParse(client);
             } else if (ev.events & EPOLLOUT) {
                 Connectinfo* client = static_cast<Connectinfo*>(ev.data.ptr);
@@ -157,7 +162,7 @@ void Graph_Server_Control::ServerStop() {
         }
     }
     socketctrl.SocketDisconnet(epollctrl.Epollfd());
-    socketctrl.SocketDisconnet(socket_settings.listenfd);
+    socketctrl.SocketDisconnet(socket_settings.socketfd);
     std::string log = "Server total run time:" + server_clock.Runtime_str() + " sec";
     graph_server_log.Infolog(log);
     graph_server_log.Infolog("Server is close now.");

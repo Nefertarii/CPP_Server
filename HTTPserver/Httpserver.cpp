@@ -1,4 +1,4 @@
-#include "Servcontrol.h"
+#include "Servctrl.h"
 
 void SIG_handler(int sig) {
     if (sig == SIGINT) {
@@ -13,7 +13,7 @@ void SIG_handler(int sig) {
 int main(int argc, const char* argv[]) {
     std::string config_file;
     if (argc != 2) {
-        config_file = "/home/cs18/vscode/Webserver/Http.conf";
+        config_file = "/home/cs18/vscode/Webserver/Config/Http.conf";
     } else {
         config_file = argv[1];
     }

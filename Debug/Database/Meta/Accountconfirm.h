@@ -11,6 +11,7 @@ class Account_Parse {
 private:
     Log* this_log;
     bool have_upper;
+    bool read_success;
     std::string accountfile;
     std::map<std::string, std::string> accounts;
     std::map<std::string, size_t> fail_counts;
@@ -18,7 +19,9 @@ private:
     bool SaveAccount();
 
 public:
+    Account_Parse() { read_success = false; }
     Account_Parse(std::string accountfile_);
+    bool ReadAccountFile(std::string accountfile_);
     void SetLog(Log* log_p, size_t buffer_size);
     //Login
     bool MetaLogin(std::string account, std::string password);
@@ -32,8 +35,10 @@ bool Account_Parse::ReadAccount() {
         for (auto i : accounts) {
             fail_counts[i.first] = 0;
         }
+        read_success = true;
         return true;
     }
+    read_success = false;
     return false;
 }
 
@@ -43,6 +48,7 @@ bool Account_Parse::SaveAccount() {
 
 Account_Parse::Account_Parse(std::string accountfile_) {
     accountfile = accountfile_;
+    read_success = false;
     if (!ReadAccount()) {
         std::cout << "Can't read account file:" << accountfile << "\n";
         return;
@@ -50,18 +56,27 @@ Account_Parse::Account_Parse(std::string accountfile_) {
 }
 
 void Account_Parse::SetLog(Log* log_p, size_t buffer_size) {
-    if (log_p == nullptr) {
-        this_log = new Log("Meta_Confirm_txt", buffer_size);
+    if (log_p != nullptr) {
+        this_log = log_p;
         have_upper = true;
     } else {
-        this_log = log_p;
+        this_log = new Log("Meta_Confirm_txt", buffer_size);
         have_upper = false;
     }
+}
 
+bool Account_Parse::ReadAccountFile(std::string accountfile_) {
+    accountfile = accountfile_;
+    if (!ReadAccount()) {
+        std::cout << "Can't read account file:" << accountfile << "\n";
+        return false;
+    }
+    return true;
 }
 
 //little data, not use sort algorithm
 bool Account_Parse::MetaLogin(std::string account, std::string password) {
+    if (!read_success) { return false; }
     std::string log = "User:" + account + " Login ";
     auto account_it = accounts.find(account);
     if (account_it == accounts.end()) {
@@ -92,6 +107,7 @@ bool Account_Parse::MetaLogin(std::string account, std::string password) {
 }
 
 bool Account_Parse::MetaRegsiter(std::string account, std::string password) {
+    if (!read_success) { return false; }
     std::string log = "User:" + account + " regsiter ";
     auto account_it = accounts.find(account);
     if (account_it == accounts.end()) {
@@ -108,6 +124,7 @@ bool Account_Parse::MetaRegsiter(std::string account, std::string password) {
 }
 
 bool Account_Parse::MetaChangePassword(std::string account, std::string oldpassword, std::string password) {
+    if (!read_success) { return false; }
     std::string log = "User:" + account + " change password ";
     auto account_it = accounts.find(account);
     if (account_it == accounts.end()) {
@@ -132,7 +149,7 @@ bool Account_Parse::MetaChangePassword(std::string account, std::string oldpassw
 }
 
 Account_Parse::~Account_Parse() {
-    if (!have_upper) {
+    if (have_upper == false && this_log != nullptr) {
         delete this_log;
         this_log = nullptr;
     }

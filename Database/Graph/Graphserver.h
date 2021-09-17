@@ -1,7 +1,7 @@
 #ifndef GRAPHSERVER_H_
 #define GRAPHSERVER_H_
 
-#include "../../Important/Gepollcontrol.h"
+#include "../../Important/Gepollctrl.h"
 #include "../../Important/Gsocketctrl.h"
 #include <fstream>
 #include <string>
@@ -48,5 +48,4 @@ public:
     void ServerStop();
     ~Graph_Server_Control();
 };
-
 #endif

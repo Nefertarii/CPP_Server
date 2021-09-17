@@ -8,7 +8,7 @@ else
 CPPFLAGS = -pthread -Wall -std=c++17 -O2
 endif
 OBJECTS1 = Glog.o Gjson.o Gstring.o Gtime.o \
-			metaconfirm.o Gmeta_http.o Gmeta_local.o Gmeta.o 
+			Accountconfirm.o Metahttp.o Metalocal.o Gmeta.o 
 OBJECTS2 = Graph.o GQLparse.o Graphserv.o 
 
 $(TARGET1): $(OBJECTS1)
@@ -21,12 +21,12 @@ Gstring.o : ../../Important/Gstring.h
 	$(cc) $(CPPFLAGS) -c ../../Important/Gstring.cpp
 Gtime.o : ../../Important/Gtime.h
 	$(cc) $(CPPFLAGS) -c ../../Important/Gtime.cpp
-metaconfirm.o : ../Meta/metaconfirm.h
-	$(cc) $(CPPFLAGS) -c ../Meta/metaconfirm.cpp
-Gmeta_http.o : ../Meta/Gmeta_http.h
-	$(cc) $(CPPFLAGS) -c ../Meta/Gmeta_http.cpp
-Gmeta_local.o : ../Meta/Gmeta_local.h
-	$(cc) $(CPPFLAGS) -c ../Meta/Gmeta_local.cpp
+Accountconfirm.o : ../Meta/Accountconfirm.h
+	$(cc) $(CPPFLAGS) -c ../Meta/Accountconfirm.cpp
+Metahttp.o : ../Meta/Metahttp.h
+	$(cc) $(CPPFLAGS) -c ../Meta/Metahttp.cpp
+Metalocal.o : ../Meta/Metalocal.h
+	$(cc) $(CPPFLAGS) -c ../Meta/Metalocal.cpp
 Gmeta.o : ../Meta/Gmeta.cpp
 	$(cc) $(CPPFLAGS) -c ../Meta/Gmeta.cpp
 	

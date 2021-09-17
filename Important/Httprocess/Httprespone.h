@@ -4,6 +4,10 @@
 #include "../Gsocketfunc.h"
 #include "Httperrno.h"
 
+void Http_signal_handle();
+
+//only encapsulates read and write operations
+//need other function to control
 class Http_Respone {
 private:
     Log* this_log;
@@ -23,7 +27,6 @@ public:
     //static int Sendfile(int clientfd, std::string filename);
     //static int Sendfile(int socketfd, int filefd, off_t offset);
 };
-
 
 #endif
 

@@ -1,5 +1,6 @@
 #include "Gsocketfunc.h"
 
+
 int Gsocket::Socket(int family, int type, int protocol, Log* log_p) {
     int socketfd = socket(family, type, protocol);
     if (socketfd < 0) {
@@ -60,6 +61,18 @@ int Gsocket::Close(int fd, Log* log_p) {
     log += " ok.";
     log_p->Infolog(log);
     return 0;
+}
+
+int Gsocket::Connect(int socketfd, const struct sockaddr* sa, socklen_t salen, Log* log_p) {
+    std::string log = "Connect " + std::to_string(socketfd);
+    if (connect(socketfd, sa, salen) < 0) {
+        log += " error.";
+        log_p->Errorlog(log, errno);
+        return -1;
+    }
+    log += " ok.";
+    log_p->Infolog(log);
+    return 0; 
 }
 
 int Gsocket::Read(int socketfd, std::string* str, size_t readmax, Log* log_p) {

@@ -1,7 +1,6 @@
 #ifndef HTTPROCESS_H_
 #define HTTPROCESS_H_
 
-#include "../Gsocketfunc.h"
 #include "Httperrno.h"
 
 class Http_Process {
@@ -219,7 +218,7 @@ POSTYPE Http_Process::POSTChoose(std::string post_type) {
 }
 
 Http_Process::~Http_Process() {
-    if (!have_upper) {
+    if (have_upper == false && this_log != nullptr) {
         delete this_log;
         this_log = nullptr;
     }

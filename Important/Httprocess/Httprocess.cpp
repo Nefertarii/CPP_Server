@@ -188,7 +188,7 @@ POSTYPE Http_Process::POSTChoose(std::string post_type) {
 }
 
 Http_Process::~Http_Process() {
-    if (!have_upper) {
+    if (have_upper == false && this_log != nullptr) {
         delete this_log;
         this_log = nullptr;
     }

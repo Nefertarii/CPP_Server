@@ -58,7 +58,7 @@ void Http_Respone::BadRequest403(std::string* responehead) {
 }
 
 Http_Respone::~Http_Respone() {
-    if (!have_upper) {
+    if (have_upper == false && this_log != nullptr) {
         delete this_log;
         this_log = nullptr;
     }
