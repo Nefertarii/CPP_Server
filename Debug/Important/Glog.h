@@ -15,6 +15,7 @@ enum LOGLEVEL {
     LEVELEND = (1 << 30)
 };
 
+//class Log save/print runtime info
 class Log {
 private:
     std::string logfile;
