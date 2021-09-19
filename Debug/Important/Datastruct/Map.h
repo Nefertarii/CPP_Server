@@ -24,6 +24,10 @@
  * 完全图(complete graph)是指每一对顶点间都存在一条边的图
  */
 
+template <typename T>
+struct Vertex {
+
+};
 
 
 #endif
