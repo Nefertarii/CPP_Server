@@ -23,7 +23,6 @@
 //const size_t MAXLOG = 16;                            //Log buffer maximum
 //const char *PROTOCOL = "HTTP";                       //server used protocol
 
-
 struct Filestate {
     int filefd = 0;
     size_t filelength = 0;

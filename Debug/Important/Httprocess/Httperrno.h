@@ -1,6 +1,7 @@
 #ifndef SERVERRNO_H_
 #define SERVERRNO_H_
 
+#include "../Gsocketfunc.h"
 #include <cstddef>
 #include <string>
 

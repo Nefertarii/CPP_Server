@@ -1,4 +1,4 @@
-#include "Servcontrol.h"
+#include "Servctrl.h"
 
 void SIG_handler(int sig) {
     if (sig == SIGINT) {
