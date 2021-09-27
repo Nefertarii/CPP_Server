@@ -22,14 +22,13 @@
 	--bg-border: #eaecef;
 	--bt-bg-blue: #33518b;
 	--bt-bg-hover-blue: #0055AA; }
-.element::-webkit-scrollbar { width: 0 !important }
 
 html,body {
     overflow-x: hidden;
     width: 100%;
     box-sizing: border-box;
 	background-color: #070B21;
-	background-image: url(Image/svg/glow.svg);
+	background-image: url(../Image/svg/glow.svg);
 	background-size: 180%;
 	background-position-x: -31.25rem;
 	background-position-y: -10rem; }
@@ -95,7 +94,7 @@ a:hover,a:active {
 	height: 4rem;
 	width: 4rem;
 	border-radius: 50%;
-	background-image: url(Image/png/logo_64.png);
+	background-image: url(../Image/png/logo_64.png);
 	margin: auto;
 	overflow: hidden; }
 
@@ -136,100 +135,50 @@ a:hover,a:active {
 	cursor: pointer; }
 
 
-.Card_list {
+.Game_window {
     text-align: center;
 	margin-left: 20%;
     padding: 1rem;
 	width: 60%;
+    height: 70%;
 	background-color: var(--bg-black-light);
     box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
 	border-radius: 0.25rem;
 	color: var(--font-light); }
-.Card {
-    border: var(--boxshadow-white) solid 1px;
-    margin: auto;
-    margin-top: 3%;
-    margin-bottom: 3%;
-    box-shadow: var(--boxshadow-white) 0px 0px 5px 2px;
-	border-radius: 0.25rem;
-    min-height: 6rem;
-    width: 90%;
-	max-width: 1000px; }
-.Card_header {
-    position:relative;
-    box-sizing: border-box;
-    padding: 0.8rem;
+.Game_tittle {
     width: 100%;
-    height: 48px;
-    text-align: left; }
-.Card_image {
-    position: absolute;
-    border-radius: 10%;
+    height: 3rem;
+    background-color: #000; }
+.Game_play {
+    width: 480px;
+    height: 480px;
+    margin: auto;
+    text-align: left;
+    background-color: #333; }
+.Game_start {
     height: 32px;
     width: 32px;
-    background-image: url(Image/png/Cat1_32.png);
-    display: inline-block; }
-.Card_tittle {
-    margin-left: 40px;
-    display: inline-block;
-    text-align: top;
-    font-size: large;
-    font-weight: 600;
-    line-height: 32px; }
-.Card_share {
-    float:right; }
-
-
-.Card_main {
-    box-sizing: border-box;
+    margin-top: 224px;
+    margin-left: 224px;
+}
+.Game_option {
+    overflow: hidden;
     width: 100%;
-    padding: 0.8rem 1.2rem 0;
-    text-align: left; }
-
-
-.Card_footer {
-    box-sizing: border-box;
-    display: flex;
+    height: 3rem; }
+#Gane_load {
+    background-color: #fff;
     width: 100%;
-    height: 48px;
-    padding: 0.8rem;
-    text-align: left;
-    align-items: center; }
-.Card_button {
-    height: 28px;
-    border: 0px solid;
-	border-radius: 0.3125rem;
-	color: var(--font);
-    background-color: var(--bt-bg-blue); }
-.Card_button:hover {
-    cursor: pointer;
-    background-color: var(--bt-bg-hover-blue); }
-.Card_button:focus {
-    cursor: pointer;
-    background-color: var(--bt-bg-hover-blue); }
-.Card_svg {
-    position: relative;
-    top: 2px;
-    fill: var(--bg-gray) }
-.Card_voteup {  
-    float: left;
-    display: inline;
-    margin-right: 5px; }
-.Card_font {
-    display: inline;
-    line-height: 2px;
-    margin-right: 5px; }
-.Card_voteup_nums {
-    display: inline; }
-.Card_votedown {
-    float: left;
-    margin-right: 10px; }
-.Card_comment {
-    float: left;
-    margin-right: 10px; }
-.Card_into {
-    float: right; }
+    height: 3rem;
+    animation: progress 2s linear;
+    animation-fill-mode: forwards; }
+@keyframes progress {
+    from {
+        transform: translate(0);
+    }
 
+    to {
+        transform: translate(100%);
+    } }
 
 .Github_link {
     height: auto;
@@ -246,4 +195,3 @@ a:hover,a:active {
     width: 100%;
     text-align: center;
     color: var(--font-light); }
-

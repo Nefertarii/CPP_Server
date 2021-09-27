@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link type="text/css" rel="stylesheet" href="Tapgame.css">
+		<link rel="icon" href="../Image/png/logo_32.png" type="image/x-icon">
+		<title>瓦肆</title>
+	</head>
+	<body>
+        <Header>
+            一个热衷于尝试的网站
+        </Header>
+        <div class="Follow_left" id="Follow_left_admission">
+            <div class="Follow_left_Login_fail">
+                    <div class="Empty"></div>
+                    <div class="Follow_left_logo" id="avatar_fail"></div>
+                    <div class="Empty"></div>
+                    <div>用户名</div>
+                    <input class="input_name" id="username" type="text" />
+                    <div>密码</div>
+                    <input class="input_name" id="password" type="password" />
+                    <div class="Empty"></div>
+                    <input class="input_submit" id="login_button" type="submit" value="登录" />
+                    <div class="Empty"></div>
+                    <div>还没有账号? <a href="../CreateAccount/createaccount.html">点击注册</a></div>
+            </div>
+            <div class="Follow_left_Login_success">
+                    <div class="Empty"></div>
+                    <div class="Follow_left_logo" id="avatar_success"></div>
+                    <div class="Empty"></div>
+                    <div>用户</div>
+                    <div class="Empty"></div>
+                    <div id="Login_username">123</div>
+                    <div class="Empty"></div>
+                    <div>前往<a href="../CreateAccount/createaccount.html">个人中心</a></div>
+            </div>
+            <div class="Follow_left_footer">
+                <div>今日来访人数</div>
+                <div class="Follow_left_today_num">加载中...</div>
+                <div>较昨日</div>
+                <div class="Follow_left_yesterday_num">加载中...</div>
+            </div>
+        </div>
+        <Main>	
+            <div class="Game_window">
+                <div class="Game_tittle">Game tittle</div>
+                <div class="Game_play">
+                    <button class="Game_start">
+                        <svg>
+                            
+                        </svg>
+                    </button>
+                </div>
+                <div class="Game_option">
+                    <div id="Game_load"></div>
+                    Game option
+                </div>
+            </div>
+        </Main>
+        <Footer>
+            <div class="Github_link">
+                <a href="https://github.com/Nefertarii/" target="_blank">
+                    <svg class="Github_svg" fill-rule="evenodd" width="16" height="16">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                        </path>
+                    </svg>
+                    Github:Nefertarii
+                </a>
+            </div>
+            <div class="CN_bei_an">
+                <a href="https://beian.miit.gov.cn/" target="_blank">
+                    湘ICP备2021014961号-1
+                </a>
+            </div>
+        </Footer>
+	</body>
+	<script src="Tapgame.js"></script>
+</html>

@@ -21,15 +21,13 @@
 	--bg-red: #ff1a1a;
 	--bg-border: #eaecef;
 	--bt-bg-blue: #33518b;
-	--bt-bg-hover-blue: #0055AA; }
-.element::-webkit-scrollbar { width: 0 !important }
+	--bt-bg-hover-blue: #0055AA;
 
-html,body {
-    overflow-x: hidden;
-    width: 100%;
-    box-sizing: border-box;
+}
+
+body {
 	background-color: #070B21;
-	background-image: url(Image/svg/glow.svg);
+	background-image: url(../Image/svg/glow.svg);
 	background-size: 180%;
 	background-position-x: -31.25rem;
 	background-position-y: -10rem; }
@@ -40,23 +38,40 @@ Header {
 	text-align: center;
     padding-top: 1rem;
 	color: var(--font-light); }
+Main {
+    width: 100%; }
 Footer {
     width: 100%;
     height: 5rem;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     color: var(--font); }
+
 button {
     text-align: center; }
 
-a:link,a:visited {
+a {
 	color: var(--font-light);
 	text-decoration: none; }
-a:hover,a:active {
+a:hover {
+	color: var(--white);
+	text-decoration: none; }
+a:active {
+	color: var(--white);
+	text-decoration: none; }
+a:visited {
 	color: var(--white);
 	text-decoration: none; }
 
 .Empty {
 	margin-top: 0.7rem;
 	margin-bottom: 0.7rem; }
+
+
+
+
+
 
 #Follow_left_admission {
     animation: trans 0.6s linear;
@@ -82,32 +97,40 @@ a:hover,a:active {
 	border-radius: 0.25rem;
 	overflow: hidden;
 	transition: height 1s; }
-.Follow_left_Login_fail {
-    height: 70%;
-	display: block; }
-.Follow_left_Login_success {
-    height: 70%;
-	display: none; }
-
 .Follow_left:hover {
 	height: 25rem; }
 .Follow_left_logo {
 	height: 4rem;
 	width: 4rem;
 	border-radius: 50%;
-	background-image: url(Image/png/logo_64.png);
+	background-image: url(../Image/png/logo_64.png);
 	margin: auto;
 	overflow: hidden; }
-
 .Follow_left_footer {
-    margin-top: 1rem;
+    position: absolute;
 	width: 100%;
-    height: 10%; }
-.Follow_left_today_num {
-    color: var(--font-blue); }
-.Follow_left_yesterday_num {
-    color: var(--font-blue); }
-    
+	bottom: 0;
+    left: 0; }
+.Yesterday {
+	text-align: center; }
+.Yesterday_num {
+    color: var(--font-blue);
+	text-align: center; }
+.Before_yesterday {
+	text-align: center; }
+.Before_yesterday_num {
+    color: var(--font-blue);
+	text-align: center; 
+	margin-bottom: 1rem; }
+
+
+
+#Login_fail {
+	display: block; }
+#Login_success {
+	display: none;
+	margin-bottom: 7rem; }
+
 
 .input_name {
 	width: 80%;
@@ -145,90 +168,7 @@ a:hover,a:active {
     box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
 	border-radius: 0.25rem;
 	color: var(--font-light); }
-.Card {
-    border: var(--boxshadow-white) solid 1px;
-    margin: auto;
-    margin-top: 3%;
-    margin-bottom: 3%;
-    box-shadow: var(--boxshadow-white) 0px 0px 5px 2px;
-	border-radius: 0.25rem;
-    min-height: 6rem;
-    width: 90%;
-	max-width: 1000px; }
-.Card_header {
-    position:relative;
-    box-sizing: border-box;
-    padding: 0.8rem;
-    width: 100%;
-    height: 48px;
-    text-align: left; }
-.Card_image {
-    position: absolute;
-    border-radius: 10%;
-    height: 32px;
-    width: 32px;
-    background-image: url(Image/png/Cat1_32.png);
-    display: inline-block; }
-.Card_tittle {
-    margin-left: 40px;
-    display: inline-block;
-    text-align: top;
-    font-size: large;
-    font-weight: 600;
-    line-height: 32px; }
-.Card_share {
-    float:right; }
 
-
-.Card_main {
-    box-sizing: border-box;
-    width: 100%;
-    padding: 0.8rem 1.2rem 0;
-    text-align: left; }
-
-
-.Card_footer {
-    box-sizing: border-box;
-    display: flex;
-    width: 100%;
-    height: 48px;
-    padding: 0.8rem;
-    text-align: left;
-    align-items: center; }
-.Card_button {
-    height: 28px;
-    border: 0px solid;
-	border-radius: 0.3125rem;
-	color: var(--font);
-    background-color: var(--bt-bg-blue); }
-.Card_button:hover {
-    cursor: pointer;
-    background-color: var(--bt-bg-hover-blue); }
-.Card_button:focus {
-    cursor: pointer;
-    background-color: var(--bt-bg-hover-blue); }
-.Card_svg {
-    position: relative;
-    top: 2px;
-    fill: var(--bg-gray) }
-.Card_voteup {  
-    float: left;
-    display: inline;
-    margin-right: 5px; }
-.Card_font {
-    display: inline;
-    line-height: 2px;
-    margin-right: 5px; }
-.Card_voteup_nums {
-    display: inline; }
-.Card_votedown {
-    float: left;
-    margin-right: 10px; }
-.Card_comment {
-    float: left;
-    margin-right: 10px; }
-.Card_into {
-    float: right; }
 
 
 .Github_link {
@@ -246,4 +186,3 @@ a:hover,a:active {
     width: 100%;
     text-align: center;
     color: var(--font-light); }
-
