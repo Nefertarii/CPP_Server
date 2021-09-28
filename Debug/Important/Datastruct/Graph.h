@@ -49,7 +49,7 @@ struct Vertex {
     V data;
     int indegree;//定点入度数
     int outdegree;//顶点出度数
-    Vstatus status;;//顶点状态信息
+    Vstatus status;//顶点状态信息
     int dtime;//顶点时间标签 被发现
     int ftime;//顶点时间标签 被访问完毕
     int parent;//顶点父节点信息
@@ -89,7 +89,7 @@ private:
     virtual int priority(int i) = 0;
     virtual int indegree(int i) = 0;
     virtual int outdegree(int i) = 0;
-    virtual void exists(int i, int j) = 0;//两个顶点之间是否存在一条连边
+    virtual bool exists(int i, int j) = 0;//两个顶点之间是否存在一条连边
     virtual void reset() {
         for (int i = 0;i != n;i++) {
             status(i) = UNDISCOVERED;
@@ -110,7 +110,9 @@ template <typename TV, typename TE>
 class MatrixGraph : public Graph<TV, TE> {
 private:
     std::vector<Vertex<TV>> V;
-    std::vector<std::vector<Edge<TE>>> E;
+    std::vector<std::vector<Edge<TE>*>> E;
+    int n;//node nums
+    int e;//edge nums
 public:
     //void status(int i, int j) = 0;//设置/查询边状态
     TV& Vertex(int i) { return V[i].data; }
@@ -121,6 +123,22 @@ public:
     int Priority(int i) { return V[i].priority; }
     int Indegree(int i) { return V[i].indegree; }
     int Outdegree(int i) { return V[i].outdegree; }
+    bool exist(int i, int j) {
+        if (i <= 0)
+            return false;
+        if (n < i)
+            return false;
+        if (j <= 0)
+            return false;
+        if (n < j)
+            return false;
+        if (E[i][j] == nullptr)
+            return false;
+        return true;
+    }
+    TE& Edge(int i, int j) { return E[i][j]->data; }//边数据
+    Estatus& Status(int i, int j) { return E[i][j]->status; }//边状态
+    int& Weight(int i, int j) { return E[i][j]->weight; }//边权重
     int Next_Neighbor(int i, int j) {
         while ((-1 < j) && !exists(i, --j))
             ;
@@ -130,13 +148,56 @@ public:
         int n = 999;//sentinal;
         return Next_Neighbor(i, n);
     }
+    void Insert(TE const& edge, int w, int i, int j) {
+        if (exists(i, j)) return;
+        E[i][j] = new Edge<TE>(edge, w);
+        e++;
+        V[i].outdegree += 1;
+        V[j].indegree += 1;
+    }
+    TE Remove(int i, int j) {
+        TE ebak = Edge(i, j);
+        delete E[i][j];
+        E[i][j] = nullptr;
+        e -= 1;
+        V[i].outdegree -= 1;
+        V[j].indegree -= 1;
+        return ebak;
+    }
+    int Insert(TV const& vertex) {
+        for (int j = 0;j != n;j++) {
+            E[j].Insert(nullptr);
+            n += 1;
+        }
+        E.insert(std::vector<Edge<TE>*>(n, n, nullptr));
+        return V.insert(Vertex<TV>(vertex));
+    }
+    TV Remove(int i) {
+        for (int j = 0; j != n; j++) {
+            if (exists(i, j)) {
+                delete E[i][j];
+                E[i][j] = nullptr;
+                V[j].indegree -= 1;
+            }
+            if (exists(j, i)) {
+                delete E[j].Remove(i);
+                E[j] = nullptr;
+                V[j].outdegree -= 1;
+            }
+        }
+        TV vbak = vertex(i);
+        V.remove(i);
+        return vbak;
+    }
+    
     MatrixGraph() { n = e = 0; }
     ~MatrixGraph() {
-        /*for (int i = 0;i != n;i++) {
+        for (int i = 0;i != n;i++) {
             for (int j = 0;j != n;j++) {
                 delete E[i][j];
+                E[i][j] = nullptr;
             }
-        }*/
+        }
     }
 };
 
