@@ -2,6 +2,7 @@
 #define GRAPH_H
 
 #include <vector>
+#include <queue>
 
 /*
  * G=(V, E)
@@ -27,8 +28,8 @@
  * 如果有向图不是强连通但它的基础图是连通的称弱连通的(weakly connected)
  * 完全图(complete graph)是指每一对顶点间都存在一条边的图
  *
- * 邻接矩阵n*n n个顶点 (i,j)表示顶点之间的关系 可以表示带权图
- * 关联矩阵n*e n行e边 (i,j)表示顶点之间的关联关系
+ * 邻接矩阵n*node_nums n个顶点 (i,j)表示顶点之间的关系 可以表示带权图
+ * 关联矩阵n*edge_nums n行e边 (i,j)表示顶点之间的关联关系
  */
 
 enum Vstatus {
@@ -44,9 +45,9 @@ enum Estatus {
     BACKWARD,
 };
 
-template <typename V>
+template <typename T>
 struct Vertex {
-    V data;
+    T data;
     int indegree;//定点入度数
     int outdegree;//顶点出度数
     Vstatus status;//顶点状态信息
@@ -54,8 +55,8 @@ struct Vertex {
     int ftime;//顶点时间标签 被访问完毕
     int parent;//顶点父节点信息
     int priority;//顶点优先级数
-    Vertex(V const& d) {
-        data(d);
+    Vertex(T const& d) {
+        data = d;
         indegree = 0;
         outdegree = 0;
         status = UNDISCOVERED;
@@ -66,134 +67,151 @@ struct Vertex {
     }
 };
 
-template <typename E>
+template <typename T>
 struct Edge {
-    E data;
+    T data;
     int weight;//边权重
     Estatus status;
-    Edge(E const& d, int w) {
+    Edge(T const& d, int w) {
         data = d;
         weight = w;
         status = UNDETERMINED;
     }
 };
 
+/*
 template <typename V, typename E>
 struct Graph {
-private:
-    virtual int status(int i) = 0;
-    virtual void status(int i, int j) = 0;//设置/查询边状态
-    virtual int dTime(int i) = 0;
-    virtual int fTime(int i) = 0;
-    virtual int parent(int i) = 0;
-    virtual int priority(int i) = 0;
-    virtual int indegree(int i) = 0;
-    virtual int outdegree(int i) = 0;
-    virtual bool exists(int i, int j) = 0;//两个顶点之间是否存在一条连边
-    virtual void reset() {
-        for (int i = 0;i != n;i++) {
-            status(i) = UNDISCOVERED;
-            dTime(i) = fTime(i) = -1;
-            parent(i) = -1;
-            priority(i) = __INT_MAX__;
-            for (int j = 0;j != n;i++) {
-                if (exists(i, j))
-                    status(i, j) = UNDISCOVERED;
-            }
-        }
-    }
+public:
+    virtual int Status(int i) = 0;
+    virtual void Status(int i, int j) = 0;//设置/查询边状态
+    virtual int Dtime(int i) = 0;
+    virtual int Ftime(int i) = 0;
+    virtual int Parent(int i) = 0;
+    virtual int Priority(int i) = 0;
+    virtual int Indegree(int i) = 0;
+    virtual int Outdegree(int i) = 0;
+    virtual bool Exists(int i, int j) = 0;//两个顶点之间是否存在一条连边
+
 public:
     ;
 };
+*/
 
-template <typename TV, typename TE>
-class MatrixGraph : public Graph<TV, TE> {
-private:
-    std::vector<Vertex<TV>> V;
-    std::vector<std::vector<Edge<TE>*>> E;
-    int n;//node nums
-    int e;//edge nums
+template <typename VERTEX, typename EDGE>
+class MatrixGraph {
 public:
-    //void status(int i, int j) = 0;//设置/查询边状态
-    TV& Vertex(int i) { return V[i].data; }
-    int Status(int i) { return V[i].status; }
-    int Dtime(int i) { return V[i].dtime; }
-    int Ftime(int i) { return V[i].ftime; }
-    int Parent(int i) { return V[i].parent; }
-    int Priority(int i) { return V[i].priority; }
-    int Indegree(int i) { return V[i].indegree; }
-    int Outdegree(int i) { return V[i].outdegree; }
-    bool exist(int i, int j) {
+    std::vector<Vertex<VERTEX>> V;
+    std::vector<std::vector<Edge<EDGE>*>> E;
+    int node_nums;
+    int edge_nums;
+    void Reset() {
+        for (int i = 0;i != node_nums;i++) {
+            Status(i) = UNDISCOVERED;
+            Dtime(i) = -1;
+            Ftime(i) = -1;
+            Parent(i) = -1;
+            Priority(i) = __INT_MAX__;
+            for (int j = 0;j != node_nums;i++) {
+                if (Exist(i, j))
+                    Status(i, j) = UNDETERMINED;
+            }
+        }
+    }
+    VERTEX& VertexData(int i) { return V[i].data; }
+    EDGE& EdgeData(int i, int j) { return E[i][j]->data; }//边数据
+    bool Exist(int i, int j) {
         if (i <= 0)
             return false;
-        if (n < i)
+        if (node_nums < i)
             return false;
         if (j <= 0)
             return false;
-        if (n < j)
+        if (node_nums < j)
             return false;
         if (E[i][j] == nullptr)
             return false;
         return true;
     }
-    TE& Edge(int i, int j) { return E[i][j]->data; }//边数据
+    Vstatus& Status(int i) { return V[i].status; }
+    int& Dtime(int i) { return V[i].dtime; }
+    int& Ftime(int i) { return V[i].ftime; }
+    int& Parent(int i) { return V[i].parent; }
+    int& Priority(int i) { return V[i].priority; }
+    int Indegree(int i) { return V[i].indegree; }
+    int Outdegree(int i) { return V[i].outdegree; }
     Estatus& Status(int i, int j) { return E[i][j]->status; }//边状态
     int& Weight(int i, int j) { return E[i][j]->weight; }//边权重
-    int Next_Neighbor(int i, int j) {
-        while ((-1 < j) && !exists(i, --j))
+    int NextNeighbor(int i, int j) {
+        while ((-1 < j) && !Exist(i, --j))
             ;
         return j;
     }
-    int First_Neighbor(int i) {
-        int n = 999;//sentinal;
-        return Next_Neighbor(i, n);
+    int FirstNeighbor(int i) {
+        int node_nums = 999;//sentinal;
+        return NextNeighbor(i, node_nums);
     }
-    void Insert(TE const& edge, int w, int i, int j) {
-        if (exists(i, j)) return;
-        E[i][j] = new Edge<TE>(edge, w);
-        e++;
+    void Insert(EDGE const& edge, int w, int i, int j) {
+        if (Exist(i, j)) return;
+        E[i][j] = new Edge<EDGE>(edge, w);
+        edge_nums++;
         V[i].outdegree += 1;
         V[j].indegree += 1;
     }
-    TE Remove(int i, int j) {
-        TE ebak = Edge(i, j);
+    EDGE Remove(int i, int j) {
+        EDGE tmp_edge = Edge(i, j);
         delete E[i][j];
         E[i][j] = nullptr;
-        e -= 1;
+        edge_nums -= 1;
         V[i].outdegree -= 1;
         V[j].indegree -= 1;
-        return ebak;
+        return tmp_edge;
     }
-    int Insert(TV const& vertex) {
-        for (int j = 0;j != n;j++) {
+    int Insert(VERTEX const& vertex) {
+        for (int j = 0;j != node_nums;j++) {
             E[j].Insert(nullptr);
-            n += 1;
+            node_nums += 1;
         }
-        E.insert(std::vector<Edge<TE>*>(n, n, nullptr));
-        return V.insert(Vertex<TV>(vertex));
+        E.insert(std::vector<Edge<EDGE>*>(node_nums, node_nums, nullptr));
+        return V.insert(Vertex<VERTEX>(vertex));
     }
-    TV Remove(int i) {
-        for (int j = 0; j != n; j++) {
-            if (exists(i, j)) {
+    VERTEX Remove(int i) {
+        for (int j = 0; j != node_nums; j++) {
+            if (Exist(i, j)) {
                 delete E[i][j];
                 E[i][j] = nullptr;
                 V[j].indegree -= 1;
             }
-            if (exists(j, i)) {
+            if (Exist(j, i)) {
                 delete E[j].Remove(i);
                 E[j] = nullptr;
                 V[j].outdegree -= 1;
             }
         }
-        TV vbak = vertex(i);
+        VERTEX tmp_vertex = V(i);
         V.remove(i);
-        return vbak;
+        return tmp_vertex;
     }
-    
-    MatrixGraph() { n = e = 0; }
+public:
+    MatrixGraph() { node_nums = edge_nums = 0; }
+    template <typename T>
+    BreadthFirstSearch(T v, int& clock) {//BFS
+        std::queue<T> Q;
+        Status(v) = DISCOVERED;
+        Q.push(v);
+        while (!Q.empty()) {
+            v = Q.top();
+            Dtime(v) = ++clock;
+            for (int i = FirstNeighbor(i);i != -1;i = NextNeighbor(v, i)) {
+                ;
+            }
+            Status(v) = VISITED;
+        }
+        
+    }
     ~MatrixGraph() {
-        for (int i = 0;i != n;i++) {
-            for (int j = 0;j != n;j++) {
+        for (int i = 0;i != node_nums;i++) {
+            for (int j = 0;j != node_nums;j++) {
                 delete E[i][j];
                 E[i][j] = nullptr;
             }
