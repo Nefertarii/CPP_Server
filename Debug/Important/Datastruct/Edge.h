@@ -2,10 +2,10 @@
 #define EDGE_H_
 
 enum Estatus {
-    UNDETERMINED,
-    TREE,
-    CROSS,
-    FORWARD,
+    UNDETERMINED,   //待定
+    TREE,           //树边类型
+    CROSS,          //跨边类型
+    FORWARD,        
     BACKWARD,
 };
 

@@ -23,7 +23,8 @@ public:
     void InsertVertex(VERTEX const& data_);
     Edge<EDGE> RemoveEdge(int i, int j);
     Vertex<VERTEX> RemoveVertex(int i);
-    void BreadthFirstSearch(VERTEX index, int& clock);
+    void BreadthFirstSearch(VERTEX v, int& clock);
+    void BFS(int start_vertex);
     MatrixGraph();
     ~MatrixGraph(){}
 };
@@ -132,19 +133,37 @@ MatrixGraph<VERTEX, EDGE>::MatrixGraph() {
 }
 
 template <typename VERTEX, typename EDGE>
-void MatrixGraph<VERTEX, EDGE>::BreadthFirstSearch(VERTEX index, int& clock)  {//BFS
+void MatrixGraph<VERTEX, EDGE>::BreadthFirstSearch(VERTEX v, int& clock)  {//BFS
     std::queue<VERTEX> queue;
-    vertex_vec[index].status = DISCOVERED;
-    queue.push(index);
+    vertex_vec[v].status = DISCOVERED;
+    queue.push(v);
     while (!queue.empty()) {
-        index = queue.top();
+        v = queue.top();
         vertex_vec[v].dtime = ++clock;
-        for (int i = FirstNeighbor(i);i != -1;i = NextNeighbor(v, i)) {
-            ;//func
+        for (int u = FirstNeighbor(u);u != -1;u = NextNeighbor(v, u)) { //v的邻居u
+            if (vertex_vec[u].status == UNDISCOVERED) {
+                vertex_vec[u].status = DISCOVERED;
+                queue.push(u);
+                edge_vec[v, u].status = TREE;
+                vertex_vec[u].parent = vertex_vec[v];
+            } else {
+                edge_vec[v, u].status = CROSS;
+            }
+            vertex_vec[v].status = VISITED;
         }
         vertex_vec[v].status = VISITED;
     }
 }
 
+template <typename VERTEX, typename EDGE>
+void MatrixGraph<VERTEX, EDGE>::BFS(int start_vertex) {
+    int clock = 0;
+    int vertex = start_vertex;
+    do {
+        if (vertex_vec[vertex].status == UNDISCOVERED) {
+            BreadthFirstSearch(vertex, clock);
+        }
+    } while (start_vertex != (vertex = (++v % nodes)));
+}
 
 #endif  
