@@ -23,10 +23,11 @@ public:
     void InsertVertex(VERTEX const& data_);
     Edge<EDGE> RemoveEdge(int i, int j);
     Vertex<VERTEX> RemoveVertex(int i);
-    void BreadthFirstSearch(VERTEX v, int& clock);
+    void BreadthFirstSearch(int v, int& clock);
     void BFS(int start_vertex);
+    void DepthFirstSearch(int v, int& clock);
     MatrixGraph();
-    ~MatrixGraph(){}
+    ~MatrixGraph() {}
 };
 
 template <typename VERTEX, typename EDGE>
@@ -106,7 +107,7 @@ void MatrixGraph<VERTEX, EDGE>::InsertVertex(VERTEX const& data_) {
         (int)(matrix_size *= 1.5);
         MatrixResize();
     }
-} 
+}
 
 template <typename VERTEX, typename EDGE>
 Edge<EDGE> MatrixGraph<VERTEX, EDGE>::RemoveEdge(int i, int j) {
@@ -133,8 +134,8 @@ MatrixGraph<VERTEX, EDGE>::MatrixGraph() {
 }
 
 template <typename VERTEX, typename EDGE>
-void MatrixGraph<VERTEX, EDGE>::BreadthFirstSearch(VERTEX v, int& clock)  {//BFS
-    std::queue<VERTEX> queue;
+void MatrixGraph<VERTEX, EDGE>::BreadthFirstSearch(int v, int& clock) {//BFS
+    std::queue<int> queue;
     vertex_vec[v].status = DISCOVERED;
     queue.push(v);
     while (!queue.empty()) {
@@ -165,5 +166,35 @@ void MatrixGraph<VERTEX, EDGE>::BFS(int start_vertex) {
         }
     } while (start_vertex != (vertex = (++v % nodes)));
 }
+
+template <typename VERTEX, typename EDGE>
+void MatrixGraph<VERTEX, EDGE>::DepthFirstSearch(int v, int& clock) {//DFS
+    vertex_vec[v].dtime = ++clock;
+    vertex_vec[v].status = DISCOVERED;
+    for (int u = FirstNeighbor(v); u != -1;i = NextNeighbor(v, u)) {
+        switch (vertex_vec[u].status) {
+        case UNDISCOVERED: {
+            edge_vec[v][u] = TREE;
+            vertex_vec[u].parent = vertex_vec[v];
+            DepthFirstSearch(u, clock);
+            break;
+        }
+        case DISCOVERED: {
+            edge_vec[v][u] = BACKWARD;
+            break;
+        }
+        default: {
+            if (vertex_vec[v].dtime < vertex_vec[u].dtime)
+                edge_vec[v][u] = FORWARD;
+            else
+                edge_vec[v][u] = CROSS;
+            break;
+        }
+        }
+    }
+    vertex_vec[v].status = VISITED;
+    vertex_vec[v].ftime = ++clock;
+}
+
 
 #endif  

@@ -2,11 +2,11 @@
 #define EDGE_H_
 
 enum Estatus {
-    UNDETERMINED,   //待定
+    UNDETERMINED,   //待定类型
     TREE,           //树边类型
-    CROSS,          //跨边类型
-    FORWARD,        
-    BACKWARD,
+    CROSS,          //跨越边类型
+    FORWARD,        //前向边类型
+    BACKWARD,       //回向边类型
 };
 
 template <typename T>
