@@ -190,7 +190,7 @@ void MatrixGraph<VERTEX, EDGE>::DepthFirstSearch(int v, int& clock) {//DFS
                 edge_vec[v][u] = CROSS;
             break;
         }
-        }
+        }// BFS/DFS vertex visit maybe have problem
     }
     vertex_vec[v].status = VISITED;
     vertex_vec[v].ftime = ++clock;
