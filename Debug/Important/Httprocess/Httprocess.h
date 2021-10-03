@@ -15,7 +15,6 @@ public:
     void SetLog(Log* log, size_t buffer_size);
     void SetReadmax(size_t readmax_) { readmax = readmax_; }
     void SetDocumentRoot(std::string document_root_) { document_root = document_root_; }
-
     std::string StrHttpState(int codenum);
     std::string FileType(std::string filename);
     void CreateResponeHead(std::string* responehead, std::string filetype, int state, int bodylength);
@@ -122,70 +121,18 @@ int Http_Process::GETParse(std::string readbuf, std::string* filename, Filestate
 
 int Http_Process::POSTParse(std::string request, std::string* post_type, std::string* post_data) { //return POST request type and date
     //Get POST type
-    std::string type = Substr(request, 5, readmax, ' ');
-    type = Substr_Revers(type, 30, '/');
-    if (type == "-1" || type == "0") {
-        return -1;
-    }
+    size_t index = request.find("Content-Length:");
+    //"Conte nt-Le ngth:&nbsp"
+    std::string length = Substr(request, index + 16, readmax, '\n');
+    size_t content_size = std::stoul(length);
+    std::string type = Substr(request, 6, readmax, ' ');
     //Get readbuf data
-    std::string data = Substr_Revers(request, readmax, '\n');
-    if (data == "-1" || data == "0") {
-        return -1;
-    }
+    std::string data = request.substr((request.length() - content_size), content_size);
+    if (data.size() == 0) { return -1; }
     //Handler post request
-    std::string log;
-    switch (POSTChoose(type)) {
-    case POSTLogin: {
-        //Login
-        log = "Login:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTReset: {
-        //Reset password
-        log = "Reset password:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTRegister: {
-        //Register
-        log = "Register:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTVoteup: {
-        //Vote up
-        log = "Vote up:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTVotedown: {
-        //Vote down
-        log = "Vote down:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTComment: {
-        //Comment
-        log = "Comment:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTContent: {
-        //Content
-        log = "Content:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTReadcount: {
-        //Readcount add
-        log = "Readcount add:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTVerifi: {
-        //Verification code
-        log = "Verification:" + data;
-        this_log->Infolog(log);
-        break;
-    } default: {
-        //Error type
-        break;
-    }
-    } //switch end
-
+    POSTChoose(type);
+    std::string log = type + ":" + data;
+    this_log->Infolog(log);
     *post_type = type;
     *post_data = data;
     return 0;

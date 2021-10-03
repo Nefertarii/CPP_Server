@@ -111,3 +111,179 @@ INFO: Close 4 ok.	 Data:1633270818102
 INFO: Close 3 ok.	 Data:1633270818102
 INFO: Server total run time:25 sec	 Data:1633270818102
 INFO: Server is close now.	 Data:1633270818102
+
+INFO: Http handler init complite.	 Data:1633275742764
+INFO: Server initialization complete.	 Data:1633275742764
+INFO: Socket open ok	 Data:1633275742764
+INFO: Set reuse address ok.	 Data:1633275742764
+INFO: Set reuse port ok.	 Data:1633275742764
+INFO: Bind set ok	 Data:1633275742764
+INFO: Listen set, fd:3.	 Data:1633275742764
+INFO: Epoll set, fd:4.	 Data:1633275742764
+WARNING: Server closeing.	 Data:1633275743565
+INFO: Close 4 ok.	 Data:1633275743565
+INFO: Close 3 ok.	 Data:1633275743565
+INFO: Server total run time:1 sec	 Data:1633275743565
+INFO: Server is close now.	 Data:1633275743565
+
+INFO: Http handler init complite.	 Data:1633275758949
+INFO: Server initialization complete.	 Data:1633275758949
+INFO: Socket open ok	 Data:1633275758949
+INFO: Set reuse address ok.	 Data:1633275758949
+INFO: Set reuse port ok.	 Data:1633275758949
+INFO: Bind set ok	 Data:1633275758949
+INFO: Listen set, fd:3.	 Data:1633275758949
+INFO: Epoll set, fd:4.	 Data:1633275758949
+INFO: Get accept from 127.0.0.1	 Data:1633275766824
+INFO: Client IP:127.0.0.1:34126	 Data:1633275766824
+INFO: epoll add, fd:5.	 Data:1633275766824
+INFO: Get accept from 127.0.0.1	 Data:1633275766824
+INFO: Client IP:127.0.0.1:34128	 Data:1633275766824
+INFO: epoll add, fd:6.	 Data:1633275766824
+INFO: Read from 5	 Data:1633275766857
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.html filefd: 7 success.	 Data:1633275766857
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.html.	 Data:1633275766857
+INFO: Write to: 5	 Data:1633275766857
+INFO: Write to: 5 success.	 Data:1633275766857
+INFO: Read from 5	 Data:1633275767015
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.css filefd: 8 success.	 Data:1633275767015
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.css.	 Data:1633275767015
+INFO: Write to: 5	 Data:1633275767015
+INFO: Write to: 5 success.	 Data:1633275767016
+INFO: Read from 5	 Data:1633275767024
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.js filefd: 9 success.	 Data:1633275767024
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.js.	 Data:1633275767024
+INFO: Write to: 5	 Data:1633275767024
+INFO: Write to: 5 success.	 Data:1633275767024
+INFO: Read from 6	 Data:1633275767040
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg filefd: 10 success.	 Data:1633275767040
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg.	 Data:1633275767041
+INFO: Write to: 6	 Data:1633275767041
+INFO: Write to: 6 success.	 Data:1633275767041
+INFO: Read from 6	 Data:1633275767048
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png filefd: 11 success.	 Data:1633275767048
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png.	 Data:1633275767048
+INFO: Write to: 6	 Data:1633275767048
+INFO: Write to: 6 success.	 Data:1633275767048
+INFO: Read from 6	 Data:1633275767068
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/Cat1_32.png filefd: 12 success.	 Data:1633275767068
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/Cat1_32.png.	 Data:1633275767068
+INFO: Write to: 6	 Data:1633275767068
+INFO: Write to: 6 success.	 Data:1633275767068
+INFO: Read from 5	 Data:1633275770835
+INFO: Request type:POST, Bad requeset.	 Data:1633275770835
+WARNING: send bad request 403.	 Data:1633275770835
+INFO: Write to: 5	 Data:1633275770835
+INFO: Write to: 5 success.	 Data:1633275770835
+WARNING: Server closeing.	 Data:1633275824230
+INFO: Epoll del, fd:5.	 Data:1633275824230
+INFO: Close 5 ok.	 Data:1633275824230
+INFO: Epoll del, fd:6.	 Data:1633275824230
+INFO: Close 6 ok.	 Data:1633275824230
+INFO: Close 4 ok.	 Data:1633275824230
+INFO: Close 3 ok.	 Data:1633275824230
+INFO: Server total run time:66 sec	 Data:1633275824230
+INFO: Server is close now.	 Data:1633275824231
+
+INFO: Http handler init complite.	 Data:1633275829742
+INFO: Server initialization complete.	 Data:1633275829742
+INFO: Socket open ok	 Data:1633275829742
+INFO: Set reuse address ok.	 Data:1633275829742
+INFO: Set reuse port ok.	 Data:1633275829742
+INFO: Bind set ok	 Data:1633275829742
+INFO: Listen set, fd:3.	 Data:1633275829742
+INFO: Epoll set, fd:4.	 Data:1633275829742
+INFO: Get accept from 127.0.0.1	 Data:1633275833306
+INFO: Client IP:127.0.0.1:34144	 Data:1633275833306
+INFO: epoll add, fd:5.	 Data:1633275833306
+INFO: Read from 5	 Data:1633275833306
+INFO: Request type:POST, Bad requeset.	 Data:1633275833306
+WARNING: send bad request 403.	 Data:1633275833306
+INFO: Write to: 5	 Data:1633275833306
+INFO: Write to: 5 success.	 Data:1633275833306
+WARNING: Server closeing.	 Data:1633275886862
+INFO: Epoll del, fd:5.	 Data:1633275886862
+INFO: Close 5 ok.	 Data:1633275886862
+INFO: Close 4 ok.	 Data:1633275886862
+INFO: Close 3 ok.	 Data:1633275886862
+INFO: Server total run time:57 sec	 Data:1633275886862
+INFO: Server is close now.	 Data:1633275886862
+
+INFO: Http handler init complite.	 Data:1633278079106
+INFO: Server initialization complete.	 Data:1633278079106
+INFO: Socket open ok	 Data:1633278079106
+INFO: Set reuse address ok.	 Data:1633278079106
+INFO: Set reuse port ok.	 Data:1633278079106
+INFO: Bind set ok	 Data:1633278079106
+INFO: Listen set, fd:3.	 Data:1633278079106
+INFO: Epoll set, fd:4.	 Data:1633278079106
+INFO: Get accept from 127.0.0.1	 Data:1633278082678
+INFO: Client IP:127.0.0.1:34368	 Data:1633278082678
+INFO: epoll add, fd:5.	 Data:1633278082678
+INFO: Read from 5	 Data:1633278082678
+INFO: Request type:POST, Bad requeset.	 Data:1633278082678
+WARNING: send bad request 403.	 Data:1633278082678
+INFO: Write to: 5	 Data:1633278082678
+INFO: Write to: 5 success.	 Data:1633278082678
+WARNING: Server closeing.	 Data:1633278093190
+INFO: Epoll del, fd:5.	 Data:1633278093190
+INFO: Close 5 ok.	 Data:1633278093190
+INFO: Close 4 ok.	 Data:1633278093190
+INFO: Close 3 ok.	 Data:1633278093190
+INFO: Server total run time:14 sec	 Data:1633278093190
+INFO: Server is close now.	 Data:1633278093190
+
+INFO: Http handler init complite.	 Data:1633278217865
+INFO: Server initialization complete.	 Data:1633278217865
+INFO: Socket open ok	 Data:1633278217865
+INFO: Set reuse address ok.	 Data:1633278217865
+INFO: Set reuse port ok.	 Data:1633278217865
+INFO: Bind set ok	 Data:1633278217865
+INFO: Listen set, fd:3.	 Data:1633278217865
+INFO: Epoll set, fd:4.	 Data:1633278217865
+INFO: Get accept from 127.0.0.1	 Data:1633278220862
+INFO: Client IP:127.0.0.1:34394	 Data:1633278220862
+INFO: epoll add, fd:5.	 Data:1633278220862
+INFO: Read from 5	 Data:1633278220862
+INFO: Login:	 Data:1633278220863
+INFO: Request type:POST. Request type:login.Data:.	 Data:1633278220863
+WARNING: send bad request 403.	 Data:1633278220863
+INFO: Write to: 5	 Data:1633278220863
+INFO: Write to: 5 success.	 Data:1633278220864
+WARNING: Server closeing.	 Data:1633278255204
+INFO: Epoll del, fd:5.	 Data:1633278255204
+INFO: Close 5 ok.	 Data:1633278255205
+INFO: Close 4 ok.	 Data:1633278255205
+INFO: Close 3 ok.	 Data:1633278255205
+INFO: Server total run time:38 sec	 Data:1633278255205
+INFO: Server is close now.	 Data:1633278255205
+
+INFO: Http handler init complite.	 Data:1633278263450
+INFO: Server initialization complete.	 Data:1633278263450
+INFO: Socket open ok	 Data:1633278263450
+INFO: Set reuse address ok.	 Data:1633278263450
+INFO: Set reuse port ok.	 Data:1633278263450
+INFO: Bind set ok	 Data:1633278263450
+INFO: Listen set, fd:3.	 Data:1633278263450
+INFO: Epoll set, fd:4.	 Data:1633278263450
+INFO: Get accept from 127.0.0.1	 Data:1633278269645
+INFO: Client IP:127.0.0.1:34410	 Data:1633278269645
+INFO: epoll add, fd:5.	 Data:1633278269645
+INFO: Read from 5	 Data:1633278269645
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.css filefd: 6 success.	 Data:1633278269645
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.css.	 Data:1633278269645
+INFO: Write to: 5	 Data:1633278269645
+INFO: Write to: 5 success.	 Data:1633278269645
+INFO: Read from 5	 Data:1633278275273
+INFO: Login:123&123	 Data:1633278275274
+INFO: Request type:POST. Request type:login.Data:123&123.	 Data:1633278275274
+WARNING: send bad request 403.	 Data:1633278275274
+INFO: Write to: 5	 Data:1633278275274
+INFO: Write to: 5 success.	 Data:1633278275274
+WARNING: Server closeing.	 Data:1633278293321
+INFO: Epoll del, fd:5.	 Data:1633278293321
+INFO: Close 5 ok.	 Data:1633278293321
+INFO: Close 4 ok.	 Data:1633278293321
+INFO: Close 3 ok.	 Data:1633278293321
+INFO: Server total run time:30 sec	 Data:1633278293321
+INFO: Server is close now.	 Data:1633278293321

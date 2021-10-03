@@ -11,13 +11,16 @@ private:
     bool have_upper;
     bool have_connect;
     Socket_Config* socket_config;
+    std::string ip;
+    int port;
     std::string token;
 
 public:
     Socket_Control_Client() = default;
     void SetConfig(Socket_Config* config);
     void SetLog(Log* upper, size_t buffer_size);
-    int SocketConnect(std::string ip, int port);
+    void SetConnect(std::string ip, int port);
+    int SocketConnect();
     int SocketRead(std::string* readbuf);
     int SocketWrite(std::string* message);
     int SocketDisconnect();
@@ -42,7 +45,12 @@ void Socket_Control_Client::SetLog(Log* upper, size_t buffer_size) {
     }
 }
 
-int Socket_Control_Client::SocketConnect(std::string ip, int port) {
+void Socket_Control_Client::SetConnect(std::string ip_, int port_) {
+    ip = ip_;
+    port = port_;
+}
+
+int Socket_Control_Client::SocketConnect() {
     struct sockaddr_in servaddr;
     memset(&servaddr, 0, sizeof(servaddr));
     serverfd = Gsocket::Socket(AF_INET, SOCK_STREAM, 0, this_log);

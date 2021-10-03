@@ -15,7 +15,7 @@ private:
     Http_Respone responectrl;
     void ClientClear();
     int MethodGetParse(Clientinfo* client, std::string readbuf);
-    int MethodPostParse(Clientinfo* client, std::string readbuf);
+    int MethodPostParse(Clientinfo* client, std::string readbuf, std::string* type, std::string* data);
     int SendResponehead(Clientinfo* client);
     int SendResponebody(Clientinfo* client);
     int SendResponefile(Clientinfo* client);
@@ -43,15 +43,15 @@ int HTTP_Handler::MethodGetParse(Clientinfo* client, std::string readbuf) {
     }
 }
 
-int HTTP_Handler::MethodPostParse(Clientinfo* client, std::string readbuf) {
+int HTTP_Handler::MethodPostParse(Clientinfo* client, std::string readbuf,
+                                  std::string* type, std::string* data) {
     std::string log;
-    std::string type, data;
-    if (processctrl.POSTParse(readbuf, &type, &data) < 0) {
+    if (processctrl.POSTParse(readbuf, type, data) < 0) {
         log = "Request type:POST, Bad requeset.";
         this_log->Infolog(log);
         return -1;
     } else {
-        log = "Request type:POST. Request type:" + type + ".Data:" + data + ".";
+        log = "Request type:POST. Request type:" + *type + ".Data:" + *data + ".";
         this_log->Infolog(log);
         return 0;
     }
@@ -87,12 +87,14 @@ std::string HTTP_Handler::RequestParse(Clientinfo* client, std::string readbuf) 
         }
         return "ok";
     } case POST: {
-        if (MethodPostParse(client, readbuf) < 0) {
-            ;
+        std::string type, data;
+        if (MethodPostParse(client, readbuf, &type, &data) < 0) {
+            this_log->Warninglog("send bad request 403.");
+            responectrl.BadRequest403(&client->respone_head);
+            this_log->Errorlog("Bad request type.");
+            return "error";
         }
-        this_log->Warninglog("send bad request 403.");
-        responectrl.BadRequest403(&client->respone_head); // not use post;
-        return "POST";
+        return "post/" + type + "/" + data;
     } default: {
         this_log->Warninglog("send bad request 403.");
         responectrl.BadRequest403(&client->respone_head);

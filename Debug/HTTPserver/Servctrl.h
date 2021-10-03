@@ -76,6 +76,9 @@ Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
         //graph connect control init
         graphctrl.SetLog(&http_server_log, logbuf_size);
         graphctrl.SetConfig(&connect_settings);
+        std::string ip = global_string_settings.find("GraphIP")->second;
+        int port = global_value_settings.find("GraphPort")->second;
+        graphctrl.SetConnect(ip, port);
         
         http_server_log.Infolog("Server initialization complete.");
         init_complite = true;        
@@ -94,6 +97,9 @@ void Server_Control_Epoll::ServerStart() {
     if (listenfd < 0) {
         std::cout << "Server can't create.\n";
         return;
+    }
+    if (graphctrl.SocketConnect() < 0) {
+        std::cout << "Server can't connect graph server.\n";
     }
     struct epoll_event ev, events[server_settings.connect_max];
     ev.events = EPOLLIN | EPOLLET;
@@ -121,9 +127,14 @@ void Server_Control_Epoll::ServerStart() {
             } else if (ev.events & EPOLLIN) {
                 Clientinfo* client = static_cast<Clientinfo*>(ev.data.ptr);
                 std::string readbuf;
-                int result = clientctrl.SocketRead(client->clientfd, &readbuf);
-                if (result == 0) {
-                    std::string requeset = httpctrl.RequestParse(client, readbuf);
+                if (clientctrl.SocketRead(client->clientfd, &readbuf) == 0) {
+                    std::string data = httpctrl.RequestParse(client, readbuf);
+                    if (data.size() > 5) {
+                        //process
+                        //connect graph
+                        //create json
+                        //write
+                    }
                     epollctrl.Epollwrite(client->clientfd, client);
                 } else {
                     ConnectDel(client);
