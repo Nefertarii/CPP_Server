@@ -27,3 +27,87 @@
 
 
 
+
+INFO: Http handler init complite.	 Data:1633270793821
+INFO: Server initialization complete.	 Data:1633270793821
+INFO: Socket open ok	 Data:1633270793822
+INFO: Set reuse address ok.	 Data:1633270793822
+INFO: Set reuse port ok.	 Data:1633270793822
+INFO: Bind set ok	 Data:1633270793822
+INFO: Listen set, fd:3.	 Data:1633270793822
+INFO: Epoll set, fd:4.	 Data:1633270793822
+INFO: Get accept from 127.0.0.1	 Data:1633270798232
+INFO: Client IP:127.0.0.1:34054	 Data:1633270798232
+INFO: epoll add, fd:5.	 Data:1633270798232
+INFO: Read from 5	 Data:1633270798232
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.html filefd: 6 success.	 Data:1633270798232
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.html.	 Data:1633270798232
+INFO: Write to: 5	 Data:1633270798232
+INFO: Write to: 5 success.	 Data:1633270798232
+INFO: Get accept from 127.0.0.1	 Data:1633270798269
+INFO: Client IP:127.0.0.1:34056	 Data:1633270798269
+INFO: epoll add, fd:7.	 Data:1633270798269
+INFO: Read from 5	 Data:1633270798848
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.css filefd: 8 success.	 Data:1633270798848
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.css.	 Data:1633270798848
+INFO: Write to: 5	 Data:1633270798848
+INFO: Write to: 5 success.	 Data:1633270798848
+INFO: Read from 7	 Data:1633270798875
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.js filefd: 9 success.	 Data:1633270798875
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.js.	 Data:1633270798876
+INFO: Write to: 7	 Data:1633270798876
+INFO: Write to: 7 success.	 Data:1633270798876
+INFO: Read from 5	 Data:1633270798922
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg filefd: 10 success.	 Data:1633270798961
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg.	 Data:1633270798961
+INFO: Write to: 5	 Data:1633270798961
+INFO: Write to: 5 success.	 Data:1633270798961
+INFO: Read from 5	 Data:1633270798978
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png filefd: 11 success.	 Data:1633270798989
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png.	 Data:1633270798989
+INFO: Write to: 5	 Data:1633270798989
+INFO: Write to: 5 success.	 Data:1633270798989
+INFO: Read from 7	 Data:1633270799196
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/Cat1_32.png filefd: 12 success.	 Data:1633270799197
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/Cat1_32.png.	 Data:1633270799197
+INFO: Write to: 7	 Data:1633270799197
+INFO: Write to: 7 success.	 Data:1633270799197
+INFO: Read from 7	 Data:1633270799660
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/logo_32.png filefd: 13 success.	 Data:1633270799660
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/logo_32.png.	 Data:1633270799660
+INFO: Write to: 7	 Data:1633270799660
+INFO: Write to: 7 success.	 Data:1633270799660
+INFO: Read from 7	 Data:1633270803706
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Game/Tapgame.html filefd: 14 success.	 Data:1633270803706
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Game/Tapgame.html.	 Data:1633270803706
+INFO: Write to: 7	 Data:1633270803706
+INFO: Write to: 7 success.	 Data:1633270803706
+INFO: Read from 7	 Data:1633270803768
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Game/Tapgame.css filefd: 15 success.	 Data:1633270803768
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Game/Tapgame.css.	 Data:1633270803768
+INFO: Write to: 7	 Data:1633270803768
+INFO: Write to: 7 success.	 Data:1633270803768
+INFO: Read from 5	 Data:1633270803770
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Game/Tapgame.js filefd: 16 success.	 Data:1633270803770
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Game/Tapgame.js.	 Data:1633270803770
+INFO: Write to: 5	 Data:1633270803770
+INFO: Write to: 5 success.	 Data:1633270803770
+INFO: Read from 7	 Data:1633270803792
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg filefd: 17 success.	 Data:1633270803793
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg.	 Data:1633270803793
+INFO: Write to: 7	 Data:1633270803793
+INFO: Write to: 7 success.	 Data:1633270803793
+INFO: Read from 7	 Data:1633270803799
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png filefd: 18 success.	 Data:1633270803799
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png.	 Data:1633270803799
+INFO: Write to: 7	 Data:1633270803799
+INFO: Write to: 7 success.	 Data:1633270803799
+WARNING: Server closeing.	 Data:1633270818102
+INFO: Epoll del, fd:5.	 Data:1633270818102
+INFO: Close 5 ok.	 Data:1633270818102
+INFO: Epoll del, fd:7.	 Data:1633270818102
+INFO: Close 7 ok.	 Data:1633270818102
+INFO: Close 4 ok.	 Data:1633270818102
+INFO: Close 3 ok.	 Data:1633270818102
+INFO: Server total run time:25 sec	 Data:1633270818102
+INFO: Server is close now.	 Data:1633270818102

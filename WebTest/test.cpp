@@ -3,7 +3,6 @@
 #include <string>
 
 int main() {
-
     Log* log = new Log("test.txt", 200);
     int socketfd = 0;
     struct sockaddr_in servaddr;

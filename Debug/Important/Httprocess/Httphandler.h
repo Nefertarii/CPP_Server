@@ -3,7 +3,7 @@
 
 #include "Httprocess.h"
 #include "Httprespone.h"
-#include "../Gsocketctrl.h"
+#include "../Gsocketfunc.h"
 
 class HTTP_Handler {
 private:
@@ -22,7 +22,7 @@ private:
 public:
     HTTP_Handler() {}
     void Init(Log* log_p, size_t logbuf_size, std::string document_root_, Socket_Config socket_settings);
-    void RequestParse(Clientinfo* client, std::string readbuf);
+    std::string RequestParse(Clientinfo* client, std::string readbuf);
     int SendRespone(Clientinfo* client);
     ~HTTP_Handler();
 };
@@ -78,26 +78,26 @@ void HTTP_Handler::Init(Log* log_p, size_t logbuf_size, std::string document_roo
     this_log->Infolog("Http handler init complite.");
 }
 
-void HTTP_Handler::RequestParse(Clientinfo* client, std::string readbuf) {
+std::string HTTP_Handler::RequestParse(Clientinfo* client, std::string readbuf) {
     switch (processctrl.RequestType(&readbuf)) {
     case GET: {
         if (MethodGetParse(client, readbuf) < 0) {
             this_log->Warninglog("send bad request 403.");
             responectrl.BadRequest403(&client->respone_head);
         }
-        break;
+        return "ok";
     } case POST: {
         if (MethodPostParse(client, readbuf) < 0) {
             ;
         }
         this_log->Warninglog("send bad request 403.");
         responectrl.BadRequest403(&client->respone_head); // not use post;
-        break;
+        return "POST";
     } default: {
         this_log->Warninglog("send bad request 403.");
         responectrl.BadRequest403(&client->respone_head);
         this_log->Errorlog("Bad request type.");
-        break;
+        return "error";
     }
     }//switch end
 }

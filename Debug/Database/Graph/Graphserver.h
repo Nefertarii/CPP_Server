@@ -2,7 +2,7 @@
 #define GRAPHSERVER_H_
 
 #include "../../Important/Gepollctrl.h"
-#include "../../Important/Gsocketctrl.h"
+#include "../../Important/Gsocketctrl_server.h"
 #include <fstream>
 #include <string>
 #include <vector>
@@ -26,7 +26,7 @@ struct Connectinfo {
 class Graph_Server_Control {
 private:
     Epoll_Control epollctrl;
-    Socket_Control socketctrl;
+    Socket_Control_Server socketctrl;
     Socket_Config socket_settings;
     std::vector<Connectinfo> clients;
     std::map<std::string, std::string> global_string_settings;
@@ -138,7 +138,6 @@ Graph_Server_Control::Graph_Server_Control(std::string config_file) {
         map_it = global_value_settings.find("ReusePort");
         socket_settings.reuseport = map_it->second;
         socket_settings.socketfd = -1;
-        socket_settings.is_server = true;
 
         graph_server_log.Set("Graph_Server_Log.txt", logbuf_size);
         socketctrl.SetLog(&graph_server_log, logbuf_size);

@@ -29,6 +29,26 @@ struct Filestate {
     size_t offset = 0;
 };
 
+struct Socket_Config {
+    size_t connect_max = 0;
+    size_t connect_nums = 0;
+    size_t write_max = 0;
+    size_t read_max = 0;
+    int port = 0;
+    int reuseaddr = 0;
+    int reuseport = 0;
+    Socket_Config& operator=(Socket_Config tmp) {
+        this->connect_max = tmp.connect_max;
+        this->connect_nums = tmp.connect_nums;
+        this->write_max = tmp.write_max;
+        this->read_max = tmp.read_max;
+        this->port = tmp.port;
+        this->reuseaddr = tmp.reuseaddr;
+        this->reuseport = tmp.reuseport;
+        return *this;
+    }
+};
+
 
 //using
 //using ULL = unsigned long long;
@@ -51,7 +71,6 @@ namespace Gsocket {
 
 
 //function
-
 int Gsocket::Socket(int family, int type, int protocol, Log* log_p) {
     int socketfd = socket(family, type, protocol);
     if (socketfd < 0) {

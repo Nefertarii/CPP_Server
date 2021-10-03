@@ -186,11 +186,9 @@ int Http_Process::POSTParse(std::string request, std::string* post_type, std::st
     }
     } //switch end
 
-
     *post_type = type;
     *post_data = data;
     return 0;
-
 }
 
 POSTYPE Http_Process::POSTChoose(std::string post_type) {

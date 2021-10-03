@@ -5,6 +5,7 @@
 #include "Edge.h"
 #include <vector>
 #include <queue>
+#include <iostream>
 
 template <typename VERTEX, typename EDGE>
 class MatrixGraph {
@@ -26,6 +27,7 @@ public:
     void BreadthFirstSearch(int v, int& clock);
     void BFS(int start_vertex);
     void DepthFirstSearch(int v, int& clock);
+    void DFS(int start_vertex);
     MatrixGraph();
     ~MatrixGraph() {}
 };
@@ -77,7 +79,6 @@ void MatrixGraph<VERTEX, EDGE>::MatrixResize() {
 template <typename VERTEX, typename EDGE>
 int MatrixGraph<VERTEX, EDGE>::NextNeighbor(int i, int j) {
     while ((-1 < j) && !Exist(i, --j)) {
-        ;//do something
         return j;
     }
     return j;
@@ -134,25 +135,28 @@ MatrixGraph<VERTEX, EDGE>::MatrixGraph() {
 }
 
 template <typename VERTEX, typename EDGE>
-void MatrixGraph<VERTEX, EDGE>::BreadthFirstSearch(int v, int& clock) {//BFS
-    std::queue<int> queue;
+void MatrixGraph<VERTEX, EDGE>::BreadthFirstSearch(int v, int& clock) {//BFS 
     vertex_vec[v].status = DISCOVERED;
+    std::queue<int> queue;
     queue.push(v);
     while (!queue.empty()) {
-        v = queue.top();
+        v = queue.front();
+        queue.pop();
         vertex_vec[v].dtime = ++clock;
-        for (int u = FirstNeighbor(u);u != -1;u = NextNeighbor(v, u)) { //v的邻居u
+        for (int u = FirstNeighbor(u);u != 0;u = NextNeighbor(v, u)) { //v的邻居u
             if (vertex_vec[u].status == UNDISCOVERED) {
                 vertex_vec[u].status = DISCOVERED;
                 queue.push(u);
-                edge_vec[v, u].status = TREE;
-                vertex_vec[u].parent = vertex_vec[v];
+                edge_vec[v][u].status = TREE;
+                vertex_vec[u].parent = &vertex_vec[v];
             } else {
-                edge_vec[v, u].status = CROSS;
+                edge_vec[v][u].status = CROSS;
             }
             vertex_vec[v].status = VISITED;
         }
         vertex_vec[v].status = VISITED;
+        std::cout << vertex_vec[v].data << " ";
+        //dosomething
     }
 }
 
@@ -164,37 +168,51 @@ void MatrixGraph<VERTEX, EDGE>::BFS(int start_vertex) {
         if (vertex_vec[vertex].status == UNDISCOVERED) {
             BreadthFirstSearch(vertex, clock);
         }
-    } while (start_vertex != (vertex = (++v % nodes)));
+        vertex += 1;
+    } while (start_vertex != (vertex = (vertex % nodes)));
 }
 
 template <typename VERTEX, typename EDGE>
 void MatrixGraph<VERTEX, EDGE>::DepthFirstSearch(int v, int& clock) {//DFS
     vertex_vec[v].dtime = ++clock;
     vertex_vec[v].status = DISCOVERED;
-    for (int u = FirstNeighbor(v); u != -1;i = NextNeighbor(v, u)) {
+    for (int u = FirstNeighbor(v); u != -1;u = NextNeighbor(v, u)) {
         switch (vertex_vec[u].status) {
         case UNDISCOVERED: {
-            edge_vec[v][u] = TREE;
-            vertex_vec[u].parent = vertex_vec[v];
+            edge_vec[v][u].status = TREE;
+            vertex_vec[u].parent = &vertex_vec[v];
             DepthFirstSearch(u, clock);
             break;
         }
         case DISCOVERED: {
-            edge_vec[v][u] = BACKWARD;
+            edge_vec[v][u].status = BACKWARD;
             break;
         }
         default: {
             if (vertex_vec[v].dtime < vertex_vec[u].dtime)
-                edge_vec[v][u] = FORWARD;
+                edge_vec[v][u].status = FORWARD;
             else
-                edge_vec[v][u] = CROSS;
+                edge_vec[v][u].status = CROSS;
             break;
         }
         }// BFS/DFS vertex visit maybe have problem
     }
     vertex_vec[v].status = VISITED;
+    std::cout << vertex_vec[v].data << " ";
+    //dosomething
     vertex_vec[v].ftime = ++clock;
 }
 
+template <typename VERTEX, typename EDGE>
+void MatrixGraph<VERTEX, EDGE>::DFS(int start_vertex) {
+    int clock = 0;
+    int vertex = start_vertex;
+    do {
+        if (vertex_vec[vertex].status == UNDISCOVERED) {
+            DepthFirstSearch(vertex, clock);
+        }
+        vertex += 1;
+    } while (start_vertex != (vertex = (vertex % nodes)));
+}
 
 #endif  
