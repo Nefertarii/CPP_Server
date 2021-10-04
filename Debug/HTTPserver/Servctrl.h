@@ -6,6 +6,7 @@
 #include "../Important/Gsocketctrl_client.h"
 #include "../Important/Gepollctrl.h"
 #include "../Important/Gfilefunc.h"
+#include "Accountconfirm.h"
 #include <fstream>
 #include <map>
 
@@ -20,6 +21,7 @@ private:
     Epoll_Control epollctrl;
     HTTP_Handler httpctrl;
     Log http_server_log;
+    Account_Parse accountctrl;
     
     Timer server_clock;
     std::map<std::string, std::string> global_string_settings;
@@ -79,7 +81,9 @@ Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
         std::string ip = global_string_settings.find("GraphIP")->second;
         int port = global_value_settings.find("GraphPort")->second;
         graphctrl.SetConnect(ip, port);
-        
+
+        accountctrl.ReadAccountFile(global_string_settings.find("AccountFile")->second);
+
         http_server_log.Infolog("Server initialization complete.");
         init_complite = true;        
     } else {
