@@ -8,8 +8,7 @@ enum Vstatus {
 };
 
 template <typename T>
-class Vertex {
-public:
+struct Vertex {
     T data;         //数据
     Vstatus status; //状态
     int indegree;   //入度
@@ -18,7 +17,6 @@ public:
     int ftime;      //被访问完成时间
     int priority;   //优先级数
     Vertex* parent; //父节点
-    Vertex() = default;
     Vertex(T const& data_) {
         data = data_;
         status = UNDISCOVERED;
@@ -50,7 +48,6 @@ public:
         priority = -1;
         parent = nullptr;
     }
-    ~Vertex() = default;
 };
 
 

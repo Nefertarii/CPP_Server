@@ -10,12 +10,10 @@ enum Estatus {
 };
 
 template <typename T>
-class Edge {
-public:
+struct Edge {
     T data;         //数据
     Estatus status; //状态
     int weight;     //权重
-    Edge() = default;
     Edge(T const& data_, int weight_) {
         data = data_;
         weight = weight_;
@@ -32,7 +30,6 @@ public:
         status = UNDETERMINED;
         weight = -1;
     }
-    ~Edge() = default;
 };
 
 

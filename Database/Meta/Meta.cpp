@@ -1,6 +1,5 @@
-#include "Accountconfirm.h"
 #include "Metalocal.h"
-#include "../../Important/Gsocketctrl.h"
+#include "../../Important/Gsocketctrl_server.h"
 
 struct Serverinfo {
     std::string name = "";
@@ -29,9 +28,8 @@ int main(int argc, const char* argv[]) {
     Log meta_local_log;
     meta_local_log.Set("Meta_Local_Log.txt", 200);
     Meta_Local Meta;
-    Socket_Control socketctrl;
+    Socket_Control_Server socketctrl;
     Socket_Config config;
-    config.is_server = false;
     config.read_max = 4096;
     config.write_max = 4096;
     config.socketfd = -1;

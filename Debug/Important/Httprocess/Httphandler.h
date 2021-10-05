@@ -4,9 +4,7 @@
 #include "Httprocess.h"
 #include "Httprespone.h"
 #include "Accountconfirm.h"
-#include "../Gsocketfunc.h"
 #include "../Gstring.h"
-#include <vector>
 #include <map>
 
 class HTTP_Handler {

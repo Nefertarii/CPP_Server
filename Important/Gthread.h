@@ -64,5 +64,4 @@ public:
     auto submit(F &&f, Args &&...args) -> std::future<decltype(f(args...))>;
 };
 
-
 #endif

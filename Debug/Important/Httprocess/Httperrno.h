@@ -3,7 +3,6 @@
 
 #include "../Gsocketfunc.h"
 #include <cstddef>
-#include <string>
 
 enum REQUESTYPE {
     TYPENONE = 0,

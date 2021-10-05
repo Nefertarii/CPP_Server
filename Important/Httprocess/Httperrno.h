@@ -1,14 +1,22 @@
 #ifndef SERVERRNO_H_
 #define SERVERRNO_H_
 
-#include <cstddef>
-#include <string>
 #include "../Gsocketfunc.h"
+#include <cstddef>
 
 enum REQUESTYPE {
     TYPENONE = 0,
     GET,
     POST,
+    POSTLogin,
+    POSTReset,
+    POSTRegister,
+    POSTVoteup,
+    POSTVotedown,
+    POSTComment,
+    POSTContent,
+    POSTReadcount,
+    POSTVerifi,
     TYPEND = (1 << 30)
 };
 
@@ -24,50 +32,46 @@ enum SERVSTATE {
 };
 
 enum HTTPSTATE {
+    HTTPNONE = 0,
+    Continue = 100,
     OK = 200,
+    Multiplechoices = 300,
     Badrequest = 400,
     Unauthorized = 401,
+    Paymentrequired = 402,
     Forbidden = 403,
-    Notfound = 404
+    Notfound = 404,
+    Methodnotallowed = 405,
+    Internalservererror = 500,
+    HTTPEND = (1 << 30)
 };
 
-enum POSTYPE {
-    POSTERR = 0,
-    POSTLogin,
-    POSTReset,
-    POSTRegister,
-    POSTVoteup,
-    POSTVotedown,
-    POSTComment,
-    POSTContent,
-    POSTReadcount,
-    POSTVerifi
+struct HttpHeadConfig {
+    std::string Constent_Charset = "";
+    std::string Content_Language = "";
+    std::string Server_Name = "";
+    HttpHeadConfig& operator=(const HttpHeadConfig& new_config);
 };
-
-
 
 struct Clientinfo {
     std::string port = "";
     std::string ip = "";
+    std::string postdata = "";
     std::string respone_head = "";
     std::string respone_body = "";
-    //client's socketfd
-    int clientfd = 0;
+    int clientfd = 0;       //client socketfd
     size_t rewrite_count = 0;
     Filestate fileinfo;
-    SERVERR err_code = ERRNONE;
-    SERVSTATE state_code = STATENONE;
     REQUESTYPE requset_type = TYPENONE;
+    HTTPSTATE http_state = HTTPNONE;
     void Reset();
 };
-//reset httpconnect
-//clear httprocess
 
-class Strerr {
-public:
-    const char* Str_error(SERVERR err_code);
-    const char* Str_state(SERVSTATE state_code);
-    const char* Str_type(REQUESTYPE requset_type);
+namespace StrCode {
+    std::string StrErrorCode(SERVERR err_code);
+    std::string StrStateCode(SERVSTATE state_code);
+    std::string StrTypeCode(REQUESTYPE requset_type);
+    std::string StrHttpCode(HTTPSTATE http_state);
 };
 
 #endif

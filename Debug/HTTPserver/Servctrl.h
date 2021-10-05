@@ -5,9 +5,6 @@
 #include "../Important/Gsocketctrl_server.h"
 #include "../Important/Gsocketctrl_client.h"
 #include "../Important/Gepollctrl.h"
-#include "../Important/Gfilefunc.h"
-#include <fstream>
-#include <map>
 
 class Server_Control_Epoll {
 private:

@@ -1,6 +1,5 @@
 #include "Accountconfirm.h"
 
-
 bool Account_Parse::ReadAccount() {
     if (Gfile::ReadConfig(accountfile, &accounts)) {
         for (auto i : accounts) {
@@ -45,7 +44,6 @@ bool Account_Parse::ReadAccountFile(std::string accountfile_) {
     return true;
 }
 
-//little data, not use sort algorithm
 bool Account_Parse::MetaLogin(std::string account, std::string password) {
     if (!read_success) { return false; }
     std::string log = "User:" + account + " Login ";

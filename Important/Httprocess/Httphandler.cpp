@@ -1,16 +1,17 @@
 #include "Httphandler.h"
 
-
 int HTTP_Handler::MethodGetParse(Clientinfo* client, std::string readbuf) {
     std::string log;
     std::string filename, filetype;
     if (processctrl.GETParse(readbuf, &filename, &client->fileinfo) < 0) {
-        log = "Request type:GET, Bad requeset.";
-        this_log->Infolog(log);
+        this_log->Infolog("Request type:GET, Bad requeset.");
+        client->http_state = Notfound;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request Notfound.");
         return -1;
     } else {
-        filetype = processctrl.FileType(filename);
-        processctrl.CreateResponeHead(&client->respone_head, filetype, 200, client->fileinfo.filelength);
+        client->http_state = OK;
+        processctrl.CreateResponeHead(client, processctrl.FileType(filename));
         log = "Request type:GET, Request file:" + filename + ".";
         this_log->Infolog(log);
         return 0;
@@ -21,56 +22,147 @@ int HTTP_Handler::MethodPostParse(Clientinfo* client, std::string readbuf) {
     std::string log;
     std::string type, data;
     if (processctrl.POSTParse(readbuf, &type, &data) < 0) {
-        log = "Request type:POST, Bad requeset.";
-        this_log->Infolog(log);
+        this_log->Infolog("Request type:POST, Bad requeset.");
+        client->http_state = Forbidden;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request Forbidden.");
         return -1;
     } else {
-        log = "Request type:POST. Request type:" + type + ".Data:" + data + ".";
+        client->postdata = data;
+        client->requset_type = processctrl.POSTChoose(type);
+        log = "Request type:POST. Request type:" + type + " Data:" + data + ".";
         this_log->Infolog(log);
+        PostProcess(client);
         return 0;
     }
 }
 
-void HTTP_Handler::Init(Log* log_p, size_t logbuf_size, std::string document_root_, Socket_Config socket_settings) {
-    buffer_size = logbuf_size;
+void HTTP_Handler::SetLog(Log* log_p, size_t buffer_size) {
     if (log_p != nullptr) {
         this_log = log_p;
         have_upper = true;
     } else {
-        this_log = new Log("Http_Handler_Log.txt", buffer_size);
+        this_log = new Log("Http_Handler_Log.txt", logbuf_size);
         have_upper = false;
     }
-    //process
-    processctrl.SetLog(this_log, buffer_size);
-    processctrl.SetReadmax(socket_settings.read_max);
-    processctrl.SetDocumentRoot(document_root_);
-    //respone
-    responectrl.SetLog(this_log, buffer_size);
-    responectrl.SetReadmax(socket_settings.read_max);
-    responectrl.SetWritemax(socket_settings.write_max);
+}
 
+void HTTP_Handler::Init(std::map<std::string, std::string>* global_string_settings,
+                        std::map<std::string, size_t>* global_value_settings) {
+    logbuf_size = global_value_settings->find("MaxLogBuffer")->second;
+    //process
+    HttpHeadConfig respone_head_config;
+    respone_head_config.Constent_Charset = global_string_settings->find("Constent_Charset")->second;
+    respone_head_config.Content_Language = global_string_settings->find("Content-Language")->second;
+    respone_head_config.Server_Name = global_string_settings->find("Server-Name")->second;
+    processctrl.SetLog(this_log, logbuf_size);
+    processctrl.SetHttpRespone(respone_head_config);
+    processctrl.SetReadmax(global_value_settings->find("ReadMax")->second);
+    processctrl.SetDocumentRoot(global_string_settings->find("DocumentRoot")->second);
+    //respone
+    responectrl.SetLog(this_log, logbuf_size);
+    responectrl.SetReadmax(global_value_settings->find("ReadMax")->second);
+    responectrl.SetWritemax(global_value_settings->find("WriteMax")->second);
+    //account
+    accountctrl.SetLog(this_log, logbuf_size);
+    accountctrl.ReadAccountFile(global_string_settings->find("AccountFile")->second);
+    accountctrl.ReadAccountInfoFile(global_string_settings->find("AccountInfoFile")->second);
+    //done
     this_log->Infolog("Http handler init complite.");
 }
 
 void HTTP_Handler::RequestParse(Clientinfo* client, std::string readbuf) {
     switch (processctrl.RequestType(&readbuf)) {
     case GET: {
-        if (MethodGetParse(client, readbuf) < 0) {
-            this_log->Warninglog("send bad request 403.");
-            responectrl.BadRequest403(&client->respone_head);
-        }
+        client->requset_type = GET;
+        MethodGetParse(client, readbuf);
         break;
     } case POST: {
-        if (MethodPostParse(client, readbuf) < 0) {
-            ;
-        }
-        this_log->Warninglog("send bad request 403.");
-        responectrl.BadRequest403(&client->respone_head); // not use post;
+        client->requset_type = POST;
+        MethodPostParse(client, readbuf);
         break;
     } default: {
-        this_log->Warninglog("send bad request 403.");
-        responectrl.BadRequest403(&client->respone_head);
+        client->requset_type = TYPENONE;
+        client->http_state = Forbidden;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request Forbidden.");
         this_log->Errorlog("Bad request type.");
+        break;
+    }
+    }//switch end
+}
+
+void HTTP_Handler::PostProcess(Clientinfo* client) {
+    std::vector<std::string> data;
+    std::string tmp;
+    int datasize = client->postdata.size();
+    int index = 0;
+    while (index <= datasize) {
+        tmp = Substr(client->postdata, index, 100, '&');
+        data.push_back(tmp);
+        index += tmp.size() + 1;
+    }
+    switch (client->requset_type) {
+    case POSTLogin: {
+        if (accountctrl.Login(data[0], data[1])) {
+            client->respone_body = accountctrl.GetAccountInfo(data[0]);
+        } else {
+            client->respone_body = JsonSpliced({"Login", "false"});
+        }
+        client->http_state = OK;
+        processctrl.CreateResponeHead(client);
+        break;
+    }
+    case POSTReset: {
+        if (accountctrl.ChangePassword(data[0], data[1], data[2])) {
+            client->respone_body = JsonSpliced({ "ResetPassword","OK" });
+        } else {
+            client->respone_body = JsonSpliced({ "ResetPassword","false" });
+        }
+        client->http_state = OK;
+        processctrl.CreateResponeHead(client);
+        this_log->Warninglog("Send request OK.");
+        break;
+    }
+    case POSTRegister: {
+        if (accountctrl.Regsiter(data[0], data[1])) {
+            client->respone_body = JsonSpliced({ "Regsiter","Ok" });
+        } else {
+            client->respone_body = JsonSpliced({ "Regsiter","false" });
+        }
+        client->http_state = OK;
+        processctrl.CreateResponeHead(client);
+        this_log->Warninglog("Send request OK.");
+        break;
+    }
+    case POSTVoteup: {
+        client->http_state = Forbidden;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request Forbidden.");
+        break;
+    }
+    case POSTVotedown: {
+        client->http_state = Forbidden;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request Forbidden.");
+        break;
+    }
+    case POSTComment: {
+        client->http_state = Forbidden;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request Forbidden.");
+        break;
+    }
+    case POSTContent: {
+        client->http_state = Forbidden;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request Forbidden.");
+        break;
+    }
+    default: {
+        client->http_state = Forbidden;
+        processctrl.CreateBadHead(client);
+        this_log->Warninglog("Send request 403.");
         break;
     }
     }//switch end

@@ -2,10 +2,8 @@
 #define ACCOUNTCONFIRM_H_
 
 #include "../Gfilefunc.h"
-#include "../Glog.h"
 #include "../Gjson.h"
-#include <fstream>
-#include <iostream>
+#include "../Glog.h"
 #include <algorithm>
 
 //暂时用作数据库的替代

@@ -1,7 +1,6 @@
 #ifndef HTTPRESPONE_H_
 #define HTTPRESPONE_H_
 
-#include "../Gsocketfunc.h"
 #include "Httperrno.h"
 
 void Http_signal_handle();
@@ -16,11 +15,9 @@ private:
     size_t readmax;
 public:
     Http_Respone() {}
-    void SetLog(Log* log, size_t buffer_size);
+    void SetLog(Log* log_p, size_t buffer_size);
     void SetWritemax(size_t writemax_) { writemax = writemax_; }
     void SetReadmax(size_t readmax_) { readmax = readmax_; }
-    void BadRequest404(std::string* responehead);
-    void BadRequest403(std::string* responehead);
     int Send(int socketfd, std::string* message);
     int SendFile(int socketfd, Filestate *file);
     ~Http_Respone();

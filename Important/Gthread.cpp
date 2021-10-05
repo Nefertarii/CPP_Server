@@ -53,6 +53,7 @@ void Gthreadpool::ThreadWorker::operator()() {
     }
 }
 
+
 void Gthreadpool::init() {
     shutdown_ = false;
     threads_ = std::vector<std::thread>(threadnum_);

@@ -42,3 +42,8 @@ std::string Timer::Runtime_str() {
     std::string time_str = std::to_string(time_long);
     return time_str;
 }
+
+void Timer::Reset() {
+    begintime_ms = Nowtime_Ms();
+    begintime_sec = Nowtime_Sec();
+}

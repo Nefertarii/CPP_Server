@@ -1,6 +1,6 @@
 #include "Glog.h"
 
-const char* Loglevel_map[] = {
+static const char* Loglevel_map[] = {
     [INFO] = "INFO:",
     [WARNING] = "WARNING:",
     [ERROR] = "ERROR:",
@@ -19,7 +19,7 @@ void Log::Savetotemp(LOGLEVEL level, std::string log, int err) {
     std::string strlevel = Strlevel(level);
     std::string strlog = log;
     std::string strtime = std::to_string(Timer::Nowtime_ms());
-#ifdef DEBUG
+#if defined(DEBUG)
     if (!err) {
         strlog = strlevel + "" + strlog + "\t Data:" + strtime;
         std::cout << strlog << "\n";
@@ -29,6 +29,9 @@ void Log::Savetotemp(LOGLEVEL level, std::string log, int err) {
     std::string strerr = tmperr;
     strlog = strlevel + " " + strlog + " " + strerr + "\t Data:" + strtime;
     std::cout << strlog << "\n";
+#elif defined(NOLOG)
+    //do nothing
+    ;
 #else
     if (!err) {
         tmplog_vec[logindex] = strlevel + " " + strlog + "\t Data:" + strtime;

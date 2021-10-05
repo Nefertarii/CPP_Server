@@ -1,11 +1,11 @@
 #include "Httprocess.h"
 
-void Http_Process::SetLog(Log* log, size_t buffer_size) {
-    if (log == nullptr) {
+void Http_Process::SetLog(Log* log_p, size_t buffer_size) {
+    if (log_p == nullptr) {
         this_log = new Log("Http_Process_Log.txt", buffer_size);
         have_upper = false;
     } else {
-        this_log = log;
+        this_log = log_p;
         have_upper = true;
     }
 }
@@ -55,14 +55,38 @@ std::string Http_Process::FileType(std::string filename) {
     }
 }
 
-void Http_Process::CreateResponeHead(std::string* responehead, std::string filetype, int state, int bodylength) {
-    *responehead += ("HTTP/1.1 " + std::to_string(state) + " " + StrHttpState(state));
-    *responehead += "Constent_Charset:utf-8\r\n";
-    *responehead += "Content-Language:zh-CN\r\n";
-    *responehead += ("Content-Type:" + filetype + "\r\n");
-    *responehead += ("Content-Length:" + std::to_string(bodylength) + "\r\n");
-    *responehead += (Timer::Nowtime_str() + "\r\n");
-    *responehead += "Server version:Gserver/1.0 (C++) \r\n\r\n";
+void Http_Process::CreateResponeHead(Clientinfo* client, std::string filetype) {
+    client->respone_head.clear();
+    std::string code_num = std::to_string(client->http_state);
+    std::string code_detail = StrCode::StrHttpCode(client->http_state);
+    client->respone_head += "HTTP/1.1 " + code_num + " " + code_detail + "\r\n";
+    client->respone_head += "Constent_Charset:" + respone_head_config.Constent_Charset + "\r\n";
+    client->respone_head += "Content-Language" + respone_head_config.Content_Language + "r\n";
+    if (filetype.size()) {
+        client->respone_head += "Content-Type:" + filetype + "\r\n";
+    }
+    if (client->respone_body.size()) {
+        client->respone_head += "Content-Length:" + std::to_string(client->respone_body.size()) + "\r\n";
+    } else {
+        client->respone_head += "Content-Length:" + std::to_string(client->fileinfo.filelength) + "\r\n";
+    }
+
+    client->respone_head += Timer::Nowtime_str() + "\r\n";
+    client->respone_head += "Server version:" + respone_head_config.Server_Name + "\r\n";
+    client->respone_head += "\r\n";
+}
+
+void Http_Process::CreateBadHead(Clientinfo* client) {
+    client->respone_head.clear();
+    std::string code_num = std::to_string(client->http_state);
+    std::string code_detail = StrCode::StrHttpCode(client->http_state);
+    client->respone_head += "HTTP/1.1 " + code_num + " " + code_detail + "\r\n";
+    client->respone_head += "Constent_Charset:" + respone_head_config.Constent_Charset + "\r\n";
+    client->respone_head += "Content-Language" + respone_head_config.Content_Language + "r\n";
+    client->respone_head += "Content-Length: 0\r\n";
+    client->respone_head += Timer::Nowtime_str() + "\r\n";
+    client->respone_head += "Server version:" + respone_head_config.Server_Name + "\r\n";
+    client->respone_head += "\r\n";
 }
 
 REQUESTYPE Http_Process::RequestType(std::string* readbuf) {
@@ -92,78 +116,21 @@ int Http_Process::GETParse(std::string readbuf, std::string* filename, Filestate
 
 int Http_Process::POSTParse(std::string request, std::string* post_type, std::string* post_data) { //return POST request type and date
     //Get POST type
-    std::string type = Substr(request, 5, readmax, ' ');
-    type = Substr_Revers(type, 30, '/');
-    if (type == "-1" || type == "0") {
-        return -1;
-    }
+    size_t index = request.find("Content-Length:");
+    //"Conte nt-Le ngth:&nbsp"
+    std::string length = Substr(request, index + 16, readmax, '\n');
+    size_t content_size = std::stoul(length);
+    std::string type = Substr(request, 6, readmax, ' ');
     //Get readbuf data
-    std::string data = Substr_Revers(request, readmax, '\n');
-    if (data == "-1" || data == "0") {
-        return -1;
-    }
-    //Handler post request
-    std::string log;
-    switch (POSTChoose(type)) {
-    case POSTLogin: {
-        //Login
-        log = "Login:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTReset: {
-        //Reset password
-        log = "Reset password:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTRegister: {
-        //Register
-        log = "Register:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTVoteup: {
-        //Vote up
-        log = "Vote up:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTVotedown: {
-        //Vote down
-        log = "Vote down:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTComment: {
-        //Comment
-        log = "Comment:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTContent: {
-        //Content
-        log = "Content:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTReadcount: {
-        //Readcount add
-        log = "Readcount add:" + data;
-        this_log->Infolog(log);
-        break;
-    } case POSTVerifi: {
-        //Verification code
-        log = "Verification:" + data;
-        this_log->Infolog(log);
-        break;
-    } default: {
-        //Error type
-        break;
-    }
-    } //switch end
-
-
+    std::string data = request.substr((request.length() - content_size), content_size);
+    if (data.size() == 0) { return -1; }
+    data += "&";
     *post_type = type;
     *post_data = data;
     return 0;
-
 }
 
-POSTYPE Http_Process::POSTChoose(std::string post_type) {
+REQUESTYPE Http_Process::POSTChoose(std::string post_type) {
     if (post_type == "login") {
         return POSTLogin;
     } else if (post_type == "reset") {
@@ -183,7 +150,7 @@ POSTYPE Http_Process::POSTChoose(std::string post_type) {
     } else if (post_type == "verification") {
         return POSTVerifi;
     } else {
-        return POSTERR;
+        return TYPENONE;
     }
 }
 

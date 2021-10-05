@@ -23,16 +23,22 @@
 //const size_t MAXLOG = 16;                            //Log buffer maximum
 //const char *PROTOCOL = "HTTP";                       //server used protocol
 
-
 struct Filestate {
     int filefd = 0;
     size_t filelength = 0;
     size_t offset = 0;
 };
 
-
-//using
-//using ULL = unsigned long long;
+struct Socket_Config {
+    size_t connect_max = 0;
+    size_t connect_nums = 0;
+    size_t write_max = 0;
+    size_t read_max = 0;
+    int port = 0;
+    int reuseaddr = 0;
+    int reuseport = 0;
+    Socket_Config& operator=(Socket_Config tmp);
+};
 
 namespace Gsocket {
     int Socket(int family, int type, int protocal, Log* log_p);

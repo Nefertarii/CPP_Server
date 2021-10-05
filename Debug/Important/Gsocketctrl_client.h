@@ -2,7 +2,6 @@
 #define GSOCKETCTRL_CLIENT_H_
 
 #include "Gsocketfunc.h"
-#include "Glog.h"
 
 class Socket_Control_Client {
 private:

@@ -1,5 +1,13 @@
 #include "Graphserver.h"
 
+void Connectinfo::Reset() {
+    ip.clear();
+    port.clear();
+    meassage.clear();
+    token.clear();
+    socketfd = -1;
+}
+
 bool Graph_Server_Control::ReadConfig(std::string config_file) {
     std::fstream file;
     std::string fileline;
@@ -55,7 +63,10 @@ void Graph_Server_Control::ConnectDel(Connectinfo* client) {
 }
 
 void Graph_Server_Control::MeassgeParse(Connectinfo* client) {
-    //GQLparse
+    //GQLparse 
+    
+
+    
     client->meassage = "Get your message\n Is:" + client->meassage;
     epollctrl.Epollwrite(client->socketfd, client);
 }
@@ -73,23 +84,15 @@ void Graph_Server_Control::ResultSend(Connectinfo* client) {
 
 Graph_Server_Control::Graph_Server_Control(std::string config_file) {
     if (ReadConfig(config_file)) {
-        auto map_it = global_value_settings.find("MaxLogBuffer");
-        size_t logbuf_size = map_it->second;
-        map_it = global_value_settings.find("MaxClients");
-        socket_settings.connect_max = map_it->second;
+        size_t logbuf_size = global_value_settings.find("MaxLogBuffer")->second;
+        socket_settings.connect_max = global_value_settings.find("MaxClients")->second;
         socket_settings.connect_nums = 0;
-        map_it = global_value_settings.find("WriteMax");
-        socket_settings.write_max = map_it->second;
-        map_it = global_value_settings.find("ReadMax");
-        socket_settings.read_max = map_it->second;
-        map_it = global_value_settings.find("Listen");
-        socket_settings.port = map_it->second;
-        map_it = global_value_settings.find("ReuseAddress");
-        socket_settings.reuseaddr = map_it->second;
-        map_it = global_value_settings.find("ReusePort");
-        socket_settings.reuseport = map_it->second;
+        socket_settings.write_max = global_value_settings.find("WriteMax")->second;
+        socket_settings.read_max = global_value_settings.find("ReadMax")->second;
+        socket_settings.port = global_value_settings.find("Listen")->second;
+        socket_settings.reuseaddr = global_value_settings.find("ReuseAddress")->second;
+        socket_settings.reuseport = global_value_settings.find("ReusePort")->second;
         socket_settings.socketfd = -1;
-        socket_settings.is_server = true;
 
         graph_server_log.Set("Graph_Server_Log.txt", logbuf_size);
         socketctrl.SetLog(&graph_server_log, logbuf_size);
