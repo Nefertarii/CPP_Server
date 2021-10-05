@@ -9,32 +9,35 @@ private:
     std::string document_root;
     Log* this_log;
     bool have_upper;
+    HttpHeadConfig respone_head_config;
 
 public:
     Http_Process() {}
-    void SetLog(Log* log, size_t buffer_size);
+    void SetLog(Log* log_p, size_t buffer_size);
+    void SetHttpRespone(HttpHeadConfig config) { respone_head_config = config; }
     void SetReadmax(size_t readmax_) { readmax = readmax_; }
     void SetDocumentRoot(std::string document_root_) { document_root = document_root_; }
     std::string StrHttpState(int codenum);
     std::string FileType(std::string filename);
-    void CreateResponeHead(std::string* responehead, std::string filetype, int state, int bodylength);
+    void CreateResponeHead(Clientinfo* client, std::string filetype = "");
+    void CreateBadHead(Clientinfo* client);
     REQUESTYPE RequestType(std::string* readbuf);
     //Use GET type parse readbuf and set fileinfo
     int GETParse(std::string readbuf, std::string* filename, Filestate* file);
     //Use POST type parse readbuf and set respone data
     int POSTParse(std::string request, std::string* post_type, std::string* post_data);
     //string to int for use switch
-    POSTYPE POSTChoose(std::string post_type);
+    REQUESTYPE POSTChoose(std::string post_type);
     ~Http_Process();
 };
 
 
-void Http_Process::SetLog(Log* log, size_t buffer_size) {
-    if (log == nullptr) {
+void Http_Process::SetLog(Log* log_p, size_t buffer_size) {
+    if (log_p == nullptr) {
         this_log = new Log("Http_Process_Log.txt", buffer_size);
         have_upper = false;
     } else {
-        this_log = log;
+        this_log = log_p;
         have_upper = true;
     }
 }
@@ -84,14 +87,38 @@ std::string Http_Process::FileType(std::string filename) {
     }
 }
 
-void Http_Process::CreateResponeHead(std::string* responehead, std::string filetype, int state, int bodylength) {
-    *responehead += ("HTTP/1.1 " + std::to_string(state) + " " + StrHttpState(state));
-    *responehead += "Constent_Charset:utf-8\r\n";
-    *responehead += "Content-Language:zh-CN\r\n";
-    *responehead += ("Content-Type:" + filetype + "\r\n");
-    *responehead += ("Content-Length:" + std::to_string(bodylength) + "\r\n");
-    *responehead += (Timer::Nowtime_str() + "\r\n");
-    *responehead += "Server version:Gserver/1.0 (C++) \r\n\r\n";
+void Http_Process::CreateResponeHead(Clientinfo* client, std::string filetype) {
+    client->respone_head.clear();
+    std::string code_num = std::to_string(client->http_state);
+    std::string code_detail = StrCode::StrHttpCode(client->http_state);
+    client->respone_head += "HTTP/1.1 " + code_num + " " + code_detail + "\r\n";
+    client->respone_head += "Constent_Charset:" + respone_head_config.Constent_Charset + "\r\n";
+    client->respone_head += "Content-Language" + respone_head_config.Content_Language + "r\n";
+    if (filetype.size()) {
+        client->respone_head += "Content-Type:" + filetype + "\r\n";
+    }
+    if (client->respone_body.size()) {
+        client->respone_head += "Content-Length:" + std::to_string(client->respone_body.size()) + "\r\n";
+    } else {
+        client->respone_head += "Content-Length:" + std::to_string(client->fileinfo.filelength) + "\r\n";
+    }
+
+    client->respone_head += Timer::Nowtime_str() + "\r\n";
+    client->respone_head += "Server version:" + respone_head_config.Server_Name + "\r\n";
+    client->respone_head += "\r\n";
+}
+
+void Http_Process::CreateBadHead(Clientinfo* client) {
+    client->respone_head.clear();
+    std::string code_num = std::to_string(client->http_state);
+    std::string code_detail = StrCode::StrHttpCode(client->http_state);
+    client->respone_head += "HTTP/1.1 " + code_num + " " + code_detail + "\r\n";
+    client->respone_head += "Constent_Charset:" + respone_head_config.Constent_Charset + "\r\n";
+    client->respone_head += "Content-Language" + respone_head_config.Content_Language + "r\n";
+    client->respone_head += "Content-Length: 0\r\n";
+    client->respone_head += Timer::Nowtime_str() + "\r\n";
+    client->respone_head += "Server version:" + respone_head_config.Server_Name + "\r\n";
+    client->respone_head += "\r\n";
 }
 
 REQUESTYPE Http_Process::RequestType(std::string* readbuf) {
@@ -129,16 +156,13 @@ int Http_Process::POSTParse(std::string request, std::string* post_type, std::st
     //Get readbuf data
     std::string data = request.substr((request.length() - content_size), content_size);
     if (data.size() == 0) { return -1; }
-    //Handler post request
-    POSTChoose(type);
-    std::string log = type + ":" + data;
-    this_log->Infolog(log);
+    data += "&";
     *post_type = type;
     *post_data = data;
     return 0;
 }
 
-POSTYPE Http_Process::POSTChoose(std::string post_type) {
+REQUESTYPE Http_Process::POSTChoose(std::string post_type) {
     if (post_type == "login") {
         return POSTLogin;
     } else if (post_type == "reset") {
@@ -158,7 +182,7 @@ POSTYPE Http_Process::POSTChoose(std::string post_type) {
     } else if (post_type == "verification") {
         return POSTVerifi;
     } else {
-        return POSTERR;
+        return TYPENONE;
     }
 }
 

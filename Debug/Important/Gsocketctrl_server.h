@@ -13,7 +13,7 @@ private:
 public:
     Socket_Control_Server() {}
     void SetConfig(Socket_Config* config);
-    void SetLog(Log* upper, size_t buffer_size);
+    void SetLog(Log* log_p, size_t buffer_size);
     int SocketListen();
     int SocketAccept();
     int SocketRead(int socketfd, std::string* str);      //read once;
@@ -30,9 +30,9 @@ void Socket_Control_Server::SetConfig(Socket_Config* config) {
     }
 }
 
-void Socket_Control_Server::SetLog(Log* upper, size_t buffer_size) {
-    if (upper != nullptr) {
-        this_log = upper;
+void Socket_Control_Server::SetLog(Log* log_p, size_t buffer_size) {
+    if (log_p != nullptr) {
+        this_log = log_p;
         have_upper = true;
     } else {
         this_log = new Log("Socket_Control_Log.txt", buffer_size);

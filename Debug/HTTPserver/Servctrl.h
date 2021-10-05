@@ -6,14 +6,13 @@
 #include "../Important/Gsocketctrl_client.h"
 #include "../Important/Gepollctrl.h"
 #include "../Important/Gfilefunc.h"
-#include "Accountconfirm.h"
 #include <fstream>
 #include <map>
 
 class Server_Control_Epoll {
 private:
     Socket_Control_Server clientctrl;
-    Socket_Control_Client graphctrl;
+    //Socket_Control_Client graphctrl;
     Socket_Config server_settings, connect_settings;
     std::vector<Clientinfo> clients;
     int listenfd;
@@ -21,7 +20,6 @@ private:
     Epoll_Control epollctrl;
     HTTP_Handler httpctrl;
     Log http_server_log;
-    Account_Parse accountctrl;
     
     Timer server_clock;
     std::map<std::string, std::string> global_string_settings;
@@ -62,27 +60,28 @@ Server_Control_Epoll::Server_Control_Epoll(std::string config_file) {
         server_settings.port = global_value_settings.find("Listen")->second;
         server_settings.reuseaddr = global_value_settings.find("ReuseAddress")->second;
         server_settings.reuseport = global_value_settings.find("ReusePort")->second;
-        std::string document_root = global_string_settings.find("DocumentRoot")->second;
         //server settings
         http_server_log.Set("HTTP_Server_Log.txt", logbuf_size);
-        httpctrl.Init(&http_server_log, logbuf_size, document_root, server_settings);
         clients.resize(server_settings.connect_max);
+        //server http control init
+        httpctrl.SetLog(&http_server_log, logbuf_size);
+        httpctrl.Init(&global_string_settings, &global_value_settings);
         //server socket control init
         clientctrl.SetLog(&http_server_log, logbuf_size);
         clientctrl.SetConfig(&server_settings);
         //server epoll control init
         epollctrl.SetLog(&http_server_log, logbuf_size);
         //...//
-        connect_settings.write_max = global_value_settings.find("WriteMax")->second;
-        connect_settings.read_max = global_value_settings.find("ReadMax")->second;
+        /*
+        //connect_settings.write_max = global_value_settings.find("WriteMax")->second;
+        //connect_settings.read_max = global_value_settings.find("ReadMax")->second;
         //graph connect control init
         graphctrl.SetLog(&http_server_log, logbuf_size);
         graphctrl.SetConfig(&connect_settings);
         std::string ip = global_string_settings.find("GraphIP")->second;
         int port = global_value_settings.find("GraphPort")->second;
         graphctrl.SetConnect(ip, port);
-
-        accountctrl.ReadAccountFile(global_string_settings.find("AccountFile")->second);
+        */
 
         http_server_log.Infolog("Server initialization complete.");
         init_complite = true;        
@@ -101,9 +100,6 @@ void Server_Control_Epoll::ServerStart() {
     if (listenfd < 0) {
         std::cout << "Server can't create.\n";
         return;
-    }
-    if (graphctrl.SocketConnect() < 0) {
-        std::cout << "Server can't connect graph server.\n";
     }
     struct epoll_event ev, events[server_settings.connect_max];
     ev.events = EPOLLIN | EPOLLET;
@@ -124,7 +120,7 @@ void Server_Control_Epoll::ServerStart() {
             if (ev.data.ptr == nullptr) {
                 int connectfd = clientctrl.SocketAccept();
                 if (connectfd < 0) {
-                    http_server_log.Errorlog("Bad connect.");
+                    http_server_log.Errorlog("BCreateBadHeadad connect.");
                 } else {
                     ConnectAdd(&clients[server_settings.connect_nums], connectfd);
                 }
@@ -132,13 +128,7 @@ void Server_Control_Epoll::ServerStart() {
                 Clientinfo* client = static_cast<Clientinfo*>(ev.data.ptr);
                 std::string readbuf;
                 if (clientctrl.SocketRead(client->clientfd, &readbuf) == 0) {
-                    std::string data = httpctrl.RequestParse(client, readbuf);
-                    if (data.size() > 5) {
-                        //process
-                        //connect graph
-                        //create json
-                        //write
-                    }
+                    httpctrl.RequestParse(client, readbuf);
                     epollctrl.Epollwrite(client->clientfd, client);
                 } else {
                     ConnectDel(client);
@@ -175,6 +165,7 @@ void Server_Control_Epoll::ServerStop() {
     std::string log = "Server total run time:" + server_clock.Runtime_str() + " sec";
     http_server_log.Infolog(log);
     http_server_log.Infolog("Server is close now.");
+    server_clock.Reset();
 }
 
 Server_Control_Epoll::~Server_Control_Epoll() {

@@ -1,12 +1,12 @@
 #ifndef ACCOUNTCONFIRM_H_
 #define ACCOUNTCONFIRM_H_
 
-#include "../Important/Gfilefunc.h"
-#include "../Important/Glog.h"
+#include "../Gfilefunc.h"
+#include "../Glog.h"
+#include "../Gjson.h"
 #include <fstream>
 #include <iostream>
 #include <algorithm>
-#include <vector>
 
 //暂时用作数据库的替代
 class Account_Parse {
@@ -24,14 +24,14 @@ private:
 
 public:
     Account_Parse() { read_success = false; }
+    void SetLog(Log* log_p, size_t buffer_size);
     bool ReadAccountFile(std::string account_file_);
     bool ReadAccountInfoFile(std::string account_info_file_);
-    void SetLog(Log* log_p, size_t buffer_size);
-    //Login
     bool Login(std::string account, std::string password);
     bool Regsiter(std::string account, std::string password);
     bool ChangePassword(std::string account, std::string oldpassword, std::string password);
-    bool ChangeInfo(std::string account, std::string info_name, std::string new_info);
+    bool ChangeAccountInfo(std::string account, std::string info_name, std::string new_info);
+    std::string GetAccountInfo(std::string account);
     ~Account_Parse();
 };
 
@@ -150,7 +150,7 @@ bool Account_Parse::ChangePassword(std::string account, std::string oldpassword,
     }
 }
 
-bool Account_Parse::ChangeInfo(std::string account, std::string info_name, std::string new_info) {
+bool Account_Parse::ChangeAccountInfo(std::string account, std::string info_name, std::string new_info) {
     std::string log = "User:" + account + " change info ";
     auto it = accounts_info.find(account);
     if (it != accounts_info.end()) {
@@ -169,6 +169,14 @@ bool Account_Parse::ChangeInfo(std::string account, std::string info_name, std::
     log += "fail, not this account.";
     this_log->Infolog(log);
     return false;
+}
+
+std::string Account_Parse::GetAccountInfo(std::string account) {
+    auto it = accounts_info.find(account);
+    if (it != accounts_info.end()) {
+        return JsonSpliced(it->second);
+    }
+    return "";
 }
 
 Account_Parse::~Account_Parse() {
