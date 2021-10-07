@@ -7,7 +7,9 @@
 	--boxshadow-blue: #466886;
 	--boxshadow-white: #8b8b8b;
 	--font-light: #BCC7EF;
+    --font-dark: #627597;
 	--font-blue: #0066ff;
+    --font-green:#00CFC8;
 
 	--link: #0166d6;
 	--link-hover: #0100d6;
@@ -24,15 +26,17 @@
 	--bt-bg-hover-blue: #0055AA; }
 .element::-webkit-scrollbar { width: 0 !important }
 
+
+
 html,body {
-    overflow-x: hidden;
+    margin: 0%;
     width: 100%;
     box-sizing: border-box;
-	background-color: #070B21;
-	background-image: url(Image/svg/glow.svg);
-	background-size: 180%;
-	background-position-x: -31.25rem;
-	background-position-y: -10rem; }
+	background-color: #040D21;
+    background-image: url(Image/svg/glow.svg);
+	background-size: 200%;
+	background-position-x: 50%;
+	background-position-y: 50%; }
 Header {
     width: 100%;
 	margin:auto;
@@ -44,9 +48,6 @@ Footer {
     width: 100%;
     height: 5rem;
     color: var(--font); }
-button {
-    text-align: center; }
-
 a:link,a:visited {
 	color: var(--font-light);
 	text-decoration: none; }
@@ -58,17 +59,34 @@ a:hover,a:active {
 	margin-top: 0.7rem;
 	margin-bottom: 0.7rem; }
 
+@keyframes animStar {
+    from {transform:translateY(0)} 
+    to {transform:translateY(-2000px)} }
+@media(prefers-reduced-motion) {
+    .bg-stars-1,.bg-stars-2,.bg-stars-3
+    {animation:none} }
+.bg-stars {
+    flex: auto;
+    position: relative;
+    box-shadow: solid; }
+#bg-stars-1 {
+    background: transparent;
+    width: 1px;
+    height: 1px;
+    animation: animStar 100s linear infinite; }
+#bg-stars-2 {
+    width: 2px;
+    height: 2px;
+    animation: animStar 120s linear infinite; }
+#bg-stars-3 {
+    width: 3px;
+    height: 3px;
+    animation: animStar 150s linear infinite; }
+
+
 #Follow_left_admission {
     animation: trans 0.6s linear;
     animation-fill-mode: forwards; }
-@keyframes trans {
-    from {
-        transform: translate(-200%);
-    }
-
-    to {
-        transform: translate(0);
-    } }
 
 .Follow_left {
 	position: fixed;

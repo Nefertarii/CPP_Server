@@ -1,0 +1,41 @@
+:root {
+	--font-color: #878EA6;
+	--background-color: #0c162d;
+	--button-color: #0055AA;
+	--white: #FFFFFF;
+	--black: #000000;
+	--boxshadow: #466886;	
+	--test-bg-color: #CDFFFE;
+	--test-font-color: #BCC7EF;
+}
+body {
+	background-color: #040D21;
+	background-image: url(../Image/svg/glow.svg);
+	background-repeat: no-repeat;
+	background-size: 160%;
+	background-position: -31.25rem;
+	box-sizing: border-box;
+}
+.notfound {
+	padding-top: 12rem;
+	min-width: 30rem;
+	color: white;
+}
+.font401 {
+	text-align: center;
+	font-size: xx-large;
+	padding-bottom: 1rem;
+	
+}
+.gif {
+	padding-top: 1rem;
+	background-image: url(../Image/gif/John_Travolta_Not_Found.gif);
+	background-repeat: no-repeat;
+	width:480px;
+	height:204px;
+	text-align: center;
+	margin: auto;
+}
+.back {
+	text-align: center;
+}

@@ -2,108 +2,156 @@
 // variable name   aaaBbbCcc
 
 
-var nameInput = document.getElementsByClassName("input_name");
-var nameLabel = document.getElementById("input_error_name");
-var emailInput = document.getElementsByClassName("input_email");
-var emailLabel = document.getElementById("input_error_email");
-var passwdInput = document.getElementsByClassName("input_passwd");
-var passwdLabel = document.getElementById("input_error_passwd");
-var verifyInput = document.getElementById("input_ver");
-var submit_button = document.getElementById('input_submit');
+//生成随机数
+function randomNum(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+//生成随机颜色RGB分量
+function randomColor(min, max) {
+    var _r = randomNum(min, max);
+    var _g = randomNum(min, max);
+    var _b = randomNum(min, max);
+    return "rgb(" + _r + "," + _g + "," + _b + ")";
+}
 
-var name = "false";
-var email = "false";
-var passwd = "false";
+var star1 = document.getElementById("bg-stars-1");
+var star2 = document.getElementById("bg-stars-2");
+var star3 = document.getElementById("bg-stars-3");
 
-nameInput[0].addEventListener("keydown", NameDetect);
-emailInput[0].addEventListener("keydown", EmailDetect);
-passwdInput[0].addEventListener("keydown", PasswdDetect);
+function randomNum(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}
+
+window.onload = function bgstars() {
+    document.getElementsByClassName("card-list")[0].style.height = "90%";
+    console.log(123);
+    var stars1 = "";
+    var stars2 = "";
+    var stars3 = "";
+    var maxstars = 50;
+    for (var i = 0; i < maxstars; i++) {
+        stars1 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
+        stars2 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
+        stars3 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
+        if (i+1 != maxstars) {
+            stars1 += ",";
+            stars2 += ",";
+            stars3 += ",";
+        }
+    }
+    star1.style.boxShadow = stars1;
+    star2.style.boxShadow = stars2;
+    star3.style.boxShadow = stars3;
+}
+
+
+
+
+
+
+
+
+
+
+var nameInput = document.getElementsByClassName("input-email")[0];
+var nameLabel = document.getElementById("input-error-username");
+var emailInput = document.getElementsByClassName("input-password")[0];
+var emailLabel = document.getElementById("input-error-email");
+var passwdInput = document.getElementsByClassName("input-username")[0];
+var passwdLabel = document.getElementById("input-error-passwd");
+var verifyInput = document.getElementById("input-ver");
+var submit_button = document.getElementById('input-submit');
+
+var inputname = "false";
+var inputemail = "false";
+var inputpasswd = "false";
+
+nameInput.addEventListener("keydown", NameDetect);
+emailInput.addEventListener("keydown", EmailDetect);
+passwdInput.addEventListener("keydown", PasswdDetect);
 verifyInput.addEventListener("keydown", SubmitDetect);
 
 function NameDetect() {
 	nameLabel.style.visibility = "hidden";
-	nameInput[0].style.backgroundImage = "url('../Image/gif/delay-16px.gif')";
+	nameInput.style.backgroundImage = "url('../Image/gif/delay-16px.gif')";
 	setTimeout(inline, 500);
 	function inline() {
-		if (8 <= nameInput[0].value.length) {
+		if (8 <= nameInput.value.length) {
 			nameLabel.style.visibility = "visible";
-			nameLabel.innerHTML = "用户名 " + nameInput[0].value + " 可以使用";
+			nameLabel.innerHTML = "用户名 " + nameInput.value + " 可以使用";
 			nameLabel.className = "input_success";
-			nameInput[0].style.borderColor = "#34d058";
-			nameInput[0].style.backgroundImage = "url('../Image/png/success.png')";
-			name = "true";
+			nameInput.style.borderColor = "#34d058";
+			nameInput.style.backgroundImage = "url('../Image/png/success.png')";
+			inputname = true;
 
-		} else if (nameInput[0].value.length == 0) {
+		} else if (nameInput.value.length == 0) {
 			nameLabel.style.visibility = "hidden";
-			nameInput[0].style.backgroundImage = "url('none')";
-			nameInput[0].style.borderColor = "#d8dee2";
-			name = "false";
+			nameInput.style.backgroundImage = "url('none')";
+			nameInput.style.borderColor = "#d8dee2";
+			inputname = false;
 		} else {
 			nameLabel.style.visibility = "visible";
-			nameLabel.innerHTML = "用户名 " + nameInput[0].value + " 不合法或已被使用";
+			nameLabel.innerHTML = "用户名 " + nameInput.value + " 不合法或已被使用";
 			nameLabel.className = "input_error";
-			nameInput[0].style.borderColor = "#F97583";
-			nameInput[0].style.backgroundImage = "url('../Image/png/error.png')";
-			name = "false";
-		}
-	}
+			nameInput.style.borderColor = "#F97583";
+			nameInput.style.backgroundImage = "url('../Image/png/error.png')";
+            inputname = false;
+        }
+    }
 }
-
 function EmailDetect() {
 	emailLabel.style.visibility = "hidden";
-	emailInput[0].style.backgroundImage = "url('../Image/gif/delay-16px.gif')";
+	emailInput.style.backgroundImage = "url('../Image/gif/delay-16px.gif')";
 	setTimeout(inline, 500);
 	var STATE = "none";
 	var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 	function inline() {
-		if (true == pattern.test(emailInput[0].value)) {
+		if (true == pattern.test(emailInput.value)) {
 			emailLabel.style.visibility = "hidden";
 			emailLabel.className = "input_success"
-			emailInput[0].style.borderColor = "#34d058";
-			emailInput[0].style.backgroundImage = "url('../Image/png/success.png')";
-			email = "true";
+			emailInput.style.borderColor = "#34d058";
+			emailInput.style.backgroundImage = "url('../Image/png/success.png')";
+			inputemail = true;
 		} else if (0 == emailLabel.value) {
 			emailLabel.style.visibility = "hidden";
-			emailInput[0].style.backgroundImage = "url('none')";
-			emailInput[0].style.borderColor = "#d8dee2";
-			email = "false";
+			emailInput.style.backgroundImage = "url('none')";
+			emailInput.style.borderColor = "#d8dee2";
+			inputemail = false;
 		} else {
 			emailLabel.style.visibility = "visible";
 			emailLabel.className = "input_error";
 			emailLabel.innerHTML = "邮箱不合法或已被使用";
-			emailInput[0].style.borderColor = "#F97583";
-			emailInput[0].style.backgroundImage = "url('../Image/png/error.png')";
-			email = "false";
+			emailInput.style.borderColor = "#F97583";
+			emailInput.style.backgroundImage = "url('../Image/png/error.png')";
+			inputemail = false;
 		}
 	}
 }
-
 function PasswdDetect() {
-	passwdInput[0].style.backgroundImage = "url('../Image/gif/delay-16px.gif')";
+	passwdInput.style.backgroundImage = "url('../Image/gif/delay-16px.gif')";
 	setTimeout(inline, 500);
 	function inline() {
-		if (8 <= passwdInput[0].value.length) {
+		if (8 <= passwdInput.value.length) {
 			passwdLabel.style.color = "#34d058";
-			passwdInput[0].style.borderColor = "#34d058";
-			passwdInput[0].style.backgroundImage = "url('../Image/png/success.png')";
-			passwd = "true";
-		} else if (passwdInput[0].value.length == 0) {
-			passwdInput[0].style.backgroundImage = "url('none')";
-			passwdInput[0].style.borderColor = "#d8dee2";
-			passwd = "false";
+			passwdInput.style.borderColor = "#34d058";
+			passwdInput.style.backgroundImage = "url('../Image/png/success.png')";
+			inputpasswd = true;
+		} else if (passwdInput.value.length == 0) {
+			passwdInput.style.backgroundImage = "url('none')";
+			passwdInput.style.borderColor = "#d8dee2";
+			inputpasswd = false;
 		} else {
 			passwdLabel.style.color = "#86181D";
-			passwdInput[0].style.borderColor = "#F97583";
-			passwdInput[0].style.backgroundImage = "url('../Image/png/error.png')";
-			passwd = "false";
+			passwdInput.style.borderColor = "#F97583";
+			passwdInput.style.backgroundImage = "url('../Image/png/error.png')";
+			inputpasswd = false;
 		}
 	}
 }
-
 function SubmitDetect() {
 	let register_verify = document.getElementById("input_ver").value;
-	console.log(register_verify);
-	if (name === "true" && email === "true" && passwd === "true" && register_verify === str_random) {
+    console.log(register_verify);
+	if (inputname === true && inputemail === true && inputpasswd === true) {
 		submit_button.disabled = false;
 		submit_button.className = "input_submit_true";
 	} else {
@@ -111,49 +159,59 @@ function SubmitDetect() {
 		submit_button.className = "input_submit_false";
 	}
 }
-
-/*
-//var verification = document.getElementById("verification");
-var random = Math.floor(Math.random() * 100);
-var str_random;
-verification.style.backgroundImage = "url(verification/" + random + ".png)";
-var requeset = new XMLHttpRequest();
-document.onreadystatechange = function() {
-	if (document.readyState == "complete") {
-		requeset.open("POST", "verification", true);
-		requeset.send(random);
-	};
-};
-*/
-requeset.onreadystatechange = function() {
-	if (requeset.readyState == 4 && requeset.status == 200) {
-		var returnObj = eval("(" + requeset.responseText + ")");
-		verification.style.backgroundImage = "url(verification/" + returnObj.random + ".png)";
-		str_random = returnObj.random;
-		console.log(str_random);
-	}
-}
-
-
-
 var register = new XMLHttpRequest();
-var register_name = document.getElementById("username").value;
-var register_email = document.getElementById("email").value;
-var register_passwd = document.getElementById("password").value;
-var register_verify = document.getElementById("input_ver").value;
 var register_button = document.getElementById("input_submit");
-register_button.onclick = function() {
-	let register_name = document.getElementById("username").value;
-	let register_email = document.getElementById("email").value;
-	let register_passwd = document.getElementById("password").value;
-	var tmp = register_name + "&" + register_email + "&" + register_passwd;
-	register.open("POST", "register", true);
-	register.send(tmp);
-}
 submit_button.onclick = function() {
-	let login_name = document.getElementById("username").value;
-	let login_passwd = document.getElementById("password").value;
-	var register_value = login_name + "&" + login_passwd;
-	login.open("POST", "login", true);
-	login.send(register_value);
+    let register_name = document.getElementById("username").value;
+	let register_email = document.getElementById("email").value;
+    let register_passwd = document.getElementById("password").value;
+	var info = register_name + "&" + register_email + "&" + register_passwd;
+	register.open("POST", "register", true);
+	register.send(info);
 }
+document.getElementById("verify-code").onclick = function (click) {
+    click.preventDefault();
+    drawPic();
+};
+function drawPic() {
+    //获取到元素canvas
+    var verifycode = document.getElementById("verify-code");
+    var verifystr = "0123456789abcdefghijklmnopqrstuvwxyz"; //设置随机数库
+    var picTxt = ""; //随机数
+    var verifynums = 4;
+    var picwidth = verifycode.width;
+    var picheight = verifycode.height;
+    var verifytext = verifycode.getContext("2d"); //获取 context 对象
+
+    //随机画原，填充颜色
+    verifytext.fillStyle = randomColor(180, 240); //填充画布颜色
+    verifytext.fillRect(0, 0, picwidth, picheight); //填充矩形--画画
+    verifytext.beginPath();
+    verifytext.arc(randomNum(0, picwidth), randomNum(0, picheight), 1, 0, 2 * Math.PI);
+    verifytext.fill();
+    for (var i = 0; i < verifynums; i++) {
+        var x = (picwidth - 20) / verifynums * i + 20;
+        var y = randomNum(picheight / 2, picheight);
+        var randomdeg = randomNum(-45, 45);
+        var txt = verifystr[randomNum(0, verifystr.length)];
+        picTxt += txt; //获取一个随机数
+        verifytext.fillStyle = randomColor(10, 100); //填充随机颜色
+        verifytext.font = randomNum(50, 80) + "px SimHei"; //设置随机数大小，字体为SimHei
+        verifytext.translate(x, y); //将当前xy坐标作为原始坐标
+        verifytext.rotate(randomdeg * Math.PI / 180); //旋转随机角度
+        verifytext.fillText(txt, 0, 0); //绘制填色的文本
+        verifytext.rotate(-randomdeg * Math.PI / 180);
+        verifytext.translate(-x, -y);
+    }
+    for (var i = 0; i < verifynums; i++) {
+        //定义笔触颜色
+        verifytext.strokeStyle = randomColor(90, 180);
+        verifytext.beginPath();
+        //随机划线--4条路径
+        verifytext.moveTo(randomNum(0, picwidth), randomNum(0, picheight));
+        verifytext.lineTo(randomNum(0, picwidth), randomNum(0, picheight));
+        verifytext.stroke();
+    }
+    return picTxt; //返回随机数字符串
+}
+drawPic();

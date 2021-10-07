@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>加入瓦肆 创建账号</title>
+		<link type="text/css" rel="stylesheet" href="Regsiteraccount.css" />
+		<link rel="icon" href="../Image/png/logo_32.png" type="image/x-icon">
+	</head>
+	<body>
+		<div class="head1">加入瓦肆</div>
+		<div class="head2">创建账号</div>
+		<div align="center" class="maincss">
+			<from action="/create" method="post">
+				<dl class="input">
+					<dt>用户名</dt>
+					<input name="username" type="text" class="input_name" id="username" />
+					<div align="left">
+						<label class="input_error" id="input_error_name"></label>
+					</div>
+					<dt>邮箱地址</dt>
+					<input name="emailaddress" type="text" class="input_email" id="email" />
+					<div align="left">
+						<label class="input_error" id="input_error_email"></label>
+					</div>
+					<dt>密码</dt>
+					<input name="password" type="password" class="input_passwd" id="password" />
+					<dt class="input_passwd_unless">密码至少需要
+						<label id="input_error_passwd">8个字符</label>
+					</dt>
+					<div class="verify">
+						<div class="left">
+							<dt>验证码</dt>
+							<input type="text" class="input_verify" id="input_ver" />
+						</div>
+						<div class="right">
+                            <canvas id="canvas" width="100" height="30"></canvas>
+                        </div>
+					</div>
+					<div class="space"></div>
+					<input type="button" class="input_submit_false" id="input_submit" disabled="disabled" value="创建账户" />
+				</dl>
+			</from>
+		</div>
+	</body>
+	<script src="Regsiteraccount.js"></script>
+</html>
