@@ -16,33 +16,46 @@
                 <div id="bg-stars-2"></div>
                 <div id="bg-stars-3"></div>
             </div>
+
         	<div class="card-list">
                 <div class="card">
-                    <div class="title-email">邮箱地址
-                        <div><input type="text" class="input-email" /></div>
-                        <div class="input-error" id="input-error-email"></div>
+                    <div class="title-email">邮箱地址</div>
+                    <div class="div-email">
+                        <span class="arrow"> → &nbsp; </span>
+                        <input type="text" class="input-email" />
+                        <button class="continue" id="input-error-email">继续</button>
                     </div>     
-                    <div class="title-username">用户名
-                        <div><input type="text" class="input-username" /></div>
-                        <div class="input-error" id="input-error-username"></div>
-                    </div>               
-                    <div class="title-password">密码
-                        <div><input type="password" class="input-password" /></div>
-                        <div class="input_error"></div>
-                    </div>                    
-                    <div class="title-verify">验证码
-						<div class="left"> 
-							<input type="text" class="input_verify" id="input_ver" />
-						</div>
-						<div class="right">
-                            <canvas id="canvas" width="100" height="30"></canvas>
+
+                    <div class="title-password">密码</div>
+                    <div class="div-password">
+                        <span class="arrow"> → &nbsp; </span>
+                        <input type="text" class="input-password" />
+                        <button class="continue" id="input-error-password">继续</button>
+                    </div>     
+       
+                    <div class="title-username">用户名</div>
+                    <div class="div-username">
+                        <span class="arrow"> → &nbsp; </span>
+                        <input type="text" class="input-username" />
+                        <button class="continue" id="input-error-username">继续</button>
+                    </div>   
+           
+                    <div class="title-username">验证码</div>
+                    <div class="div-verifycode">
+                        <span class="arrow"> → &nbsp; </span>
+						<div class="verify-half"> 
+                            <input type="text" class="input-verifycode" />
                         </div>
+                        <button class="continue" id="input-submit">提交</button>
                     </div>
-                    <div class="title-submit">提交
-                        <input type="button"/>
+                    <div class="div-verifypic">
+						<div class="verify-half"> 
+                            <canvas id="canvas" width="120" height="50"></canvas>
+                        </div>
                     </div>
                 </div>
         	</div>
+            <div class="badinput-prompt">11111111</div>
         </Main>
         <Footer>
             <div class="Github_link">

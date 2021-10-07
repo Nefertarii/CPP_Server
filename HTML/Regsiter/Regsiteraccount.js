@@ -17,13 +17,14 @@ function randomColor(min, max) {
 var star1 = document.getElementById("bg-stars-1");
 var star2 = document.getElementById("bg-stars-2");
 var star3 = document.getElementById("bg-stars-3");
-
 function randomNum(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
 
+
 window.onload = function bgstars() {
-    document.getElementsByClassName("card-list")[0].style.height = "90%";
+    //20% 35% 55% 85%
+    document.getElementsByClassName("card-list")[0].style.height = "85%";
     console.log(123);
     var stars1 = "";
     var stars2 = "";
@@ -45,22 +46,21 @@ window.onload = function bgstars() {
 }
 
 
-
-
-
-
-
-
-
-
-var nameInput = document.getElementsByClassName("input-email")[0];
-var nameLabel = document.getElementById("input-error-username");
-var emailInput = document.getElementsByClassName("input-password")[0];
+var emailInput = document.getElementsByClassName("input-email")[0];
 var emailLabel = document.getElementById("input-error-email");
-var passwdInput = document.getElementsByClassName("input-username")[0];
-var passwdLabel = document.getElementById("input-error-passwd");
+var nameInput = document.getElementsByClassName("input-username")[0];
+var nameLabel = document.getElementById("input-error-username");
+var passwdInput = document.getElementsByClassName("input-password")[0];
+var passwdLabel = document.getElementById("input-error-password");
 var verifyInput = document.getElementById("input-ver");
 var submit_button = document.getElementById('input-submit');
+
+
+
+
+
+
+/*
 
 var inputname = "false";
 var inputemail = "false";
@@ -86,7 +86,7 @@ function NameDetect() {
 
 		} else if (nameInput.value.length == 0) {
 			nameLabel.style.visibility = "hidden";
-			nameInput.style.backgroundImage = "url('none')";
+			nameInput.style.backgroundImage = "url('')";
 			nameInput.style.borderColor = "#d8dee2";
 			inputname = false;
 		} else {
@@ -112,9 +112,9 @@ function EmailDetect() {
 			emailInput.style.borderColor = "#34d058";
 			emailInput.style.backgroundImage = "url('../Image/png/success.png')";
 			inputemail = true;
-		} else if (0 == emailLabel.value) {
+		} else if (emailInput.value.length == 0) {
 			emailLabel.style.visibility = "hidden";
-			emailInput.style.backgroundImage = "url('none')";
+			emailInput.style.backgroundImage = "url('')";
 			emailInput.style.borderColor = "#d8dee2";
 			inputemail = false;
 		} else {
@@ -137,7 +137,7 @@ function PasswdDetect() {
 			passwdInput.style.backgroundImage = "url('../Image/png/success.png')";
 			inputpasswd = true;
 		} else if (passwdInput.value.length == 0) {
-			passwdInput.style.backgroundImage = "url('none')";
+			passwdInput.style.backgroundImage = "url('')";
 			passwdInput.style.borderColor = "#d8dee2";
 			inputpasswd = false;
 		} else {
@@ -148,6 +148,7 @@ function PasswdDetect() {
 		}
 	}
 }
+//Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.
 function SubmitDetect() {
 	let register_verify = document.getElementById("input_ver").value;
     console.log(register_verify);
@@ -168,7 +169,10 @@ submit_button.onclick = function() {
 	var info = register_name + "&" + register_email + "&" + register_passwd;
 	register.open("POST", "register", true);
 	register.send(info);
-}
+}*/
+
+
+
 document.getElementById("verify-code").onclick = function (click) {
     click.preventDefault();
     drawPic();

@@ -9,7 +9,7 @@
 	--font-light: #BCC7EF;
     --font-dark: #627597;
 	--font-blue: #0066ff;
-    --font-green:#00CFC8;
+    --font-green:#00CfC8;
 
 	--link: #0166d6;
 	--link-hover: #0100d6;
@@ -17,10 +17,12 @@
 	--input-border-foucs: #66afe9;
 	--input-submit: #2ea44f;
 	--input-submit-hover: #379D49;
+    --bg: #040D21;
 	--bg-black: #0c162d;
 	--bg-black-light: #1c233c;
 	--bg-gray: #f6f8fa;
 	--bg-red: #ff1a1a;
+    --bg-pink: #ea4aaa;
 	--bg-border: #eaecef;
 	--bt-bg-blue: #33518b;
 }
@@ -34,11 +36,10 @@ a:hover,a:active {
 
 html,body {
     margin: 0%;
-    overflow: hidden;
     width: 100%;
     height: 100%;
     box-sizing: border-box;
-	background-color: #040D21;
+	background-color: var(--bg);
     background-image: url(../Image/svg/glow.svg);
 	background-size: 200%;
 	background-position-x: 45%;
@@ -58,85 +59,14 @@ Footer {
     width: 100%;
     height: 5rem;
     color: var(--font); }
+input, input:hover, input:focus {
+    background-color: var(--bg-black);
+    border: 0;
+    outline: 0;
+    color: var(--white);
+    caret-color: var(--white);
+    padding: 4px 10px; }
 
-input {
-    width: 80%;
-    padding: 5px 12px;
-    border-radius: 7px;
-    border: 1px solid #d8dee2;
-    background-color: #F6F8F9;
-    background-repeat: no-repeat;
-    background-position-x: 98%;
-    background-position-y: center;
-}
-
-.input-error:before {
-	content: "";
-	border-left: 5px solid transparent;
-	border-right: 5px solid transparent;
-	border-bottom: 5px solid var(--border-error);
-	position: absolute;
-	top: -5px;
-	left: 5px;
-}
-.input-error:before {
-	background-color: var(--bg-error);
-	border: 0.01875rem solid var(--border-error);
-	height: 1.25rem;
-	position: relative;
-	margin-top: .1rem;
-	border-radius: 0.25rem;
-	font-weight: 400;
-	font-family: "Segoe UI";
-	font-size: 0.75rem;
-	line-height: 1.125rem;
-	color: var(--font-error);
-	padding: 0.0625rem 0.1875rem;
-	visibility: hidden;
-}
-.input-error:after {
-	content: "";
-	border-left: 5px solid transparent;
-	border-right: 5px solid transparent;
-	border-bottom: 5px solid #FFEEF0;
-	position: absolute;
-	top: -4px;
-	left: 5px;
-}
-
-.input-success:before {
-	content: "";
-	border-left: 5px solid transparent;
-	border-right: 5px solid transparent;
-	border-bottom: 5px solid var(--border-success);
-	position: absolute;
-	top: -5px;
-	left: 5px;
-}
-.input-success {
-	background-color: var(--bg-success);
-	border: 0.01875rem solid var(--border-success);
-	height: 1.25rem;
-	position: relative;
-	margin-top: .1rem;
-	border-radius: 0.25rem;
-	font-weight: 400;
-	font-family: "Segoe UI";
-	font-size: 0.75rem;
-	line-height: 1.125rem;
-	color: var(--font-success);
-	padding: 0.0625rem 0.1875rem;
-	visibility: hidden;
-}
-.input-success:after {
-	content: "";
-	border-left: 5px solid transparent;
-	border-right: 5px solid transparent;
-	border-bottom: 5px solid var(--bg-success);
-	position: absolute;
-	top: -4px;
-	left: 5px;
-}
 
 @keyframes animStar {
     from {transform:translateY(0)} 
@@ -165,66 +95,120 @@ input {
     height: 3px;
     animation: animStar 150s linear infinite; }
 
-
     
 .card-list {
+    
     position: relative;
-    z-index: 100 !important;
+    z-index: 100;
     text-align: center;
-    overflow: hidden;
-	margin-left: 20%;
+	margin: auto;
     padding: 1rem;
+    min-width: 550px;
 	width: 60%;
+    max-width: 800px;
     height: 0%;
     max-height: 90%;
-	background-color: var(--bg-black-light);
+	background-color: var(--bg-black);
     box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
 	border-radius: 0.25rem;
-	color: var(--font-light);
+	color: var(--font-green);
+    transition: height 1s; }
+.card {
+    text-align: left;
+    padding: 2rem; }
+.badinput-prompt {
+    font-size: large;
+    color: var(--font-dark);
+    z-index: 100;
+    text-align: left;
+	margin: auto;
+    margin-top: 20px;
+    min-width: 550px;
+	width: 60%;
+    max-width: 800px;
+    height: 0%;
+    max-height: 90%;
     transition: height 1s; }
 
-.card {
-    margin: auto;
-    width: 80%;
-    height: 100%;
-}
+
+.arrow {
+    font-size: large;
+    padding-top: 4px;
+    color: var(--bg-pink);
+    height: 24px;
+    width: 24px; }
+.continue {
+    height: 32px;
+    padding: 5px 12px;
+    background-color: var(--bg-black);
+    color: var(--font-dark);
+    border: var(--font-dark) solid 1px;
+    border-radius: 6px;
+    outline: none; }
+.continue:hover, .continue:focus {
+    cursor: pointer;
+    outline: none; }
+
+
 .title-email {
-    text-align: left;
-    padding: .3rem;
-    background: #fff;
-}
+    margin-bottom: 10px; }
+.div-email {
+    height: 32px;
+    display: flex;
+    text-align: left; }
+.input-email {
+    font-size: large;
+    height: 24px;
+    width: 80%; }
+
+
 .title-password {
-    text-align: left;
-    padding: .3rem;
-    background: #fff;
-}
+    margin-top: 40px;
+    margin-bottom: 10px; }
+.div-password {
+    height: 32px;
+    display: flex;
+    text-align: left; }
+.input-password {
+    font-size: large;
+    height: 24px;
+    width: 80%; }
+
+
 .title-username {
-    text-align: left;
-    padding: .3rem;
-    background: #fff;
-}
+    margin-top: 40px;
+    margin-bottom: 10px; }
+.div-username {
+    height: 32px;
+    display: flex;
+    text-align: left; }
+.input-username {
+    font-size: large;
+    height: 24px;
+    width: 80%; }
+
+
 .title-verify {
-    text-align: left;
-    padding: .3rem;
-    background: #fff;
-}
-.verify-left {
-    background-color: #000;
-    width: 40%;
-    height: 100%;
-}
-.verify-right {
-    background-color: #000;
-    float: right;
-    width: 40%;
-    height: 100%;
-}
-.verify-code {
-    width: 100%;
-    height: 100%;
-
-}
-
+    margin-top: 40px;
+    margin-bottom: 10px; }
+.div-verifycode {
+    height: 32px;
+    display: flex;
+    text-align: left; }
+.div-verifypic {
+    margin-left: 24px;
+    height: 32px;
+    display: flex;
+    text-align: left; }
+.input-verifycode {
+    font-size: large;
+    height: 24px;
+    width: 80%; }
+#canvas {
+    vertical-align: middle;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    cursor: pointer; }
 
 
 .Github_link {
