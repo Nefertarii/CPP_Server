@@ -15,13 +15,13 @@
 	--link-hover: #0100d6;
 	--input-border: #d8dee2;
 	--input-border-foucs: #66afe9;
-	--input-submit: #2ea44f;
-	--input-submit-hover: #379D49;
     --bg: #040D21;
 	--bg-black: #0c162d;
 	--bg-black-light: #1c233c;
 	--bg-gray: #f6f8fa;
 	--bg-red: #ff1a1a;
+    --bg-green: #2ea44f;
+	--bg-green-dark: #379D49;
     --bg-pink: #ea4aaa;
 	--bg-border: #eaecef;
 	--bt-bg-blue: #33518b;
@@ -71,9 +71,6 @@ input, input:hover, input:focus {
 @keyframes animStar {
     from {transform:translateY(0)} 
     to {transform:translateY(-2000px)} }
-@media(prefers-reduced-motion) {
-    .bg-stars-1,.bg-stars-2,.bg-stars-3
-    {animation:none} }
 .bg-stars {
     position: relative;
     z-index: 10;
@@ -97,7 +94,7 @@ input, input:hover, input:focus {
 
     
 .card-list {
-    
+    overflow: hidden;
     position: relative;
     z-index: 100;
     text-align: center;
@@ -107,7 +104,7 @@ input, input:hover, input:focus {
 	width: 60%;
     max-width: 800px;
     height: 0%;
-    max-height: 90%;
+    max-height: 1200px;
 	background-color: var(--bg-black);
     box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
 	border-radius: 0.25rem;
@@ -144,10 +141,20 @@ input, input:hover, input:focus {
     color: var(--font-dark);
     border: var(--font-dark) solid 1px;
     border-radius: 6px;
+    pointer-events:none;
     outline: none; }
-.continue:hover, .continue:focus {
-    cursor: pointer;
+.continue-success {
+    height: 32px;
+    padding: 5px 12px;
+    background-color: var(--bg-black);
+    color: var(--bg-green);
+    border: var(--bg-green) solid 1px;
+    border-radius: 6px;
     outline: none; }
+.continue-success:hover, .continue-success:focus {
+    color: var(--bg-green-dark);
+    border: var(--bg-green-dark) solid 1px;
+    cursor: pointer; }
 
 
 .title-email {
@@ -197,7 +204,8 @@ input, input:hover, input:focus {
     text-align: left; }
 .div-verifypic {
     margin-left: 24px;
-    height: 32px;
+    height: 50px;
+    width: 120px;
     display: flex;
     text-align: left; }
 .input-verifycode {
