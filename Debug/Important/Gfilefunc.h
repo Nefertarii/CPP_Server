@@ -12,6 +12,7 @@ namespace Gfile {
     bool ReadConfig(std::string config_file_dir, std::map<std::string, std::string>* string_map);
     bool ReadConfig(std::string config_file_dir, std::map<std::string, size_t>* string_map);
     bool ReadConfig(std::string config_file_dir, std::map<std::string, std::vector<std::string>>* strvec_map);
+    bool ReadConfig(std::string config_file_dir, std::vector<std::string>* strvec);
     bool SaveData(std::string config_file_dir, std::map<std::string, std::string>* string_map);
     bool SaveData(std::string config_file_dir, std::map<std::string, std::vector<std::string>>* strvec_map);
 }
@@ -134,6 +135,19 @@ bool Gfile::ReadConfig(std::string config_file_dir, std::map<std::string, std::v
         return true;
     }
     file.close();
+    return false;
+}
+
+bool Gfile::ReadConfig(std::string config_file_dir, std::vector<std::string>* strvec) {
+    std::fstream file;
+    std::string fileline;
+    file.open(config_file_dir, std::ios::in);
+    if (file) {
+        while (std::getline(file, fileline)) {
+            strvec->push_back(fileline);
+        }
+        return true;
+    }
     return false;
 }
 

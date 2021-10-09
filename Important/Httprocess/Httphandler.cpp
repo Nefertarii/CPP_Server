@@ -65,7 +65,6 @@ void HTTP_Handler::Init(std::map<std::string, std::string>* global_string_settin
     responectrl.SetWritemax(global_value_settings->find("WriteMax")->second);
     //account
     accountctrl.SetLog(this_log, logbuf_size);
-    accountctrl.ReadAccountFile(global_string_settings->find("AccountFile")->second);
     accountctrl.ReadAccountInfoFile(global_string_settings->find("AccountInfoFile")->second);
     //done
     this_log->Infolog("Http handler init complite.");
@@ -103,7 +102,7 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
         index += tmp.size() + 1;
     }
     switch (client->requset_type) {
-    case POSTLogin: {
+    case POSTLogin: { //数据要求 邮箱&密码
         if (accountctrl.Login(data[0], data[1])) {
             client->respone_body = accountctrl.GetAccountInfo(data[0]);
         } else {
@@ -113,7 +112,7 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
         processctrl.CreateResponeHead(client);
         break;
     }
-    case POSTReset: {
+    case POSTReset: { //数据要求 邮箱&旧密码&新密码
         if (accountctrl.ChangePassword(data[0], data[1], data[2])) {
             client->respone_body = JsonSpliced({ "ResetPassword","OK" });
         } else {
@@ -124,8 +123,8 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
         this_log->Warninglog("Send request OK.");
         break;
     }
-    case POSTRegister: {
-        if (accountctrl.Regsiter(data[0], data[1])) {
+    case POSTRegister: { //数据要求 邮箱&密码&用户名
+        if (accountctrl.Regsiter(data[0], data[1], data[2])) {
             client->respone_body = JsonSpliced({ "Regsiter","Ok" });
         } else {
             client->respone_body = JsonSpliced({ "Regsiter","false" });
