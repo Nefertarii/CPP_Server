@@ -1,12 +1,12 @@
 var login = new XMLHttpRequest();
 var login_name = document.getElementById("username").value;
 var login_passwd = document.getElementById("password").value;
-var login_button = document.getElementById("login_button");
+var login_button = document.getElementById("login-button");
 
-var avatar = document.getElementById("avatar_success");
-var left_info_fail = document.getElementById("left_info_fail");
-var left_info_success = document.getElementById("left_info_success");
-var left_info_success_username = document.getElementById("left_info_success_username");
+var avatar = document.getElementById("avatar-success");
+var login_fail = document.getElementById("Follow-left-Login-fail");
+var login_success = document.getElementById("Follow-left-Login-sucess");
+var login_success_username = document.getElementById("left-info-success-username");
 
 
 
@@ -20,11 +20,11 @@ login_button.onclick = function() {
 login.onreadystatechange = function() {
 	if (login.readyState == 4 && login.status == 200) {
 		var returnObj = eval("(" + login.responseText + ")");
-		if (returnObj.login == "success") {
-			left_info_fail.style.display = "none";
-			left_info_success.style.display = "block";
-			avatar.style.backgroundImage = "url(" + returnObj.AccountImage + ")";
-			left_info_success_username.innerHTML = returnObj.AccountAlias;
+		if (returnObj.Login[0].state == "success") {
+			login_fail.style.display = "none";
+			login_success.style.display = "block";
+			avatar.style.backgroundImage = "url(" + returnObj.Login[1].AccountImage + ")";
+			login_success_username.innerHTML = returnObj.Login[1].AccountAlias;
 		}
 	}
 };

@@ -1,36 +1,36 @@
 hncsgwc@gmail.com
 AccountPassword admin
-AccountImage Image/Account/root.png
+AccountImage Image/Account/Default.png
 AccountAlias admin
 AccountID 10000000
 ----
 notexist1@gmail.com
 AccountPassword password1111
-AccountImage Image/Account/tempaccount1.png
+AccountImage Image/Account/Default.png
 AccountAlias user111
 AccountID 10000002
 ----
 notexist2@gmail.com
 AccountPassword password2
-AccountImage Image/Account/tempaccount2.png
+AccountImage Image/Account/Default.png
 AccountAlias user2
 AccountID 10000003
 ----
 notexist3@gmail.com
 AccountPassword password3
-AccountImage Image/Account/tempaccount3.png
+AccountImage Image/Account/Default.png
 AccountAlias user3
 AccountID 10000004
 ----
 notexist4@gmail.com
 AccountPassword password4
-AccountImage Image/Account/tempaccount4.png
+AccountImage Image/Account/Default.png
 AccountAlias user4
 AccountID 10000005
 ----
 notexist5@gmail.com
 AccountPassword password5
-AccountImage Image/Account/tempaccount5.png
+AccountImage Image/Account/Default.png
 AccountAlias user5
 AccountID 10000006
 ----
@@ -42,7 +42,7 @@ AccountID 10000007
 ----
 notexist@gmail.com
 AccountPassword password0
-AccountImage Image/Account/tempaccount0.png
+AccountImage Image/Account/Default.png
 AccountAlias UserTest
 AccountID 10000001
 ----
