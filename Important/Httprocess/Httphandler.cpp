@@ -104,7 +104,8 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
     switch (client->requset_type) {
     case POSTLogin: { //数据要求 邮箱&密码
         if (accountctrl.Login(data[0], data[1])) {
-            client->respone_body = accountctrl.GetAccountInfo(data[0]);
+            client->respone_body = JsonSpliced({"Login", "success"});
+            client->respone_body += accountctrl.GetAccountInfo(data[0]);
         } else {
             client->respone_body = JsonSpliced({"Login", "false"});
         }
@@ -114,7 +115,7 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
     }
     case POSTReset: { //数据要求 邮箱&旧密码&新密码
         if (accountctrl.ChangePassword(data[0], data[1], data[2])) {
-            client->respone_body = JsonSpliced({ "ResetPassword","OK" });
+            client->respone_body = JsonSpliced({ "ResetPassword","success" });
         } else {
             client->respone_body = JsonSpliced({ "ResetPassword","false" });
         }
@@ -125,7 +126,7 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
     }
     case POSTRegister: { //数据要求 邮箱&密码&用户名
         if (accountctrl.Regsiter(data[0], data[1], data[2])) {
-            client->respone_body = JsonSpliced({ "Regsiter","Ok" });
+            client->respone_body = JsonSpliced({ "Regsiter","success" });
         } else {
             client->respone_body = JsonSpliced({ "Regsiter","false" });
         }
