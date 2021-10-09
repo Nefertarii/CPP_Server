@@ -136,32 +136,40 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
     }
     switch (client->requset_type) {
     case POSTLogin: { //数据要求 邮箱&密码
+        client->respone_body = "{\"Login\":[";
         if (accountctrl.Login(data[0], data[1])) {
-            client->respone_body = accountctrl.GetAccountInfo(data[0]);
+            client->respone_body += JsonSpliced({ "state", "success" });
+            client->respone_body += ",";
+            client->respone_body += accountctrl.GetAccountInfo(data[0]);
         } else {
-            client->respone_body = JsonSpliced({"Login", "false"});
+            client->respone_body += JsonSpliced({ "state", "false" });
         }
+        client->respone_body += "]}";
         client->http_state = OK;
         processctrl.CreateResponeHead(client);
         break;
     }
     case POSTReset: { //数据要求 邮箱&旧密码&新密码
+        client->respone_body = "{\"ResetPassword\":[";
         if (accountctrl.ChangePassword(data[0], data[1], data[2])) {
-            client->respone_body = JsonSpliced({ "ResetPassword","OK" });
+            client->respone_body += JsonSpliced({ "state","success" });
         } else {
-            client->respone_body = JsonSpliced({ "ResetPassword","false" });
+            client->respone_body += JsonSpliced({ "state","false" });
         }
+        client->respone_body += "]}";
         client->http_state = OK;
         processctrl.CreateResponeHead(client);
         this_log->Warninglog("Send request OK.");
         break;
     }
     case POSTRegister: { //数据要求 邮箱&密码&用户名
+        client->respone_body = "{\"Regsiter\":[";
         if (accountctrl.Regsiter(data[0], data[1], data[2])) {
-            client->respone_body = JsonSpliced({ "Regsiter","Ok" });
+            client->respone_body += JsonSpliced({ "state","success" });
         } else {
-            client->respone_body = JsonSpliced({ "Regsiter","false" });
+            client->respone_body += JsonSpliced({ "state","false" });
         }
+        client->respone_body += "]}";
         client->http_state = OK;
         processctrl.CreateResponeHead(client);
         this_log->Warninglog("Send request OK.");

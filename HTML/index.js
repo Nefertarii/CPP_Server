@@ -20,11 +20,11 @@ login_button.onclick = function() {
 login.onreadystatechange = function() {
 	if (login.readyState == 4 && login.status == 200) {
 		var returnObj = eval("(" + login.responseText + ")");
-		if (returnObj.session == "success") {
+		if (returnObj.login == "success") {
 			left_info_fail.style.display = "none";
 			left_info_success.style.display = "block";
-			avatar.style.backgroundImage = "url(" + returnObj.image + ")";
-			left_info_success_username.innerHTML = returnObj.username;
+			avatar.style.backgroundImage = "url(" + returnObj.AccountImage + ")";
+			left_info_success_username.innerHTML = returnObj.AccountAlias;
 		}
 	}
 };

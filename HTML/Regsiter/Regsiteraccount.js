@@ -276,28 +276,3 @@ register.onreadystatechange = function() {
 		}
 	}
 };
-
-/*
-//Make sure it's at least 15 characters OR at least 8 characters including a number and a lowercase letter.
-function SubmitDetect() {
-	let register_verify = document.getElementById("input_ver").value;
-    console.log(register_verify);
-	if (inputname === true && inputemail === true && inputpasswd === true) {
-		submit_button.disabled = false;
-		submit_button.className = "input_submit_true";
-	} else {
-		submit_button.disabled = true;
-		submit_button.className = "input_submit_false";
-	}
-}
-var register = new XMLHttpRequest();
-var register_button = document.getElementById("input_submit");
-submit_button.onclick = function() {
-    let register_name = document.getElementById("username").value;
-	let register_email = document.getElementById("email").value;
-    let register_passwd = document.getElementById("password").value;
-	var info = register_name + "&" + register_email + "&" + register_passwd;
-	register.open("POST", "register", true);
-	register.send(info);
-}*/
-
