@@ -114,8 +114,19 @@ a:hover,a:active {
 	width: 4rem;
 	border-radius: 50%;
 	background-image: url(Image/png/logo_64.png);
+    background-repeat: no-repeat;
 	margin: auto;
-	overflow: hidden; }
+	overflow: hidden;
+ }
+.avatar-success {
+    height: 4rem;
+	width: 4rem;
+	border-radius: 50%;
+	background-image: url(Image/png/logo_64.png);
+    background-repeat: no-repeat;
+	margin: auto;
+	overflow: hidden;
+}
 
 .Follow-left-footer {
     margin-top: 1rem;

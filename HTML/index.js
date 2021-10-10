@@ -4,11 +4,9 @@ var login_passwd = document.getElementById("password").value;
 var login_button = document.getElementById("login-button");
 
 var avatar = document.getElementById("avatar-success");
-var login_fail = document.getElementById("Follow-left-Login-fail");
-var login_success = document.getElementById("Follow-left-Login-sucess");
-var login_success_username = document.getElementById("left-info-success-username");
-
-
+var login_fail = document.getElementsByClassName("Follow-left-Login-fail")[0];
+var login_success = document.getElementsByClassName("Follow-left-Login-success")[0];
+var login_success_username = document.getElementById("Login-username");
 
 login_button.onclick = function() {
 	let login_name = document.getElementById("username").value;
@@ -18,9 +16,9 @@ login_button.onclick = function() {
 	login.send(tmp);
 }
 login.onreadystatechange = function() {
-	if (login.readyState == 4 && login.status == 200) {
-		var returnObj = eval("(" + login.responseText + ")");
-		if (returnObj.Login[0].state == "success") {
+    if (login.readyState == 4 && login.status == 200) {
+        var returnObj = eval("(" + login.responseText + ")");
+		if (returnObj.Login[0].state === "success") {
 			login_fail.style.display = "none";
 			login_success.style.display = "block";
 			avatar.style.backgroundImage = "url(" + returnObj.Login[1].AccountImage + ")";
@@ -38,7 +36,6 @@ function randomNum(min, max) {
 }
 
 window.onload = function bgstars() {
-    console.log(123);
     var stars1 = "";
     var stars2 = "";
     var stars3 = "";
