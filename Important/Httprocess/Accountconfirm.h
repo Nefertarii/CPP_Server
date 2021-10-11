@@ -27,14 +27,14 @@ private:
     std::vector<std::string> account_template;
     Info_Line info_line;
     bool SaveAccountInfo();
-    std::string FindInfo(std::vector<std::string> account_info, std::string info_name);
-    std::string FindInfo(std::string account, std::string info_name);
     void AccountTemplate();
 
 public:
     Account_Parse() { read_success = false; }
     void SetLog(Log* log_p, size_t buffer_size);
     bool ReadAccountInfoFile(std::string account_info_file_);
+    std::string FindInfo(std::vector<std::string> account_info, std::string info_name);
+    std::string FindInfo(std::string account, std::string info_name = "");
     bool Login(std::string account, std::string password);
     bool Regsiter(std::string account, std::string password, std::string alias);
     bool ChangePassword(std::string account, std::string oldpassword, std::string password);

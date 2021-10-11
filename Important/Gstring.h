@@ -13,6 +13,6 @@ char* string_to_char(std::string str);
 std::string Substr(std::string str, size_t begin, size_t maxlength, char end);
 //intersept string from str.end() to find char 'end' 
 //maximum length is 'maxlength'
-std::string Substr_Revers(std::string str, size_t maxlength, char end);
+std::string SubstrRevers(std::string str, size_t maxlength, char end);
 
 #endif

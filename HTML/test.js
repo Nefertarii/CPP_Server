@@ -26,3 +26,14 @@ window.onload = function bgstars() {
     star2.style.boxShadow = stars2;
     star3.style.boxShadow = stars3;
 }
+
+
+var searchJson = {};getSearchJson();
+function getSearchJson(){
+    var searchArr = decodeURI(location.search).substr(1).split("&");
+    for(var i in searchArr){
+        searchJson[searchArr[i].split("=")[0]] = searchArr[i].split("=")[1]
+    }
+}
+$("#productInfo").html("<label>产品代号：</label><span>"+searchJson.productCode+"</span>\
+    <label>产品名称：</label><span>"+searchJson.productName+"</span>");

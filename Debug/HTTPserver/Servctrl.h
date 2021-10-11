@@ -117,7 +117,7 @@ void Server_Control_Epoll::ServerStart() {
             if (ev.data.ptr == nullptr) {
                 int connectfd = clientctrl.SocketAccept();
                 if (connectfd < 0) {
-                    http_server_log.Errorlog("BCreateBadHeadad connect.");
+                    http_server_log.Errorlog("CreateBadHeadad connect.");
                 } else {
                     ConnectAdd(&clients[server_settings.connect_nums], connectfd);
                 }

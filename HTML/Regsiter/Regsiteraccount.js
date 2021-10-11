@@ -65,9 +65,7 @@ function EmailDetect() {
             emailarrow.style.color = "var(--bg-green)";
             promptLabel.style.visibility = "hidden";
             inputemail = true;
-            if (emaildone === "false") {
-                emailcontinue.className = "continue-success";
-            }
+            emailcontinue.className = "continue-success";
         } else if (emailvaule.length == 0) {
             emailarrow.innerHTML = "→";
             emailarrow.style.color = "var(--bg-pink)";
@@ -77,18 +75,38 @@ function EmailDetect() {
             emailarrow.innerHTML = "✕";
             emailarrow.style.color = "var(--bg-red)";
             promptLabel.style.visibility = "visible";
-            promptLabel.innerHTML = "邮箱不合法或已被使用";
+            promptLabel.innerHTML = "邮箱不合法";
             inputemail = false;
         }
         Alldetect();
     }
 }
-emailcontinue.onclick = function(){
-    if (emaildone === "false") {
-        emailcontinue.style.visibility = "hidden";
-        board.style.height = "220px";
-        emaildone = "true";
-    }
+emailcontinue.onclick = function () {
+    var register = new XMLHttpRequest();
+	let register_email = emailInput.value;
+	var info = register_email;
+	register.open("POST", "register", true);
+    register.send(info);
+    setTimeout(function () {
+        if (register.readyState == 4 && register.status == 200) {
+            returnObj = eval("(" + register.responseText + ")");
+            if (returnObj.RegsiterFind[0].state === "success") {
+                emailarrow.innerHTML = "✓";
+                emailarrow.style.color = "var(--bg-green)";
+                inputemail = true;
+                emailcontinue.style.visibility = "hidden";
+                board.style.height = "220px";
+                emaildone = "true";
+            } else {
+                emailarrow.innerHTML = "✕";
+                emailarrow.style.color = "var(--bg-red)";
+                promptLabel.style.visibility = "visible";
+                promptLabel.innerHTML = "邮箱已被使用";
+                emailcontinue.className = "continue";
+                inputemail = false;
+            }
+        }
+    }, 1000);
 }
 
 var passwdInput = document.getElementsByClassName("input-password")[0];
@@ -172,7 +190,6 @@ usernamecontinue.onclick = function(){
 var verifycode;
 document.getElementsByClassName("div-verifypic")[0].onclick = function(){
     verifycode = drawPic();
-    console.log(verifycode);
 }
 function drawPic() {
     //获取canvas
@@ -247,32 +264,30 @@ function VerifyDetect() {
 }
 function Alldetect() {
     if (inputemail == true && inputpasswd == true && inputusername == true && inputverify == true) {
-        console.log("true");
         valuesubmit.className = "continue-success";
     } else {
-        console.log("false");
         valuesubmit.className = "continue";
     }
 }
 
 var register = new XMLHttpRequest();
 document.getElementById("continue-submit").onclick = function () {
-    
 	let register_email = emailInput.value;
     let register_passwd = passwdInput.value;
     let register_name = usernameInput.value;
-	var info = register_name + "&" + register_email + "&" + register_passwd;
+	var info = register_email + "&" + register_passwd + "&" + register_name;
 	register.open("POST", "register", true);
-	register.send(info);
+    register.send(info);
+    setTimeout(function () {
+        if (register.readyState == 4 && register.status == 200) {
+            returnObj = eval("(" + register.responseText + ")");
+            if (returnObj.Regsiter[0].state === "success") {
+                window.alert("注册成功 3S后返回主页");
+                setTimeout(function (){
+                    window.location.href = "http://159.75.51.91:8000/";
+                }, 3000);
+            }
+        }
+    }, 800);
+
 }
-register.onreadystatechange = function() {
-	if (register.readyState == 4 && register.status == 200) {
-		var returnObj = eval("(" + register.responseText + ")");
-		if (returnObj.session == "success") {
-			left_info_fail.style.display = "none";
-			left_info_success.style.display = "block";
-			avatar.style.backgroundImage = "url(" + returnObj.image + ")";
-			left_info_success_username.innerHTML = returnObj.username;
-		}
-	}
-};

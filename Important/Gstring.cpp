@@ -7,6 +7,10 @@ char* string_to_char(std::string str) {
 }
 
 std::string Substr(std::string str, size_t begin, size_t maxlength, char end) {
+     size_t length = str.length();
+    if (maxlength > length) {
+        maxlength = length;
+    }
     size_t beg_i = begin, end_i = 0;
     while (end_i <= maxlength) {
         if (str[end_i + beg_i] == end)
@@ -22,11 +26,12 @@ std::string Substr(std::string str, size_t begin, size_t maxlength, char end) {
     }
 }
 
-std::string Substr_Revers(std::string str, size_t maxlength, char end) {
-    if (maxlength > str.length()) {
-        return "-1";
+std::string SubstrRevers(std::string str, size_t maxlength, char end) {
+    size_t length = str.length();
+    if (maxlength > length) {
+        maxlength = length;
     }
-    size_t beg_i = str.length(), end_i = 0;
+    size_t beg_i = length, end_i = 0;
     while (end_i <= maxlength) {
         if (str[beg_i - end_i] == end) {
             break;

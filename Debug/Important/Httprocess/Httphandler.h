@@ -142,7 +142,7 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
             client->respone_body += ",";
             client->respone_body += accountctrl.GetAccountInfo(data[0]);
         } else {
-            client->respone_body += JsonSpliced({ "state", "false" });
+            client->respone_body += JsonSpliced({"state", "false"});
         }
         client->respone_body += "]}";
         client->http_state = OK;
@@ -163,11 +163,20 @@ void HTTP_Handler::PostProcess(Clientinfo* client) {
         break;
     }
     case POSTRegister: { //数据要求 邮箱&密码&用户名
-        client->respone_body = "{\"Regsiter\":[";
-        if (accountctrl.Regsiter(data[0], data[1], data[2])) {
+        if (data.size() == 4) { //注册信息
+            client->respone_body = "{\"Regsiter\":[";
+            if (accountctrl.Regsiter(data[0], data[1], data[2])) {
             client->respone_body += JsonSpliced({ "state","success" });
-        } else {
-            client->respone_body += JsonSpliced({ "state","false" });
+            } else {
+                client->respone_body += JsonSpliced({ "state","false" });
+            }
+        } else if (data.size() == 2){
+            client->respone_body = "{\"RegsiterFind\":[";
+            if (accountctrl.FindInfo(data[0]) == "") { //查找邮箱
+                client->respone_body += JsonSpliced({ "state","success" });
+            } else {
+                client->respone_body += JsonSpliced({ "state","false" });
+            }
         }
         client->respone_body += "]}";
         client->http_state = OK;
@@ -245,6 +254,5 @@ HTTP_Handler::~HTTP_Handler() {
         this_log = nullptr;
     }
 }
-
 
 #endif

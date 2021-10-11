@@ -1,0 +1,160 @@
+
+INFO: Http handler init complite.	 Data:1633945666151
+INFO: Server initialization complete.	 Data:1633945666151
+INFO: Socket open ok	 Data:1633945666151
+INFO: Set reuse address ok.	 Data:1633945666151
+INFO: Set reuse port ok.	 Data:1633945666151
+INFO: Bind set ok	 Data:1633945666151
+INFO: Listen set, fd:3.	 Data:1633945666151
+INFO: Epoll set, fd:4.	 Data:1633945666151
+INFO: Get accept from 127.0.0.1	 Data:1633945705318
+INFO: Client IP:127.0.0.1:50790	 Data:1633945705318
+INFO: epoll add, fd:5.	 Data:1633945705318
+INFO: Get accept from 127.0.0.1	 Data:1633945705318
+INFO: Client IP:127.0.0.1:50792	 Data:1633945705318
+INFO: epoll add, fd:6.	 Data:1633945705318
+INFO: Read from 5	 Data:1633945705332
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.html filefd: 7 success.	 Data:1633945705332
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.html.	 Data:1633945705332
+INFO: Write to: 5	 Data:1633945705332
+INFO: Write to: 5 success.	 Data:1633945705332
+INFO: Read from 5	 Data:1633945706432
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.css filefd: 8 success.	 Data:1633945706432
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.css.	 Data:1633945706432
+INFO: Write to: 5	 Data:1633945706432
+INFO: Write to: 5 success.	 Data:1633945706432
+INFO: Read from 5	 Data:1633945706489
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.js filefd: 9 success.	 Data:1633945706489
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.js.	 Data:1633945706489
+INFO: Write to: 5	 Data:1633945706489
+INFO: Write to: 5 success.	 Data:1633945706489
+INFO: Read from 5	 Data:1633945706573
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg filefd: 10 success.	 Data:1633945706573
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg.	 Data:1633945706573
+INFO: Write to: 5	 Data:1633945706573
+INFO: Write to: 5 success.	 Data:1633945706573
+INFO: Read from 5	 Data:1633945706605
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png filefd: 11 success.	 Data:1633945706605
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/logo_64.png.	 Data:1633945706605
+INFO: Write to: 5	 Data:1633945706605
+INFO: Write to: 5 success.	 Data:1633945706605
+INFO: Read from 5	 Data:1633945706663
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/png/Cat1_32.png filefd: 12 success.	 Data:1633945706663
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/png/Cat1_32.png.	 Data:1633945706663
+INFO: Write to: 5	 Data:1633945706663
+INFO: Write to: 5 success.	 Data:1633945706663
+INFO: Read from 5	 Data:1633945726179
+INFO: Request type:POST. Request type:login Data:hncsgwc@gmail.com&admin&.	 Data:1633945726179
+INFO: User:hncsgwc@gmail.com Login success.	 Data:1633945726179
+INFO: Write to: 5	 Data:1633945726179
+INFO: Write to: 5 success.	 Data:1633945726179
+INFO: Write to: 5	 Data:1633945726179
+INFO: Write to: 5 success.	 Data:1633945726179
+INFO: Read from 5	 Data:1633945726210
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/Account/Default.png filefd: 13 success.	 Data:1633945726210
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/Account/Default.png.	 Data:1633945726210
+INFO: Write to: 5	 Data:1633945726210
+INFO: Write to: 5 success.	 Data:1633945726210
+INFO: Read from 5	 Data:1633945739604
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Game/Tapgame.html filefd: 14 success.	 Data:1633945739604
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Game/Tapgame.html.	 Data:1633945739604
+INFO: Write to: 5	 Data:1633945739604
+INFO: Write to: 5 success.	 Data:1633945739604
+INFO: Read from 5	 Data:1633945740014
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Game/Tapgame.css filefd: 15 success.	 Data:1633945740014
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Game/Tapgame.css.	 Data:1633945740014
+INFO: Write to: 5	 Data:1633945740014
+INFO: Write to: 5 success.	 Data:1633945740014
+INFO: Read from 5	 Data:1633945740050
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Game/Tapgame.js filefd: 16 success.	 Data:1633945740050
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Game/Tapgame.js.	 Data:1633945740050
+INFO: Write to: 5	 Data:1633945740050
+INFO: Write to: 5 success.	 Data:1633945740050
+INFO: Read from 5	 Data:1633945740243
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg filefd: 17 success.	 Data:1633945740243
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg.	 Data:1633945740243
+INFO: Write to: 5	 Data:1633945740243
+INFO: Write to: 5 success.	 Data:1633945740243
+INFO: Read from 5	 Data:1633945740371
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/Account/Default.png filefd: 18 success.	 Data:1633945740371
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/Account/Default.png.	 Data:1633945740371
+INFO: Write to: 5	 Data:1633945740371
+INFO: Write to: 5 success.	 Data:1633945740371
+INFO: Read from 5	 Data:1633945747109
+ERROR: Readfile error No such file or directory	 Data:1633945747109
+INFO: Request type:GET, Bad requeset.	 Data:1633945747109
+WARNING: Send request Notfound.	 Data:1633945747109
+INFO: Write to: 5	 Data:1633945747109
+INFO: Write to: 5 success.	 Data:1633945747109
+INFO: client: 6 send close	 Data:1633945809112
+INFO: Epoll del, fd:6.	 Data:1633945809112
+INFO: Close 6 ok.	 Data:1633945809112
+INFO: Get accept from 127.0.0.1	 Data:1633945809112
+INFO: Client IP:127.0.0.1:51620	 Data:1633945809113
+INFO: epoll add, fd:6.	 Data:1633945809113
+INFO: Read from 5	 Data:1633945817225
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Regsiter/Regsiteraccount.html filefd: 19 success.	 Data:1633945817225
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Regsiter/Regsiteraccount.html.	 Data:1633945817225
+INFO: Write to: 5	 Data:1633945817225
+INFO: Write to: 5 success.	 Data:1633945817225
+INFO: Read from 5	 Data:1633945817547
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Regsiter/Regsiteraccount.css filefd: 20 success.	 Data:1633945817547
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Regsiter/Regsiteraccount.css.	 Data:1633945817547
+INFO: Write to: 5	 Data:1633945817547
+INFO: Write to: 5 success.	 Data:1633945817547
+INFO: Read from 5	 Data:1633945817581
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Regsiter/Regsiteraccount.js filefd: 21 success.	 Data:1633945817581
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Regsiter/Regsiteraccount.js.	 Data:1633945817581
+INFO: Write to: 5	 Data:1633945817581
+INFO: Write to: 5 success.	 Data:1633945817581
+INFO: Read from 5	 Data:1633945817640
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg filefd: 22 success.	 Data:1633945817640
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Image/svg/glow.svg.	 Data:1633945817640
+INFO: Write to: 5	 Data:1633945817640
+INFO: Write to: 5 success.	 Data:1633945817641
+INFO: Read from 5	 Data:1633945828307
+INFO: Request type:POST. Request type:Regsiter/register Data:hncsgwc@gmail.com&.	 Data:1633945828307
+WARNING: Send request 403.	 Data:1633945828307
+INFO: Write to: 5	 Data:1633945828307
+INFO: Write to: 5 success.	 Data:1633945828307
+INFO: Read from 5	 Data:1633945828519
+INFO: Request type:POST. Request type:Regsiter/register Data:hncsgwc@gmail.com&.	 Data:1633945828519
+WARNING: Send request 403.	 Data:1633945828519
+INFO: Write to: 5	 Data:1633945828519
+INFO: Write to: 5 success.	 Data:1633945828519
+INFO: Read from 5	 Data:1633945828593
+INFO: Request type:POST. Request type:Regsiter/register Data:hncsgwc@gmail.com&.	 Data:1633945828593
+WARNING: Send request 403.	 Data:1633945828593
+INFO: Write to: 5	 Data:1633945828593
+INFO: Write to: 5 success.	 Data:1633945828594
+WARNING: Server closeing.	 Data:1633945897826
+INFO: Epoll del, fd:5.	 Data:1633945897826
+INFO: Close 5 ok.	 Data:1633945897826
+INFO: Epoll del, fd:6.	 Data:1633945897826
+INFO: Close 6 ok.	 Data:1633945897826
+INFO: Close 4 ok.	 Data:1633945897826
+INFO: Close 3 ok.	 Data:1633945897826
+INFO: Server total run time:231 sec	 Data:1633945897826
+INFO: Server is close now.	 Data:1633945897826
+
+INFO: Http handler init complite.	 Data:1633945913366
+INFO: Server initialization complete.	 Data:1633945913366
+INFO: Socket open ok	 Data:1633945913366
+INFO: Set reuse address ok.	 Data:1633945913366
+INFO: Set reuse port ok.	 Data:1633945913366
+INFO: Bind set ok	 Data:1633945913366
+INFO: Listen set, fd:3.	 Data:1633945913366
+INFO: Epoll set, fd:4.	 Data:1633945913366
+WARNING: Server closeing.	 Data:1633945914225
+INFO: Close 4 ok.	 Data:1633945914225
+INFO: Close 3 ok.	 Data:1633945914225
+INFO: Server total run time:1 sec	 Data:1633945914225
+INFO: Server is close now.	 Data:1633945914225
+
+
+
+
+
+
+
+

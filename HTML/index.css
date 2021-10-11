@@ -24,7 +24,7 @@
 	--bg-border: #eaecef;
 	--bt-bg-blue: #33518b;
 	--bt-bg-hover-blue: #0055AA; }
-.element::-webkit-scrollbar { width: 0 !important }
+
 
 
 
@@ -110,23 +110,21 @@ a:hover,a:active {
 .Follow-left:hover {
 	height: 25rem; }
 .Follow-left-logo {
-	height: 4rem;
-	width: 4rem;
+	height: 64px;
+	width: 64px;
 	border-radius: 50%;
 	background-image: url(Image/png/logo_64.png);
     background-repeat: no-repeat;
 	margin: auto;
-	overflow: hidden;
- }
+	overflow: hidden; }
 .avatar-success {
-    height: 4rem;
-	width: 4rem;
+    height: 64px;
+	width: 64px;
 	border-radius: 50%;
 	background-image: url(Image/png/logo_64.png);
     background-repeat: no-repeat;
 	margin: auto;
-	overflow: hidden;
-}
+	overflow: hidden; }
 
 .Follow-left-footer {
     margin-top: 1rem;
@@ -166,6 +164,8 @@ a:hover,a:active {
 
 
 .Card-list {
+    position: relative;
+    z-index: 100;
     text-align: center;
 	margin-left: 20%;
     padding: 1rem;

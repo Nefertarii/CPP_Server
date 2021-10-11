@@ -4,24 +4,6 @@ bool Account_Parse::SaveAccountInfo() {
     return Gfile::SaveData(account_info_file, &accounts_info);
 }
 
-std::string Account_Parse::FindInfo(std::vector<std::string> account_info, std::string info_name) {
-    auto it = std::find(account_info.begin(), account_info.end(), info_name);
-    it++;
-    return *it;
-}
-
-std::string Account_Parse::FindInfo(std::string account, std::string info_name) {
-    auto it = accounts_info.find(account);
-    if (it != accounts_info.end()) {
-        for (size_t i = 0; i < it->second.size(); i += 2) {
-            if (it->second.at(i) == info_name) {
-                return it->second.at(i + 1);
-            }
-        }
-    }
-    return "";
-}
-
 void Account_Parse::SetLog(Log* log_p, size_t buffer_size) {
     if (log_p != nullptr) {
         this_log = log_p;
@@ -42,6 +24,34 @@ bool Account_Parse::ReadAccountInfoFile(std::string account_info_file_) {
     std::cout << "Can't read account info file:" << account_info_file << "\n";
     read_success = false;
     return false;
+}
+
+std::string Account_Parse::FindInfo(std::vector<std::string> account_info, std::string info_name) {
+    auto it = std::find(account_info.begin(), account_info.end(), info_name);
+    it++;
+    return *it;
+}
+
+std::string Account_Parse::FindInfo(std::string account, std::string info_name) {
+    std::string log = "User:" + account + " findinfo " + info_name;
+    auto it = accounts_info.find(account);
+    if (it != accounts_info.end()) {
+        if (info_name == "") {
+            log += "Account found.";
+            this_log->Infolog(log);
+            return "Account found.";
+        }
+        for (size_t i = 0; i < it->second.size(); i += 2) {
+            if (it->second.at(i) == info_name) {
+                log += " found.";
+                this_log->Infolog(log);
+                return it->second.at(i + 1);
+            }
+        }
+    }
+    log += " Not found.";
+    this_log->Infolog(log);
+    return "";
 }
 
 void Account_Parse::AccountTemplate() {
@@ -110,6 +120,11 @@ bool Account_Parse::Login(std::string account, std::string input_password) {
 bool Account_Parse::Regsiter(std::string account, std::string password, std::string alias) {
     if (!read_success) { return false; }
     std::string log = "User:" + account + " regsiter ";
+    if (password.size() < 8 && 65 < password.size()) {
+        log += "fail, password length to long/short.";
+        this_log->Infolog(log);
+        return false;
+    }
     auto account_it = accounts_info.find(account);
     if (account_it == accounts_info.end()) {
         std::vector<std::string> newaccount;

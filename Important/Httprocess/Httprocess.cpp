@@ -61,7 +61,7 @@ void Http_Process::CreateResponeHead(Clientinfo* client, std::string filetype) {
     std::string code_detail = StrCode::StrHttpCode(client->http_state);
     client->respone_head += "HTTP/1.1 " + code_num + " " + code_detail + "\r\n";
     client->respone_head += "Constent_Charset:" + respone_head_config.Constent_Charset + "\r\n";
-    client->respone_head += "Content-Language" + respone_head_config.Content_Language + "r\n";
+    client->respone_head += "Content-Language:" + respone_head_config.Content_Language + "\r\n";
     if (filetype.size()) {
         client->respone_head += "Content-Type:" + filetype + "\r\n";
     }
@@ -82,7 +82,7 @@ void Http_Process::CreateBadHead(Clientinfo* client) {
     std::string code_detail = StrCode::StrHttpCode(client->http_state);
     client->respone_head += "HTTP/1.1 " + code_num + " " + code_detail + "\r\n";
     client->respone_head += "Constent_Charset:" + respone_head_config.Constent_Charset + "\r\n";
-    client->respone_head += "Content-Language" + respone_head_config.Content_Language + "r\n";
+    client->respone_head += "Content-Language:" + respone_head_config.Content_Language + "\r\n";
     client->respone_head += "Content-Length: 0\r\n";
     client->respone_head += Timer::Nowtime_str() + "\r\n";
     client->respone_head += "Server version:" + respone_head_config.Server_Name + "\r\n";
@@ -121,6 +121,7 @@ int Http_Process::POSTParse(std::string request, std::string* post_type, std::st
     std::string length = Substr(request, index + 16, readmax, '\n');
     size_t content_size = std::stoul(length);
     std::string type = Substr(request, 6, readmax, ' ');
+    type = SubstrRevers(type, type.length(), '/');
     //Get readbuf data
     std::string data = request.substr((request.length() - content_size), content_size);
     if (data.size() == 0) { return -1; }
