@@ -1,0 +1,13 @@
+
+
+.button-1 {
+    height: 200px;
+    width: 200px;
+    background-color: black;
+}
+.button-2 {
+    height: 200px;
+    width: 200px;
+    background-color: red;
+    pointer-events:none;
+}

@@ -1,0 +1,86 @@
+@import "Color.css";
+
+.Follow-left {
+	position: fixed;
+    z-index: 100;
+	height: 5rem;
+	width: 12.5rem;
+	max-width: 15%;
+	background-color: var(--bg-black);
+	color: var(--font-light);
+	text-align: center;
+	box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
+	border-radius: 0.25rem;
+	overflow: hidden;
+	transition: height 1s; }
+.Follow-left-Login-fail {
+    height: 70%;
+	display: block; }
+.Follow-left-Login-success {
+    height: 70%;
+	display: none; }
+
+.Follow-left:hover {
+	height: 25rem; }
+.Follow-left-logo {
+	height: 64px;
+	width: 64px;
+	border-radius: 50%;
+	background-image: url(../Image/png/logo_64.png);
+    background-repeat: no-repeat;
+	margin: auto;
+	overflow: hidden; }
+.avatar-success {
+    height: 64px;
+	width: 64px;
+	border-radius: 50%;
+	background-image: url(../Image/png/logo_64.png);
+    background-repeat: no-repeat;
+	margin: auto;
+	overflow: hidden; }
+
+.Follow-left-footer {
+    margin-top: 1rem;
+	width: 100%;
+    height: 10%; }
+.Follow-left-today-num {
+    color: var(--font-blue); }
+.Follow-left-yesterday-num {
+    color: var(--font-blue); }
+
+a:link,a:visited {
+	color: var(--font-light);
+	text-decoration: none; }
+a:hover,a:active {
+	color: var(--white);
+	text-decoration: none; }
+
+.input-name {
+	width: 80%;
+	height: .7rem;
+	padding: 5px 7px;
+	border-radius: 7px;
+	border: 1px solid var(--input-border);
+	margin-top: .3rem; }
+.input-name:focus {
+	outline: none;
+	box-shadow: var(--boxshadow-blue) 0px 0px 7px 5px; }
+.input-submit {
+	border: 1.4px solid var(--bt-bg-blue);
+	box-shadow: 0px 0px 5px 2px var(--boxshadow-blue);
+	background-color: var(--bg-black-light);
+	color: var(--font-light);
+	width: 5rem;
+	border-radius: 5px;
+	padding-bottom: 3px;
+	text-align: center;
+	margin: auto; }
+.input-submit:hover {
+	border-color: var(--input-border-force);
+	outline: 0;
+	box-shadow: 0 0px 5px 2px var(--white);
+	cursor: pointer; }
+
+.Empty {
+	margin-top: 0.7rem;
+	margin-bottom: 0.7rem; }

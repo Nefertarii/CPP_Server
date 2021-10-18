@@ -1,46 +1,34 @@
-var star1 = document.getElementById("bg-stars-1");
-var star2 = document.getElementById("bg-stars-2");
-var star3 = document.getElementById("bg-stars-3");
-
-function randomNum(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-}
-
-window.onload = function bgstars() {
-    var stars1 = "";
-    var stars2 = "";
-    var stars3 = "";
-    var maxstars = 50;
-    for (var i = 0; i < maxstars; i++) {
-        stars1 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
-        stars2 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
-        stars3 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
-        if (i+1 != maxstars) {
-            stars1 += ",";
-            stars2 += ",";
-            stars3 += ",";
-        }
-    }
-    star1.style.boxShadow = stars1;
-    star2.style.boxShadow = stars2;
-    star3.style.boxShadow = stars3;
-}
-
 var login = new XMLHttpRequest();
 var login_name = document.getElementById("username").value;
 var login_passwd = document.getElementById("password").value;
 var login_button = document.getElementById("login-button");
+var login_out_button = document.getElementById("login-out");
 
 var avatar = document.getElementById("avatar-success");
 var login_fail = document.getElementsByClassName("Follow-left-Login-fail")[0];
 var login_success = document.getElementsByClassName("Follow-left-Login-success")[0];
 var login_success_username = document.getElementById("Login-username");
 
+var Logindata = localStorage.getItem("Logindata");
+Logindata = JSON.parse(Logindata); //转为JSON
+console.log(Logindata);
+if (Logindata == null) {
+    ;
+} else {
+    if (Logindata.Login[0].state === "success") {
+        login_fail.style.display = "none";
+        login_success.style.display = "block";
+        avatar.style.backgroundImage = "url(../" + Logindata.Login[1].AccountImage + ")";
+        login_success_username.innerHTML = Logindata.Login[1].AccountAlias;
+    }  
+}
+
 login_button.onclick = function() {
 	let login_name = document.getElementById("username").value;
 	let login_passwd = document.getElementById("password").value;
 	var tmp = login_name + "&" + login_passwd;
-	login.open("POST", "login", true);
+    login.open("POST", "login", true);
+    console.log(tmp);
 	login.send(tmp);
 }
 var returnObj;
@@ -59,4 +47,8 @@ login.onreadystatechange = function() {
 	}
 };
 
-
+login_out_button.onclick = function () {
+    login_fail.style.display = "block";
+    login_success.style.display = "none";
+    localStorage = null;
+}

@@ -1,0 +1,24 @@
+.card-list {
+    overflow: hidden;
+    position: relative;
+    z-index: 100;
+    text-align: center;
+	margin: auto;
+    padding: 1rem;
+    min-width: 550px;
+	width: 60%;
+    max-width: 800px;
+    height: 500px;
+    max-height: 1200px;
+	background-color: var(--bg-black);
+    box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
+	border-radius: 0.25rem;
+	color: var(--font-light);
+    transition: height 1s; }
+.card {
+    text-align: left;
+    padding: 2rem; }
+audio {
+    height: 50px;
+    width: 100%;
+}

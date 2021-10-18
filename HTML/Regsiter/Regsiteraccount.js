@@ -1,8 +1,3 @@
-// function name   AaaBbbCcc
-// variable name   aaaBbbCcc
-
-
-//生成随机数
 function randomNum(min, max) {
     return Math.floor(Math.random() * (max - min) + min);
 }
@@ -14,32 +9,8 @@ function randomColor(min, max) {
     return "rgb(" + _r + "," + _g + "," + _b + ")";
 }
 
-var star1 = document.getElementById("bg-stars-1");
-var star2 = document.getElementById("bg-stars-2");
-var star3 = document.getElementById("bg-stars-3");
-//20% 35% 55% 85%
 var board = document.getElementsByClassName("card-list")[0];
 board.style.height = "120px";
-
-window.onload = function bgstart() {
-    var stars1 = "";
-    var stars2 = "";
-    var stars3 = "";
-    var maxstars = 50;
-    for (var i = 0; i < maxstars; i++) {
-        stars1 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
-        stars2 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
-        stars3 += randomNum(100, 2000) + "px " + randomNum(100, 2000) + "px #fff";
-        if (i+1 != maxstars) {
-            stars1 += ",";
-            stars2 += ",";
-            stars3 += ",";
-        }
-    }
-    star1.style.boxShadow = stars1;
-    star2.style.boxShadow = stars2;
-    star3.style.boxShadow = stars3;
-}
 
 var inputemail = false;
 var inputpasswd = false;
@@ -271,23 +242,23 @@ function Alldetect() {
 }
 
 var register = new XMLHttpRequest();
-document.getElementById("continue-submit").onclick = function () {
+valuesubmit.onclick = function () {
 	let register_email = emailInput.value;
     let register_passwd = passwdInput.value;
     let register_name = usernameInput.value;
+    valuesubmit.className = "continue";
 	var info = register_email + "&" + register_passwd + "&" + register_name;
 	register.open("POST", "register", true);
     register.send(info);
-    setTimeout(function () {
-        if (register.readyState == 4 && register.status == 200) {
-            returnObj = eval("(" + register.responseText + ")");
-            if (returnObj.Regsiter[0].state === "success") {
-                window.alert("注册成功 3S后返回主页");
-                setTimeout(function (){
-                    window.location.href = "http://159.75.51.91:8000/";
-                }, 3000);
-            }
+    if (register.readyState == 4 && register.status == 200) {
+        returnObj = eval("(" + register.responseText + ")");
+        if (returnObj.Regsiter[0].state === "success") {
+            window.alert("注册成功 3S后返回主页");
+            setTimeout(function (){
+                window.location.href = "http://159.75.51.91:8000/";
+            }, 2000);
+        } else {
+            window.alert("注册失败 账号信息输入非法");
         }
-    }, 800);
-
+    }
 }

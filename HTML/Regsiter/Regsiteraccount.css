@@ -1,31 +1,4 @@
-:root {
-	--test-font: #878EA6;
-	--test-bg: #CDFFFE;
-
-	--white: #FFFFFF;
-	--black: #000000;
-	--boxshadow-blue: #466886;
-	--boxshadow-white: #8b8b8b;
-	--font-light: #BCC7EF;
-    --font-dark: #627597;
-	--font-blue: #0066ff;
-    --font-green:#00CfC8;
-
-	--link: #0166d6;
-	--link-hover: #0100d6;
-	--input-border: #d8dee2;
-	--input-border-foucs: #66afe9;
-    --bg: #040D21;
-	--bg-black: #0c162d;
-	--bg-black-light: #1c233c;
-	--bg-gray: #f6f8fa;
-	--bg-red: #ff1a1a;
-    --bg-green: #2ea44f;
-	--bg-green-dark: #379D49;
-    --bg-pink: #ea4aaa;
-	--bg-border: #eaecef;
-	--bt-bg-blue: #33518b;
-}
+@import "../Resource/CSS/Color.css";
 
 a:link,a:visited {
 	color: var(--font-light);
@@ -34,65 +7,20 @@ a:hover,a:active {
 	color: var(--white);
 	text-decoration: none; }
 
-html,body {
-    margin: 0%;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-	background-color: var(--bg);
-    background-image: url(../Image/svg/glow.svg);
-	background-size: 200%;
-	background-position-x: 45%;
-	background-position-y: 45%; }
-Header {
-    width: 100%;
-	margin:auto;
-	height: 5rem;
-    text-align: center;
-	color: var(--font-light); }
-Main {
-    position: relative;
-    width: 100%;
-    height: 75%;
-    margin: auto; }
-Footer {
-    width: 100%;
-    height: 5rem;
-    color: var(--font); }
 input, input:hover, input:focus {
-    background-color: var(--bg-black);
+    background-color: var(--bg-black-light);
     border: 0;
     outline: 0;
     color: var(--white);
     caret-color: var(--white);
     padding: 4px 10px; }
 
-
-@keyframes animStar {
-    from {transform:translateY(0)} 
-    to {transform:translateY(-2000px)} }
-.bg-stars {
+Main {
     position: relative;
-    z-index: 10;
-    flex: auto;
-    box-shadow: solid; }
-#bg-stars-1 {
-    background: transparent;
-    width: 1px;
-    height: 1px;
-    animation: animStar 100s linear infinite; }
-#bg-stars-2 {
-    background: transparent;
-    width: 2px;
-    height: 2px;
-    animation: animStar 120s linear infinite; }
-#bg-stars-3 {
-    background: transparent;
-    width: 3px;
-    height: 3px;
-    animation: animStar 150s linear infinite; }
+    width: 100%;
+    height: 75%;
+    margin: auto; }
 
-    
 .card-list {
     overflow: hidden;
     position: relative;
@@ -103,9 +31,9 @@ input, input:hover, input:focus {
     min-width: 550px;
 	width: 60%;
     max-width: 800px;
-    height: 0%;
+    height: 0;
     max-height: 1200px;
-	background-color: var(--bg-black);
+    background-color: var(--bg-black-light);
     box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
 	border-radius: 0.25rem;
 	color: var(--font-green);
@@ -137,7 +65,7 @@ input, input:hover, input:focus {
 .continue {
     height: 32px;
     padding: 5px 12px;
-    background-color: var(--bg-black);
+    background-color: var(--bg-black-light);
     color: var(--font-dark);
     border: var(--font-dark) solid 1px;
     border-radius: 6px;
@@ -146,7 +74,7 @@ input, input:hover, input:focus {
 .continue-success {
     height: 32px;
     padding: 5px 12px;
-    background-color: var(--bg-black);
+    background-color: var(--bg-black-light);
     color: var(--bg-green);
     border: var(--bg-green) solid 1px;
     border-radius: 6px;
@@ -217,20 +145,3 @@ input, input:hover, input:focus {
     box-sizing: border-box;
     border: 1px solid #ddd;
     cursor: pointer; }
-
-
-.Github_link {
-    height: auto;
-    width: 100%;
-    text-align: center;
-    color: var(--font-light);
-    margin-top: 1rem; }
-.Github_svg {
-    position: relative;
-    top: 2px;
-    fill: var(--white) }   
-.CN_bei_an {
-    height: auto;
-    width: 100%;
-    text-align: center;
-    color: var(--font-light); }

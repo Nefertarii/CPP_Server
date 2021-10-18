@@ -2,13 +2,16 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+        <link type="text/css" rel="stylesheet" href="../Resource/CSS/Background.css" />
+        <link type="text/css" rel="stylesheet" href="../Resource/CSS/Followleft.css" />
+        <link type="text/css" rel="stylesheet" href="../Resource/CSS/Footer.css" />
 		<link type="text/css" rel="stylesheet" href="Tapgame.css">
 		<link rel="icon" href="../Image/png/logo_32.png" type="image/x-icon">
 		<title>瓦肆</title>
 	</head>
 	<body>
         <Header>
-            <h1>一个热衷于尝试的网站</h1>
+            <h1>一个啥都想做的网站</h1>
         </Header>
         <div class="Follow-left" id="Follow-left-admission">
             <div class="Follow-left-Login-fail">
@@ -33,6 +36,7 @@
                     <div id="Login-username">User</div>
                     <div class="Empty"></div>
                     <div>前往<a href="../Errorpage/Page404.html">个人中心</a></div>
+                    <input class="input-submit" id="login-out" type="submit" value="注销登录" />
             </div>
             <div class="Follow-left-footer">
                 <div>今日来访人数</div>
@@ -41,12 +45,12 @@
                 <div class="Follow-left-yesterday-num">加载中...</div>
             </div>
         </div>
+        <div class="bg-stars">
+            <div id="bg-stars-1"></div>
+            <div id="bg-stars-2"></div>
+            <div id="bg-stars-3"></div>
+        </div>
         <Main>
-            <div class="bg-stars">
-                <div id="bg-stars-1"></div>
-                <div id="bg-stars-2"></div>
-                <div id="bg-stars-3"></div>
-            </div>	
             <div class="Game_window">
                 <div class="Game_tittle">Game tittle</div>
                 <div class="Game_play">
@@ -80,4 +84,6 @@
         </Footer>
 	</body>
 	<script src="Tapgame.js"></script>
+    <script src="../Resource/JS/Bgstar.js"></script>
+    <script src="../Resource/JS/Login.js"></script>
 </html>
