@@ -1,5 +1,6 @@
 #include "Httphandler.h"
 
+
 int HTTP_Handler::MethodGetParse(Clientinfo* client, std::string readbuf) {
     std::string log;
     std::string filename, filetype;

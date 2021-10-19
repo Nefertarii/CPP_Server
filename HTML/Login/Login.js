@@ -37,19 +37,31 @@ var returnObj;
 login.onreadystatechange = function () {
     if (login.readyState == 4 && login.status == 200) {
         returnObj = eval("(" + login.responseText + ")");
-		if (returnObj.Login[0].state === "success") {
-            if (returnObj.Login[0].state === "success") {
-                window.alert("注册成功 3S后返回主页");
-                localStorage;
-                str_login_data = JSON.stringify(returnObj);
-                localStorage.setItem("Logindata",str_login_data)
-                setTimeout(function (){
-                    window.location.href = "http://159.75.51.91:8000/";
-                }, 2000);
-            } else {
-                window.alert("登录失败 密码或账号错误");
-                valuesubmit.className = "submit-continue";
-            }
+        if (returnObj.Login[0].state === "success") {
+            localStorage;
+            str_login_data = JSON.stringify(returnObj);
+            localStorage.setItem("Logindata",str_login_data)
+            window.alert("登录成功 3S后返回主页");
+            setTimeout(function (){
+                window.location.href = "http://159.75.51.91:8000/";
+            }, 2000);
+        } else {
+            window.alert("登录失败 密码或邮箱错误");
+            valuesubmit.className = "submit-continue";
         }
-	}
+	} else {
+        valuesubmit.className = "submit-continue";
+    }
+};
+login.onreadystatechange = function() {
+    if (login.readyState == 4 && login.status == 200) {
+        returnObj = eval("(" + login.responseText + ")");
+		if (returnObj.Login[0].state === "success") {
+			avatar.style.backgroundImage = "url(" + returnObj.Login[1].AccountImage + ")";
+			login_success_username.innerHTML = returnObj.Login[1].AccountAlias;
+        } 
+        localStorage;
+        str_login_data = JSON.stringify(returnObj);
+        localStorage.setItem("Logindata",str_login_data)
+	} 
 };

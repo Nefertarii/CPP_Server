@@ -23,32 +23,38 @@ if (Logindata == null) {
     }  
 }
 
-login_button.onclick = function() {
+login_button.onclick = function () {
+    login_button.className = "submit-wait";
 	let login_name = document.getElementById("username").value;
 	let login_passwd = document.getElementById("password").value;
-	var tmp = login_name + "&" + login_passwd;
+    var tmp = login_name + "&" + login_passwd;
     login.open("POST", "login", true);
     console.log(tmp);
 	login.send(tmp);
 }
 var returnObj;
-login.onreadystatechange = function() {
+login.onreadystatechange = function () {
     if (login.readyState == 4 && login.status == 200) {
         returnObj = eval("(" + login.responseText + ")");
 		if (returnObj.Login[0].state === "success") {
 			login_fail.style.display = "none";
 			login_success.style.display = "block";
 			avatar.style.backgroundImage = "url(" + returnObj.Login[1].AccountImage + ")";
-			login_success_username.innerHTML = returnObj.Login[1].AccountAlias;
+            login_success_username.innerHTML = returnObj.Login[1].AccountAlias;
+            localStorage;
+            str_login_data = JSON.stringify(returnObj);
+            localStorage.setItem("Logindata",str_login_data)
+        } else {
+            window.alert("登录失败 密码或邮箱错误");
+            valuesubmit.className = "submit-continue";
         }
-        localStorage;
-        str_login_data = JSON.stringify(returnObj);
-        localStorage.setItem("Logindata",str_login_data)
-	}
+	} else {
+        valuesubmit.className = "submit-continue";
+    }
 };
 
 login_out_button.onclick = function () {
     login_fail.style.display = "block";
     login_success.style.display = "none";
-    localStorage = null;
+    localStorage.clear();
 }

@@ -62,10 +62,7 @@ a:hover,a:active {
 	border-radius: 7px;
 	border: 1px solid var(--input-border);
 	margin-top: .3rem; }
-.input-name:focus {
-	outline: none;
-	box-shadow: var(--boxshadow-blue) 0px 0px 7px 5px; }
-.input-submit {
+.submit-continue {
 	border: 1.4px solid var(--bt-bg-blue);
 	box-shadow: 0px 0px 5px 2px var(--boxshadow-blue);
 	background-color: var(--bg-black-light);
@@ -75,11 +72,20 @@ a:hover,a:active {
 	padding-bottom: 3px;
 	text-align: center;
 	margin: auto; }
-.input-submit:hover {
-	border-color: var(--input-border-force);
-	outline: 0;
-	box-shadow: 0 0px 5px 2px var(--white);
-	cursor: pointer; }
+.submit-continue:hover {
+    outline: none;
+	box-shadow: var(--boxshadow-blue) 0px 0px 7px 5px; }
+.submit-wait {
+    pointer-events:none;
+	border: 1.4px solid var(--bt-bg-blue);
+	box-shadow: 0px 0px 5px 2px var(--boxshadow-blue);
+	background-color: var(--bg-gray);
+	color: var(--black);
+	width: 5rem;
+	border-radius: 5px;
+	padding-bottom: 3px;
+	text-align: center;
+	margin: auto; }
 
 .Empty {
 	margin-top: 0.7rem;

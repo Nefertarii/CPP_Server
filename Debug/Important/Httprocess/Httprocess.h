@@ -81,6 +81,10 @@ std::string Http_Process::FileType(std::string filename) {
         return "image/svg+xml";
     } else if (suffix == ".ico") {
         return "image/x-icon";
+    } else if (suffix == ".mp3") {
+        return "audio/mp3";
+    } else if (suffix == ".mp4") {
+        return "video/mp4";
     } else {
         return "text/plain";
     }

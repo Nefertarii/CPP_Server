@@ -165,14 +165,4 @@ std::string StrCode::StrHttpCode(HTTPSTATE state_code) {
     }//swicth end
 }
 
-
-
-
-
-
-
-
-
-
-
 #endif

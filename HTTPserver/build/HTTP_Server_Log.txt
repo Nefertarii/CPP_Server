@@ -158,3 +158,97 @@ INFO: Server is close now.	 Data:1633945914225
 
 
 
+
+
+INFO: Http handler init complite.	 Data:1634572440137
+INFO: Server initialization complete.	 Data:1634572440137
+INFO: Socket open ok	 Data:1634572440138
+INFO: Set reuse address ok.	 Data:1634572440138
+INFO: Set reuse port ok.	 Data:1634572440138
+INFO: Bind set ok	 Data:1634572440138
+INFO: Listen set, fd:3.	 Data:1634572440138
+INFO: Epoll set, fd:4.	 Data:1634572440138
+INFO: Get accept from 127.0.0.1	 Data:1634572471021
+INFO: Client IP:127.0.0.1:35788	 Data:1634572471021
+INFO: epoll add, fd:5.	 Data:1634572471021
+INFO: Read from 5	 Data:1634572471035
+INFO: Request type:POST. Request type:-1 Data:hncsgwc@gmail.com&admin&.	 Data:1634572471035
+WARNING: Send request 403.	 Data:1634572471035
+INFO: Write to: 5	 Data:1634572471035
+INFO: Write to: 5 success.	 Data:1634572471035
+WARNING: Server closeing.	 Data:1634572495033
+INFO: Epoll del, fd:5.	 Data:1634572495033
+INFO: Close 5 ok.	 Data:1634572495033
+INFO: Close 4 ok.	 Data:1634572495033
+INFO: Close 3 ok.	 Data:1634572495033
+INFO: Server total run time:55 sec	 Data:1634572495033
+INFO: Server is close now.	 Data:1634572495033
+
+INFO: Http handler init complite.	 Data:1634572550873
+INFO: Server initialization complete.	 Data:1634572550873
+INFO: Socket open ok	 Data:1634572550873
+INFO: Set reuse address ok.	 Data:1634572550873
+INFO: Set reuse port ok.	 Data:1634572550873
+INFO: Bind set ok	 Data:1634572550873
+INFO: Listen set, fd:3.	 Data:1634572550873
+INFO: Epoll set, fd:4.	 Data:1634572550873
+INFO: Get accept from 127.0.0.1	 Data:1634572572229
+INFO: Client IP:127.0.0.1:35810	 Data:1634572572229
+INFO: epoll add, fd:5.	 Data:1634572572229
+INFO: Read from 5	 Data:1634572572230
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Resource/CSS/Background.css filefd: 6 success.	 Data:1634572572260
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Resource/CSS/Background.css.	 Data:1634572572260
+INFO: Get accept from 127.0.0.1	 Data:1634572572260
+INFO: Client IP:127.0.0.1:35812	 Data:1634572572260
+INFO: epoll add, fd:7.	 Data:1634572572260
+INFO: Write to: 5	 Data:1634572572260
+INFO: Write to: 5 success.	 Data:1634572572260
+INFO: Read from 7	 Data:1634572572260
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Resource/CSS/Color.css filefd: 8 success.	 Data:1634572572260
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Resource/CSS/Color.css.	 Data:1634572572260
+INFO: Write to: 7	 Data:1634572572272
+INFO: Write to: 7 success.	 Data:1634572572272
+INFO: Get accept from 127.0.0.1	 Data:1634572572272
+INFO: Client IP:127.0.0.1:35816	 Data:1634572572272
+INFO: epoll add, fd:9.	 Data:1634572572272
+INFO: Read from 9	 Data:1634572572273
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Resource/CSS/Followleft.css filefd: 10 success.	 Data:1634572572273
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Resource/CSS/Followleft.css.	 Data:1634572572273
+INFO: Write to: 9	 Data:1634572572273
+INFO: Write to: 9 success.	 Data:1634572572273
+INFO: Get accept from 127.0.0.1	 Data:1634572572283
+INFO: Client IP:127.0.0.1:35818	 Data:1634572572283
+INFO: epoll add, fd:11.	 Data:1634572572283
+INFO: Read from 11	 Data:1634572572285
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/Resource/CSS/Footer.css filefd: 12 success.	 Data:1634572572285
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/Resource/CSS/Footer.css.	 Data:1634572572285
+INFO: Write to: 11	 Data:1634572572285
+INFO: Write to: 11 success.	 Data:1634572572285
+INFO: Read from 9	 Data:1634572572322
+INFO: Readfile /home/cs18/vscode/Webserver/HTML/index.css filefd: 13 success.	 Data:1634572572323
+INFO: Request type:GET, Request file:/home/cs18/vscode/Webserver/HTML/index.css.	 Data:1634572572324
+INFO: Write to: 9	 Data:1634572572324
+INFO: Write to: 9 success.	 Data:1634572572324
+INFO: Get accept from 127.0.0.1	 Data:1634572573251
+INFO: Client IP:127.0.0.1:35814	 Data:1634572573251
+INFO: epoll add, fd:14.	 Data:1634572573251
+INFO: Read from 11	 Data:1634572596391
+INFO: Request type:POST. Request type:-1 Data:hncsgwc@gmail.com&admin&.	 Data:1634572596391
+WARNING: Send request 403.	 Data:1634572596391
+INFO: Write to: 11	 Data:1634572596391
+INFO: Write to: 11 success.	 Data:1634572596391
+WARNING: Server closeing.	 Data:1634572608569
+INFO: Epoll del, fd:5.	 Data:1634572608569
+INFO: Close 5 ok.	 Data:1634572608569
+INFO: Epoll del, fd:7.	 Data:1634572608569
+INFO: Close 7 ok.	 Data:1634572608569
+INFO: Epoll del, fd:9.	 Data:1634572608569
+INFO: Close 9 ok.	 Data:1634572608569
+INFO: Epoll del, fd:11.	 Data:1634572608569
+INFO: Close 11 ok.	 Data:1634572608569
+INFO: Epoll del, fd:14.	 Data:1634572608569
+INFO: Close 14 ok.	 Data:1634572608569
+INFO: Close 4 ok.	 Data:1634572608569
+INFO: Close 3 ok.	 Data:1634572608569
+INFO: Server total run time:58 sec	 Data:1634572608569
+INFO: Server is close now.	 Data:1634572608569
