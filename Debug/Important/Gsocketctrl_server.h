@@ -63,7 +63,6 @@ int Socket_Control_Server::SocketListen() {
         return -1;
     }
     if (Gsocket::Listen(listenfd, 0, this_log) < 0) { return -1; }
-    signal(SIGPIPE, SIG_IGN);
     return listenfd;
 }
 

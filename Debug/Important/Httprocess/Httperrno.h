@@ -148,16 +148,16 @@ std::string StrCode::StrHttpCode(HTTPSTATE state_code) {
         return Http100_map[state_code - 100 % HTTPEND];
     }
     case 2: {
-        return Http200_map[state_code-200 % HTTPEND];
+        return Http200_map[state_code - 200 % HTTPEND];
     }
     case 3: {
-        return Http300_map[state_code-300 % HTTPEND];
+        return Http300_map[state_code - 300 % HTTPEND];
     }
     case 4: {
-        return Http400_map[state_code-400 % HTTPEND];
+        return Http400_map[state_code - 400 % HTTPEND];
     }
     case 5: {
-        return Http500_map[state_code-500 % HTTPEND];
+        return Http500_map[state_code - 500 % HTTPEND];
     }
     default: {
         return "";

@@ -221,6 +221,9 @@ int Gsocket::Writefile(int socketfd, int filefd, off_t offset, size_t writemax ,
         } else if (errno == EAGAIN || errno == EWOULDBLOCK) {
             log_p->Warninglog("kernel cache full");
             return 2;
+        } else if (errno == EPIPE) {
+            log_p->Errorlog("Client close", errno);
+            return -1;
         } else {
             log_p->Errorlog("Write error", errno);
             return -1;

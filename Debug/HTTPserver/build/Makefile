@@ -2,54 +2,53 @@ MODE = NORMAL
 TARGET = HTTPserver
 cc = g++
 ifeq ($(MODE),DEBUG)
-CPPFLAGS = -pthread -Wall -std=c++17 -DDEBUG -Og
+CPPFLAGS = -pthread -Wall -std=c++17 -DDEBUG -pg -Og
 else
 CPPFLAGS = -pthread -Wall -std=c++17 -O2
 endif
-OBJECTS = Httpserver.o \
-			Servctrl.o \
-			Httphandler.o Httprocess.o Httprespone.o Gsocketctrl.o \
-			Httperrno.o
-			Gepollctrl.o Gsocketctrl.o \
-			
-
-			
-
-		
+OBJECTS = Gstring.o Gtime.o Glog.o Gjson.o Gfilefunc.o \
+			Gsocketfunc.o Gepollctrl.o \
+			Gsocketctrl_client.o Gsocketctrl_server.o \
+			Httperrno.o Accountconfirm.o \
+			Httprocess.o Httprespone.o Httphandler.o \
+			Servctrl.o Httpserver.o \
 
 $(TARGET): $(OBJECTS)
 	$(cc) $(CPPFLAGS) -o $(TARGET) $(OBJECTS)
-Gjson.o : ../../Important/Gjson.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Gjson.cpp
-Glog.o : ../../Important/Glog.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Glog.cpp
-Gsort.o : ../../Important/Gsort.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Gsort.cpp
+
 Gstring.o : ../../Important/Gstring.h
 	$(cc) $(CPPFLAGS) -c ../../Important/Gstring.cpp
-Gthread.o : ../../Important/Gthread.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Gthread.cpp
 Gtime.o : ../../Important/Gtime.h
 	$(cc) $(CPPFLAGS) -c ../../Important/Gtime.cpp
-
-Gepollcontrol.o : ../../Important/Gepollcontrol.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Gepollcontrol.cpp
-Gsocketctrl.o :	../../Important/Gsocketctrl.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Gsocketctrl.cpp
-Gsocketfunc.o :	../../Important/Gsocketfunc.h
+Glog.o : ../../Important/Glog.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Glog.cpp
+Gjson.o : ../../Important/Gjson.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Gjson.cpp
+Gfilefunc.o : ../../Important/Gfilefunc.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Gfilefunc.cpp
+			 
+Gsocketfunc.o : ../../Important/Gsocketfunc.h
 	$(cc) $(CPPFLAGS) -c ../../Important/Gsocketfunc.cpp
+Gepollctrl.o : ../../Important/Gepollctrl.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Gepollctrl.cpp
+Gsocketctrl_client.o : ../../Important/Gsocketctrl_client.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Gsocketctrl_client.cpp
+Gsocketctrl_server.o : ../../Important/Gsocketctrl_server.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Gsocketctrl_server.cpp
 
 Httperrno.o : ../../Important/Httprocess/Httperrno.h
 	$(cc) $(CPPFLAGS) -c ../../Important/Httprocess/Httperrno.cpp
-Httphandler.o : ../../Important/Httprocess/Httphandler.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Httprocess/Httphandler.cpp
-Httprespone.o : ../../Important/Httprocess/Httprespone.h
-	$(cc) $(CPPFLAGS) -c ../../Important/Httprocess/Httprespone.cpp
+Accountconfirm.o : ../../Important/Httprocess/Accountconfirm.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Httprocess/Accountconfirm.cpp
 Httprocess.o : ../../Important/Httprocess/Httprocess.h
 	$(cc) $(CPPFLAGS) -c ../../Important/Httprocess/Httprocess.cpp
+Httprespone.o : ../../Important/Httprocess/Httprespone.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Httprocess/Httprespone.cpp
+Httphandler.o : ../../Important/Httprocess/Httphandler.h
+	$(cc) $(CPPFLAGS) -c ../../Important/Httprocess/Httphandler.cpp
 
-Servcontrol.o : ../Servcontrol.h
-	$(cc) $(CPPFLAGS) -c ../Servcontrol.cpp
+Servctrl.o : ../Servctrl.h
+	$(cc) $(CPPFLAGS) -c ../Servctrl.cpp
 Httpserver.o : ../Httpserver.cpp
 	$(cc) $(CPPFLAGS) -c ../Httpserver.cpp
 

@@ -6,7 +6,7 @@
 #include "../Glog.h"
 #include <algorithm>
 
-//文字行 数据行在其文字下一行
+//文字行 数据行在其下一行
 struct Info_Line {
     size_t password = 0;
     size_t image = 0;

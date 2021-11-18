@@ -17,8 +17,9 @@ int main(int argc, const char* argv[]) {
     } else {
         config_file = argv[1];
     }
-    static Server_Control_Epoll server(config_file);
+    Server_Control_Epoll server(config_file);
     signal(SIGINT, SIG_handler);
+    signal(SIGPIPE, SIG_IGN);
     std::cout << "Server Start.\n";
     server.ServerStart();
     return 0;

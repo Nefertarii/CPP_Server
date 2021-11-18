@@ -106,6 +106,7 @@ void Server_Control_Epoll::ServerStart() {
     epoll_ctl(epollfd, EPOLL_CTL_ADD, listenfd, &ev);
 
     for (;;) {
+        sleep(0.01);
         int readyfds = epoll_wait(epollfd, events, (int)server_settings.connect_max, 0);
         if (readyfds < 0 && errno != EINTR) { //epoll create fail
             http_server_log.Fatalog("Cann't create epoll control.");
