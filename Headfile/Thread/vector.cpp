@@ -1,56 +1,71 @@
 #include "Head/vector.h"
+#include <iostream>
 
 template <typename T>
-void thread::Vector<T>::Vector::lock() {
-    std::lock_guard<std::mutex> lk(mtx);
-    //if time out
-    //...
-}
-
-template <typename T>
-thread::Vector<T>::Vector(const Vector& other) {
+thread::Safe_Vector<T>::Safe_Vector(Safe_Vector& other) {
     std::lock_guard<std::mutex> lk(other.mtx);
+    std::cout << "Safe_Vector\n";
     data = other.data;
 }
 
 template <typename T>
-T thread::Vector<T>::get(uint posi) {
-    lock();
+T thread::Safe_Vector<T>::get(uint posi) {
+    std::lock_guard<std::mutex> lk(mtx);
     return data[posi];
 }
 
 template <typename T>
-void thread::Vector<T>::get(uint posi, T& value) {
-    lock();
+void thread::Safe_Vector<T>::get(uint posi, T& value) {
+    std::lock_guard<std::mutex> lk(mtx);
     value = data[posi];
 }
 
 template <typename T>
-void thread::Vector<T>::insert(uint posi, T value) {
-    lock();
+void thread::Safe_Vector<T>::insert(uint posi, T value) {
+    std::lock_guard<std::mutex> lk(mtx);
     data[posi] = std::move(value);
 }
 
 template <typename T>
-void thread::Vector<T>::push_back(T value) {
-    lock();
+void thread::Safe_Vector<T>::push_back(T value) {
+    std::lock_guard<std::mutex> lk(mtx);
     data.push_back(std::move(value));
 }
 
 template <typename T>
-bool thread::Vector<T>::empty() {
-    lock();
+bool thread::Safe_Vector<T>::empty() {
+    std::lock_guard<std::mutex> lk(mtx);
     return data.empty();
 }
 
 template <typename T>
-uint thread::Vector<T>::size() {
-    lock();
+void thread::Safe_Vector<T>::clear() {
+    std::lock_guard<std::mutex> lk(mtx);
+    data.clear();
+}
+
+template <typename T>
+T thread::Safe_Vector<T>::earse(uint posi) {
+    std::lock_guard<std::mutex> lk(mtx);
+    T value = data.erase(data[posi]);
+    return value;
+}
+
+template <typename T>
+uint thread::Safe_Vector<T>::size() {
+    std::lock_guard<std::mutex> lk(mtx);
     return data.size();
 }
 
 template <typename T>
-void thread::Vector<T>::clear() {
-    lock();
-    data.clear();
+void thread::Safe_Vector<T>::resize(uint new_size) {
+    std::lock_guard<std::mutex> lk(mtx);
+    data.resize(new_size);
+}
+
+template <typename T>
+void thread::Safe_Vector<T>::swap(thread::Safe_Vector<T>& rhs) {
+    std::lock_guard<std::mutex> lk_lhs(this->mtx);
+    std::lock_guard<std::mutex> lk_rhs(rhs.mtx);
+    std::swap(this->data, rhs.data);
 }
