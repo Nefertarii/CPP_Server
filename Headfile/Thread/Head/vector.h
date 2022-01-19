@@ -12,7 +12,7 @@ namespace thread {
         std::mutex mtx;
     public:
         Safe_Vector() = default;
-        Safe_Vector(Safe_Vector& other);
+        Safe_Vector(const Safe_Vector& other);
         Safe_Vector operator=(const Safe_Vector&) = delete;
         T get(uint posi);
         void get(uint posi, T& value);

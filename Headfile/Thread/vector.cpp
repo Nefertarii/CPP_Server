@@ -1,10 +1,8 @@
 #include "Head/vector.h"
-#include <iostream>
 
 template <typename T>
-thread::Safe_Vector<T>::Safe_Vector(Safe_Vector& other) {
+thread::Safe_Vector<T>::Safe_Vector(const Safe_Vector& other) {
     std::lock_guard<std::mutex> lk(other.mtx);
-    std::cout << "Safe_Vector\n";
     data = other.data;
 }
 
@@ -15,9 +13,9 @@ T thread::Safe_Vector<T>::get(uint posi) {
 }
 
 template <typename T>
-void thread::Safe_Vector<T>::get(uint posi, T& value) {
+void thread::Safe_Vector<T>::get(uint posi, T& var) {
     std::lock_guard<std::mutex> lk(mtx);
-    value = data[posi];
+    var = data[posi];
 }
 
 template <typename T>
