@@ -1,7 +1,7 @@
 #ifndef THREAD_SAFE_VECTOR_H_
 #define THREAD_SAFE_VECTOR_H_
 
-#include "concurrency.h"
+#include <mutex>
 #include <vector>
 
 namespace Thread {

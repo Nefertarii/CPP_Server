@@ -1,7 +1,7 @@
 #ifndef THREAD_SAFE_STACK_H_
 #define THREAD_SAFE_STACK_H_
 
-#include "concurrency.h"
+#include <mutex>
 #include <stack>
 
 namespace Thread {

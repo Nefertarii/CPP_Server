@@ -1,7 +1,7 @@
 #ifndef THREAD_SAFE_DEQUE_H_
 #define THREAD_SAFE_DEQUE_H_
 
-#include "concurrency.h"
+#include <mutex>
 #include <deque>
 
 namespace Thread {
@@ -19,6 +19,8 @@ namespace Thread {
         void push_front(const T& value);
         void pop_back();
         void pop_front();
+        T front();
+        T back();
         void insert(const T& posi_value, const T& value);
         void earse(const T& posi_value);
         bool empty();
@@ -53,6 +55,18 @@ template <typename T>
 void Thread::Safe_Deque<T>::push_front(const T& value) {
     std::lock_guard<std::mutex> lk(mtx);
     data.push_front(value);
+}
+
+template <typename T>
+T Thread::Safe_Deque<T>::front() {
+    std::lock_guard<std::mutex> lk(mtx);
+    return data.front();
+}
+
+template <typename T>
+T Thread::Safe_Deque<T>::back() {
+    std::lock_guard<std::mutex> lk(mtx);
+    data.back();
 }
 
 template <typename T>

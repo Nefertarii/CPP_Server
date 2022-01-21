@@ -1,7 +1,7 @@
 #ifndef THREAD_SAFE_LIST_H_
 #define THREAD_SAFE_LIST_H_
 
-#include "concurrency.h"
+#include <mutex>
 #include <algorithm>
 #include <list>
 

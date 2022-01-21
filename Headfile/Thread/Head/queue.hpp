@@ -1,7 +1,7 @@
 #ifndef THREAD_SAFE_QUEUE_H_
 #define THREAD_SAFE_QUEUE_H_
 
-#include "concurrency.h"
+#include <mutex>
 #include <queue>
 
 namespace Thread {
