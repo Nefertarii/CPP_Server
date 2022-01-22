@@ -16,6 +16,7 @@ namespace Thread {
         Safe_Queue operator=(const Safe_Queue&) = delete;
         void push(const T& value);
         void pop();
+        bool try_pop(T& value);
         bool empty();
         uint size();
         void swap(Thread::Safe_Queue<T>& rhs);
@@ -41,6 +42,16 @@ void Thread::Safe_Queue<T>::pop() {
     std::lock_guard<std::mutex> lk(mtx);
     data.pop();
 }
+
+template <typename T>
+bool Thread::Safe_Queue<T>::try_pop(T& value) {
+    std::lock_guard<std::mutex> lk(mtx);
+    if (data.empty()) { return false; }
+    value = std::move(data.front());
+    data.pop();
+    return true;
+}
+
 
 template <typename T>
 bool Thread::Safe_Queue<T>::empty() {

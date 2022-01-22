@@ -1,9 +1,11 @@
 #include "deque.hpp"
 #include "queue.hpp"
 #include "vector.hpp"
+#include <thread>
 #include <functional>
 #include <exception>
 #include <future>
+#include <iostream>
 
 namespace Thread {
     class Thread_Pool {
@@ -33,18 +35,18 @@ namespace Thread {
             Function_wrap& operator=(const Function_wrap&) = delete;
         };
         using Task = Function_wrap;
-        class Task_deque {
+        class Task_queue {
         private:
             std::deque<Task> deque;
             mutable std::mutex mtx;
         public:
-            Task_deque() {}
-            Task_deque(const Task_deque& other) = delete;
-            Task_deque& operator=(const Task_deque& other) = delete;
-            void push();
-            bool empty();
-            bool try_pop();
-            bool try_steal_task();
+            Task_queue() {}
+            Task_queue(const Task_queue& other) = delete;
+            Task_queue& operator=(const Task_queue& other) = delete;
+            void push(Task data);
+            bool empty() const;
+            bool try_pop(Task& task);
+            bool try_steal_task(Task& task);
         };
         class Join_threads {
         private:
@@ -56,10 +58,10 @@ namespace Thread {
         };
         std::atomic_bool done;
         Thread::Safe_Queue<Task> pool_work_queue;
-        std::vector<std::unique_ptr<Task_deque>> queues;
+        std::vector<std::unique_ptr<Task_queue>> tasks;
         std::vector<std::thread> threads;
         Join_threads joiner;
-        static thread_local Task_deque* local_work_deque;
+        static thread_local Task_queue* local_work_queue;
         static thread_local int index;
         void worker_thread(int index_);
         bool pop_task_from_local_queue(Task& task);
@@ -74,22 +76,22 @@ namespace Thread {
     };
 };
 
-Function_wrap Thread::Thread_Pool::Function_wrap::operator=(Function_wrap&& other) {
+Thread::Thread_Pool::Function_wrap& Thread::Thread_Pool::Function_wrap::operator=(Function_wrap&& other) {
     impl = std::move(other.impl);
     return *this;
 }
 
-void Thread::Thread_Pool::Task_deque::push(data_type data) {
+void Thread::Thread_Pool::Task_queue::push(Task data) {
     std::lock_guard<std::mutex> lk(mtx);
     deque.push_front(std::move(data));
 }
 
-bool Thread::Thread_Pool::Task_deque::empty() const {
+bool Thread::Thread_Pool::Task_queue::empty() const {
     std::lock_guard<std::mutex> lk(mtx);
     return deque.empty();
 }
 
-bool Thread::Thread_Pool::Task_deque::try_pop(data_type& res) {
+bool Thread::Thread_Pool::Task_queue::try_pop(Task& res) {
     std::lock_guard<std::mutex> lk(mtx);
     if (deque.empty()) { return false; }
     else {
@@ -99,7 +101,7 @@ bool Thread::Thread_Pool::Task_deque::try_pop(data_type& res) {
     }
 }
 
-bool Thread::Thread_Pool::Task_deque::try_steal_task(data_type& res) {
+bool Thread::Thread_Pool::Task_queue::try_steal_task(Task& res) {
     std::lock_guard<std::mutex> lk(mtx);
     if (deque.empty()) { return false; }
     else {
@@ -115,5 +117,21 @@ Thread::Thread_Pool::Join_threads::~Join_threads() {
     }
 }
 
+thread_local Thread::Thread_Pool::Task_queue* Thread::Thread_Pool::local_work_queue = 0;
+bool Thread::Thread_Pool::pop_task_from_local_queue(Task& task) {
+    return local_work_queue && local_work_queue->try_pop(task);
+}
 
+bool Thread::Thread_Pool::pop_task_from_pool_queue(Task& task) {
+    return pool_work_queue.try_pop(task);
+}
+
+thread_local int Thread::Thread_Pool::index = 0;
+bool Thread::Thread_Pool::pop_task_from_other_thread_queue(Task& task) {
+    for (uint i = 0;i < tasks.size();i++) {
+        const int new_index = (Thread::Thread_Pool::index + i + 1) % tasks.size();
+        if (tasks[new_index]->try_steal_task(task)) { return true; }
+    }
+    return false;
+}
 
