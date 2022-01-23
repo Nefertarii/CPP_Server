@@ -1,3 +1,6 @@
+#ifndef THREADPOOL_H_
+#define THREADPOOL_H_
+
 #include "deque.hpp"
 #include "queue.hpp"
 #include "vector.hpp"
@@ -61,9 +64,9 @@ namespace Thread {
         std::vector<std::unique_ptr<Task_queue>> tasks;
         std::vector<std::thread> threads;
         Join_threads joiner;
-        static thread_local Task_queue* local_work_queue;
-        static thread_local int index;
-        void worker_thread(int index_);
+        inline static thread_local Task_queue* local_work_queue;
+        inline static thread_local int index;
+        void worker_thread(uint index_);
         bool pop_task_from_local_queue(Task& task);
         bool pop_task_from_pool_queue(Task& task);
         bool pop_task_from_other_thread_queue(Task& task);
@@ -72,7 +75,7 @@ namespace Thread {
         template <typename Func>
         std::future<typename std::result_of<Func()>::type> submit(Func func);
         void run_pending_task();
-        ~Thread_Pool();
+        ~Thread_Pool() { done = true; }
     };
 };
 
@@ -117,7 +120,27 @@ Thread::Thread_Pool::Join_threads::~Join_threads() {
     }
 }
 
-thread_local Thread::Thread_Pool::Task_queue* Thread::Thread_Pool::local_work_queue = 0;
+void Thread::Thread_Pool::worker_thread(uint index_) {
+    index = index_;
+    local_work_queue = tasks[index].get();
+    while (!done) { run_pending_task(); }
+}
+
+Thread::Thread_Pool::Thread_Pool() :done(false), joiner(threads) {
+    const uint thread_count = std::thread::hardware_concurrency();\
+    try {
+        for (uint i = 0;i < thread_count;i++) {
+            tasks.push_back(std::unique_ptr<Task_queue>(new Task_queue));
+            threads.push_back(std::thread(&Thread_Pool::worker_thread, this, i));
+        }
+    }
+    catch (...) {
+        done = true;
+        throw;
+    }
+}
+
+//thread_local Thread::Thread_Pool::Task_queue* Thread::Thread_Pool::local_work_queue = 0;
 bool Thread::Thread_Pool::pop_task_from_local_queue(Task& task) {
     return local_work_queue && local_work_queue->try_pop(task);
 }
@@ -126,7 +149,7 @@ bool Thread::Thread_Pool::pop_task_from_pool_queue(Task& task) {
     return pool_work_queue.try_pop(task);
 }
 
-thread_local int Thread::Thread_Pool::index = 0;
+//thread_local int Thread::Thread_Pool::index = 0;
 bool Thread::Thread_Pool::pop_task_from_other_thread_queue(Task& task) {
     for (uint i = 0;i < tasks.size();i++) {
         const int new_index = (Thread::Thread_Pool::index + i + 1) % tasks.size();
@@ -135,3 +158,24 @@ bool Thread::Thread_Pool::pop_task_from_other_thread_queue(Task& task) {
     return false;
 }
 
+template <typename Func>
+std::future<typename std::result_of<Func()>::type> Thread::Thread_Pool::submit(Func func) {
+    using ResultType = typename std::result_of<Func()>::type;
+    std::packaged_task<ResultType()> task(func);
+    std::future<ResultType> res(task.get_future());
+    if (local_work_queue) { local_work_queue->push(std::move(task)); }
+    else { pool_work_queue.push(std::move(task)); }
+    return res;
+}
+
+void Thread::Thread_Pool::run_pending_task() {
+    Task task;
+    if (pop_task_from_local_queue(task) ||
+        pop_task_from_pool_queue(task) ||
+        pop_task_from_other_thread_queue(task)) {
+        task();
+    }
+    else { std::this_thread::yield(); }
+}
+
+#endif

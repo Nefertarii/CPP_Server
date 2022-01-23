@@ -15,8 +15,8 @@ namespace Thread {
         Safe_Deque() = default;
         Safe_Deque(const Safe_Deque& other);
         Safe_Deque operator=(const Safe_Deque&) = delete;
-        void push_back(const T& value);
-        void push_front(const T& value);
+        void push_back(T value);
+        void push_front(T value);
         void pop_back();
         void pop_front();
         T front();
@@ -46,13 +46,13 @@ Thread::Safe_Deque<T>::Safe_Deque(const Safe_Deque& other) {
 }
 
 template <typename T>
-void Thread::Safe_Deque<T>::push_back(const T& value) {
+void Thread::Safe_Deque<T>::push_back(T value) {
     std::lock_guard<std::mutex> lk(mtx);
     data.push_back(value);
 }
 
 template <typename T>
-void Thread::Safe_Deque<T>::push_front(const T& value) {
+void Thread::Safe_Deque<T>::push_front(T value) {
     std::lock_guard<std::mutex> lk(mtx);
     data.push_front(value);
 }
