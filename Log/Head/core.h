@@ -4,17 +4,18 @@
 #include "formatter.h"
 #include "sink.h"
 #include "record.h"
-#include "../../Headfile/Clock/Head/timer.h"
 
 class Log_Core {
 private:
     Timer clock;
-    //formatter
-    //record
-    //sink
+    Formatter formatter;
+    Sink sink;
+    Record record;
+    uint temp_capacity;
+    uint log_size;
 public:
     //
-}
+};
 
 
 #endif

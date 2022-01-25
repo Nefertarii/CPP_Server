@@ -2,21 +2,19 @@
 #define LOG_ENUM_H_
 
 enum LogLevel {
-    NONE = -1,
-    NORMAL,
-    NOTIFI,
-    WARNING,
-    ERROR,
-    CRITICAL,
-    LEVELEND = (1 << 30)
+    LOG_NONE = -1,
+    LOG_NORMAL,
+    LOG_NOTIFI,
+    LOG_WARNING,
+    LOG_ERROR,
+    LOG_CRITICAL
 };
 
 enum Location {
-    L_CONSOLE,
-    L_FILE,
-    L_NETWORK,
-    L_NONE,
-    LOCATIONEND = (1 << 30)
+    LOC_CONSOLE,
+    LOC_FILE,
+    LOC_NETWORK,
+    LOC_NONE
 };
 
 #endif
