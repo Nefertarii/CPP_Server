@@ -4,25 +4,19 @@
 #include <cstring>
 #include <string>
 #include <mutex>
+#include "logenum.h"
 
-enum LogLevel {
-    NORMAL,
-    NOTIFI,
-    WARNING,
-    ERROR,
-    CRITICAL,
-    LEVELEND = (1 << 30)
-};
+
 
 class Formatter {
 private:
     bool flag;
+    std::mutex mtx;
     char date_tmp_c[80];
     std::string log_tmp;
     std::string level_tmp, date_tmp, from_tmp, info_tmp;
     void loglevel(LogLevel level);
     void logdate(long date);
-    std::mutex mtx;
 public:
     //[level] [date] from : info  
     Formatter(bool flag_);
