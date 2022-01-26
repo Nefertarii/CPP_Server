@@ -45,6 +45,14 @@ std::string Sink::process(std::string& str, char stop) {
     return std::string();
 }
 
+bool Sink::Filter(std::string log_level) {
+    /*if (log_level == "Normal") {
+        if (filter < Normal) {
+            
+        }
+    }*/
+}
+
 Sink::Sink() {
     concurrency_flag = false;
     log_size = 0;
@@ -71,7 +79,9 @@ void Sink::Set_filter(LogLevel level) { filter = level; }
 
 void Sink::Log_add(std::string log) {
     if (concurrency_flag) { mtx.lock(); }
-    level.push(process(log, ' '));
+    std::string log_level = process(log, ' ');
+    level.push(log_level);
+    ////////////////
     std::string tmp = process(log, ' ');
     date.push(process(log, ' '));
     from.push(process(log, ':'));
@@ -82,6 +92,7 @@ void Sink::Log_add(std::string log) {
 
 void Sink::Log_add(LogLevel log_level, long log_date,
                    std::string log_from, std::string log_detail) {
+    if (log_level <= filter) { return; }
     if (concurrency_flag) { mtx.lock(); }
     level.push(Loglevel_map[log_level]);
     date.push(std::to_string(log_date));
@@ -89,26 +100,6 @@ void Sink::Log_add(LogLevel log_level, long log_date,
     info.push(log_detail);
     log_size += 1;
     mtx.unlock();
-}
-
-void Sink::Normal_log(std::string log_from, std::string log_detail) {
-    Log_add(LOG_NORMAL, clock.Now_time_sec(), log_from, log_detail);
-}
-
-void Sink::Notifi_log(std::string log_from, std::string log_detail) {
-    Log_add(LOG_NOTIFI, clock.Now_time_sec(), log_from, log_detail);
-}
-
-void Sink::Warning_log(std::string log_from, std::string log_detail) {
-    Log_add(LOG_WARNING, clock.Now_time_sec(), log_from, log_detail);
-}
-
-void Sink::Error_log(std::string log_from, std::string log_detail) {
-    Log_add(LOG_ERROR, clock.Now_time_sec(), log_from, log_detail);
-}
-
-void Sink::Critical_log(std::string log_from, std::string log_detail) {
-    Log_add(LOG_CRITICAL, clock.Now_time_sec(), log_from, log_detail);
 }
 
 void Sink::Log_consume(std::string& log) {

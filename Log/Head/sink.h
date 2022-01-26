@@ -20,6 +20,7 @@ private:
     uint log_size;
     std::string Log_consume();
     std::string process(std::string& str, char stop);
+    bool Filter(std::string log_level);
 public:
     Sink();
     Sink(bool concurrency_flag_);
@@ -29,11 +30,6 @@ public:
     void Log_add(std::string log);
     void Log_add(LogLevel log_level, long log_date,
                  std::string log_from, std::string log_detail);
-    void Normal_log(std::string log_from, std::string log_detail);
-    void Notifi_log(std::string log_from, std::string log_detail);
-    void Warning_log(std::string log_from, std::string log_detail);
-    void Error_log(std::string log_from, std::string log_detail);
-    void Critical_log(std::string log_from, std::string log_detail);
     void Log_consume(std::string& log);
     void Log_consume(std::vector<std::string>* logs);
     uint Get_size();

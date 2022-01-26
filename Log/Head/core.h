@@ -5,16 +5,22 @@
 #include "sink.h"
 #include "record.h"
 
-class Log_Core {
+class Core {
 private:
     Timer clock;
     Formatter formatter;
     Sink sink;
     Record record;
     uint temp_capacity;
-    uint log_size;
 public:
-    //
+    Core();
+    void Normal_log(std::string log_from, std::string log_detail);
+    void Notifi_log(std::string log_from, std::string log_detail);
+    void Warning_log(std::string log_from, std::string log_detail);
+    void Error_log(std::string log_from, std::string log_detail);
+    void Critical_log(std::string log_from, std::string log_detail);
+    
+    ~Core();
 };
 
 
