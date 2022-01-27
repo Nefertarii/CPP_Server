@@ -11,28 +11,24 @@ class Sink {
 private:
     bool concurrency_flag;
     std::mutex mtx;
-    std::queue<std::string> level;
-    std::queue<std::string> date;
-    std::queue<std::string> from;
-    std::queue<std::string> info;
-    LogLevel filter;
+    std::queue<Log> log_queue;
+    LogLevel in_filter;
+    LogLevel out_filter;
     Timer clock;
-    uint log_size;
-    std::string Log_consume();
-    std::string process(std::string& str, char stop);
-    bool Filter(std::string log_level);
+    LogLevel Filter_str(std::string log_level);
 public:
     Sink();
     Sink(bool concurrency_flag_);
-    Sink(LogLevel filter_, bool concurrency_flag_);
+    Sink(LogLevel in, LogLevel out, bool concurrency_flag_);
     void Set_flag(bool concurrency_flag_);
-    void Set_filter(LogLevel level);
-    void Log_add(std::string log);
-    void Log_add(LogLevel log_level, long log_date,
+    void Set_in_filter(LogLevel level);
+    void Set_out_filter(LogLevel level);
+    bool Log_add(std::string log_str);
+    bool Log_add(LogLevel log_level, long log_date,
                  std::string log_from, std::string log_detail);
-    void Log_consume(std::string& log);
-    void Log_consume(std::vector<std::string>* logs);
-    uint Get_size();
+    bool Log_consume(Log* log);
+    bool Log_consume(std::vector<Log>* logs);
+    std::string process(std::string& str, char stop);
 };
 
 

@@ -7,7 +7,15 @@ enum LogLevel {
     LOG_NOTIFI,
     LOG_WARNING,
     LOG_ERROR,
-    LOG_CRITICAL
+    LOG_CRITICAL,
+    LOG_END = (1 << 30)
+};
+
+struct Log {
+    std::string level;
+    std::string date;
+    std::string from;
+    std::string detail;
 };
 
 enum Location {

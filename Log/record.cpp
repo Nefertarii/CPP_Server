@@ -2,7 +2,7 @@
 
 Record::Record() {
     concurrency_flag = false;
-    filename = "Default_Save.txt";
+    filename = "Default_log.txt";
 }
 
 Record::Record(std::string save_file, bool concurrency_flag_) {
@@ -21,7 +21,7 @@ void Record::Set_flag(bool concurrency_flag_) {
 bool Record::Save_to_file(std::string info) {
     std::fstream file(filename, std::ios::out);
     if (file) {
-        file.write(info, info.size());
+        file.write(info.c_str(), info.size());
         file.close();
         return true;
     }
@@ -33,7 +33,7 @@ bool Record::Save_to_file(std::vector<std::string> info) {
     std::fstream file(filename);
     if (file) {
         for (auto line : info) {
-            file.write(line, line.size());
+            file.write(line.c_str(), line.size());
         }
         file.close();
         return true;

@@ -11,16 +11,25 @@ private:
     Formatter formatter;
     Sink sink;
     Record record;
-    uint temp_capacity;
+    uint log_size;
+    uint log_capacity;
+    std::vector<std::string> logs;
+    std::vector<Log> logs_tmp;
 public:
     Core();
-    void Normal_log(std::string log_from, std::string log_detail);
-    void Notifi_log(std::string log_from, std::string log_detail);
-    void Warning_log(std::string log_from, std::string log_detail);
-    void Error_log(std::string log_from, std::string log_detail);
-    void Critical_log(std::string log_from, std::string log_detail);
-    
-    ~Core();
+    Core(bool flag, uint capacity, LogLevel in_filter, LogLevel out_filter, std::string filename);
+    bool Normal_log(std::string log_from, std::string log_detail);
+    bool Notifi_log(std::string log_from, std::string log_detail);
+    bool Warning_log(std::string log_from, std::string log_detail);
+    bool Error_log(std::string log_from, std::string log_detail);
+    bool Critical_log(std::string log_from, std::string log_detail);
+    void Set_log_in_filter(LogLevel level);
+    void Set_log_out_filter(LogLevel level);
+    void Set_save_file(std::string filename);
+    void Set_concurrency(bool flag);
+    void Set_capacity(uint size);
+    void Save_to_file();
+    ~Core() {}
 };
 
 

@@ -11,7 +11,6 @@ private:
     bool concurrency_flag;
     std::mutex mtx;
     char date_tmp_c[80];
-    std::string log_tmp, date_tmp;
 public:
     //[level] [date] from:info  
     Formatter();
@@ -20,8 +19,7 @@ public:
     std::string Trans_date(long date);
     std::string Trans_date(std::string date);
     std::string Trans_log(LogLevel level, long date, std::string from, std::string info);
-    void Trans_log(LogLevel level, long date, std::string from,
-               std::string info, std::string& log);
+    std::string Trans_log(Log log);
 };
 
 
