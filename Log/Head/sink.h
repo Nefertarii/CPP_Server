@@ -27,7 +27,7 @@ public:
     bool Log_add(LogLevel log_level, long log_date,
                  std::string log_from, std::string log_detail);
     bool Log_consume(Log* log);
-    bool Log_consume(std::vector<Log>* logs);
+    bool Log_consume(std::queue<Log>* logs);
     std::string process(std::string& str, char stop);
 };
 

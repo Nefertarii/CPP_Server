@@ -38,7 +38,7 @@ long Timer::Run_time_sec() {
 std::string Timer::Sec_to_string(long time) {
     char temp[80];
     struct tm *time_tm = localtime(&time);
-    strftime(temp, 80, "Data:%a, %b %m %Y %H:%M:%S GMT", time_tm);
+    strftime(temp, 80, "Data:%a, %b %m %Y %H:%M:%S GMT\n", time_tm);
     std::string str = temp;
     return str;
 }

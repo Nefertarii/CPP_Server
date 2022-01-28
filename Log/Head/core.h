@@ -13,8 +13,8 @@ private:
     Record record;
     uint log_size;
     uint log_capacity;
-    std::vector<std::string> logs;
-    std::vector<Log> logs_tmp;
+    std::queue<std::string> logs;
+    std::queue<Log> logs_tmp;
 public:
     Core();
     Core(bool flag, uint capacity, LogLevel in_filter, LogLevel out_filter, std::string filename);

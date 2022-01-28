@@ -2,18 +2,19 @@
 
 Core::Core() {
     log_size = 0;
-    Set_concurrency(false);
     log_capacity = 200;
+    Set_concurrency(false);
     sink.Set_in_filter(LOG_NONE);
     sink.Set_out_filter(LOG_NONE);
     record.Set_filename("Default_log.txt");
+    
 }
 
 Core::Core(bool flag, uint capacity, LogLevel in_filter,
            LogLevel out_filter, std::string filename) {
     log_size = 0;
-    Set_concurrency(flag);
     log_capacity = capacity;
+    Set_concurrency(flag);
     sink.Set_in_filter(in_filter);
     sink.Set_out_filter(out_filter);
     record.Set_filename(filename);
@@ -85,9 +86,11 @@ void Core::Set_capacity(uint size) { log_capacity = size; }
 
 void Core::Save_to_file() {
     //consume
+    std::string write_time = clock.Sec_to_string(clock.Now_time_sec());
+    record.Save_to_file(write_time);
     sink.Log_consume(&logs_tmp);
     for (uint i = 0;i < logs_tmp.size();i++) {
-        logs[i] = formatter.Trans_log(logs_tmp[i]);
+        logs.push(formatter.Trans_log(logs_tmp.front()));
     }
-    record.Save_to_file(logs);
+    record.Save_to_file(&logs);
 }

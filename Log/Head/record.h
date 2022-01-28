@@ -2,8 +2,8 @@
 #define RECORD_H_
 
 #include <string>
-#include <vector>
 #include <fstream>
+#include <queue>
 
 class Record {
 private:
@@ -15,7 +15,7 @@ public:
     void Set_flag(bool concurrency_flag_);
     void Set_filename(std::string save_file);
     bool Save_to_file(std::string info);
-    bool Save_to_file(std::vector<std::string> info);
+    bool Save_to_file(std::queue<std::string>* info);
 };
 
 

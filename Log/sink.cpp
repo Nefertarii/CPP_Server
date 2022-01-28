@@ -110,7 +110,7 @@ bool Sink::Log_consume(Log* log) {
 
 }
 
-bool Sink::Log_consume(std::vector<Log>* logs) {
+bool Sink::Log_consume(std::queue<Log>* logs) {
     if (log_queue.empty()) { return false; }
     if (concurrency_flag) { mtx.lock(); }
     Log tmp_log;
@@ -118,11 +118,11 @@ bool Sink::Log_consume(std::vector<Log>* logs) {
         tmp_log = log_queue.front();
         log_queue.pop();
         if (out_filter == LOG_NONE) {
-            logs->push_back(tmp_log);
+            logs->push(tmp_log);
             continue;
         }
         else if (out_filter != Filter_str(tmp_log.level)) { continue; }
-        else { logs->push_back(tmp_log); }
+        else { logs->push(tmp_log); }
     }
     mtx.unlock();
     return true;

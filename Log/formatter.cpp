@@ -27,7 +27,7 @@ std::string Formatter::Trans_date(std::string date) {
     return Trans_date(std::stol(date));
 }
 
-std::string Formatter::Trans_log(LogLevel level, long date, std::string from, std::string info) {
+std::string Formatter::Trans_log(LogLevel level, long date, std::string from, std::string detail) {
     std::string tmp_log;
     if (concurrency_flag) { mtx.lock(); }
     tmp_log += '[';
@@ -36,7 +36,7 @@ std::string Formatter::Trans_log(LogLevel level, long date, std::string from, st
     tmp_log += Trans_date(date);
     tmp_log += from;
     tmp_log += ":";
-    tmp_log += info;
+    tmp_log += detail;
     tmp_log += "\n";
     mtx.unlock();
     return tmp_log;

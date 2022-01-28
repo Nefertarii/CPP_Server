@@ -19,7 +19,7 @@ void Record::Set_flag(bool concurrency_flag_) {
 }
 
 bool Record::Save_to_file(std::string info) {
-    std::fstream file(filename, std::ios::out);
+    std::fstream file(filename, std::ios_base::out | std::ios::app);
     if (file) {
         file.write(info.c_str(), info.size());
         file.close();
@@ -29,11 +29,14 @@ bool Record::Save_to_file(std::string info) {
     return false;
 }
 
-bool Record::Save_to_file(std::vector<std::string> info) {
-    std::fstream file(filename);
+bool Record::Save_to_file(std::queue<std::string>* info) {
+    std::fstream file(filename, std::ios_base::out | std::ios::app);
+    std::string tmp_str;
     if (file) {
-        for (auto line : info) {
-            file.write(line.c_str(), line.size());
+        for (uint i = 0;i < info->size();i++) {
+            tmp_str = info->front();
+            file.write(tmp_str.c_str(), tmp_str.size());
+            info->pop();
         }
         file.close();
         return true;
