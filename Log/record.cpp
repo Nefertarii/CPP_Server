@@ -33,7 +33,8 @@ bool Record::Save_to_file(std::queue<std::string>* info) {
     std::fstream file(filename, std::ios_base::out | std::ios::app);
     std::string tmp_str;
     if (file) {
-        for (uint i = 0;i < info->size();i++) {
+        size_t queue_size = info->size();
+        for (size_t i = 0;i < queue_size;i++) {
             tmp_str = info->front();
             file.write(tmp_str.c_str(), tmp_str.size());
             info->pop();

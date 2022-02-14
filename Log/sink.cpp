@@ -129,9 +129,9 @@ bool Sink::Log_consume(std::queue<Log>* logs) {
 }
 
 std::string Sink::process(std::string& str, char stop) {
-    uint size = str.size();
+    size_t size = str.size();
     if (size == 0) { std::string(); }
-    uint index = 0;
+    size_t index = 0;
     while (1) {
         if (str[index] == stop) {
             std::string tmp(str.begin(), str.begin() + index);

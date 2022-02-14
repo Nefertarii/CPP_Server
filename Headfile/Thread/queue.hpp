@@ -6,7 +6,6 @@
 #include <condition_variable>
 
 
-
 namespace Thread {
     template <typename T>
     class Safe_Queue {

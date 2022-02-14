@@ -152,7 +152,7 @@ bool Thread::Thread_Pool::pop_task_from_pool_queue(Task& task) {
 //thread_local int Thread::Thread_Pool::index = 0;
 bool Thread::Thread_Pool::pop_task_from_other_thread_queue(Task& task) {
     for (uint i = 0;i < tasks.size();i++) {
-        const int new_index = (Thread::Thread_Pool::index + i + 1) % tasks.size();
+        const size_t new_index = (Thread::Thread_Pool::index + i + 1) % tasks.size();
         if (tasks[new_index]->try_steal_task(task)) { return true; }
     }
     return false;
