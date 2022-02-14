@@ -3,14 +3,16 @@
 [用于测试的服务器网站](http://webwasi.com/)      
 [更新计划/内容](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)
 
+### 更新日志/Change log
+[日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)
+
 ### 项目背景/Background
-在学习完相关知识后想将其整合，于是想到制作一个有交互功能，且考虑使用数据库存储相关数据的web服务器  
-打算制作一个使用自制的数据库，并由多进程管理+多线程的服务器程序    
+在学习完相关知识后想将其整合，于是想到制作一个有交互功能的服务器  
+打算制作一个由多进程管理+多线程的服务器程序    
 由此加深对基础知识的理解和大型项目制作过程的体验  
-( 一开始考虑搭配unreal制作一款游戏并作为游戏服务器使用，要配套开发时间周期太长  
+配套有日志库，网络库，一个线程池及一些容器结构
+( 一开始考虑搭配unreal制作一款游戏并作为游戏服务器使用，unreal还不咋会用 
   目前结构也在向能使用不同协议方便扩展的运行方式而开发 )   
-程序整体由管理进程控制数据库进程和服务器进程的启动以及启动时的设置  
-也可单独使用数据库和服务器
 作为我的第一个大型规划，后续会不断更新  
 
 #### 整体构思
@@ -18,7 +20,6 @@
 - [ ] 打算从http升级成https处理(整体完成后考虑)
 - [ ] 内存的分配(可以自动回收垃圾的垃圾回收器,预计和string类一起开发)
 - [ ] 字符串的处理(底层对char* 的使用很多,来回转化不大美观且容易出错，实现一个贴合程序的string类)
-- [ ] 数据库的制作(需要解决数据的问题，包括数据的储存和加载，还有不同模块和整体的整合是最需要考虑的部分,计划最后开发)
 
 整体功能/模块大致构思：  
 * 公共资源
@@ -65,9 +66,6 @@
 若不绑定0\~1024端口，使用 ```./HTTPserver [conf file]``` 即可启动服务器进程  
 绑定1\~1024端口需要添加权限，需使用 ```sudo ./HTTPserver [conf file]``` 才可成功启动  
 如 ```./HTTPserver /home/ubuntu/Http.conf``` 启动HTTP WEB服务器。  
-
-### 更新日志/Change log
-[日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)
 
 ### 项目负责/Maintainers
 [@Nefertarii](https://github.com/Nefertarii)  
