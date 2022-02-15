@@ -6,7 +6,7 @@ namespace Wasi {
         enum LogLevel {
             LOG_NONE = -1,
             LOG_NORMAL,
-            LOG_NOTIFI,
+            LOG_NOTICE,
             LOG_WARNING,
             LOG_ERROR,
             LOG_CRITICAL,

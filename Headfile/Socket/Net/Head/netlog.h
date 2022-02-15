@@ -9,7 +9,7 @@ namespace Wasi {
 		private:
 			Wasi::Log::Core logcore;
 		public:
-			Logging() {}
+			Logging();
 			bool Normal_log(std::string log_from, std::string log_detail);
 			bool Notifi_log(std::string log_from, std::string log_detail);
 			bool Warning_log(std::string log_from, std::string log_detail);
@@ -19,6 +19,5 @@ namespace Wasi {
 		};
 	}
 }
-
 
 #endif // !NET_LOG_H_

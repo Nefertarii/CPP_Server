@@ -4,16 +4,16 @@
 using namespace Wasi::Log;
 
 const char* Loglevel_map[] = {
-    [LOG_NORMAL] = "Normal",
-    [LOG_NOTIFI] = "Notification",
-    [LOG_WARNING] = "Warning",
-    [LOG_ERROR] = "Error",
-    [LOG_CRITICAL] = "Critical"
+    [LOG_NORMAL]   = "   Normal   ",
+    [LOG_NOTICE]   = "Notification",
+    [LOG_WARNING]  = "   Warning  ",
+    [LOG_ERROR]    = "   Error    ",
+    [LOG_CRITICAL] = "   Critical "
 };
 
 LogLevel Sink::Filter_str(std::string log_level) {
     if (log_level == "Normal") { return LOG_NORMAL; }
-    else if (log_level == "Notification") { return LOG_NOTIFI; }
+    else if (log_level == "Notification") { return LOG_NOTICE; }
     else if (log_level == "Warning") { return LOG_WARNING; }
     else if (log_level == "Error") { return LOG_ERROR; }
     else if (log_level == "Critical") { return LOG_CRITICAL; }

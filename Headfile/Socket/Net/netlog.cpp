@@ -2,6 +2,10 @@
 
 using namespace Wasi::Socket;
 
+Logging::Logging() { 
+	logcore.Set_save_file("NetLog.log");
+}
+
 bool Logging::Normal_log(std::string log_from, std::string log_detail) {
 	if (!logcore.Add_log(Wasi::Log::LOG_NORMAL, log_from, log_detail)) {
 		logcore.Save_to_file();
@@ -11,7 +15,7 @@ bool Logging::Normal_log(std::string log_from, std::string log_detail) {
 }
 
 bool Logging::Notifi_log(std::string log_from, std::string log_detail) {
-	if (!logcore.Add_log(Wasi::Log::LOG_NOTIFI, log_from, log_detail)) {
+	if (!logcore.Add_log(Wasi::Log::LOG_NOTICE, log_from, log_detail)) {
 		logcore.Save_to_file();
 		return false;
 	}

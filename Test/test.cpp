@@ -12,6 +12,7 @@
 #include "../Log/Head/sink.h"
 #include "../Log/Head/core.h"
 #include "../Headfile/Socket/Net/Head/netlog.h"
+#include "../Headfile/Socket/Net/Head/eventloop.h"
 
 
 /* using/enum  AaBbCc
@@ -22,7 +23,7 @@
  */
 
 //using namespace Wasi::Log;
-//using namespace Wasi::Socket;
+using namespace Wasi::Socket;
 using namespace std;
 
 Wasi::Thread::Safe_Queue<int> ique;
@@ -50,16 +51,20 @@ void test_func3() {
     }
 }
 
+Event_Loop eventloop;
+
+void func2() {
+    std::cout << "func2 run.\n";
+    eventloop.Loop();
+}
+
 void func1() {
-    //Wasi::Log::Core core;
-    Wasi::Socket::Logging logging;
-    for (int i = 0; i <= 500; i++) {
-        logging.Critical_log("Test", "123");
-    }
+    std::cout << "func1 run.\n";
+    eventloop.Loop();
 }
 //std::cout << "|" << sink.Log_consume() << "|";
 
 int main() {
-    func1();
-    std::cout << "hi\n";
+    thread T1(func1);
+    thread T2(func2);
 }

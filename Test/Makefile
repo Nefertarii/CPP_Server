@@ -1,7 +1,7 @@
 TARGET = test
 CC = g++
 TARGET = test
-OBJECTS = timer.o formatter.o sink.o record.o core.o test.o 
+OBJECTS = timer.o formatter.o sink.o record.o core.o netlog.o test.o 
 FLAGS = -pthread -std=c++17 -Og -Wall
 SOCKET = ../Headfile/Socket
 THREAD = ../Headfile/Thread
@@ -26,7 +26,8 @@ record.o : $(LOG)/Head/record.h
 core.o : $(LOG)/Head/core.h
 	$(CC) $(FLAGS) -c $(LOG)/core.cpp
 
-
+netlog.o : $(SOCKET)/Net/Head/netlog.h
+	$(CC) $(FLAGS) -c $(SOCKET)/Net/netlog.cpp
 
 test.o : test.cpp
 	$(CC) $(FLAGS) -c test.cpp
