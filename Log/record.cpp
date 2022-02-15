@@ -1,5 +1,7 @@
 #include "Head/record.h"
 
+using namespace Wasi::Log;
+
 Record::Record() {
     concurrency_flag = false;
     filename = "Default_log.txt";

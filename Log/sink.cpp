@@ -1,4 +1,7 @@
 #include "Head/sink.h"
+#include <iostream>
+
+using namespace Wasi::Log;
 
 const char* Loglevel_map[] = {
     [LOG_NORMAL] = "Normal",
@@ -63,12 +66,15 @@ bool Sink::Log_add(std::string log_str) {
         mtx.unlock();
         return false;
     }
-    Log tmp_log;
+    LogLine tmp_log;
     tmp_log.level = log_level;
     tmp_log.date = process(log_str, ' ');
     tmp_log.from = process(log_str, ':');
     tmp_log.detail = log_str;
     log_queue.push(tmp_log);
+#ifdef DEBUG
+    std::cout << tmp_log << "\n";
+#endif
     mtx.unlock();
     return true;
 }
@@ -77,20 +83,23 @@ bool Sink::Log_add(LogLevel log_level, long log_date,
                    std::string log_from, std::string log_detail) {
     if (in_filter >= log_level) { return false; }
     if (concurrency_flag == true) { mtx.lock(); }
-    Log tmp_log;
+    LogLine tmp_log;
     tmp_log.level = Loglevel_map[log_level];
     tmp_log.date = std::to_string(log_date);
     tmp_log.from = log_from;
     tmp_log.detail = log_detail;
     log_queue.push(tmp_log);
+#ifdef DEBUG
+    std::cout << tmp_log << "\n";
+#endif
     mtx.unlock();
     return true;
 }
 
-bool Sink::Log_consume(Log* log) {
+bool Sink::Log_consume(LogLine* log) {
     if (log_queue.empty()) { return false; }
     if (concurrency_flag) { mtx.lock(); }
-    Log tmp_log = log_queue.front();
+    LogLine tmp_log = log_queue.front();
     log_queue.pop();
     if (out_filter == LOG_NONE) {
         *log = tmp_log;
@@ -110,10 +119,10 @@ bool Sink::Log_consume(Log* log) {
 
 }
 
-bool Sink::Log_consume(std::queue<Log>* logs) {
+bool Sink::Log_consume(std::queue<LogLine>* logs) {
     if (log_queue.empty()) { return false; }
     if (concurrency_flag) { mtx.lock(); }
-    Log tmp_log;
+    LogLine tmp_log;
     while (!log_queue.empty()) {
         tmp_log = log_queue.front();
         log_queue.pop();

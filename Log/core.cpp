@@ -1,5 +1,8 @@
 #include "Head/core.h"
 
+//using namespace Wasi;
+using namespace Wasi::Log;
+
 Core::Core() {
 	log_size = 0;
 	log_capacity = 200;
@@ -7,7 +10,6 @@ Core::Core() {
 	sink.Set_in_filter(LOG_NONE);
 	sink.Set_out_filter(LOG_NONE);
 	record.Set_filename("Default_log.txt");
-
 }
 
 Core::Core(bool flag, uint capacity, LogLevel in_filter,
@@ -20,50 +22,9 @@ Core::Core(bool flag, uint capacity, LogLevel in_filter,
 	record.Set_filename(filename);
 }
 
-bool Core::Normal_log(std::string log_from, std::string log_detail) {
+bool Core::Add_log(LogLevel log_level, std::string log_from, std::string log_detail) {
 	if (log_size + 1 >= log_capacity) { return false; }
-	if (sink.Log_add(LOG_NORMAL, clock.Now_time_sec(),
-		log_from, log_detail) == true) {
-		log_size += 1;
-		return true;
-	}
-	return false;
-}
-
-bool Core::Notifi_log(std::string log_from, std::string log_detail) {
-	if (log_size + 1 >= log_capacity) { return false; }
-	if (sink.Log_add(LOG_NOTIFI, clock.Now_time_sec(),
-		log_from, log_detail) == true) {
-		log_size += 1;
-		return true;
-	}
-	return false;
-}
-
-bool Core::Warning_log(std::string log_from, std::string log_detail) {
-	if (log_size + 1 >= log_capacity) { return false; }
-	if (sink.Log_add(LOG_WARNING, clock.Now_time_sec(),
-		log_from, log_detail) == true) {
-		log_size += 1;
-		return true;
-	}
-	return false;
-}
-
-bool Core::Error_log(std::string log_from, std::string log_detail) {
-	if (log_size + 1 >= log_capacity) { return false; }
-	if (sink.Log_add(LOG_ERROR, clock.Now_time_sec(),
-		log_from, log_detail) == true) {
-		log_size += 1;
-		return true;
-	}
-	return false;
-}
-
-bool Core::Critical_log(std::string log_from, std::string log_detail) {
-	if (log_size + 1 >= log_capacity) { return false; }
-	if (sink.Log_add(LOG_CRITICAL, clock.Now_time_sec(),
-		log_from, log_detail) == true) {
+	if (sink.Log_add(log_level, clock.Now_time_sec(), log_from, log_detail) == true) {
 		log_size += 1;
 		return true;
 	}
@@ -84,14 +45,16 @@ void Core::Set_concurrency(bool flag) {
 
 void Core::Set_capacity(uint size) { log_capacity = size; }
 
-void Core::Save_to_file() {
+bool Core::Save_to_file() {
 	//consume
-	std::string write_time = clock.Sec_to_string(clock.Now_time_sec());
-	record.Save_to_file(write_time);
+	std::string write_befroe = clock.Sec_to_string(clock.Now_time_sec());
+	write_befroe += "Logline:" + std::to_string(log_size) + "\n";
+	record.Save_to_file(write_befroe);
 	sink.Log_consume(&logs_tmp);
 	for (uint i = 0; i < log_size; i++) {
 		logs.push(formatter.Trans_log(logs_tmp.front()));
 		logs_tmp.pop();
 	}
-	record.Save_to_file(&logs);
+	log_size = 0;
+	return record.Save_to_file(&logs);
 }

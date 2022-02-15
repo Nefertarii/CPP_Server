@@ -11,6 +11,7 @@
 #include "../Log/Head/formatter.h"
 #include "../Log/Head/sink.h"
 #include "../Log/Head/core.h"
+#include "../Headfile/Socket/Net/Head/netlog.h"
 
 
 /* using/enum  AaBbCc
@@ -20,13 +21,17 @@
  *
  */
 
-Thread::Safe_Queue<int> ique;
-Thread::Safe_Deque<int> ideq;
-Thread::Safe_Vector<int> ivec;
-Thread::Safe_Stack<int> istk;
-Thread::Safe_List<int> ilist;
-Thread::Safe_Map<int, int> iimap;
-Thread::Thread_Pool threads;
+//using namespace Wasi::Log;
+//using namespace Wasi::Socket;
+using namespace std;
+
+Wasi::Thread::Safe_Queue<int> ique;
+Wasi::Thread::Safe_Deque<int> ideq;
+Wasi::Thread::Safe_Vector<int> ivec;
+Wasi::Thread::Safe_Stack<int> istk;
+Wasi::Thread::Safe_List<int> ilist;
+Wasi::Thread::Safe_Map<int, int> iimap;
+Wasi::Thread::Thread_Pool threads;
 
 void test_func1() {
     std::cout << "test_func 1\n";
@@ -46,18 +51,15 @@ void test_func3() {
 }
 
 void func1() {
-    Core core1;
-    core1.Normal_log("Test1", "detail111111");
-    core1.Normal_log("Test2", "detail111111");
-    core1.Normal_log("Test3", "detail111111");
-    core1.Normal_log("Test4", "detail111111");
-    core1.Normal_log("Test5", "detail111111");
-    core1.Save_to_file();
+    //Wasi::Log::Core core;
+    Wasi::Socket::Logging logging;
+    for (int i = 0; i <= 500; i++) {
+        logging.Critical_log("Test", "123");
+    }
 }
 //std::cout << "|" << sink.Log_consume() << "|";
 
-
 int main() {
     func1();
-    std::cout << "hi123\n";
+    std::cout << "hi\n";
 }

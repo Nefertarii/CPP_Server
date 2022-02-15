@@ -1,6 +1,7 @@
 #include "Head/formatter.h"
 
 extern const char* Loglevel_map[];
+using namespace Wasi::Log;
 
 Formatter::Formatter() {
     concurrency_flag = false;
@@ -42,7 +43,7 @@ std::string Formatter::Trans_log(LogLevel level, long date, std::string from, st
     return tmp_log;
 }
 
-std::string Formatter::Trans_log(Log log) {
+std::string Formatter::Trans_log(LogLine log) {
     std::string tmp_log;
     if (concurrency_flag) { mtx.lock(); }
     tmp_log += '[';
