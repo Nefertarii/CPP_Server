@@ -5,7 +5,7 @@
 #include <queue>
 #include <mutex>
 #include "logenum.h"
-#include "../../Headfile/Clock/Head/timer.h"
+#include "../../Headfile/Timer/Head/timer.h"
 
 namespace Wasi {
     namespace Log {
@@ -16,7 +16,7 @@ namespace Wasi {
             std::queue<LogLine> log_queue;
             LogLevel in_filter;
             LogLevel out_filter;
-            Timer clock;
+            Wasi::Time::Timer clock;
             LogLevel Filter_str(std::string log_level);
         public:
             Sink();

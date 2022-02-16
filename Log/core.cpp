@@ -24,7 +24,7 @@ Core::Core(bool flag, uint capacity, LogLevel in_filter,
 
 bool Core::Add_log(LogLevel log_level, std::string log_from, std::string log_detail) {
 	if (log_size + 1 >= log_capacity) { return false; }
-	if (sink.Log_add(log_level, clock.Now_time_sec(), log_from, log_detail) == true) {
+	if (sink.Log_add(log_level, clock.Nowtime_sec(), log_from, log_detail) == true) {
 		log_size += 1;
 		return true;
 	}
@@ -47,7 +47,7 @@ void Core::Set_capacity(uint size) { log_capacity = size; }
 
 bool Core::Save_to_file() {
 	//consume
-	std::string write_befroe = clock.Sec_to_string(clock.Now_time_sec());
+	std::string write_befroe = clock.Sec_to_string(clock.Nowtime_sec());
 	write_befroe += "Logline:" + std::to_string(log_size) + "\n";
 	record.Save_to_file(write_befroe);
 	sink.Log_consume(&logs_tmp);

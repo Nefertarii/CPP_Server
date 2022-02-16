@@ -1,8 +1,8 @@
 #ifndef NET_POLL_H_
 #define NET_POLL_H_
 
-#include "../../Headfile/Class/noncopyable.h"
-#include "../../Headfile/Clock/Head/timer.h"
+#include "../../Class/noncopyable.h"
+#include "../../Timer/Head/timer.h"
 #include <vector>
 #include <map>
 
@@ -23,7 +23,7 @@ namespace Wasi {
         public:
             Poller(Eventloop* loop);
             ~Poller();
-            Ms Poll(int timeout_ms, std::vector<Channel*> channels);
+            Wasi::Time::TimeStamp Poll(int timeout_ms, std::vector<Channel*> channels);
             void UpdateChannel(Channel* channel);
         };
     }

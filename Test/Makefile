@@ -1,10 +1,10 @@
 TARGET = test
 CC = g++
 TARGET = test
-OBJECTS = timer.o formatter.o sink.o record.o core.o netlog.o \
-	poll.o channel.o eventloop.o test.o 
+OBJECTS = timer.o timestamp.o formatter.o sink.o record.o core.o netlog.o \
+	test.o 
 FLAGS = -pthread -std=c++17 -Og -Wall
-SOCKET = ../Headfile/Socket
+SOCKET = ../Headfile/Net
 THREAD = ../Headfile/Thread
 TIMER = ../Headfile/Timer
 LOG = ../Log
@@ -14,6 +14,9 @@ $(TARGET): $(OBJECTS)
 
 timer.o : $(TIMER)/Head/timer.h
 	$(CC) $(FLAGS) -c $(TIMER)/timer.cpp
+
+timestamp.o : $(TIMER)/Head/timestamp.h
+	$(CC) $(FLAGS) -c $(TIMER)/timestamp.cpp
 
 formatter.o : $(LOG)/Head/formatter.h
 	$(CC) $(FLAGS) -c $(LOG)/formatter.cpp
@@ -27,17 +30,9 @@ record.o : $(LOG)/Head/record.h
 core.o : $(LOG)/Head/core.h
 	$(CC) $(FLAGS) -c $(LOG)/core.cpp
 
-netlog.o : $(SOCKET)/Net/Head/netlog.h
-	$(CC) $(FLAGS) -c $(SOCKET)/Net/netlog.cpp
+netlog.o : $(SOCKET)/Head/netlog.h
+	$(CC) $(FLAGS) -c $(SOCKET)/netlog.cpp
 
-poll.o : $(SOCKET)/Net/Head/poll.h
-	$(CC) $(FLAGS) -c $(SOCKET)/Net/poll.cpp
-
-channel.o : $(SOCKET)/Net/Head/channel.h
-	$(CC) $(FLAGS) -c $(SOCKET)/Net/channel.cpp
-
-eventloop.o : $(SOCKET)/Net/Head/eventloop.h
-	$(CC) $(FLAGS) -c $(SOCKET)/Net/eventloop.cpp
 
 test.o : test.cpp
 	$(CC) $(FLAGS) -c test.cpp

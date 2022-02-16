@@ -1,7 +1,6 @@
 #ifndef TIME_STAMP_H_
 #define TIME_STAMP_H_
 
-#include <chrono>
 #include <sys/time.h>
 
 namespace Wasi {
@@ -13,6 +12,7 @@ namespace Wasi {
             TimeStamp();
             TimeStamp(long microseconds);
             long Microseconds_since_epoch();
+            void Swap(TimeStamp& other);
             static const int microseconds_per_second = 1000 * 1000;
             static const int microseconds_per_milliseconds = 1000;
         };

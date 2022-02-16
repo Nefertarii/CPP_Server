@@ -7,11 +7,10 @@ using namespace Wasi::Net;
 
 Poller::Poller(EventLoop* loop):ownerloop(loop) {}
 
-Ms Poller::Poll(int timeout_ms, std::vector<Channel*> channels) {
+Wasi::Time::TimeStamp  Poller::Poll(int timeout_ms, std::vector<Channel*> channels) {
     int num_events = Poll(&*pollfds.begin(), pollfds.size(), timeout_ms);
-    Ms
+    //Ms
 }
-
 
 Poller::~Poller() {
     
