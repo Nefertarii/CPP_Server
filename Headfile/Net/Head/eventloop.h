@@ -6,12 +6,14 @@
 #include <thread>
 #include <unistd.h>
 #include <assert.h>
-#include "../../../Class/noncopyable.h"
+#include "../../Class/noncopyable.h"
 
 #include <iostream>
 
+class Channel;
+
 namespace Wasi {
-    namespace Socket {
+    namespace Net {
         class Event_Loop : Noncopyable {
         private:
             bool looping;
@@ -19,7 +21,10 @@ namespace Wasi {
         public:
             Event_Loop();
             void Loop();
-            bool Is_in_loop_thread();
+            bool IsInLoopThread();
+            void UpdateChannel(Channel* channel);
+            void RemoveChannel(Channel* channel);
+            bool HasChannel(Channel* channel);
             ~Event_Loop();
         };
     }

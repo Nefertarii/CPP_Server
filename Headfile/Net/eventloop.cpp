@@ -1,5 +1,5 @@
 #include "Head/eventloop.h"
-using namespace Wasi::Socket;
+using namespace Wasi::Net;
 
 Event_Loop::Event_Loop() :looping(false), thread_id(0) {;}
 
@@ -12,12 +12,24 @@ void Event_Loop::Loop() {
 	looping = false;
 }
 
-bool Event_Loop::Is_in_loop_thread() { 
+bool Event_Loop::IsInLoopThread() { 
 	//return thread_id == getpid();
 	if (thread_id != getpid()) {
 		assert("two or more event loop.");
 	}
 	return true;
+}
+
+void Event_Loop::UpdateChannel() {
+	
+}
+
+void Event_Loop::RemoveChannel() {
+	
+}
+
+bool Event_Loop::HasChannel() {
+	
 }
 
 Event_Loop::~Event_Loop() {

@@ -1,6 +1,6 @@
 #include "Head/netlog.h"
 
-using namespace Wasi::Socket;
+using namespace Wasi::Net;
 
 Logging::Logging() { 
 	logcore.Set_save_file("NetLog.log");

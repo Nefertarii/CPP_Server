@@ -51,7 +51,7 @@ void test_func3() {
     }
 }
 
-Event_Loop eventloop;
+//Event_Loop eventloop;
 
 void func2() {
     std::cout << "func2 run.\n";

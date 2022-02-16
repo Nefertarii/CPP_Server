@@ -1,10 +1,10 @@
 #ifndef NET_LOG_H_
 #define NET_LOG_H_
 
-#include "../../../../Log/Head/core.h"
+#include "../../../Log/Head/core.h"
 
 namespace Wasi {
-	namespace Socket {
+	namespace Net {
 		class Logging {
 		private:
 			Wasi::Log::Core logcore;
