@@ -6,8 +6,6 @@
 
 namespace Wasi {
     namespace Time {
-        using long = unsigned long;
-
         class TimeStamp {
         private:
             long time; //MicroSeconds since epoch
@@ -15,8 +13,8 @@ namespace Wasi {
             TimeStamp();
             TimeStamp(long microseconds);
             long Microseconds_since_epoch();
-            static microseconds_per_second = 1000 * 1000;
-            static microseconds_per_milliseconds = 1000;
+            static const int microseconds_per_second = 1000 * 1000;
+            static const int microseconds_per_milliseconds = 1000;
         };
         
         TimeStamp Time_stamp_add(TimeStamp timestamp, double seconds);

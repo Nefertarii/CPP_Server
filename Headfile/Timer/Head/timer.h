@@ -33,7 +33,6 @@ namespace Wasi {
             static std::string Sec_to_string(long time);
             //static std::string Ms_to_string(long time);
             //static std::string Us_to_string(long time);
-            void Reset();
             ~Timer() {};
         };
     }

@@ -33,8 +33,3 @@ std::string Timer::Sec_to_string(long time) {
     std::string str = temp;
     return str;
 }
-
-void Timer::Reset() {
-    create_time_ms = Now_time_ms_();
-    create_time_sec = Now_time_sec_();
-}
