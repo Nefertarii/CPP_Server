@@ -12,8 +12,10 @@
 #include "../Log/Head/sink.h"
 #include "../Log/Head/core.h"
 #include "../Headfile/Net/Head/netlog.h"
-#include "../Headfile/Net/Head/eventloop.h"
-
+#include "../Headfile/Net/Poll/Head/eventloop.h"
+#include "../Headfile/Net/Poll/Head/channel.h"
+#include "../Headfile/Net/Poll/Head/poll.h"
+#include <sys/timerfd.h>
 
 /* using/enum  AaBbCc
  * class/struct Aa_Bb_Cc
@@ -24,6 +26,7 @@
 
 //using namespace Wasi::Log;
 using namespace Wasi::Net;
+using namespace Wasi::Time;
 using namespace std;
 
 Wasi::Thread::Safe_Queue<int> ique;
@@ -65,7 +68,40 @@ void func1() {
 //std::cout << "|" << sink.Log_consume() << "|";
 */
 
+void func1() {
+    TimeStamp t1;
+    TimeStamp t2(Timer::Nowtime_us());
+    std::cout << t2.Microseconds_since_epoch() << "\n";
+    std::cout << Timer::Nowtime_us() << "\n";
+    std::cout << Timer::Nowtime_ms() << "\n";
+    std::cout << Timer::Nowtime_sec() << "\n";
+    std::cout << Timer::To_string(t2);
+}
+
+EventLoop* loop1;
+
+void timeout() {
+    std::cout << "Timeout\n";
+    loop1->Quit();
+}
+
+void func2() {
+    EventLoop loop2;
+    loop1 = &loop2;
+    int timerfd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
+    Channel channel(&loop2, timerfd);
+    channel.Set_read_callback(timeout);
+    channel.Enable_reading();
+    struct itimerspec howlong;
+    bzero(&howlong, sizeof(howlong));
+    howlong.it_value.tv_sec = 5;
+    ::timerfd_settime(timerfd, 0, &howlong, nullptr);
+    loop2.Loop();
+    ::close(timerfd);
+}
+
 int main() {
     //thread T1(func1);
     //thread T2(func2);
+    func2();
 }

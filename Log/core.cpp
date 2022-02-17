@@ -47,7 +47,7 @@ void Core::Set_capacity(uint size) { log_capacity = size; }
 
 bool Core::Save_to_file() {
 	//consume
-	std::string write_befroe = clock.Sec_to_string(clock.Nowtime_sec());
+	std::string write_befroe = clock.To_string(clock.Nowtime_sec());
 	write_befroe += "Logline:" + std::to_string(log_size) + "\n";
 	record.Save_to_file(write_befroe);
 	sink.Log_consume(&logs_tmp);
