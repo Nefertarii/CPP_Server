@@ -9,7 +9,7 @@ namespace Wasi {
     namespace Log {
         class Core {
         private:
-            Wasi::Time::Timer clock;
+            Wasi::Time::Clock clock;
             Formatter formatter;
             Sink sink;
             Record record;

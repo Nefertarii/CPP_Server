@@ -16,21 +16,4 @@ void TimeStamp::Swap(TimeStamp& other) {
     std::swap(time, other.time);
 }
 
-TimeStamp Time_stamp_add(TimeStamp timestamp, double seconds) {
-    long addtime = static_cast<long>(seconds * TimeStamp::microseconds_per_second);
-    return TimeStamp(timestamp.Microseconds_since_epoch() + addtime);
-}
-
-double Time_stamp_diff(TimeStamp high, TimeStamp low) {
-    long difftime = high.Microseconds_since_epoch() - low.Microseconds_since_epoch();
-    return static_cast<double>(difftime) / TimeStamp::microseconds_per_second;
-}
-
-inline bool operator<(TimeStamp lhs, TimeStamp rhs) {
-    return lhs.Microseconds_since_epoch() < rhs.Microseconds_since_epoch();
-}
-
-inline bool operator==(TimeStamp lhs, TimeStamp rhs) {
-    return lhs.Microseconds_since_epoch() == rhs.Microseconds_since_epoch();
-}
-
+TimeStamp TimeStamp::Invalid() { return TimeStamp(); }

@@ -1,12 +1,39 @@
 #include "Head/eventloop.h"
 #include "Head/channel.h"
 #include "Head/poll.h"
+#include "../../Timer/Head/clock.h"
+#include "../../Timer/Head/timerid.h"
+#include "../../Timer/Head/timestamp.h"
+#include "../../Timer/Head/timerqueue.h"
 #include <iostream>
+#include <assert.h>
 
+using namespace Wasi;
 using namespace Wasi::Net;
 const int poll_time_ms = 10000;
 
-EventLoop::EventLoop() :looping(false), thread_id(gettid()) { ; }
+EventLoop::EventLoop() :
+	looping(false), 
+	quit(false),
+	thread_id(getpid()), 
+	poller(Poller::New_default_poller(this)) { ; }
+
+void EventLoop::Handle_read() {
+	
+}
+
+void EventLoop::Do_pending_functions() {
+	std::vector<std::function<void()>> functions;
+	calling_pending_function = true;
+	{
+		std::lock_guard<std::mutex> lk(mtx);
+		functions.swap(pending_functions);
+	}
+	for (size_t i = 0;i < functions.size();++i) {
+		functions[i]();
+	}
+	calling_pending_function = false;
+}
 
 void EventLoop::Loop() {
 	assert(!looping);
@@ -19,6 +46,7 @@ void EventLoop::Loop() {
 			 it != active_channels.end(); ++it) {
 			(*it)->Handle_event();
 		}
+		Do_pending_functions();
 	}
 	std::cout << "loop end.\n";
 	looping = false;
@@ -26,6 +54,15 @@ void EventLoop::Loop() {
 
 void EventLoop::Quit() {
 	quit = true;
+	if (!Is_in_loop_thread()) { Wakeup(); }
+}
+
+void EventLoop::Wakeup() {
+	int one = 1;
+	size_t ret = ::write(wakeup_fd, &one, sizeof(one));
+	if (ret != sizeof(one)) {
+		std::cout << "ERR,wakeup() writes:" << ret << " bytes, should is 8";
+	}
 }
 
 bool EventLoop::Is_in_loop_thread() {
@@ -35,6 +72,33 @@ bool EventLoop::Is_in_loop_thread() {
 		return false;
 	}
 	return true;
+}
+
+Time::TimerId EventLoop::Run_at(const Time::TimeStamp& time, const std::function<void()>& callback) {
+	return timer_queue->Add_timer(callback, time, 0.0);
+}
+
+Time::TimerId EventLoop::Run_after(double delay, const std::function<void()>& callback) {
+	Time::TimeStamp time(Time::Time_stamp_add(Time::Clock::Nowtime_us(), delay));
+	return Run_at(time, callback);
+}
+
+Time::TimerId EventLoop::Run_every(double interval, const std::function<void()>& callback) {
+	Time::TimeStamp time(Time::Time_stamp_add(Time::Clock::Nowtime_us(), interval));
+	return timer_queue->Add_timer(callback, time, interval);
+}
+
+void EventLoop::Run_in_loop(const std::function<void()> callback) {
+	if (Is_in_loop_thread()) { callback(); }
+	else { Queue_in_loop(std::move(callback)); }
+}
+
+void EventLoop::Queue_in_loop(const std::function<void()> callback) {
+	{
+		std::lock_guard<std::mutex> lk(mtx);
+		pending_functions.push_back(callback);
+	}
+	if (!Is_in_loop_thread() || calling_pending_function) { Wakeup(); }
 }
 
 void EventLoop::Assert_in_loop_thread() {

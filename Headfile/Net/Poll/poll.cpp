@@ -3,6 +3,8 @@
 #include "Head/channel.h"
 #include <sys/poll.h>
 #include <algorithm>
+#include <cassert>
+#include "../../Timer/Head/clock.h"
 
 using namespace Wasi::Net;
 
@@ -10,7 +12,7 @@ Poller::Poller(EventLoop* loop) :ownerloop(loop) {}
 
 Wasi::Time::TimeStamp Poller::Poll(int timeout_ms, ChannelList* active_channels) {
     int num_events = ::poll(&*pollfds.begin(), pollfds.size(), timeout_ms);
-    Wasi::Time::TimeStamp now(Wasi::Time::Timer::Nowtime_us());
+    Wasi::Time::TimeStamp now(Wasi::Time::Clock::Nowtime_ms());
     if (num_events > 0) {
         Fill_active_channel(num_events, active_channels);
         //LOG events happended
@@ -75,6 +77,8 @@ bool Poller::Has_channel(Channel* channel) const {
 }
 
 void Poller::Assert_in_loop_thread() const { ownerloop->Is_in_loop_thread(); }
+
+Poller* Poller::New_default_poller(EventLoop* loop) { return new Poller(loop); }
 
 Poller::~Poller() {
 

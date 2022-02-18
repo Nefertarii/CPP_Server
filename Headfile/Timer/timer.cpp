@@ -1,36 +1,39 @@
 #include "Head/timer.h"
+#include "Head/timestamp.h"
 
 using namespace Wasi::Time;
 
-Timer::Timer():create_time(Nowtime_us()) {}
+std::atomic<int> Timer::create_num = 0;
 
-long Timer::Runtime_us() {
-    long time_us = Nowtime_us();
-    return create_time.Microseconds_since_epoch() - time_us;
+Timer::Timer(std::function<void()> cb, TimeStamp when, double interval_) :
+    callback(cb),
+    expiration(when),
+    interval(interval_),
+    repeat(interval > 0.0),
+    sequence(create_num++) {}
+
+void Timer::Run() const { callback(); }
+
+void Timer::Restart(TimeStamp now) {
+    if (repeat) {
+        expiration = Time_stamp_add(now, interval);
+    }
+    else {
+        expiration = TimeStamp::Invalid();
+    }
 }
 
-long Timer::Runtime_ms() {
-    return Runtime_us() / TimeStamp::microseconds_per_milliseconds;
-}
+bool Timer::Repeat() { return repeat; }
 
-long Timer::Runtime_sec() {
-    return Runtime_us() / TimeStamp::microseconds_per_second;
-}
+int Timer::Sequence() { return sequence; }
 
-long Timer::Nowtime_us() {
-    TimePoint<Us> now_us = std::chrono::time_point_cast<Us>(HighResClock::now());
-    return now_us.time_since_epoch().count();
-}
+int Timer::Create_num() { return create_num; }
 
-long Timer::Nowtime_ms() { return Nowtime_us() / TimeStamp::microseconds_per_milliseconds; }
+TimeStamp Timer::Expiration() { return expiration; }
 
-long Timer::Nowtime_sec() { return Nowtime_us() / TimeStamp::microseconds_per_second; }
+/*
 
-std::string Timer::To_string(TimeStamp time) {
-    char temp[80];
-    long time_sec = time.Microseconds_since_epoch() / TimeStamp::microseconds_per_second;
-    struct tm* time_tm = localtime(&time_sec);
-    strftime(temp, 80, "Data:%a, %b %m %Y %H:%M:%S GMT\n", time_tm);
-    std::string str = temp;
-    return str;
-}
+
+            
+            ~Timer();
+*/

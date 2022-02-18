@@ -182,7 +182,7 @@ Timer clock2;
 int dispatch()
 {
     tw.addTimer(1000, func1, NULL);
-    tw.addTimer(2000, clock2.Now_time_ms, nullptr);
+    tw.addTimer(2000, clock2.Now_time_ms(), nullptr);
     tw.addTimer(5000, []() { std::cout << "hello baixiancpp" << std::endl; }, NULL);
     for(;;)
     {

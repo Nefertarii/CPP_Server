@@ -2,16 +2,19 @@
 #define NET_POLL_H_
 
 #include "../../../Class/noncopyable.h"
-#include "../../../Timer/Head/timer.h"
 #include <vector>
 #include <map>
 
 struct pollfd;
 
 namespace Wasi {
+    namespace Time{
+        class TimeStamp;
+    }
     namespace Net {
         class Channel;
         class EventLoop;
+        
         using PollFdList = std::vector<struct pollfd>;
         using ChannelList = std::vector<Channel*>;
         using ChannelMap = std::map<int, Channel*>;
@@ -24,10 +27,11 @@ namespace Wasi {
             ChannelMap channels;
         public:
             Poller(EventLoop* loop);
-            Wasi::Time::TimeStamp Poll(int timeout_ms, ChannelList* active_channels);
+            Time::TimeStamp Poll(int timeout_ms, ChannelList* active_channels);
             void Update_channel(Channel* channel);
             bool Has_channel(Channel* channel) const;
             void Assert_in_loop_thread() const;
+            static Poller* New_default_poller(EventLoop* loop);
             ~Poller();
         };
     }

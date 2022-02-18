@@ -7,7 +7,8 @@
 #include "../Headfile/Thread/stack.hpp"
 #include "../Headfile/Thread/map.hpp"
 #include "../Headfile/Thread/threadpool.hpp"
-#include "../Headfile/Timer/Head/timer.h"
+#include "../Headfile/Timer/Head/clock.h"
+#include "../Headfile/Timer/Head/timerid.h"
 #include "../Log/Head/formatter.h"
 #include "../Log/Head/sink.h"
 #include "../Log/Head/core.h"
@@ -24,7 +25,7 @@
  *
  */
 
-//using namespace Wasi::Log;
+ //using namespace Wasi::Log; 
 using namespace Wasi::Net;
 using namespace Wasi::Time;
 using namespace std;
@@ -70,12 +71,12 @@ void func1() {
 
 void func1() {
     TimeStamp t1;
-    TimeStamp t2(Timer::Nowtime_us());
+    TimeStamp t2(Clock::Nowtime_us());
     std::cout << t2.Microseconds_since_epoch() << "\n";
-    std::cout << Timer::Nowtime_us() << "\n";
-    std::cout << Timer::Nowtime_ms() << "\n";
-    std::cout << Timer::Nowtime_sec() << "\n";
-    std::cout << Timer::To_string(t2);
+    std::cout << Clock::Nowtime_us() << "\n";
+    std::cout << Clock::Nowtime_ms() << "\n";
+    std::cout << Clock::Nowtime_sec() << "\n";
+    std::cout << Clock::To_string(t2);
 }
 
 EventLoop* loop1;
@@ -100,8 +101,49 @@ void func2() {
     ::close(timerfd);
 }
 
+void func3() {
+    std::atomic<int> i1;
+    std::cout << i1++ << "\n";
+    std::cout << i1;
+}
+
+int cnt = 0;
+EventLoop* loop3;
+
+void printTid() {
+    std::cout << "pid = " << getpid()
+        << " tid = " << gettid()
+        << " now " << Clock::To_string(TimeStamp(Clock::Nowtime_us())) << "\n";
+}
+
+void print(const char* msg) {
+    std::cout << "msg" << Clock::To_string(TimeStamp(Clock::Nowtime_us())) << msg << "\n";
+    if (++cnt == 20)   {
+        loop3->Quit();
+    }
+}
+
+void func4() {
+    printTid();
+    EventLoop loop;
+    loop3 = &loop;
+
+    print("main");
+    loop.Run_after(1, std::bind(print, "once1"));
+    loop.Run_after(1.5, std::bind(print, "once1.5"));
+    loop.Run_after(2.5, std::bind(print, "once2.5"));
+    loop.Run_after(3.5, std::bind(print, "once3.5"));
+    loop.Run_every(2, std::bind(print, "every2"));
+    loop.Run_every(3, std::bind(print, "every3"));
+
+    loop.Loop();
+    print("main loop exits");
+    sleep(1);
+}
+
 int main() {
     //thread T1(func1);
     //thread T2(func2);
-    func2();
+    func4();
+    //func3();
 }
