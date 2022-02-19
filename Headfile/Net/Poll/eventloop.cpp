@@ -6,17 +6,23 @@
 #include "../../Timer/Head/timestamp.h"
 #include "../../Timer/Head/timerqueue.h"
 #include <iostream>
-#include <assert.h>
+#include <cassert>
+#include <sys/eventfd.h>
 
 using namespace Wasi;
 using namespace Wasi::Net;
 const int poll_time_ms = 10000;
 
 EventLoop::EventLoop() :
-	looping(false), 
+	looping(false),
 	quit(false),
-	thread_id(getpid()), 
-	poller(Poller::New_default_poller(this)) { ; }
+	calling_pending_function(false),
+	wakeup_fd(Create_event()),
+	thread_id(gettid()),
+	poller(Poller::New_default_poller(this)),
+	wakeup_channel(new Channel(this, wakeup_fd)),
+	timer_queue(new Time::TimerQueue(this))
+	 { ; }
 
 void EventLoop::Handle_read() {
 	
@@ -65,17 +71,8 @@ void EventLoop::Wakeup() {
 	}
 }
 
-bool EventLoop::Is_in_loop_thread() {
-	//return thread_id == getpid();
-	if (thread_id != getpid()) {
-		assert("two or more event loop.");
-		return false;
-	}
-	return true;
-}
-
 Time::TimerId EventLoop::Run_at(const Time::TimeStamp& time, const std::function<void()>& callback) {
-	return timer_queue->Add_timer(callback, time, 0.0);
+	return timer_queue->Add_timer(std::move(callback), time, 0.0);
 }
 
 Time::TimerId EventLoop::Run_after(double delay, const std::function<void()>& callback) {
@@ -88,12 +85,12 @@ Time::TimerId EventLoop::Run_every(double interval, const std::function<void()>&
 	return timer_queue->Add_timer(callback, time, interval);
 }
 
-void EventLoop::Run_in_loop(const std::function<void()> callback) {
+void EventLoop::Run_in_loop(const std::function<void()>& callback) {
 	if (Is_in_loop_thread()) { callback(); }
 	else { Queue_in_loop(std::move(callback)); }
 }
 
-void EventLoop::Queue_in_loop(const std::function<void()> callback) {
+void EventLoop::Queue_in_loop(const std::function<void()>& callback) {
 	{
 		std::lock_guard<std::mutex> lk(mtx);
 		pending_functions.push_back(callback);
@@ -119,12 +116,27 @@ void EventLoop::Remove_channel(Channel* channel) {
 
 }
 
+int EventLoop::Create_event() {
+	int eventfd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+	if (eventfd_ < 0) { /*std::cout<<"event creat fail.";*/ }
+	return eventfd_;
+}
+
 bool EventLoop::Has_channel(Channel* channel) {
 	assert(channel->Owner_loop() == this);
 	Assert_in_loop_thread();
 	return poller->Has_channel(channel);
 }
 
+bool EventLoop::Is_in_loop_thread() {
+	//return thread_id == getpid();
+	if (thread_id != gettid()) {
+		assert("two or more event loop.");
+		return false;
+	}
+	return true;
+}
+
 EventLoop::~EventLoop() {
-	;
+	//delete poller;
 }

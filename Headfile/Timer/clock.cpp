@@ -30,7 +30,7 @@ std::string Clock::To_string(TimeStamp time) {
     char temp[80];
     long time_sec = time.Microseconds_since_epoch() / TimeStamp::microseconds_per_second;
     struct tm* time_tm = localtime(&time_sec);
-    strftime(temp, 80, "Data:%a, %b %m %Y %H:%M:%S GMT\n", time_tm);
+    strftime(temp, 80, "Data:%a, %b %m %Y %H:%M:%S GMT", time_tm);
     std::string str = temp;
     return str;
 }

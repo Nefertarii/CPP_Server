@@ -1,14 +1,31 @@
 #include "Head/poll.h"
 #include "Head/eventloop.h"
 #include "Head/channel.h"
-#include <sys/poll.h>
+
 #include <algorithm>
 #include <cassert>
 #include "../../Timer/Head/clock.h"
 
 using namespace Wasi::Net;
 
-Poller::Poller(EventLoop* loop) :ownerloop(loop) {}
+void Poller::Fill_active_channel(int events, ChannelList* active_channels) const {
+    for (PollFdList::const_iterator pfd = pollfds.begin();
+        pfd != pollfds.end() && events > 0; ++pfd) {
+        if (pfd->revents > 0) {
+            --events;
+            ChannelMap::const_iterator ch = channels.find(pfd->fd);
+            assert(ch != channels.end());
+            Channel* channel = ch->second;
+            assert(channel->Fd() == pfd->fd);
+            channel->Set_revents(pfd->revents);
+            active_channels->push_back(channel);
+        }
+    }
+}
+
+Poller::Poller(EventLoop* loop) :ownerloop(loop) {
+    
+}
 
 Wasi::Time::TimeStamp Poller::Poll(int timeout_ms, ChannelList* active_channels) {
     int num_events = ::poll(&*pollfds.begin(), pollfds.size(), timeout_ms);
@@ -26,21 +43,6 @@ Wasi::Time::TimeStamp Poller::Poll(int timeout_ms, ChannelList* active_channels)
     return now;
 }
 //poller只负责IO multiplexing(多路复用) 不负责dispatching(事件分发)
-
-void Poller::Fill_active_channel(int events, ChannelList* active_channels) const {
-    for (PollFdList::const_iterator pfd = pollfds.begin();
-         pfd != pollfds.end() && events > 0; ++pfd) {
-        if (pfd->revents > 0) {
-            --events;
-            ChannelMap::const_iterator ch = channels.find(pfd->fd);
-            assert(ch != channels.end());
-            Channel* channel = ch->second;
-            assert(channel->Fd() == pfd->fd);
-            channel->Set_revents(pfd->revents);
-            active_channels->push_back(channel);
-        }
-    }
-}
 
 void Poller::Update_channel(Channel* channel) {
     Assert_in_loop_thread();

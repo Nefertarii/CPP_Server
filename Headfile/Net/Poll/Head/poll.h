@@ -4,8 +4,8 @@
 #include "../../../Class/noncopyable.h"
 #include <vector>
 #include <map>
-
-struct pollfd;
+#include <sys/poll.h>
+//struct pollfd;
 
 namespace Wasi {
     namespace Time{
@@ -15,7 +15,7 @@ namespace Wasi {
         class Channel;
         class EventLoop;
         
-        using PollFdList = std::vector<struct pollfd>;
+        using PollFdList = std::vector<pollfd>;
         using ChannelList = std::vector<Channel*>;
         using ChannelMap = std::map<int, Channel*>;
 

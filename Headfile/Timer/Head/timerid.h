@@ -10,6 +10,7 @@ namespace Wasi {
             int sequence;
         public:
             TimerId();
+            TimerId(Timer* timer);
             TimerId(Timer* timer_, int sequence_);
         };
     } // namespace Timer
