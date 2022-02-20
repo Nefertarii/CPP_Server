@@ -5,21 +5,26 @@
 #include <functional>
 
 namespace Wasi {
+	namespace Time {
+		class TimeStamp;
+	}
 	namespace Net {
 		class EventLoop;
 		class Channel : Noncopyable {
 		private:
 			using EventCallBack = std::function<void()>;
-			void Update_();
+			using ReadEventCallBack = std::function<void(Time::TimeStamp)>;
+			void Update();
 			static const int none_event;
 			static const int read_event;
 			static const int write_event;
 			EventLoop* loop;
 			const int fd;
+			bool in_loop;
 			int events;
 			int revents;
 			int index;
-			EventCallBack read_callback;
+			ReadEventCallBack read_callback;
 			EventCallBack write_callback;
 			EventCallBack error_callback;
 			EventCallBack close_callback;
@@ -29,14 +34,14 @@ namespace Wasi {
 			int Index();
 			int Events();
 			int Revents();
-			void Handle_event();
-			void Update();
+			//void Remove():
+			void Handle_event(Time::TimeStamp receive_time);
 			void Set_revents(int revents_);
 			void Set_index(int index_);
-			void Set_read_callback(const EventCallBack& cb);
-			void Set_write_callback(const EventCallBack& cb);
-			void Set_error_callback(const EventCallBack& cb);
-			void Set_close_callback(const EventCallBack& cb);
+			void Set_read_callback(ReadEventCallBack cb);
+			void Set_write_callback(EventCallBack cb);
+			void Set_error_callback(EventCallBack cb);
+			void Set_close_callback(EventCallBack cb);
 			void Enable_reading();
 			void Disable_reading();
 			void Enable_writing();

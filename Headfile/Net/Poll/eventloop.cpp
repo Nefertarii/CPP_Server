@@ -1,6 +1,6 @@
 #include "Head/eventloop.h"
 #include "Head/channel.h"
-#include "Head/poll.h"
+#include "Head/poller.h"
 #include "../../Timer/Head/clock.h"
 #include "../../Timer/Head/timerid.h"
 #include "../../Timer/Head/timestamp.h"
@@ -11,99 +11,84 @@
 
 using namespace Wasi;
 using namespace Wasi::Net;
-const int poll_time_ms = 10000;
+const int poll_timeout_ms = 5000;
+
+int Create_event_fd() {
+	int evtfd = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+	if (evtfd < 0) {
+		std::cout << "event fd create fail.\n";
+	}
+	return evtfd;
+}
+
+void EventLoop::Abort_not_in_loop_thread() {
+	if (!Is_in_loop_thread()) {
+		std::cout << "EventLoop:" << thread_id << "not current.\n"
+			<< "should be:" << gettid() << "\n";
+	}
+
+}
+
+void EventLoop::Do_pending_functors() {
+	std::vector<Functors> functors;
+	calling_pending_functors = true;
+	{
+		std::lock_guard<std::mutex> lk(mtx);
+		functors.swap(pending_functors);
+	}
+	for (const Functors& functor : functors) { functor(); }
+	calling_pending_functors = false;
+}
 
 EventLoop::EventLoop() :
 	looping(false),
 	quit(false),
-	calling_pending_function(false),
-	wakeup_fd(Create_event()),
 	thread_id(gettid()),
-	poller(Poller::New_default_poller(this)),
-	wakeup_channel(new Channel(this, wakeup_fd)),
-	timer_queue(new Time::TimerQueue(this))
-	 { ; }
-
-void EventLoop::Handle_read() {
-	
-}
-
-void EventLoop::Do_pending_functions() {
-	std::vector<std::function<void()>> functions;
-	calling_pending_function = true;
-	{
-		std::lock_guard<std::mutex> lk(mtx);
-		functions.swap(pending_functions);
-	}
-	for (size_t i = 0;i < functions.size();++i) {
-		functions[i]();
-	}
-	calling_pending_function = false;
-}
+	current_active_channel(nullptr),
+	poller(new Poller(this)),
+	timer_queue(new Time::TimerQueue(this)),
+	calling_pending_functors(false),
+	wake_up_fd(Create_event_fd()){}
 
 void EventLoop::Loop() {
 	assert(!looping);
+	Assert_in_loop_thread();
 	looping = true;
 	quit = false;
 	while (!quit) {
 		active_channels.clear();
-		poller->Poll(poll_time_ms, &active_channels);
-		for (ChannelList::iterator it = active_channels.begin();
-			 it != active_channels.end(); ++it) {
-			(*it)->Handle_event();
+		poll_return_time = poller->Poll(poll_timeout_ms, &active_channels);
+		for (Channel* channel : active_channels) {
+			current_active_channel = channel;
+			current_active_channel->Handle_event(poll_return_time);
 		}
-		Do_pending_functions();
+		current_active_channel = nullptr;
+		Do_pending_functors();
 	}
-	std::cout << "loop end.\n";
 	looping = false;
 }
 
 void EventLoop::Quit() {
 	quit = true;
-	if (!Is_in_loop_thread()) { Wakeup(); }
+	if (!Is_in_loop_thread()) { Wake_up(); }
 }
 
-void EventLoop::Wakeup() {
-	int one = 1;
-	size_t ret = ::write(wakeup_fd, &one, sizeof(one));
-	if (ret != sizeof(one)) {
-		std::cout << "ERR,wakeup() writes:" << ret << " bytes, should is 8";
-	}
+Time::TimeStamp EventLoop::Poll_return_time() const {
+	return poll_return_time;
 }
 
-Time::TimerId EventLoop::Run_at(const Time::TimeStamp& time, const std::function<void()>& callback) {
+Time::TimerId EventLoop::Run_at(const Time::TimeStamp& time, Functors callback) {
 	return timer_queue->Add_timer(std::move(callback), time, 0.0);
 }
 
-Time::TimerId EventLoop::Run_after(double delay, const std::function<void()>& callback) {
+Time::TimerId EventLoop::Run_after(double delay, Functors callback) {
 	Time::TimeStamp time(Time::Time_stamp_add(Time::Clock::Nowtime_us(), delay));
-	return Run_at(time, callback);
+	return Run_at(time, std::move(callback));
 }
 
-Time::TimerId EventLoop::Run_every(double interval, const std::function<void()>& callback) {
+Time::TimerId EventLoop::Run_every(double interval, Functors callback) {
 	Time::TimeStamp time(Time::Time_stamp_add(Time::Clock::Nowtime_us(), interval));
-	return timer_queue->Add_timer(callback, time, interval);
-}
-
-void EventLoop::Run_in_loop(const std::function<void()>& callback) {
-	if (Is_in_loop_thread()) { callback(); }
-	else { Queue_in_loop(std::move(callback)); }
-}
-
-void EventLoop::Queue_in_loop(const std::function<void()>& callback) {
-	{
-		std::lock_guard<std::mutex> lk(mtx);
-		pending_functions.push_back(callback);
-	}
-	if (!Is_in_loop_thread() || calling_pending_function) { Wakeup(); }
-}
-
-void EventLoop::Assert_in_loop_thread() {
-	if (!Is_in_loop_thread()) {
-		//abortNotInLoopThread();
-		std::cout << "EventLoop:" << thread_id << "not current.\n"
-			<< "should be:" << gettid() << "\n";
-	}
+	return timer_queue->Add_timer(std::move(callback), time, interval);
 }
 
 void EventLoop::Update_channel(Channel* channel) {
@@ -112,31 +97,36 @@ void EventLoop::Update_channel(Channel* channel) {
 	poller->Update_channel(channel);
 }
 
-void EventLoop::Remove_channel(Channel* channel) {
-
+void EventLoop::Assert_in_loop_thread() {
+	if (!Is_in_loop_thread()) { Abort_not_in_loop_thread(); }
 }
 
-int EventLoop::Create_event() {
-	int eventfd_ = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
-	if (eventfd_ < 0) { /*std::cout<<"event creat fail.";*/ }
-	return eventfd_;
+bool EventLoop::Is_in_loop_thread() const {
+	return thread_id == gettid();
 }
 
-bool EventLoop::Has_channel(Channel* channel) {
-	assert(channel->Owner_loop() == this);
-	Assert_in_loop_thread();
-	return poller->Has_channel(channel);
+void EventLoop::Run_in_loop(Functors callback) {
+	if (Is_in_loop_thread()) { callback(); }
+	else { Queue_in_loop(callback); }
 }
 
-bool EventLoop::Is_in_loop_thread() {
-	//return thread_id == getpid();
-	if (thread_id != gettid()) {
-		assert("two or more event loop.");
-		return false;
+void EventLoop::Queue_in_loop(Functors callback) {
+	{
+		std::lock_guard<std::mutex> lk(mtx);
+		pending_functors.push_back(std::move(callback));
 	}
-	return true;
+	if (!Is_in_loop_thread() || calling_pending_functors) { Wake_up(); }
+}
+
+void EventLoop::Wake_up() {
+	int tmp = 1;
+	int ret = write(wake_up_fd, &tmp, sizeof(tmp));
+	if (ret != sizeof(tmp)) {
+		std::cout << "Wake up writes:" << ret << " bytes, should be 8\n";
+	}
 }
 
 EventLoop::~EventLoop() {
-	//delete poller;
+	assert(!looping);
+	close(wake_up_fd);
 }

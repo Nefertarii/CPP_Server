@@ -3,56 +3,76 @@
 
 #include <vector>
 #include <thread>
-#include <mutex>
 #include <unistd.h>
 #include <functional>
+#include <memory>
+#include <mutex>
 #include "../../../Class/noncopyable.h"
+#include "../../../Timer/Head/timestamp.h"
 
 namespace Wasi {
     namespace Time {
         class TimerId;
-        class TimeStamp;
         class TimerQueue;
     }
     namespace Net {
         class Channel;
         class Poller;
         using ChannelList = std::vector<Channel*>;
+        using Functors = std::function<void()>;
         
         class EventLoop : Noncopyable {
         private:
             bool looping;
             bool quit;
+            const pid_t thread_id;
+            Time::TimeStamp poll_return_time;
+            Channel* current_active_channel;
+            std::unique_ptr<Poller> poller;
+            std::unique_ptr<Time::TimerQueue> timer_queue;
+            ChannelList active_channels;
+            std::mutex mtx;
+            std::vector<Functors> pending_functors;
+            void Abort_not_in_loop_thread();
+            void Do_pending_functors();
+            bool calling_pending_functors;
+            int wake_up_fd;
+            /*bool looping;
+            bool quit;
             bool calling_pending_function;
             int wakeup_fd;
             std::mutex mtx;
-            std::vector<std::function<void()>> pending_functions;
             const pid_t thread_id;
-            std::unique_ptr<Poller> poller;
             //Poller* poller;
             std::unique_ptr<Channel> wakeup_channel;
-            std::unique_ptr<Time::TimerQueue> timer_queue;
             ChannelList active_channels;
             void Handle_read();
-            void Do_pending_functions();
+            */
         public:
             EventLoop();
             void Loop();
             void Quit();
-            void Wakeup();
-            //void Abort_not_in_loop_thread();
-            Time::TimerId Run_at(const Time::TimeStamp& time, const std::function<void()>& callback);
-            Time::TimerId Run_after(double delay, const std::function<void()>& callback);
-            Time::TimerId Run_every(double interval, const std::function<void()>& callback);
-            void Run_in_loop(const std::function<void()>& callback);
-            void Queue_in_loop(const std::function<void()>& callback);
-            void Assert_in_loop_thread();
+            Time::TimeStamp Poll_return_time() const;
+            Time::TimerId Run_at(const Time::TimeStamp& time, Functors callback);
+            Time::TimerId Run_after(double delay, Functors callback);
+            Time::TimerId Run_every(double interval, Functors callback);
             void Update_channel(Channel* channel);
+            void Assert_in_loop_thread();
+            bool Is_in_loop_thread() const;
+            void Queue_in_loop(Functors callback);
+            void Run_in_loop(Functors callback);
+            void Wake_up();
+            ~EventLoop();
+            /*
+            void Wakeup();
+            //
+            void Run_in_loop(const std::function<void()>& callback);
+            
             void Remove_channel(Channel* channel);
             int Create_event();
             bool Has_channel(Channel* channel);
-            bool Is_in_loop_thread();
             ~EventLoop();
+            */
         };
     }
 }

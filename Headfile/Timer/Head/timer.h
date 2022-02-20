@@ -4,19 +4,20 @@
 #include <functional>
 #include <atomic>
 #include "timestamp.h"
+#include "../../Class/noncopyable.h"
 
 namespace Wasi {
     namespace Time {
-        class Timer {
+        class Timer : Noncopyable {
         private:
-            std::function<void()> callback;
+            const std::function<void()> callback;
             TimeStamp expiration;
             const double interval;
             const bool repeat;
             const int sequence;
             static std::atomic<int> create_num;
         public:
-            Timer(std::function<void()> cb, TimeStamp when, double interval_);
+            Timer(const std::function<void()>& callback_, TimeStamp when, double interval_);
             void Run() const;
             void Restart(TimeStamp now);
             bool Repeat();

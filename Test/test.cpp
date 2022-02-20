@@ -15,7 +15,7 @@
 #include "../Headfile/Net/Head/netlog.h"
 #include "../Headfile/Net/Poll/Head/eventloop.h"
 #include "../Headfile/Net/Poll/Head/channel.h"
-#include "../Headfile/Net/Poll/Head/poll.h"
+#include "../Headfile/Net/Poll/Head/poller.h"
 #include <sys/timerfd.h>
 
 /* using/enum  AaBbCc
@@ -43,7 +43,7 @@ void func2() {
     loop1 = &loop2;
     int timerfd = ::timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK | TFD_CLOEXEC);
     Channel channel(&loop2, timerfd);
-    channel.Set_read_callback(timeout);
+    channel.Set_read_callback(std::bind(timeout));
     channel.Enable_reading();
     struct itimerspec howlong;
     bzero(&howlong, sizeof(howlong));
@@ -60,12 +60,12 @@ EventLoop* loop3;
 void printTid() {
     std::cout << "pid = " << getpid()
         << " tid = " << gettid()
-        << " now " << Clock::To_string(TimeStamp(Clock::Nowtime_us())) << "\n";
+        << " now = " << Clock::To_string(TimeStamp(Clock::Nowtime_us())) << "\n";
 }
 
 void print(const char* msg) {
     std::cout << msg << ":" << Clock::To_string(TimeStamp(Clock::Nowtime_us())) << "\n";
-    if (++cnt == 20)   {
+    if (++cnt == 20) {
         loop3->Quit();
     }
 }
@@ -81,7 +81,7 @@ void func4() {
     loop.Run_after(3.5, std::bind(print, "once3.5"));
     loop.Run_every(2, std::bind(print, "every2"));
     loop.Run_every(3, std::bind(print, "every3"));
-    
+
     loop.Loop();
     print("main loop exits");
     sleep(1);
@@ -89,11 +89,39 @@ void func4() {
 
 
 
-void func5(std::function<void()>& f1) {
-    f1();
-    //EventLoop evl;
-    //TimerQueue tq(loop3);
-    //TimerQueue tq(&evl);
+EventLoop* g_loop;
+int g_flag = 0;
+
+void run4() {
+    std::cout << "run4(): pid = " << getpid() << ", flag = " << g_flag << "\n";
+    g_loop->Quit();
+}
+
+void run3() {
+    std::cout << "run3(): pid = " << gettid() << ", flag = " << g_flag << "\n";
+    g_loop->Run_after(3, run4);
+    g_flag = 3;
+}
+
+void run2() {
+    std::cout << "run2(): pid = " << getpid() << ", flag = " << g_flag << "\n";
+    g_loop->Queue_in_loop(run3);
+}
+
+void run1() {
+    g_flag = 1;
+    std::cout << "run1(): pid = " << getpid() << ", flag = " << g_flag << "\n";
+    g_loop->Run_in_loop(run2);
+    g_flag = 2;
+}
+
+void func5() {
+    std::cout << "main(): pid = " << getpid() << ", flag = " << g_flag << "\n";
+    EventLoop loop;
+    g_loop = &loop;
+    loop.Run_after(2, run1);
+    loop.Loop();
+    std::cout << "main(): pid = " << getpid() << ", flag = " << g_flag << "\n";
 }
 
 
@@ -101,6 +129,6 @@ int main() {
     //thread T1(func1);
     //thread T2(func2);
     //func2();
-    func4();
+    func5();
     //EventLoop loop;
 }

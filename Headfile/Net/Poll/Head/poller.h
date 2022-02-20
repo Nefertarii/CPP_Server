@@ -4,8 +4,7 @@
 #include "../../../Class/noncopyable.h"
 #include <vector>
 #include <map>
-#include <sys/poll.h>
-//struct pollfd;
+#include <sys/epoll.h>
 
 namespace Wasi {
     namespace Time{
@@ -15,21 +14,26 @@ namespace Wasi {
         class Channel;
         class EventLoop;
         
-        using PollFdList = std::vector<pollfd>;
+        //using PollFdList = std::vector<pollfd>;
         using ChannelList = std::vector<Channel*>;
         using ChannelMap = std::map<int, Channel*>;
-
+        using EventList = std::vector<epoll_event>;
         class Poller : Noncopyable {
         private:
-            void Fill_active_channel(int events, ChannelList* active_channels) const;
+            const char* Operation_to_string(int operation);
+            void Fill_active_channel(int num_events, ChannelList* active_channels) const;
+            void Update(int operation, Channel* channel);
+            static const int init_events_size = 16;
             EventLoop* ownerloop;
-            PollFdList pollfds;
             ChannelMap channels;
+            EventList events;
+            int epollfd;
         public:
             Poller(EventLoop* loop);
             Time::TimeStamp Poll(int timeout_ms, ChannelList* active_channels);
             void Update_channel(Channel* channel);
-            bool Has_channel(Channel* channel) const;
+            void Remove_channel(Channel* channel);
+            //bool Has_channel(Channel* channel) const;
             void Assert_in_loop_thread() const;
             static Poller* New_default_poller(EventLoop* loop);
             ~Poller();

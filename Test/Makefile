@@ -3,7 +3,7 @@ CC = g++
 TARGET = test
 OBJECTS = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
-	poll.o eventloop.o channel.o test.o 
+	poller.o eventloop.o channel.o test.o 
 FLAGS = -pthread -std=c++17 -Og -Wall
 NET = ../Headfile/Net
 THREAD = ../Headfile/Thread
@@ -43,8 +43,8 @@ core.o : $(LOG)/Head/core.h
 netlog.o : $(NET)/Head/netlog.h
 	$(CC) $(FLAGS) -c $(NET)/netlog.cpp
 
-poll.o : $(NET)/Poll/Head/poll.h
-	$(CC) $(FLAGS) -c $(NET)/Poll/poll.cpp
+poller.o : $(NET)/Poll/Head/poller.h
+	$(CC) $(FLAGS) -c $(NET)/Poll/poller.cpp
 
 eventloop.o : $(NET)/Poll/Head/eventloop.h
 	$(CC) $(FLAGS) -c $(NET)/Poll/eventloop.cpp

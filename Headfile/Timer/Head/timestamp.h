@@ -13,6 +13,7 @@ namespace Wasi {
             TimeStamp(long microseconds);
             long Microseconds_since_epoch();
             void Swap(TimeStamp& other);
+            bool Valid() const;
             static TimeStamp Invalid();
             static const int microseconds_per_second = 1000 * 1000;
             static const int microseconds_per_milliseconds = 1000;

@@ -16,4 +16,8 @@ void TimeStamp::Swap(TimeStamp& other) {
     std::swap(time, other.time);
 }
 
+bool TimeStamp::Valid() const {
+    return time > 0;
+}
+
 TimeStamp TimeStamp::Invalid() { return TimeStamp(); }

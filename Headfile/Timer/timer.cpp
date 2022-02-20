@@ -5,8 +5,8 @@ using namespace Wasi::Time;
 
 std::atomic<int> Timer::create_num = 0;
 
-Timer::Timer(std::function<void()> cb, TimeStamp when, double interval_) :
-    callback(cb),
+Timer::Timer(const std::function<void()>& callback_, TimeStamp when, double interval_) :
+    callback(callback_),
     expiration(when),
     interval(interval_),
     repeat(interval > 0.0),
