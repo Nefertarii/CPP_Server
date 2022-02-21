@@ -19,7 +19,8 @@ namespace Wasi {
             static const int microseconds_per_milliseconds = 1000;
         };
         inline TimeStamp Time_stamp_add(TimeStamp timestamp, double seconds) {
-            return TimeStamp();
+            long delta = static_cast<long>(seconds * TimeStamp::microseconds_per_second);
+            return TimeStamp(timestamp.Microseconds_since_epoch() + delta);
         }
         inline double Time_stamp_diff(TimeStamp high, TimeStamp low) {
             long difftime = high.Microseconds_since_epoch() - low.Microseconds_since_epoch();

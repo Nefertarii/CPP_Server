@@ -68,8 +68,8 @@ Poller::Poller(EventLoop* loop) :
 }
 
 Wasi::Time::TimeStamp Poller::Poll(int timeout_ms, ChannelList* active_channels) {
-    std::cout << "fd total count:" << channels.size() << "\n";
     int num_events = epoll_wait(epollfd, &*events.begin(), (int)events.size(), timeout_ms);
+    std::cout << "num_events total count:" << num_events << "\n";
     int errno_ = errno;
     Wasi::Time::TimeStamp now(Wasi::Time::Clock::Nowtime_ms());
     if (num_events > 0) {
@@ -95,6 +95,8 @@ void Poller::Update_channel(Channel* channel) {
     int index = channel->Index();
     int fd_ = channel->Fd();
     assert(channels.find(fd_) == channels.end());
+    std::cout << "fd:" << channel->Fd() << " events:" << channel->Events() <<
+        " index:" << index << "\n";
     if (index == poller_new || index == poller_del) {
         if (index == poller_new) { channels[fd_] = channel; }
         else { assert(channels[fd_] == channel); }

@@ -55,6 +55,7 @@ void EventLoop::Loop() {
 	Assert_in_loop_thread();
 	looping = true;
 	quit = false;
+	//timer_queue->Get_expired();
 	while (!quit) {
 		active_channels.clear();
 		poll_return_time = poller->Poll(poll_timeout_ms, &active_channels);
@@ -119,8 +120,8 @@ void EventLoop::Queue_in_loop(Functors callback) {
 }
 
 void EventLoop::Wake_up() {
-	int tmp = 1;
-	int ret = write(wake_up_fd, &tmp, sizeof(tmp));
+	ssize_t tmp = 1;
+	ssize_t ret = write(wake_up_fd, &tmp, sizeof(tmp));
 	if (ret != sizeof(tmp)) {
 		std::cout << "Wake up writes:" << ret << " bytes, should be 8\n";
 	}

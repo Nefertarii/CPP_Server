@@ -22,15 +22,15 @@ timespec Time_from_now(TimeStamp when) {
     if (microseconds < 100) { microseconds = 100; }
     timespec ts;
     ts.tv_sec = static_cast<time_t>(microseconds / TimeStamp::microseconds_per_second);
-    ts.tv_sec = static_cast<long>((microseconds % TimeStamp::microseconds_per_second) * 1000);
+    ts.tv_nsec = static_cast<long>((microseconds % TimeStamp::microseconds_per_second) * 1000);
     return ts;
 }
 
 void Read_timerfd(int timerfd_, TimeStamp now) {
-    ssize_t remaining;
+    long remaining;
     ssize_t ret = read(timerfd_, &remaining, sizeof(remaining));
-    std::cout << "Handle read " << ret << " at " << Clock::To_string(now) << "\n";
-    if (ret != remaining) { std::cout << "Handle read " << ret << "bytes should be 8.\n"; }
+    std::cout << "Handle read " << remaining << " at:" << now.Microseconds_since_epoch() << "\n";
+    if (ret != sizeof(remaining)) { std::cout << "Handle read " << ret << " bytes, Should be 8.\n"; }
 }
 
 void Reset_timerfd(int timerfd_, TimeStamp expiration) {
@@ -43,7 +43,6 @@ void Reset_timerfd(int timerfd_, TimeStamp expiration) {
 }
 
 void TimerQueue::Handle_read() {
-    std::cout << "Handle_read" << "\n";
     loop->Assert_in_loop_thread();
     TimeStamp now(Clock::Nowtime_us());
     Read_timerfd(timerfd, now);

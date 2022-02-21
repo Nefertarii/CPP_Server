@@ -4,7 +4,7 @@ TARGET = test
 OBJECTS = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
 	poller.o eventloop.o channel.o test.o 
-FLAGS = -pthread -std=c++17 -Og -Wall
+FLAGS = -pthread -std=c++20 -Og -Wall -g
 NET = ../Headfile/Net
 THREAD = ../Headfile/Thread
 TIMER = ../Headfile/Timer

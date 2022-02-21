@@ -89,7 +89,7 @@ void Channel::Handle_event(Wasi::Time::TimeStamp receive_time) {
         if (close_callback) { close_callback(); }
     }
     if (revents & POLLNVAL) {
-        std::cout << "fd:" << fd << " channel pollnval";
+        std::cout << "fd:" << fd << " channel pollnval\n";
     }
     if (revents & (POLLERR | POLLNVAL)) {
         if (error_callback) { error_callback(); }

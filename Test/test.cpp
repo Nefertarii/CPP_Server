@@ -60,11 +60,11 @@ EventLoop* loop3;
 void printTid() {
     std::cout << "pid = " << getpid()
         << " tid = " << gettid()
-        << " now = " << Clock::To_string(TimeStamp(Clock::Nowtime_us())) << "\n";
+        << " now = " << Clock::Nowtime_us() << "\n";
 }
 
 void print(const char* msg) {
-    std::cout << msg << ":" << Clock::To_string(TimeStamp(Clock::Nowtime_us())) << "\n";
+    std::cout << msg << ":" << Clock::Nowtime_us() << "\n";
     if (++cnt == 20) {
         loop3->Quit();
     }
