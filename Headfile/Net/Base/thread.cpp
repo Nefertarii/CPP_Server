@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/prctl.h>
 #include <linux/unistd.h>
+#include <pthread.h>
 #include <string>
 #include <cassert>
 #include <latch>
@@ -19,16 +20,16 @@ struct ThreadData {
     ThreadFunc func;
     Latch* latch;
     pid_t* tid;
-    Thread(std::string name_, ThreadFunc func_, Latch* latch_, pid_t* tid_) :
+    ThreadData(std::string name_, ThreadFunc func_, Latch* latch_, pid_t* tid_) :
         name(name_),
         func(std::move(func_)),
         latch(latch_),
         tid(tid_) {}
-}
+};
 
 void* Start_thread(void* obj) {
     ThreadData* thread_data = static_cast<ThreadData*>(obj);
-    thread_data->tid = gettid();
+    *(thread_data->tid) = gettid();
     //tid = nullptr;
     thread_data->latch->count_down();
     //thread_data->latch = nullptr;
@@ -39,16 +40,15 @@ void* Start_thread(void* obj) {
     }
     catch (...) {
         thread_data->name = "crashed";
-        std::cout<<"..."
+        std::cout << "thread" << thread_data->name << " crashed.";
+        //reason;
     }
-
-    
     delete thread_data;
     return nullptr;
 }
 
 void Thread::Set_default_name() {
-    int num = num_created.fetch_add(1);
+    int num = num_created.fetch_add(1, std::memory_order_relaxed);
     if (name.empty()) {
         char buf[32];
         snprintf(buf, sizeof(buf), "Thread%d", num);
@@ -57,7 +57,7 @@ void Thread::Set_default_name() {
     }
 }
 
-Thread::Thread(ThreadFunc func_, const string& name_ = string()) :
+Thread::Thread(ThreadFunc func_, const std::string& name_) :
     started(false),
     joined(false),
     pthread_id(0),
@@ -68,22 +68,35 @@ Thread::Thread(ThreadFunc func_, const string& name_ = string()) :
     Set_default_name();
 }
 
+std::atomic<int> Thread::num_created(0);
+
 void Thread::Start() {
     assert(!started);
     started = true;
-    if (pthread_create(&pthread_id, nullptr, data))
-
+    ThreadData* data = new ThreadData(name, func, &latch, &tid);
+    if (pthread_create(&pthread_id, nullptr, Start_thread, data)) {
+        started = false;
+        delete data;
+        std::cout << "Failed create pthread.\n";
+    }
+    else {
+        latch.wait();
+        assert(tid > 0);
+    }
 }
 
-int Thread::Join();
+int Thread::Join() {
+    assert(started);
+    assert(!joined);
+    joined = true;
+    return pthread_join(pthread_id, nullptr);
+}
 
 bool Thread::Started() const { return started; }
 
 pid_t Thread::Tid() const { return tid; }
 
-const string& Thread::Name() const { return name; }
-
-static int Thread::Num_created() { return num_created.load(); }
+const std::string& Thread::Name() const { return name; }
 
 Thread::~Thread() {
     if (started && !joined) {

@@ -1,17 +1,26 @@
-TARGET = test
+TARGET1 = test
+TARGET2 = test2
+TARGET3 = test3
 CC = g++
-TARGET = test
-OBJECTS = clock.o timestamp.o timer.o timerid.o timerqueue.o \
+OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
-	poller.o eventloop.o channel.o test.o 
+	poller.o eventloop.o channel.o thread.o eventloopthread.o test.o 
+OBJECTS2 = test2.o
+OBJECTS3 = thread.o test3.o
 FLAGS = -pthread -std=c++20 -Og -Wall -g
 NET = ../Headfile/Net
 THREAD = ../Headfile/Thread
 TIMER = ../Headfile/Timer
 LOG = ../Log
 
-$(TARGET): $(OBJECTS)
-	$(CC) $(FLAGS) -o $(TARGET) $(OBJECTS)
+test: $(OBJECTS1)
+	$(CC) $(FLAGS) -o $(TARGET1) $(OBJECTS1)
+
+test2: $(OBJECTS2)
+	$(CC) $(FLAGS) -o $(TARGET2) $(OBJECTS2)
+
+test3: $(OBJECTS3)
+	$(CC) $(FLAGS) -o $(TARGET3) $(OBJECTS3)
 
 clock.o : $(TIMER)/Head/clock.h
 	$(CC) $(FLAGS) -c $(TIMER)/clock.cpp
@@ -52,9 +61,23 @@ eventloop.o : $(NET)/Poll/Head/eventloop.h
 channel.o : $(NET)/Poll/Head/channel.h
 	$(CC) $(FLAGS) -c $(NET)/Poll/channel.cpp
 
+thread.o : $(NET)/Base/Head/thread.h
+	$(CC) $(FLAGS) -c $(NET)/Base/thread.cpp
+
+eventloopthread.o : $(NET)/Poll/Head/eventloopthread.h
+	$(CC) $(FLAGS) -c $(NET)/Poll/eventloopthread.cpp
+
 test.o : test.cpp
 	$(CC) $(FLAGS) -c test.cpp
 
-.PHONY : clean
+test2.o : test2.cpp
+	$(CC) $(FLAGS) -c test2.cpp
+
+test3.o : test3.cpp
+	$(CC) $(FLAGS) -c test3.cpp
+
 clean : 
 	-rm *.o
+
+cleanall:
+	-rm *.o $(TARGET1) $(TARGET2) $(TARGET3)

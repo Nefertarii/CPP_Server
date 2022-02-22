@@ -24,13 +24,13 @@ namespace Wasi {
             Latch latch;
             static std::atomic<int> num_created;
         public:
-            explicit Thread(ThreadFunc func_, const std::string& name_ = string());
+            explicit Thread(ThreadFunc func_, const std::string& name_ = std::string());
             void Start();
             int Join();
             bool Started() const;
             pid_t Tid() const;
-            const string& Name() const;
-            static int Num_created();
+            const std::string& Name() const;
+            static int Num_created() { return num_created.load(); }
             ~Thread();
         };
     }

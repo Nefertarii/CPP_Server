@@ -23,7 +23,7 @@ int Create_event_fd() {
 
 void EventLoop::Abort_not_in_loop_thread() {
 	if (!Is_in_loop_thread()) {
-		std::cout << "EventLoop:" << thread_id << "not current.\n"
+		std::cout << "EventLoop:" << thread_id << "not current. "
 			<< "should be:" << gettid() << "\n";
 	}
 

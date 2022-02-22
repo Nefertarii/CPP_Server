@@ -16,6 +16,8 @@
 #include "../Headfile/Net/Poll/Head/eventloop.h"
 #include "../Headfile/Net/Poll/Head/channel.h"
 #include "../Headfile/Net/Poll/Head/poller.h"
+#include "../Headfile/Net/Poll/Head/eventloopthread.h"
+
 #include <sys/timerfd.h>
 
 /* using/enum  AaBbCc
@@ -124,11 +126,29 @@ void func5() {
     std::cout << "main(): pid = " << getpid() << ", flag = " << g_flag << "\n";
 }
 
+void func6() {
+    std::cout << "func6() pid = " << getpid()
+        << ", tid = " << gettid() << "\n";
+}
+
+void func7() {
+    std::cout << "main() pid = " << getpid()
+        << ", tid = " << gettid() << "\n";
+    EventLoopThread loop_thread;
+    EventLoop* loop = loop_thread.Start_loop();
+    loop->Run_in_loop(func6);
+    sleep(1);
+    loop->Run_after(2, func6);
+    sleep(3);
+    loop->Quit();
+    printf("exit main().\n");
+}
+
 
 int main() {
     //thread T1(func1);
     //thread T2(func2);
     //func2();
-    func5();
+    func7();
     //EventLoop loop;
 }
