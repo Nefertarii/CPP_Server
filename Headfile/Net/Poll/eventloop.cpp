@@ -24,9 +24,8 @@ int Create_event_fd() {
 void EventLoop::Abort_not_in_loop_thread() {
 	if (!Is_in_loop_thread()) {
 		std::cout << "EventLoop:" << thread_id << "not current. "
-			<< "should be:" << gettid() << "\n";
+			<< " should be:" << gettid() << "\n";
 	}
-
 }
 
 void EventLoop::Do_pending_functors() {
@@ -40,15 +39,28 @@ void EventLoop::Do_pending_functors() {
 	calling_pending_functors = false;
 }
 
+void EventLoop::Handle_read() {
+	int tmp = 1;
+	ssize_t ret = read(wake_up_fd, &tmp, sizeof(tmp));
+	if (ret != sizeof(tmp)) {
+		std::cout << "EventLoop:Handle_read() read:" << ret << " bytes, should be 8.\n";
+	}
+}
+
 EventLoop::EventLoop() :
+	wake_up_fd(Create_event_fd()),
 	looping(false),
 	quit(false),
+	calling_pending_functors(false),
 	thread_id(gettid()),
 	current_active_channel(nullptr),
 	poller(new Poller(this)),
 	timer_queue(new Time::TimerQueue(this)),
-	calling_pending_functors(false),
-	wake_up_fd(Create_event_fd()){}
+	wakeup_channel(new Channel(this, wake_up_fd)) {
+	std::cout << "EventLoop created:" << this << " in thread:" << thread_id << "\n";
+	wakeup_channel->Set_read_callback(std::bind(&EventLoop::Handle_read, this));
+	wakeup_channel->Enable_reading();
+}
 
 void EventLoop::Loop() {
 	assert(!looping);
@@ -57,6 +69,7 @@ void EventLoop::Loop() {
 	quit = false;
 	//timer_queue->Get_expired();
 	while (!quit) {
+		//std::cout << gettid() << "looping...\n";
 		active_channels.clear();
 		poll_return_time = poller->Poll(poll_timeout_ms, &active_channels);
 		for (Channel* channel : active_channels) {
@@ -123,7 +136,7 @@ void EventLoop::Wake_up() {
 	ssize_t tmp = 1;
 	ssize_t ret = write(wake_up_fd, &tmp, sizeof(tmp));
 	if (ret != sizeof(tmp)) {
-		std::cout << "Wake up writes:" << ret << " bytes, should be 8\n";
+		std::cout << "EventLoop:Wake_up() writes:" << ret << " bytes, should be 8\n";
 	}
 }
 

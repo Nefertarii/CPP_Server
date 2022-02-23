@@ -23,8 +23,10 @@ namespace Wasi {
         
         class EventLoop : Noncopyable {
         private:
+            int wake_up_fd;
             bool looping;
             bool quit;
+            bool calling_pending_functors;
             const pid_t thread_id;
             Time::TimeStamp poll_return_time;
             Channel* current_active_channel;
@@ -33,10 +35,12 @@ namespace Wasi {
             ChannelList active_channels;
             std::mutex mtx;
             std::vector<Functors> pending_functors;
+            std::unique_ptr<Channel> wakeup_channel;
+            
+            
             void Abort_not_in_loop_thread();
             void Do_pending_functors();
-            bool calling_pending_functors;
-            int wake_up_fd;
+            void Handle_read();
             /*bool looping;
             bool quit;
             bool calling_pending_function;
@@ -44,9 +48,9 @@ namespace Wasi {
             std::mutex mtx;
             const pid_t thread_id;
             //Poller* poller;
-            std::unique_ptr<Channel> wakeup_channel;
+            
             ChannelList active_channels;
-            void Handle_read();
+            
             */
         public:
             EventLoop();

@@ -132,7 +132,7 @@ void func6() {
 }
 
 void func7() {
-    std::cout << "main() pid = " << getpid()
+    std::cout << "func7() pid = " << getpid()
         << ", tid = " << gettid() << "\n";
     EventLoopThread loop_thread;
     EventLoop* loop = loop_thread.Start_loop();
@@ -143,7 +143,6 @@ void func7() {
     loop->Quit();
     printf("exit main().\n");
 }
-
 
 int main() {
     //thread T1(func1);

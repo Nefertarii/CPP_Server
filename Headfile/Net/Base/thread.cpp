@@ -6,9 +6,7 @@
 #include <sys/prctl.h>
 #include <linux/unistd.h>
 #include <pthread.h>
-#include <string>
 #include <cassert>
-#include <latch>
 #include <memory>
 #include <exception>
 #include <iostream>
@@ -30,9 +28,9 @@ struct ThreadData {
 void* Start_thread(void* obj) {
     ThreadData* thread_data = static_cast<ThreadData*>(obj);
     *(thread_data->tid) = gettid();
-    //tid = nullptr;
+    thread_data->tid = nullptr;
     thread_data->latch->count_down();
-    //thread_data->latch = nullptr;
+    thread_data->latch = nullptr;
     prctl(PR_SET_NAME, thread_data->name);
     try {
         thread_data->func();

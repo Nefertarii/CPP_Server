@@ -5,6 +5,7 @@
 #include <functional>
 #include <atomic>
 #include <latch>
+#include <string>
 #include "../../../Class/noncopyable.h"
 
 namespace Wasi {

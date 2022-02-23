@@ -15,18 +15,6 @@ void EventLoopThread::Thread_func() {
     loop = nullptr;
 }
 
-/*
-EventLoopThread::EventLoopThread(const ThreadInitCallback& callback_,
-                                 const std::string& name) :
-    loop(nullptr),
-    exiting(false),
-    thread(std::bind(&EventLoopThread::Thread_func, this), name),
-    mtx(),
-    cond_mtx(),
-    cond(),
-    callback(callback_) {}
-*/
-
 EventLoopThread::EventLoopThread() :
     loop(nullptr),
     exiting(false),
