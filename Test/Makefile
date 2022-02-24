@@ -4,13 +4,17 @@ TARGET3 = test3
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
-	poller.o eventloop.o channel.o thread.o eventloopthread.o test.o 
+	poller.o eventloop.o channel.o thread.o eventloopthread.o \
+	latch.o test.o 
 OBJECTS2 = test2.o
 OBJECTS3 = thread.o test3.o
 FLAGS = -pthread -std=c++20 -Og -Wall -g
-NET = ../Headfile/Net
-THREAD = ../Headfile/Thread
-TIMER = ../Headfile/Timer
+BASE = ../Net/Base
+HTTP = ../Net/Http
+INSPECT = ../Net/Inspect
+POLL = ../Net/Poll
+THREAD = ../Thread
+TIMER = ../Timer
 LOG = ../Log
 
 test: $(OBJECTS1)
@@ -21,7 +25,7 @@ test2: $(OBJECTS2)
 
 test3: $(OBJECTS3)
 	$(CC) $(FLAGS) -o $(TARGET3) $(OBJECTS3)
-
+#timer
 clock.o : $(TIMER)/Head/clock.h
 	$(CC) $(FLAGS) -c $(TIMER)/clock.cpp
 
@@ -36,7 +40,7 @@ timerid.o : $(TIMER)/Head/timerid.h
 
 timerqueue.o : $(TIMER)/Head/timerqueue.h
 	$(CC) $(FLAGS) -c $(TIMER)/timerqueue.cpp
-
+#logging
 formatter.o : $(LOG)/Head/formatter.h
 	$(CC) $(FLAGS) -c $(LOG)/formatter.cpp
 
@@ -49,24 +53,29 @@ record.o : $(LOG)/Head/record.h
 core.o : $(LOG)/Head/core.h
 	$(CC) $(FLAGS) -c $(LOG)/core.cpp
 
-netlog.o : $(NET)/Head/netlog.h
-	$(CC) $(FLAGS) -c $(NET)/netlog.cpp
+#base
+thread.o : $(BASE)/Head/thread.h
+	$(CC) $(FLAGS) -c $(BASE)/thread.cpp
 
-poller.o : $(NET)/Poll/Head/poller.h
-	$(CC) $(FLAGS) -c $(NET)/Poll/poller.cpp
+latch.o : $(BASE)/Head/latch.h
+	$(CC) $(FLAGS) -c $(BASE)/latch.cpp
 
-eventloop.o : $(NET)/Poll/Head/eventloop.h
-	$(CC) $(FLAGS) -c $(NET)/Poll/eventloop.cpp
+netlog.o : $(BASE)/Head/netlog.h
+	$(CC) $(FLAGS) -c $(BASE)/netlog.cpp
+#poll
+poller.o : $(POLL)/Head/poller.h
+	$(CC) $(FLAGS) -c $(POLL)/poller.cpp
 
-channel.o : $(NET)/Poll/Head/channel.h
-	$(CC) $(FLAGS) -c $(NET)/Poll/channel.cpp
+eventloop.o : $(POLL)/Head/eventloop.h
+	$(CC) $(FLAGS) -c $(POLL)/eventloop.cpp
 
-thread.o : $(NET)/Base/Head/thread.h
-	$(CC) $(FLAGS) -c $(NET)/Base/thread.cpp
+channel.o : $(POLL)/Head/channel.h
+	$(CC) $(FLAGS) -c $(POLL)/channel.cpp
 
-eventloopthread.o : $(NET)/Poll/Head/eventloopthread.h
-	$(CC) $(FLAGS) -c $(NET)/Poll/eventloopthread.cpp
+eventloopthread.o : $(POLL)/Head/eventloopthread.h
+	$(CC) $(FLAGS) -c $(POLL)/eventloopthread.cpp
 
+#test
 test.o : test.cpp
 	$(CC) $(FLAGS) -c test.cpp
 

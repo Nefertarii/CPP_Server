@@ -5,7 +5,7 @@
 #include <queue>
 #include <mutex>
 #include "logenum.h"
-#include "../../Headfile/Timer/Head/clock.h"
+#include "../../Timer/Head/clock.h"
 
 namespace Wasi {
     namespace Log {
