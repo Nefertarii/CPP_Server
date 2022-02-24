@@ -5,7 +5,7 @@ CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
-	latch.o test.o 
+	latch.o inetaddress.o acceptor.o test.o 
 OBJECTS2 = test2.o
 OBJECTS3 = thread.o test3.o
 FLAGS = -pthread -std=c++20 -Og -Wall -g
@@ -13,6 +13,7 @@ BASE = ../Net/Base
 HTTP = ../Net/Http
 INSPECT = ../Net/Inspect
 POLL = ../Net/Poll
+SOCKETS = ../Net/Sockets
 THREAD = ../Thread
 TIMER = ../Timer
 LOG = ../Log
@@ -74,6 +75,12 @@ channel.o : $(POLL)/Head/channel.h
 
 eventloopthread.o : $(POLL)/Head/eventloopthread.h
 	$(CC) $(FLAGS) -c $(POLL)/eventloopthread.cpp
+#sockets
+inetaddress.o : $(SOCKETS)/Head/inetaddress.h
+	$(CC) $(FLAGS) -c $(SOCKETS)/inetaddress.cpp
+
+acceptor.o : $(SOCKETS)/Head/acceptor.h
+	$(CC) $(FLAGS) -c $(SOCKETS)/acceptor.cpp
 
 #test
 test.o : test.cpp
