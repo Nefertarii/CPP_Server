@@ -3,6 +3,8 @@
 #include <stddef.h>
 #include <cstring>
 #include <cassert>
+#include <netdb.h>
+#include <sys/socket.h>
 
 using namespace Wasi::Sockets;
 
@@ -89,8 +91,27 @@ uint16_t InetAddress::Netendian_port() const {
     Network_to_host_16(Port_net_endian());
 }
 
+static thread_local char resolve_buffer[1024 * 64];
+
 bool InetAddress::Resolve(std::string host_name, InetAddress* result) {
     assert(result != nullptr);
-    //...
+    hostent hentry;
+    hostent* hentry2 = nullptr;
+    int tmp_errno = 0;
+    memset(&hentry, 0, sizeof(hentry));
+    int ret = gethostbyname_r(host_name.c_str(), &hentry, resolve_buffer,
+                              sizeof(resolve_buffer), hentry2, tmp_errno);
+    if (ret == 0 && hentry2 != nullptr) {
+        assert(hentry2->h_addrtype == AF_INET && hentry2->h_length == sizeof(uint32_t));
+        result->addr.sin_addr = *reinterpret_cast<in_addr*>(hentry2->h_addr_list[0]);
+        return true;
+    }
+    else {
+        if (ret) {
+            std::cout << "InetAddress::Resolve error.";
+        }
+        return false;
+    }
+
 }
 
