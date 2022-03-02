@@ -15,11 +15,12 @@ namespace Wasi {
         inline uint32_t Network_to_host_32(uint64_t net32);
         inline uint16_t Network_to_host_16(uint64_t net16);
 
-        /*int Accept();
-        int Connect();
-        ssize_t Read();
-        ssize_t Write();
-        void Close();*/
+        int Accept(int sockfd, sockaddr_in6 addr);
+        int Connect(int sockfd, const sockaddr* addr);
+        ssize_t Read(int sockfd, void* buf, size_t count);
+        //ssize_t Read_val(int sockfd, const iovec* iov, int iovcnt);
+        ssize_t Write(int sockfd, const void* buf, size_t count);
+        void Close(int sockfd);
 
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in* addr);
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in6* addr);

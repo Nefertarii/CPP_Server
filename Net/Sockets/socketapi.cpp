@@ -1,5 +1,9 @@
 #include "Head/socketapi.h"
 #include <cassert>
+#include <fcntl.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <iostream>
 
 using namespace Wasi::Sockets;
 
@@ -25,6 +29,30 @@ uint32_t Network_to_host_32(uint32_t net32) {
 
 uint16_t Network_to_host_16(uint16_t net16) {
     return be16toh(net16);
+}
+
+int Accept(int sockfd, sockaddr_in6 addr) {}
+
+int Connect(int sockfd, const sockaddr* addr) {
+    connect(sockfd, addr, static_cast<socklen_t>(sizeof(sockaddr_in6));)
+}
+
+ssize_t Read(int sockfd, void* buf, size_t count) {
+    return read(sockfd, buf, count);
+}
+
+/*ssize_t Read_val(int sockfd, const iovec* iov, int iovcnt) {
+    return readv()
+}*/
+
+ssize_t Write(int sockfd, const void* buf, size_t count) {
+    write(sockfd, buf, count);
+}
+
+void Close(int sockfd) {
+    if (close(sockfd) < 0) {
+        std::cout << "Sockets::Close error\n";
+    }
 }
 
 void From_ip_port(const char* ip, uint16_t port, sockaddr_in* addr) {
