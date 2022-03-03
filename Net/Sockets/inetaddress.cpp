@@ -5,6 +5,7 @@
 #include <cassert>
 #include <netdb.h>
 #include <sys/socket.h>
+#include <iostream>
 
 using namespace Wasi::Sockets;
 
@@ -27,7 +28,7 @@ InetAddress::InetAddress(uint16_t port, bool loopback, bool ipv6) {
     }
 }
 
-InetAddress::InetAddress(std::string ip, uint16_t port, bool ipv6 = false) {
+InetAddress::InetAddress(std::string ip, uint16_t port, bool ipv6) {
     if (ipv6 || strchr(ip.c_str(), ':')) {
         memset(&addr6, 0, sizeof(addr6));
         From_ip_port(ip.c_str(), port, &addr6);
@@ -50,26 +51,26 @@ sa_family_t InetAddress::Family() const {
 
 std::string InetAddress::To_string_ip_port() const {
     char buf[64] = "";
-    To_ip_port(buf, sizeof(buf), Get_sockaddr());
+    Wasi::Sockets::To_ip_port(buf, sizeof(buf), Get_sockaddr());
     return buf;
 }
 
 std::string InetAddress::To_string_ip() const {
     char buf[64] = "";
-    To_ip(buf, sizeof(buf), Get_sockaddr());
+    Wasi::Sockets::To_ip(buf, sizeof(buf), Get_sockaddr());
     return buf;
 }
 
 uint16_t InetAddress::Port_net_endian() const {
-    return addr.sin_port
+    return addr.sin_port;
 }
 
 uint16_t InetAddress::Port() const {
-    return Network_to_host_16(Port_net_endiadn());
+    return Network_to_host_16(Port_net_endian());
 }
 
 const sockaddr* InetAddress::Get_sockaddr() const {
-    return sockaddr_cast(&addr6);
+    return Wasi::Sockets::Sockaddr_cast(&addr6);
 }
 
 void InetAddress::Set_sockaddr_inet6(const sockaddr_in6& addr6_) {
@@ -82,13 +83,13 @@ void InetAddress::Set_scopeid(uint32_t scope_id) {
     }
 }
 
-uint32_t InetAddress::Netendian_ipv4() const {
+uint32_t InetAddress::Net_endian_ipv4() const {
     assert(Family() == AF_INET);
     return addr.sin_addr.s_addr;
 }
 
-uint16_t InetAddress::Netendian_port() const {
-    Network_to_host_16(Port_net_endian());
+uint16_t InetAddress::Net_endian_port() const {
+    return Network_to_host_16(Port_net_endian());
 }
 
 static thread_local char resolve_buffer[1024 * 64];
@@ -100,7 +101,7 @@ bool InetAddress::Resolve(std::string host_name, InetAddress* result) {
     int tmp_errno = 0;
     memset(&hentry, 0, sizeof(hentry));
     int ret = gethostbyname_r(host_name.c_str(), &hentry, resolve_buffer,
-                              sizeof(resolve_buffer), hentry2, tmp_errno);
+                              sizeof(resolve_buffer), &hentry2, &tmp_errno);
     if (ret == 0 && hentry2 != nullptr) {
         assert(hentry2->h_addrtype == AF_INET && hentry2->h_length == sizeof(uint32_t));
         result->addr.sin_addr = *reinterpret_cast<in_addr*>(hentry2->h_addr_list[0]);

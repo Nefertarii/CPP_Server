@@ -4,6 +4,7 @@
 #include "../../../Class/noncopyable.h"
 #include "../../Poll/Head/channel.h"
 #include "inetaddress.h"
+#include "socket.h"
 
 namespace Wasi {
     namespace Poll {
@@ -11,7 +12,6 @@ namespace Wasi {
     }
     
     namespace Sockets {
-
         using NewConnectCallback = std::function<void(int, const InetAddress&)>;
         
         class Acceptor : Noncopyable {
@@ -19,7 +19,7 @@ namespace Wasi {
             void Handle_read();
             Poll::EventLoop* loop;
             Poll::Channel accept_channel;
-            //Socket accept_socket;
+            Socket accept_socket;
             NewConnectCallback callback;
             bool listening;
             int idle_fd;

@@ -1,14 +1,16 @@
 TARGET1 = test
 TARGET2 = test2
 TARGET3 = test3
+TARGET34 = test4
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
-	latch.o inetaddress.o acceptor.o test.o 
+	latch.o socketapi.o acceptor.o socket.o inetaddress.o test.o 
 OBJECTS2 = test2.o
 OBJECTS3 = thread.o test3.o
-FLAGS = -pthread -std=c++20 -Og -Wall -g
+OBJECTS4 = test4.o 
+FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
 HTTP = ../Net/Http
 INSPECT = ../Net/Inspect
@@ -17,7 +19,7 @@ SOCKETS = ../Net/Sockets
 THREAD = ../Thread
 TIMER = ../Timer
 LOG = ../Log
-
+#test
 test: $(OBJECTS1)
 	$(CC) $(FLAGS) -o $(TARGET1) $(OBJECTS1)
 
@@ -26,6 +28,9 @@ test2: $(OBJECTS2)
 
 test3: $(OBJECTS3)
 	$(CC) $(FLAGS) -o $(TARGET3) $(OBJECTS3)
+
+test4: $(OBJECTS4)
+	$(CC) $(FLAGS) -o $(TARGET4) $(OBJECTS4)
 #timer
 clock.o : $(TIMER)/Head/clock.h
 	$(CC) $(FLAGS) -c $(TIMER)/clock.cpp
@@ -53,7 +58,6 @@ record.o : $(LOG)/Head/record.h
 
 core.o : $(LOG)/Head/core.h
 	$(CC) $(FLAGS) -c $(LOG)/core.cpp
-
 #base
 thread.o : $(BASE)/Head/thread.h
 	$(CC) $(FLAGS) -c $(BASE)/thread.cpp
@@ -76,12 +80,17 @@ channel.o : $(POLL)/Head/channel.h
 eventloopthread.o : $(POLL)/Head/eventloopthread.h
 	$(CC) $(FLAGS) -c $(POLL)/eventloopthread.cpp
 #sockets
+socket.o : $(SOCKETS)/Head/socket.h
+	$(CC) $(FLAGS) -c $(SOCKETS)/socket.cpp 
+
 inetaddress.o : $(SOCKETS)/Head/inetaddress.h
 	$(CC) $(FLAGS) -c $(SOCKETS)/inetaddress.cpp
 
+socketapi.o : $(SOCKETS)/Head/socketapi.h
+	$(CC) $(FLAGS) -c $(SOCKETS)/socketapi.cpp
+
 acceptor.o : $(SOCKETS)/Head/acceptor.h
 	$(CC) $(FLAGS) -c $(SOCKETS)/acceptor.cpp
-
 #test
 test.o : test.cpp
 	$(CC) $(FLAGS) -c test.cpp
@@ -96,4 +105,4 @@ clean :
 	-rm *.o
 
 cleanall:
-	-rm *.o $(TARGET1) $(TARGET2) $(TARGET3)
+	-rm *.o $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4)

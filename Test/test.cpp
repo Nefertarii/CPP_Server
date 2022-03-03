@@ -17,6 +17,10 @@
 #include "../Net/Poll/Head/channel.h"
 #include "../Net/Poll/Head/poller.h"
 #include "../Net/Poll/Head/eventloopthread.h"
+#include "../Net/Sockets/Head/acceptor.h"
+#include "../Net/Sockets/Head/inetaddress.h"
+#include "../Net/Sockets/Head/socketapi.h"
+#include "../Net/Sockets/Head/socket.h"
 
 #include <sys/timerfd.h>
 
@@ -30,6 +34,7 @@
 using namespace Wasi::Poll; 
 using namespace Wasi::Base;
 using namespace Wasi::Time;
+using namespace Wasi::Sockets;
 using namespace std;
 
 
@@ -144,13 +149,30 @@ void func7() {
     printf("exit main().\n");
 }
 
+void New_connection(int sockfd, const InetAddress& peeraddr) {
+    std::cout << "Accept new connection from" << peeraddr.To_string_ip_port() << "\n";
+    std::cout << write(sockfd, "Hello!\n", 7) << "\n";
+    Close(sockfd);
+}
+
+void func8() {
+    std::cout << "main pid:" << getpid() << "\n";
+    InetAddress listean_addr(9002);
+    EventLoop loop;
+    Acceptor acceptor(&loop, listean_addr, true);
+    acceptor.Set_new_connection_callback(New_connection);
+    acceptor.Listen();
+    loop.Loop();
+}
+
 int main() {
     //thread T1(func1);
     //thread T2(func2);
-    func2();
-    func4();
-    func5();
-    func6();
-    func7();
+    //func2();
+    //func4();
+    //func5();
+    //func6();
+    //func7();
+    func8();
     //EventLoop loop;
 }
