@@ -23,9 +23,9 @@ int main() {
     signal(SIGPIPE, SIG_IGN);
     
     int t;
-    std::string GET1 = "GET/HTTP/1.1\n";
-    std::string GET2 = "GET/Login/login.html HTTP/1.1\n";
-    std::string GET3 = "GET/Image/ico/favicon.ico HTTP/1.1\n";
+    std::string GET1 = "hello1\n";
+    std::string GET2 = "hello!!\n";
+    std::string GET3 = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890~!@#$%^&*(){}:\">?\n";
     while (1) {
         memset(recv, 0, sizeof(recv));
         std::cout << "input:";
@@ -47,7 +47,6 @@ int main() {
             std::cout << "bad input\n";
             break;
         }
-        //Gsocket::Read(socketfd, &recv, 4000, log);
         int readsize = read(socketfd, recv, 4096);
         recvstr = recv;
         std::cout << "Readsize:" << readsize << ", String:" << recvstr << "\n";

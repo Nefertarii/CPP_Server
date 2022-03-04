@@ -13,6 +13,7 @@ namespace Wasi {
     
     namespace Sockets {
         using NewConnectCallback = std::function<void(int, const InetAddress&)>;
+
         
         class Acceptor : Noncopyable {
         private:
