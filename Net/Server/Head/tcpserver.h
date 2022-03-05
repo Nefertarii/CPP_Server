@@ -25,9 +25,9 @@ namespace Wasi {
             const std::string ip_port;
             std::unique_ptr<Sockets::Acceptor> acceptor;
             std::shared_ptr<Poll::EventLoopThread> threadloop;
-            ConnectionCallback callback_connection;
-            MeassageCallback callback_message;
-            WriteCompleteCallback callback_write_complete;
+            ConnectionCallback connection_cb;
+            MessageCallback message_cb;
+            WriteCompleteCallback write_complete_cb;
             std::atomic<int> started;
             ConnectionMap conntions;
             int next_conn_id;
@@ -43,7 +43,7 @@ namespace Wasi {
             void Set_thread_num(int num_threads);
             void Set_thread_init_callback(const ThreadInitCallback& callback_)
             void Set_connection_callback(const ConnectionCallback& callback_);
-            void Set_message_callback(const MeassageCallback& callback_);
+            void Set_message_callback(const MessageCallback& callback_);
             void Set_write_callback(const WriteCompleteCallback& callback_);
             void Start();
             ~TcpServer();

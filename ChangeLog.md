@@ -1,4 +1,8 @@
 ## 随便写写
+2022-3-5  
+tcpserver部分的tcpconnection是关键部分,其中有用的是自定的buffer,一开始想用string直接代替想想会很麻烦,东西太多,今天把不太清除的找了一些看了看,这几天应该就能完成tcpserver了  
+同时偶然发现了peeraddr的来源(on the internet were originally considered to be equal peers rather than divided into "client machines" and "server machines".)
+
 2022-3-4  
 muduo库的tcpserver部分涉及的非常多,一时也没法写,决定先看完再写,以免出错  
 
