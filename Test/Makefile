@@ -1,7 +1,7 @@
 TARGET1 = test
 TARGET2 = test2
 TARGET3 = test3
-TARGET34 = test4
+TARGET4 = test4
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
