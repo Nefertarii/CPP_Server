@@ -21,6 +21,7 @@
 #include "../Net/Sockets/Head/inetaddress.h"
 #include "../Net/Sockets/Head/socketapi.h"
 #include "../Net/Sockets/Head/socket.h"
+#include "../Net/Base/Head/buffer.h"
 
 #include <sys/timerfd.h>
 
@@ -31,7 +32,7 @@
  *
  */
 
-using namespace Wasi::Poll; 
+using namespace Wasi::Poll;
 using namespace Wasi::Base;
 using namespace Wasi::Time;
 using namespace Wasi::Sockets;
@@ -151,7 +152,7 @@ void func7() {
 
 void New_connection(int sockfd, const InetAddress& peeraddr) {
     std::cout << "Accept new connection from" << peeraddr.To_string_ip_port() << "\n";
-    std::cout << write(sockfd, "Hello!\n", 7) << "\n";
+    //std::cout << write(sockfd, "Hello!\n", 7) << "\n";
     Close(sockfd);
 }
 

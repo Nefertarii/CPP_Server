@@ -2,14 +2,16 @@ TARGET1 = test
 TARGET2 = test2
 TARGET3 = test3
 TARGET4 = test4
+TARGET5 = test5
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
-	latch.o socketapi.o acceptor.o socket.o inetaddress.o test.o 
+	latch.o socketapi.o acceptor.o socket.o inetaddress.o buffer.o test.o 
 OBJECTS2 = test2.o
 OBJECTS3 = thread.o test3.o
-OBJECTS4 = test4.o 
+OBJECTS4 = buffer.o test4.o 
+OBJECTS5 = buffer.o test5.o 
 FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
 HTTP = ../Net/Http
@@ -31,6 +33,9 @@ test3: $(OBJECTS3)
 
 test4: $(OBJECTS4)
 	$(CC) $(FLAGS) -o $(TARGET4) $(OBJECTS4)
+
+test5: $(OBJECTS5)
+	$(CC) $(FLAGS) -o $(TARGET5) $(OBJECTS5)
 #timer
 clock.o : $(TIMER)/Head/clock.h
 	$(CC) $(FLAGS) -c $(TIMER)/clock.cpp
@@ -67,6 +72,9 @@ latch.o : $(BASE)/Head/latch.h
 
 netlog.o : $(BASE)/Head/netlog.h
 	$(CC) $(FLAGS) -c $(BASE)/netlog.cpp
+
+buffer.o : $(BASE)/Head/buffer.h
+	$(CC) $(FLAGS) -c $(BASE)/buffer.cpp
 #poll
 poller.o : $(POLL)/Head/poller.h
 	$(CC) $(FLAGS) -c $(POLL)/poller.cpp
@@ -101,8 +109,14 @@ test2.o : test2.cpp
 test3.o : test3.cpp
 	$(CC) $(FLAGS) -c test3.cpp
 
+test4.o : test4.cpp
+	$(CC) $(FLAGS) -c test4.cpp
+
+test5.o : test5.cpp
+	$(CC) $(FLAGS) -c test5.cpp
+
 clean : 
 	-rm *.o
 
 cleanall:
-	-rm *.o $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4)
+	-rm *.o $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5)

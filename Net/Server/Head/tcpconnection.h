@@ -6,6 +6,7 @@
 #include "../../../Class/noncopyable.h"
 #include "../../../Timer/Head/timestamp.h"
 #include "../../Sockets/Head/inetaddress.h"
+#include "../../Base/Head/buffer.h"
 
 struct tcp_info;
 
@@ -48,8 +49,8 @@ namespace Wasi {
             const char* State_to_string();
             Poll::EventLoop* loop;
             const std::string name;
-            std::string input_buffer;
-            std::string output_buffer;
+            Base::Buffer input_buffer;
+            Base::Buffer output_buffer;
             ConnState state;
             bool reading;
             std::unique_ptr<Sockets::Socket> socket;

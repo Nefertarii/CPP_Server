@@ -9,23 +9,20 @@ using namespace Wasi::Server;
 void TcpConnection::Handle_read(Time::TimeStamp receive_time) {
     loop->Assert_in_loop_thread();
     int tmp_errno = 0;
-    char buf[65536];
-    iovec vec[2];
-    const size_t writalbe = 
+    ssize_t read = input_buffer.Read_fd(channel->Fd(), &tmp_errno);
+    if (read > 0) {
+        MessageCallback(std::enable_shared_from_this<TcpConnection>
+                        ::shared_from_this(), &input_buffer, receive_time);
+    }
+    else if (n == 0) {
+        Handle_close();
+    }
+    else {
+        errno = tmp_errno;
+        std::cout << "TcpConnection::Handle_read error\n";
+        Handle_error();
+    }
 }
-void TcpConnection::Handle_write();
-void TcpConnection::Handle_close();
-void TcpConnection::Handle_error();
-void TcpConnection::Send(const std::string message);
-void TcpConnection::Send(const void* message, size_t len);
-void TcpConnection::Shutdown();
-void TcpConnection::Force_close();
-
-void TcpConnection::Set_state(ConnState state_) { state = state_; }
-
-void TcpConnection::Start_read();
-void TcpConnection::Stop_read();
-const char* TcpConnection::State_to_string();
 /*
 class TcpConnection : Noncopyable {
 private:
@@ -35,6 +32,18 @@ private:
         CONNECTED,
         DISCONNECTING,
     }
+    void Handle_read(Time::TimeStamp receive_time);
+    void Handle_write();
+    void Handle_close();
+    void Handle_error();
+    void Send(const std::string message);
+    void Send(const void* message, size_t len);
+    void Shutdown();
+    void Force_close();
+    void Set_state(ConnState state_);
+    void Start_read();
+    void Stop_read();
+    const char* State_to_string();
     Poll::EventLoop* loop;
     const std::string name;
     std::string input_buffer;
