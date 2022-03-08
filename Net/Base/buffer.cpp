@@ -5,19 +5,22 @@
 
 using namespace Wasi::Base;
 
+
 const char Buffer::CRLF[] = "\r\n";
 const size_t Buffer::initial_size = 1024;
 
 Buffer::Buffer(size_t size) :
+    index(0) {
+    buffer.resize(size);
+}
+
+Buffer::Buffer(std::string str) :
     index(0),
-    state(READER) {}
+    buffer(str) {}
 
-//            size_t Find(char* str) const;
-//            size_t Find(char* str, const size_t begin) const;
+size_t Buffer::Find(const char* str) { return buffer.find(str); }
 
-size_t Buffer::Find(const char* str) { return index = buffer.find(str); }
-
-size_t Buffer::Find(const char* str, size_t begin) { return index = buffer.find(str, begin); }
+size_t Buffer::Find(const char* str, size_t begin) { return buffer.find(str, begin); }
 
 size_t Buffer::First_CRLF() { return Find(CRLF); }
 
@@ -27,16 +30,35 @@ size_t Buffer::First_EOL() { return Find("\n"); }
 
 size_t Buffer::First_EOL(size_t begin) { return Find("\n", begin); }
 
+size_t Buffer::Index() const { return index; }
+
+size_t Buffer::Size() const { return buffer.length(); }
+
+size_t Buffer::Remaining() const { return buffer.length() - index; }
+
+void Buffer::Add_index(int num) {
+    int remaining = buffer.length() - index;
+    assert(num <= remaining);
+    if (num < remaining) {
+        index += num;
+    }
+    else {
+        Init();
+    }
+}
+
 void Buffer::Append(const std::string& str) { buffer += str; }
 
 void Buffer::Append(const char* str, size_t len) { buffer.append(str, len); }
 
-void Buffer::Swap(Buffer& rhs) {
-    buffer.swap(rhs.buffer);
-    std::swap(state, rhs.state);
+void Buffer::Swap(Buffer& rhs) { buffer.swap(rhs.buffer); }
+
+void Buffer::Init() {
+    index = 0;
+    buffer.clear();
 }
 
-BufState Buffer::Buffer_state() const { return state; }
+
 
 Buffer Buffer::operator+(const Buffer& rhs) {
     buffer += rhs.buffer;
@@ -45,13 +67,17 @@ Buffer Buffer::operator+(const Buffer& rhs) {
 
 Buffer& Buffer::operator=(const Buffer& rhs) {
     buffer = rhs.buffer;
-    state = rhs.state;
+    index = rhs.index;
+    return *this;
+}
+
+Buffer& Buffer::operator=(const std::string& str) {
+    buffer = str;
     return *this;
 }
 
 Buffer& Buffer::operator+=(const Buffer& rhs) {
     buffer += rhs.buffer;
-    state = rhs.state;
     return *this;
 }
 
@@ -67,7 +93,6 @@ ssize_t Buffer::Read_fd(int fd, int* tmp_errno) {
         return 0;
     }
     Append(extrabuf, read);
-    state = READER;
     return read;
 }
 

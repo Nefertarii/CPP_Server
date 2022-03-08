@@ -27,7 +27,9 @@ namespace Wasi {
         using MessageCallback = std::function<void(const TcpConnectionPtr&, std::string*, Time::TimeStamp)>;
         using HighWaterMarkCallback = std::function<void(const TcpConnectionPtr&, size_t)>;
 
-        class TcpConnection : Noncopyable {
+        class TcpConnection :
+            Noncopyable,
+            public std::enable_shared_from_this<TcpConnection> {
         private:
             enum ConnState {
                 DISCONNECTED,
@@ -39,20 +41,19 @@ namespace Wasi {
             void Handle_write();
             void Handle_close();
             void Handle_error();
-            void Send(const std::string message);
-            void Send(const void* message, size_t len);
-            void Shutdown();
-            void Force_close();
+            void Send_in_loop();
+            void Shutdown_in_loop();
+            void Force_close_in_loop();
             void Set_state(ConnState state_);
-            void Start_read();
-            void Stop_read();
+            void Start_read_in_loop();
+            void Stop_read_in_loop();
             const char* State_to_string();
             Poll::EventLoop* loop;
             const std::string name;
-            Base::Buffer input_buffer;
-            Base::Buffer output_buffer;
             ConnState state;
             bool reading;
+            Base::Buffer input_buffer;
+            Base::Buffer output_buffer;
             std::unique_ptr<Sockets::Socket> socket;
             std::unique_ptr<Poll::Channel> channel;
             const Sockets::InetAddress local_addr;
@@ -63,33 +64,34 @@ namespace Wasi {
             HighWaterMarkCallback high_water_mark_callback;
             CloseCallback close_callback;
         public:
-            TcpConnection(Event* loop, const string& name, int sockfd,
+            TcpConnection(Poll::EventLoop* loop, const string& name_, int sockfd_,
                           const Sockets::InetAddress& local_addr_,
                           const Sockets::InetAddress& peer_addr_);
             Poll::EventLoop* Get_loop() const;
             const std::string& Get_name() const;
             const Sockets::InetAddress& Get_local_address() const;
             const Sockets::InetAddress& Get_peer_address() const;
-            std::string* Get_input_buffer();
-            std::string* Get_output_buffer();
+            Base::Buffer* Get_input_buffer();
+            Base::Buffer* Get_output_buffer();
             std::string Get_tcp_info() const;
-            bool Get_tcp_info(tcp_info*) const;
+            bool Get_tcp_info(tcp_info* tcpi) const;
             bool Connected() const;
             bool Disconnected() const;
             bool Is_reading() const;
-            void Send(const void* message, int len);
-            void Send(const std::string& message);
+            void Send(const std::string message);
+            void Send(const std::string message, size_t len);
+            void Send(const char* message, size_t len);
             void Shutdown();
             void Force_close();
             void Force_close(double seconds);
             void Start_read();
             void Stop_read();
             void Set_no_delay(bool on);
-            void Set_connection_callback();
-            void Set_message_callback();
-            void Set_write_complete_callback();
-            void Set_high_water_mark_callback();
-            void Set_close_callback();
+            void Set_connection_callback(const ConnectionCallback& cb);
+            void Set_message_callback(const MessageCallback& cb);
+            void Set_write_complete_callback(const WriteCompleteCallback& cb);
+            void Set_high_water_mark_callback(const HighWaterMarkCallback& cb);
+            void Set_close_callback(const CloseCallback& cb);
             void Connect_established();
             void Connect_destroyed();
             ~TcpConnection();

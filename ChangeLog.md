@@ -1,4 +1,10 @@
 ## 随便写写
+2022-3-8  
+今天先完成了最复杂的TcpConnection,涉及修改的类有几个,东西太多了,TcpServer先搁置,把TcpConnection和修改的类先整理一下  
+shared_form_this需要继承std::enable_shared_from_this,用于将自身包装为一个shared_ptr以共享出去,在类内直接新建shared_ptr会导致计数出现问题,从而使用这个方法    
+ctor == constructor  
+dtor == destructor  
+
 2022-3-7  
 完成并测试了一下buffer类,目前没有太大的问题,还把tcpconectoin类完成了一部分  
 readv使用的iovec之前并没有了解过,目前只知道是可以在一个函数中对多个不连续缓冲区读,了解不多(unix环境高级编程14.6)  

@@ -21,7 +21,8 @@ namespace Wasi {
             void Set_reuse_addr(bool status);
             void Set_reuse_port(bool status);
             void Set_keep_alive(bool status);
-            //bool Get_tcp_info(TcpInfo*) const;
+            bool Get_tcp_info(std::string* buf) const;
+            bool Get_tcp_info(tcp_info* tcpi) const;
             ~Socket();
         };
     }

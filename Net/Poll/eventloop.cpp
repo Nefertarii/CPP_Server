@@ -50,6 +50,7 @@ void EventLoop::Handle_read() {
 EventLoop::EventLoop() :
 	wake_up_fd(Create_event_fd()),
 	looping(false),
+	event_handling(false),
 	quit(false),
 	calling_pending_functors(false),
 	thread_id(gettid()),
@@ -69,13 +70,14 @@ void EventLoop::Loop() {
 	quit = false;
 	//timer_queue->Get_expired();
 	while (!quit) {
-		//std::cout << gettid() << "looping...\n";
 		active_channels.clear();
 		poll_return_time = poller->Poll(poll_timeout_ms, &active_channels);
+		event_handling = true;
 		for (Channel* channel : active_channels) {
 			current_active_channel = channel;
 			current_active_channel->Handle_event(poll_return_time);
 		}
+		event_handling = false;
 		current_active_channel = nullptr;
 		Do_pending_functors();
 	}
@@ -109,6 +111,17 @@ void EventLoop::Update_channel(Channel* channel) {
 	assert(channel->Owner_loop() == this);
 	Assert_in_loop_thread();
 	poller->Update_channel(channel);
+}
+
+void EventLoop::Remove_channle(Channel* channel) {
+	assert(channel->Owner_loop() == this);
+	Assert_in_loop_thread();
+	if (event_handling) {
+		assert(current_active_channel == channel ||
+			   std::find(active_channels.begin(), active_channels.end(), channel) ==
+			   active_channels.end());
+	}
+	poller->Remove_channel(channel);
 }
 
 void EventLoop::Assert_in_loop_thread() {

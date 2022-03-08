@@ -2,12 +2,10 @@
 #include "Head/eventloop.h"
 #include <sys/poll.h>
 #include <iostream>
+#include <assert>
 
+using namespace Wasi;
 using namespace Wasi::Poll;
-
-const int Channel::none_event = 0;
-const int Channel::read_event = POLLIN | POLLPRI;
-const int Channel::write_event = POLLOUT;
 
 void Channel::Update() {
     in_loop = false;
@@ -18,11 +16,11 @@ Channel::Channel(EventLoop* loop_, int fd_) :
     loop(loop_),
     fd(fd_),
     in_loop(false),
+    tied(false),
+    event_handling(false),
     events(0),
     revents(0),
-    index(-1) {
-    ;
-}
+    index(-1) {}
 
 int Channel::Fd() { return fd; }
 
@@ -59,31 +57,55 @@ void Channel::Set_close_callback(EventCallBack cb) {
 }
 
 void Channel::Enable_reading() {
-    events |= read_event;
+    events |= READEVENT;
     Update();
 }
 
 void Channel::Disable_reading() {
-    events &= ~read_event;
+    events &= ~READEVENT;
     Update();
 }
 
 void Channel::Enable_writing() {
-    events |= write_event;
+    events |= WRITEVENT;
     Update();
 }
 
 void Channel::Disable_writing() {
-    events &= ~write_event;
+    events &= ~WRITEVENT;
     Update();
 }
 
-void Channel::Handle_event(Wasi::Time::TimeStamp receive_time) {
-    //std::shared_ptr<void> guard;
-    /*if ((revents & POLLHUP) && !(revents & POLLIN)) {
-        std::cout << "fd:" << fd << " channel pollhup.";
-        if (close_callback) { close_callback(); }
-    }*/
+void Channel::Disable_all() {
+    events = NONEVENT;
+    Update();
+}
+
+void Channel::Remove() {
+    assert(Is_none_event());
+    loop->Remove_channel(this);
+}
+
+void Channel::Tie(const std::shared_ptr<void>& obj) {
+    tie = obj;
+    tied = true;
+}
+
+void Channel::Handle_event(Time::TimeStamp receive_time) {
+    std::shared_ptr<void> guard;
+    if (tied) {
+        guard == tie.lock();
+        if (guard) {
+            Handle_event_with_guard(receive_time);
+        }
+    }
+    else {
+        Handle_event_with_guard(receive_time);
+    }
+}
+
+void Channel::Handle_event_with_guard(Time::TimeStamp receive_time) {
+    event_handling = true;
     if ((revents & POLLHUP) && !(revents & POLLIN)) {
         std::cout << "fd:" << fd << " channel pollhup.\n";
         if (close_callback) { close_callback(); }
@@ -100,12 +122,17 @@ void Channel::Handle_event(Wasi::Time::TimeStamp receive_time) {
     if (revents & POLLOUT) {
         if (write_callback) { write_callback(); }
     }
+    event_handling = false;
 }
 
-bool Channel::Is_none_event() { return events == none_event; }
+bool Channel::Is_none_event() { return events == NONEVENT; }
+
+bool Channel::Is_writing() { return events & WRITEVENT; }
+
+bool Channel::Is_reading() { return events & READEVENT; }
 
 EventLoop* Channel::Owner_loop() { return loop; }
 
 Channel::~Channel() {
-
+    assert(!event_handling);
 }

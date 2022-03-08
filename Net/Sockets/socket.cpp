@@ -61,6 +61,34 @@ void Socket::Set_keep_alive(bool status) {
                &opt, static_cast<socklen_t>(sizeof(opt)));
 }
 
+bool Socket::Get_tcp_info(std::string* buf) const {
+    tcp_info tcpi;
+    std::string tmp_str;
+    if (Get_tcp_info(&tcpi)) {
+        tmp_str = "unrecovered = " += tcpi.tcpi_retransmits +=
+            "rto = " += tcpi.tcpi_rto +=
+            "ato = " += tcpi.tcpi_ato +=
+            "snd_mss = " += tcpi.tcpi_snd_mss +=
+            "rcv_mss = " += tcpi.tcpi_rcv_mss +=
+            "lost = " += tcpi.tcpi_lost +=
+            "retrans = " += tcpi.tcpi_retrans +=
+            "rtt = " += tcpi.tcpi_rtt +=
+            "rttvar = " += tcpi.tcpi_rttvar +=
+            "sshthresh = " += tcpi.tcpi_snd_ssthresh +=
+            "cwnd = " += tcpi.tcpi_snd_cwnd +=
+            "total_retrans = " += tcpi.tcpi_total_retrans;
+        buf = tmp_str;
+        return true;
+    }
+    return false;
+}
+
+bool Socket::Get_tcp_info(tcp_info* tcpi) const {
+    socklen_t len = sizeof(*tcpi);
+    memset(tcpi, 0, sizeof(tcpi));
+    return getsockopt(sockfd, SOL_TCP, TCP_INFO, tcpi, &len) == 0;
+}
+
 Socket::~Socket() {
     Close(sockfd);
 }

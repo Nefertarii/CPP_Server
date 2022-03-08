@@ -23,6 +23,9 @@ namespace Wasi {
         void Shutdown_write(int sockfd);
         void Shutdown_read(int sockfd);
         void Close(int sockfd);
+
+        int Get_socket_error(int sockfd);
+        const char* String_error(int err);
         
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in* addr);
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in6* addr);

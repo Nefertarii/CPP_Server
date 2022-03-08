@@ -25,6 +25,7 @@ namespace Wasi {
         private:
             int wake_up_fd;
             bool looping;
+            bool event_handling;
             bool quit;
             bool calling_pending_functors;
             const pid_t thread_id;
@@ -36,22 +37,9 @@ namespace Wasi {
             std::mutex mtx;
             std::vector<Functors> pending_functors;
             std::unique_ptr<Channel> wakeup_channel;
-            
-            
             void Abort_not_in_loop_thread();
             void Do_pending_functors();
             void Handle_read();
-            /*bool looping;
-            bool quit;
-            bool calling_pending_function;
-            int wakeup_fd;
-            std::mutex mtx;
-            const pid_t thread_id;
-            //Poller* poller;
-            
-            ChannelList active_channels;
-            
-            */
         public:
             EventLoop();
             void Loop();
@@ -61,22 +49,13 @@ namespace Wasi {
             Time::TimerId Run_after(double delay, Functors callback);
             Time::TimerId Run_every(double interval, Functors callback);
             void Update_channel(Channel* channel);
+            void Remove_channle(Channel* channel);
             void Assert_in_loop_thread();
             bool Is_in_loop_thread() const;
             void Queue_in_loop(Functors callback);
             void Run_in_loop(Functors callback);
             void Wake_up();
             ~EventLoop();
-            /*
-            void Wakeup();
-            //
-            void Run_in_loop(const std::function<void()>& callback);
-            
-            void Remove_channel(Channel* channel);
-            int Create_event();
-            bool Has_channel(Channel* channel);
-            ~EventLoop();
-            */
         };
     }
 }

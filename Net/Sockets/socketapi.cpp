@@ -96,6 +96,24 @@ namespace Wasi {
             }
         }
 
+        int Get_socket_error(int sockfd) {
+            int optval = 0;
+            socklen_t optlen = static_cast<socklen_t>(sizeof(optval));
+            if (getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &optval, &optlen)) {
+                return errno;
+            }
+            else {
+                return optval;
+            }
+        }
+
+        thread_local char err_buf[512];
+        thread_local char time[64];
+        thread_local time_t last_sec;
+        const char* String_error(int err) {
+            return strerror_r(err, err_buf, sizeof(err_buf));
+        }
+        
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in* addr) {
             addr->sin_family = AF_INET;
             addr->sin_port = Host_to_network_16(port);

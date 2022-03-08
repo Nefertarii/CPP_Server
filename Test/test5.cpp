@@ -12,14 +12,17 @@ using namespace std;
 using namespace Wasi::Base;
 
 void func1() {
-    Buffer buf, buf2;
-    buf.Append("123456");
-    cout << buf.Content() << "\n";
-    buf2 += buf;
-    cout << buf2.Content() << "\n";
-    buf = buf + buf;
-    cout << buf.Content() << "\n";
-    cout << buf.Find("34") << "\n";
+    //Buffer buf, buf2;
+    //buf.Append("123456");
+    //cout << buf.Content() << "\n";
+    //buf2 += buf;
+    //cout << buf2.Content() << "\n";
+    //buf = buf + buf;
+    //cout << buf.Content() << "\n";
+    //cout << buf.Find("34") << "\n";
+    //string str1();
+    std::string str2("123456", 0, 3);
+    std::cout << str2 << "\n";
 }
 
 void func2() {
@@ -34,9 +37,10 @@ void func2() {
     inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr);
     std::cout << "connect:" << connect(sockfd, (sockaddr*)&servaddr, sizeof(servaddr)) << "\n";
     std::cout << "write:" << write(sockfd, str3.c_str(), str3.size()) << "bytes\n";
+    std::cout << "remaning:" << str3.length() << "\n";
     close(sockfd);
 }
 
 int main() {
-    func2();
+    func1();
 }
