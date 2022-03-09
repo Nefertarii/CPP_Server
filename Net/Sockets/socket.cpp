@@ -2,7 +2,6 @@
 #include "Head/socketapi.h"
 #include "Head/inetaddress.h"
 #include <netinet/in.h>
-#include <netinet/tcp.h>
 #include <cstring>
 #include <iostream>
 
@@ -65,19 +64,19 @@ bool Socket::Get_tcp_info(std::string* buf) const {
     tcp_info tcpi;
     std::string tmp_str;
     if (Get_tcp_info(&tcpi)) {
-        tmp_str = "unrecovered = " += tcpi.tcpi_retransmits +=
-            "rto = " += tcpi.tcpi_rto +=
-            "ato = " += tcpi.tcpi_ato +=
-            "snd_mss = " += tcpi.tcpi_snd_mss +=
-            "rcv_mss = " += tcpi.tcpi_rcv_mss +=
-            "lost = " += tcpi.tcpi_lost +=
-            "retrans = " += tcpi.tcpi_retrans +=
-            "rtt = " += tcpi.tcpi_rtt +=
-            "rttvar = " += tcpi.tcpi_rttvar +=
-            "sshthresh = " += tcpi.tcpi_snd_ssthresh +=
-            "cwnd = " += tcpi.tcpi_snd_cwnd +=
-            "total_retrans = " += tcpi.tcpi_total_retrans;
-        buf = tmp_str;
+        tmp_str = "unrecovered = " + std::to_string(tcpi.tcpi_retransmits) +
+            "rto = " + std::to_string(tcpi.tcpi_rto) +
+            "ato = " + std::to_string(tcpi.tcpi_ato) +
+            "snd_mss = " + std::to_string(tcpi.tcpi_snd_mss) +
+            "rcv_mss = " + std::to_string(tcpi.tcpi_rcv_mss) +
+            "lost = " + std::to_string(tcpi.tcpi_lost) +
+            "retrans = " + std::to_string(tcpi.tcpi_retrans) +
+            "rtt = " + std::to_string(tcpi.tcpi_rtt) +
+            "rttvar = " + std::to_string(tcpi.tcpi_rttvar) +
+            "sshthresh = " + std::to_string(tcpi.tcpi_snd_ssthresh) +
+            "cwnd = " + std::to_string(tcpi.tcpi_snd_cwnd) +
+            "total_retrans = " + std::to_string(tcpi.tcpi_total_retrans);
+        *buf = tmp_str;
         return true;
     }
     return false;
@@ -85,7 +84,7 @@ bool Socket::Get_tcp_info(std::string* buf) const {
 
 bool Socket::Get_tcp_info(tcp_info* tcpi) const {
     socklen_t len = sizeof(*tcpi);
-    memset(tcpi, 0, sizeof(tcpi));
+    memset(tcpi, 0, sizeof(*tcpi));
     return getsockopt(sockfd, SOL_TCP, TCP_INFO, tcpi, &len) == 0;
 }
 

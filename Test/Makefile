@@ -7,7 +7,8 @@ CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	formatter.o sink.o record.o core.o netlog.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
-	latch.o socketapi.o acceptor.o socket.o inetaddress.o buffer.o test.o 
+	latch.o socketapi.o acceptor.o socket.o inetaddress.o \
+	buffer.o tcpconnection.o tcpserver.o test.o 
 OBJECTS2 = test2.o
 OBJECTS3 = thread.o test3.o
 OBJECTS4 = buffer.o test4.o 
@@ -18,6 +19,7 @@ HTTP = ../Net/Http
 INSPECT = ../Net/Inspect
 POLL = ../Net/Poll
 SOCKETS = ../Net/Sockets
+SERVER = ../Net/Server
 THREAD = ../Thread
 TIMER = ../Timer
 LOG = ../Log
@@ -99,6 +101,12 @@ socketapi.o : $(SOCKETS)/Head/socketapi.h
 
 acceptor.o : $(SOCKETS)/Head/acceptor.h
 	$(CC) $(FLAGS) -c $(SOCKETS)/acceptor.cpp
+#server
+tcpconnection.o : $(SERVER)/Head/tcpconnection.h
+	$(CC) $(FLAGS) -c $(SERVER)/tcpconnection.cpp
+
+tcpserver.o : $(SERVER)/Head/tcpserver.h
+	$(CC) $(FLAGS) -c $(SERVER)/tcpserver.cpp
 #test
 test.o : test.cpp
 	$(CC) $(FLAGS) -c test.cpp

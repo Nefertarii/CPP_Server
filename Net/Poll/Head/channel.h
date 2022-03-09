@@ -3,6 +3,7 @@
 
 #include "../../../Class/noncopyable.h"
 #include <functional>
+#include <memory>
 
 namespace Wasi {
 	namespace Time {

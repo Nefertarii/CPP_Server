@@ -1,5 +1,10 @@
 ## 随便写写
 2022-3-8  
+今天简单完成了tcpserver,准备调试遇到不少之前没注意的问题  
+大部分都是类名变量名没正确的原因,花了不少时间  
+但仍有两大问题 占位符_1 _2这种目前作用没搞懂, bind unique_ptr如何操作  
+
+2022-3-8  
 今天先完成了最复杂的TcpConnection,涉及修改的类有几个,东西太多了,TcpServer先搁置,把TcpConnection和修改的类先整理一下  
 shared_form_this需要继承std::enable_shared_from_this,用于将自身包装为一个shared_ptr以共享出去,在类内直接新建shared_ptr会导致计数出现问题,从而使用这个方法    
 ctor == constructor  

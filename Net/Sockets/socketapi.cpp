@@ -113,6 +113,16 @@ namespace Wasi {
         const char* String_error(int err) {
             return strerror_r(err, err_buf, sizeof(err_buf));
         }
+
+        sockaddr_in6 Get_local_addr(int sockfd) {
+            sockaddr_in6 localaddr;
+            memset(&localaddr, 0, sizeof(localaddr));
+            socklen_t addrlen = sizeof(localaddr);
+            if (getsockname(sockfd, Sockaddr_cast(&localaddr), &addrlen) < 0) {
+                std::cout << "Socktes::Get_local_addr error\n";
+            }
+            return localaddr;
+        }
         
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in* addr) {
             addr->sin_family = AF_INET;

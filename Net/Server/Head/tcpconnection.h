@@ -24,7 +24,7 @@ namespace Wasi {
         using ConnectionCallback = std::function<void(const TcpConnectionPtr&)>;
         using CloseCallback = std::function<void(const TcpConnectionPtr&)>;
         using WriteCompleteCallback = std::function<void(const TcpConnectionPtr&)>;
-        using MessageCallback = std::function<void(const TcpConnectionPtr&, std::string*, Time::TimeStamp)>;
+        using MessageCallback = std::function<void(const TcpConnectionPtr&, Base::Buffer*, Time::TimeStamp)>;
         using HighWaterMarkCallback = std::function<void(const TcpConnectionPtr&, size_t)>;
 
         class TcpConnection :
@@ -35,8 +35,8 @@ namespace Wasi {
                 DISCONNECTED,
                 CONNECTING,
                 CONNECTED,
-                DISCONNECTING,
-            }
+                DISCONNECTING
+            };
             void Handle_read(Time::TimeStamp receive_time);
             void Handle_write();
             void Handle_close();
@@ -64,7 +64,7 @@ namespace Wasi {
             HighWaterMarkCallback high_water_mark_callback;
             CloseCallback close_callback;
         public:
-            TcpConnection(Poll::EventLoop* loop, const string& name_, int sockfd_,
+            TcpConnection(Poll::EventLoop* loop, const std::string& name_, int sockfd_,
                           const Sockets::InetAddress& local_addr_,
                           const Sockets::InetAddress& peer_addr_);
             Poll::EventLoop* Get_loop() const;
@@ -83,7 +83,7 @@ namespace Wasi {
             void Send(const char* message, size_t len);
             void Shutdown();
             void Force_close();
-            void Force_close(double seconds);
+            void Force_close_delay(double seconds);
             void Start_read();
             void Stop_read();
             void Set_no_delay(bool on);

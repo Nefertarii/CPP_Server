@@ -49,7 +49,7 @@ namespace Wasi {
             Time::TimerId Run_after(double delay, Functors callback);
             Time::TimerId Run_every(double interval, Functors callback);
             void Update_channel(Channel* channel);
-            void Remove_channle(Channel* channel);
+            void Remove_channel(Channel* channel);
             void Assert_in_loop_thread();
             bool Is_in_loop_thread() const;
             void Queue_in_loop(Functors callback);

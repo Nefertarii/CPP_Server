@@ -26,6 +26,7 @@ namespace Wasi {
 
         int Get_socket_error(int sockfd);
         const char* String_error(int err);
+        sockaddr_in6 Get_local_addr(int sockfd);
         
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in* addr);
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in6* addr);

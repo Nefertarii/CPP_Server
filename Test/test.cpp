@@ -22,6 +22,7 @@
 #include "../Net/Sockets/Head/socketapi.h"
 #include "../Net/Sockets/Head/socket.h"
 #include "../Net/Base/Head/buffer.h"
+#include "../Net/Server/Head/tcpserver.h"
 
 #include <sys/timerfd.h>
 
@@ -36,6 +37,7 @@ using namespace Wasi::Poll;
 using namespace Wasi::Base;
 using namespace Wasi::Time;
 using namespace Wasi::Sockets;
+using namespace Wasi::Server;
 using namespace std;
 
 
@@ -94,7 +96,6 @@ void func4() {
     print("main loop exits");
     sleep(1);
 }
-
 
 
 EventLoop* g_loop;
@@ -166,6 +167,36 @@ void func8() {
     loop.Loop();
 }
 
+void Connection(const TcpConnectionPtr& conn) {
+    if (conn->connected()) {
+        std::cout << "onConnection(): new connection [" << conn->Get_name()
+            << "] form" << conn->Get_peer_address().To_string_ip_port() << "\n";
+    }
+    else {
+        std::cout << "onConnection(): connection [" << conn->Get_name()
+            << "] is down\n";
+    }
+}
+
+void Message(const TcpConnectionPtr& conn, const char* data, ssize_t len) {
+    printf("onMessage(): received %zd bytes from connection [%s]\n",
+           len, conn->name().c_str());
+    std::cout << "onMessage(): received" << len
+        << "bytes from connection [" << conn->Get_name() << "]\n";
+
+}
+
+void func9() {
+    std::cout << "main pid:" << getpid() << "\n";
+    InetAddress listenaddr(9909);
+    EventLoop loop;
+    TcpServer server(&loop, listenaddr);
+    server.Set_connection_callback(Connection);
+    server.Set_message_callback(Message);
+    server.Start();
+    loop.Loop();
+}
+
 int main() {
     //thread T1(func1);
     //thread T2(func2);
@@ -174,6 +205,7 @@ int main() {
     //func5();
     //func6();
     //func7();
-    func8();
+    //func8();
+    func9();
     //EventLoop loop;
 }

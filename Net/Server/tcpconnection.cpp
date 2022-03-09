@@ -1,10 +1,13 @@
 #include "Head/tcpconnection.h"
+#include "../../Timer/Head/clock.h"
+#include "../../Timer/Head/timerid.h"
 #include "../Poll/Head/channel.h"
 #include "../Poll/Head/eventloop.h"
 #include "../Sockets/Head/socket.h"
 #include "../Sockets/Head/socketapi.h"
 #include <netinet/tcp.h>
 #include <assert.h>
+#include <iostream>
 
 using namespace Wasi;
 using namespace Wasi::Server;
@@ -14,9 +17,9 @@ void TcpConnection::Handle_read(Time::TimeStamp receive_time) {
     int tmp_errno = 0;
     ssize_t read = input_buffer.Read_fd(channel->Fd(), &tmp_errno);
     if (read > 0) {
-        MessageCallback(shared_from_this(), &input_buffer, receive_time);
+        message_callback(shared_from_this(), &input_buffer, receive_time);
     }
-    else if (n == 0) {
+    else if (read == 0) {
         Handle_close();
     }
     else {
@@ -28,7 +31,7 @@ void TcpConnection::Handle_read(Time::TimeStamp receive_time) {
 
 void TcpConnection::Handle_write() {
     loop->Assert_in_loop_thread();
-    if (channel->Is_writeing()) {
+    if (channel->Is_writing()) {
         ssize_t write = Sockets::Write(channel->Fd(),
                                        output_buffer.Content().c_str(),
                                        output_buffer.Content().length());
@@ -65,17 +68,20 @@ void TcpConnection::Handle_error() {
 void TcpConnection::Send_in_loop() {
     loop->Assert_in_loop_thread();
     ssize_t wrote = 0;
-    size_t remaining = len;
+    size_t len = output_buffer.Size();
+    size_t remaining = output_buffer.Remaining();
     bool fault = false;
     if (state == DISCONNECTED) {
         std::cout << "Disconnected, give up write.\n";
         return;
     }
-    if (!channel->Is_writing() && output_buffer.Remaining() != 0) {
-        wrote = Sockets::Write(channel->Fd(), data, len);
+    if (!channel->Is_writing() && remaining != 0) {
+        wrote = Sockets::Write(channel->Fd(), output_buffer.Content().c_str(), len);
         if (wrote > 0) {
             remaining = len - wrote;
+            output_buffer.Add_index(wrote);
             if (remaining == 0 && write_complete_callback) {
+                output_buffer.Init();
                 loop->Queue_in_loop(std::bind(write_complete_callback, shared_from_this()));
             }
         }
@@ -139,23 +145,22 @@ const char* TcpConnection::State_to_string() {
     }
 }
 
-TcpConnection::TcpConnection(Poll::EventLoop* loop_, const string& name_, int sockfd_,
+TcpConnection::TcpConnection(Poll::EventLoop* loop_, const std::string& name_, int sockfd_,
                              const Sockets::InetAddress& local_addr_,
                              const Sockets::InetAddress& peer_addr_) :
     loop(loop_),
     name(name_),
     state(CONNECTING),
     reading(true),
-    socket(new Sockets::Socket(sockfd)),
-    channel(new Poll::Channel(loop, sockfd)),
+    socket(new Sockets::Socket(sockfd_)),
+    channel(new Poll::Channel(loop, sockfd_)),
     local_addr(local_addr_),
     peer_addr(peer_addr_) {
-    Time::TimeStamp read_timestamp;
-    channel->Set_read_callback(std::bind(&TcpConnection::Handle_read, this, read_timestamp));
+    channel->Set_read_callback(std::bind(&TcpConnection::Handle_read, this, std::placeholders::_1));
     channel->Set_write_callback(std::bind(&TcpConnection::Handle_write, this));
     channel->Set_close_callback(std::bind(&TcpConnection::Handle_close, this));
     channel->Set_error_callback(std::bind(&TcpConnection::Handle_error, this));
-    std::cout << "TcpConnection[" << name << "] ctor at " << this << " fd:" << sockfd;
+    std::cout << "TcpConnection[" << name << "] ctor at " << this << " fd:" << sockfd_;
     socket->Set_keep_alive(true);
 }
 
@@ -194,13 +199,13 @@ void TcpConnection::Send(const std::string message) {
             Send_in_loop();
         }
         else {
-            loop->Run_in_loop(std::bind(Send_in_loop, this));
+            loop->Run_in_loop(std::bind(&TcpConnection::Send_in_loop, this));
         }
     }
 }
 
 void TcpConnection::Send(const std::string message, size_t len) {
-    std::string clip_str = message.assign(message, 0, len);
+    std::string clip_str = message.substr(0, len);
     Send(clip_str);
 }
 
@@ -223,7 +228,7 @@ void TcpConnection::Force_close() {
     }
 }
 
-void TcpConnection::Force_close(double seconds) {
+void TcpConnection::Force_close_delay(double seconds) {
     if (state == CONNECTED || state == DISCONNECTING) {
         Set_state(DISCONNECTING);
         loop->Run_after(seconds, std::bind(&TcpConnection::Force_close, shared_from_this()));
@@ -281,6 +286,6 @@ void TcpConnection::Connect_destroyed() {
 
 TcpConnection::~TcpConnection() {
     std::cout << "TcpConnection[" << name << "] dtor at "
-        << this << " fd:" << sockfd << " state:" << State_to_string();
+        << this << " fd:" << channel->Fd() << " state:" << State_to_string();
     assert(state == DISCONNECTED);
 }

@@ -2,6 +2,8 @@
 #define SOCKETS_SOCKET_H_
 
 #include "../../../Class/noncopyable.h"
+#include <netinet/tcp.h>
+#include <string>
 
 namespace Wasi {
     namespace Sockets {

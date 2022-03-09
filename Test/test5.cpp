@@ -32,15 +32,14 @@ void func2() {
     memset(&servaddr, 0, sizeof(servaddr));
     sockfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(9002);
+    servaddr.sin_port = htons(9981);
     std::string str3 = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890~!@#$%^&*(){}:\">?\n";
     inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr);
     std::cout << "connect:" << connect(sockfd, (sockaddr*)&servaddr, sizeof(servaddr)) << "\n";
     std::cout << "write:" << write(sockfd, str3.c_str(), str3.size()) << "bytes\n";
-    std::cout << "remaning:" << str3.length() << "\n";
     close(sockfd);
 }
 
 int main() {
-    func1();
+    func2();
 }

@@ -2,7 +2,8 @@
 #include "Head/eventloop.h"
 #include <sys/poll.h>
 #include <iostream>
-#include <assert>
+#include <cassert>
+
 
 using namespace Wasi;
 using namespace Wasi::Poll;

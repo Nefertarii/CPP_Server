@@ -113,7 +113,7 @@ void EventLoop::Update_channel(Channel* channel) {
 	poller->Update_channel(channel);
 }
 
-void EventLoop::Remove_channle(Channel* channel) {
+void EventLoop::Remove_channel(Channel* channel) {
 	assert(channel->Owner_loop() == this);
 	Assert_in_loop_thread();
 	if (event_handling) {
