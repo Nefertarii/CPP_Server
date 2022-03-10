@@ -123,7 +123,17 @@ namespace Wasi {
             }
             return localaddr;
         }
-        
+
+        sockaddr_in6 Get_peer_addr(int sockfd) {
+            sockaddr_in6 peeraddr;
+            memset(&peeraddr, 0, sizeof(peeraddr));
+            socklen_t addrlen = static_cast<socklen_t>(sizeof(peeraddr));
+            if (getpeername(sockfd, Sockaddr_cast(&peeraddr), &addrlen) < 0) {
+                std::cout << "Socktes::Get_peer_addr error\n";
+            }
+            return peeraddr;
+        }
+
         void From_ip_port(const char* ip, uint16_t port, sockaddr_in* addr) {
             addr->sin_family = AF_INET;
             addr->sin_port = Host_to_network_16(port);

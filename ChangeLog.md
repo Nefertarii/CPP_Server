@@ -1,5 +1,11 @@
 ## 随便写写
-2022-3-8  
+2022-3-10  
+补充了tcpserver 并添加了tcpclient和connector类 明天开始对这两个类进行测试  
+这两天量有点大 测试的时候再好好理解一下  
+bind unique_ptr简单的用了get获取原始指针,感觉会有问题,但还没测试  
+占位符于 std::bind 表达式用作参数时,占位符对象被存储于生成的函数对象，而以未绑定参数调用函数对象时,每个占位符 _N 被对应的第 N 个未绑定参数替换。
+
+2022-3-9  
 今天简单完成了tcpserver,准备调试遇到不少之前没注意的问题  
 大部分都是类名变量名没正确的原因,花了不少时间  
 但仍有两大问题 占位符_1 _2这种目前作用没搞懂, bind unique_ptr如何操作  
@@ -20,7 +26,7 @@ shared_form_this这个操作有点不大理解如何实现的
 TCPserver的一些东西都要基于这个buffer,因此先完成buffer类  
 
 2022-3-5  
-tcpserver部分的tcpconnection是关键部分,其中有用的是自定的buffer,一开始想用string直接代替想想会很麻烦,东西太多,今天把不太清除的找了一些看了看,这几天应该就能完成tcpserver了  
+tcpserver部分的tcpconnection是关键部分,其中有用的是自定的buffer,一开始想用string直接代替想想会很麻烦,东西太多,今天把不太清楚的找了一些看了看,这几天应该就能完成tcpserver了  
 同时偶然发现了peeraddr的来源(on the internet were originally considered to be equal peers rather than divided into "client machines" and "server machines".)  
 
 2022-3-4  

@@ -64,8 +64,8 @@ void TcpServer::Start() {
     if (started.fetch_add(1) == 0) {
         assert(!acceptor->Listening());
         started = true;
-        //loop->Run_in_loop(std::bind(&Sockets::Acceptor::Listen, std::move(acceptor)));
-        loop_->runInLoop(std::bind(&Sockets::Acceptor::Listen,  (acceptor_)));
+        loop->Run_in_loop(std::bind(&Sockets::Acceptor::Listen, acceptor.get()));
+        //loop_->runInLoop(std::bind(&Sockets::Acceptor::Listen,  (acceptor_)));
     }
 }
 

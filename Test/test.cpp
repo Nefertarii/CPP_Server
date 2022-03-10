@@ -168,7 +168,7 @@ void func8() {
 }
 
 void Connection(const TcpConnectionPtr& conn) {
-    if (conn->connected()) {
+    if (conn->Connected()) {
         std::cout << "onConnection(): new connection [" << conn->Get_name()
             << "] form" << conn->Get_peer_address().To_string_ip_port() << "\n";
     }
@@ -178,19 +178,18 @@ void Connection(const TcpConnectionPtr& conn) {
     }
 }
 
-void Message(const TcpConnectionPtr& conn, const char* data, ssize_t len) {
-    printf("onMessage(): received %zd bytes from connection [%s]\n",
-           len, conn->name().c_str());
-    std::cout << "onMessage(): received" << len
-        << "bytes from connection [" << conn->Get_name() << "]\n";
-
+void Message(const TcpConnectionPtr& conn, Buffer* buf, TimeStamp receiveTime) {
+    std::cout << "Message(): received" << buf->Size()
+        << "bytes from connection [" << conn->Get_name() << "] at "
+        << Clock::To_string(receiveTime);
 }
+
 
 void func9() {
     std::cout << "main pid:" << getpid() << "\n";
-    InetAddress listenaddr(9909);
+    InetAddress listenaddr(9002);
     EventLoop loop;
-    TcpServer server(&loop, listenaddr);
+    TcpServer server(&loop, listenaddr, "server1", TcpServer::REUSEPORT);
     server.Set_connection_callback(Connection);
     server.Set_message_callback(Message);
     server.Start();
