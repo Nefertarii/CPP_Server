@@ -36,7 +36,7 @@ namespace Wasi {
             std::mutex mtx;
         public:
             TcpClient(Poll::EventLoop* loop_,
-                      const Sockets::InetAddress& serveraddr
+                      const Sockets::InetAddress& serveraddr,
                       const std::string& cli_name);
             void Connect();
             void Disconnect();
@@ -45,8 +45,8 @@ namespace Wasi {
             void Set_message_callback(MessageCallback callback);
             void Set_write_complete_callback(WriteCompleteCallback callback);
             void Set_connection_callback(ConnectionCallback callback);
-            TcpConnectionPtr Connection() const;
-            EventLoop* Get_loop() const;
+            TcpConnectionPtr Connection();
+            Poll::EventLoop* Get_loop() const;
             const std::string& Get_name() const;
             bool Get_retry()const;
             ~TcpClient();

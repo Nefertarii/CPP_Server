@@ -44,7 +44,7 @@ namespace Wasi {
             NewConnectionCallback new_connection_callback;
         public:
             Connector(Poll::EventLoop* loop_,
-                      Const InetAddress& servaddr_);
+                      const InetAddress& servaddr_);
             void Set_new_connection_callback(const NewConnectionCallback& callback);
             void Start();
             void Restart();

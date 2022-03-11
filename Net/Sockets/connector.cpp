@@ -2,6 +2,7 @@
 #include "../Poll/Head/channel.h"
 #include "../Poll/Head/eventloop.h"
 #include "../Sockets/Head/socketapi.h"
+#include "../../Timer/Head/timerid.h"
 #include <cassert>
 #include <iostream>
 
@@ -11,7 +12,7 @@ using namespace Wasi::Sockets;
 const int Connector::max_retry_delay_ms = 30 * 1000;
 const int Connector::init_retry_delay_ms = 500;
 
-void Connector::Set_state(States state_) { state = state_ }
+void Connector::Set_state(States state_) { state = state_; }
 
 void Connector::Start_in_loop() {
     loop->Assert_in_loop_thread();
@@ -54,11 +55,11 @@ void Connector::Connect() {
     case EFAULT:
     case ENOTSOCK:
         std::cout << "Connector::ConnectConnect error" << tmp_errno;
-        Socktes::Close(sockfd);
+        Sockets::Close(sockfd);
         break;
     default:
         std::cout << "Connector::Connect:Unexpected error" << tmp_errno;
-        Socktes::Close(sockfd);
+        Sockets::Close(sockfd);
         break;
     }
 }
@@ -107,7 +108,7 @@ void Connector::Retry(int sockfd) {
         std::cout << "Connector::Retry Retry connecting to " << servaddr.To_string_ip_port()
             << " in " << retry_delay_ms << " milliseconds.\n";
         loop->Run_after(retry_delay_ms / 1000.0,
-                        sdt::bind(&Connector::Start_in_loop, shared_from_this()));
+                        std::bind(&Connector::Start_in_loop, shared_from_this()));
         retry_delay_ms = std::min(retry_delay_ms * 2, max_retry_delay_ms);
     }
     else {
@@ -126,12 +127,12 @@ int Connector::Remove_and_Reset() {
 }
 
 Connector::Connector(Poll::EventLoop* loop_,
-                     Const InetAddress& servaddr_) :
+                     const InetAddress& servaddr_) :
     loop(loop_),
     servaddr(servaddr_),
+    retry_delay_ms(init_retry_delay_ms),
     connect(false),
-    state(DISCONNECTED),
-    retry_delay_ms(init_retry_delay_ms) {
+    state(DISCONNECTED) {
     std::cout << "Connector ctor [" << this << "]\n";
 }
 

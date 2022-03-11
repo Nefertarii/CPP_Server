@@ -5,25 +5,57 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <unistd.h>
+#include "../Timer/Head/clock.h"
 #include "../Net/Base/Head/buffer.h"
 #include "../Net/Sockets/Head/socketapi.h"
+#include "../Net/Sockets/Head/inetaddress.h"
+#include "../Net/Sockets/Head/connector.h"
+#include "../Net/Sockets/Head/socketapi.h"
+#include "../Net/Poll/Head/eventloop.h"
+#include "../Net/Poll/Head/channel.h"
+#include "../Net/Server/Head/tcpclient.h"
+#include "../Net/Server/Head/tcpconnection.h"
 
 using namespace std;
 using namespace Wasi::Base;
+using namespace Wasi::Server;
+using namespace Wasi::Poll;
+using namespace Wasi::Sockets;
+using namespace Wasi::Time;
+
+std::string message = "Hello\n";
+
+void Connection(const TcpConnectionPtr& conn) {
+    if (conn->Connected()) {
+        std::cout << "Connection: new connection [" << conn->Get_name() << "]"
+            << " from " << conn->Get_peer_address().To_string_ip() << "\n";
+        conn->Send(message);
+    }
+    else {
+        std::cout << "Connection: connection [" << conn->Get_name() << "]"
+            << " is down\n";
+    }
+}
+
+void Message(const TcpConnectionPtr& conn, Buffer* buffer,
+             TimeStamp receive_time) {
+    std::cout << "Message: received " << buffer->Size()
+        << " bytes from connection [" << conn->Get_name() << "] at "
+        << Clock::To_string(receive_time) << "\n";
+}
 
 void func1() {
-    //Buffer buf, buf2;
-    //buf.Append("123456");
-    //cout << buf.Content() << "\n";
-    //buf2 += buf;
-    //cout << buf2.Content() << "\n";
-    //buf = buf + buf;
-    //cout << buf.Content() << "\n";
-    //cout << buf.Find("34") << "\n";
-    //string str1();
-    std::string str2("123456", 0, 3);
-    std::cout << str2 << "\n";
+    EventLoop loop;
+    InetAddress servaddr("localhost", 9902);
+    TcpClient client(&loop, servaddr, "client1");
+
+    client.Set_connection_callback(Connection);
+    client.Set_message_callback(Message);
+    client.Enable_retry();
+    client.Connect();
+    loop.Loop();
 }
+
 
 void func2() {
     int sockfd = 0;
@@ -41,5 +73,5 @@ void func2() {
 }
 
 int main() {
-    func2();
+    func1();
 }

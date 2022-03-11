@@ -3,9 +3,11 @@
 #include "../Sockets/Head/inetaddress.h"
 #include "../Sockets/Head/connector.h"
 #include "../Sockets/Head/socketapi.h"
+#include "../../Timer/Head/timerid.h"
 #include <cassert>
 #include <iostream>
 
+using namespace Wasi;
 using namespace Wasi::Server;
 
 void Wasi::Server::Remove_connection(Poll::EventLoop* loop,
@@ -14,7 +16,7 @@ void Wasi::Server::Remove_connection(Poll::EventLoop* loop,
 }
 
 void Wasi::Server::Remove_connector(const ConnectorPtr& connector) {
-    
+
 }
 
 void TcpClient::New_connection(int sockfd) {
@@ -30,7 +32,7 @@ void TcpClient::New_connection(int sockfd) {
     conn->Set_connection_callback(connection_callback);
     conn->Set_message_callback(message_callback);
     conn->Set_write_complete_callback(write_complete_callback);
-    conn->Set_close_callback(std::bind(&TcpClient::Remove_connection, this, _1));
+    conn->Set_close_callback(std::bind(&TcpClient::Remove_connection, this, std::placeholders::_1));
     {
         std::lock_guard<std::mutex> lk(mtx);
         connection = conn;
@@ -40,7 +42,7 @@ void TcpClient::New_connection(int sockfd) {
 
 void TcpClient::Remove_connection(const TcpConnectionPtr& conn) {
     loop->Assert_in_loop_thread();
-    assert(connection == conn->Get_loop());
+    assert(loop == conn->Get_loop());
     {
         std::lock_guard<std::mutex> lk(mtx);
         assert(connection == conn);
@@ -58,7 +60,7 @@ TcpClient::TcpClient(Poll::EventLoop* loop_,
                      const Sockets::InetAddress& serveraddr,
                      const std::string& cli_name) :
     loop(loop_),
-    connector(new Connector(loop, serveraddr)),
+    connector(new Sockets::Connector(loop, serveraddr)),
     name(cli_name),
     connection_callback(),
     message_callback(),
@@ -66,13 +68,13 @@ TcpClient::TcpClient(Poll::EventLoop* loop_,
     connect(true),
     next_conn_id(1) {
     connector->Set_new_connection_callback(
-        std::bind(&TcpClient::New_connection, this, _1));
+        std::bind(&TcpClient::New_connection, this, std::placeholders::_1));
     std::cout << "TcpClient::TcpClient[" << this << "] connector "
         << connector.get() << "\n";
 }
 
 void TcpClient::Connect() {
-    std::cout << "TcpClient::Connect ["name << "] connecting to "
+    std::cout << "TcpClient::Connect [" << name << "] connecting to "
         << connector->Get_servaddr().To_string_ip_port() << "\n";
     connect = true;
     connector->Start();
@@ -105,16 +107,16 @@ void TcpClient::Set_connection_callback(ConnectionCallback callback) {
     connection_callback = callback;
 }
 
-TcpConnectionPtr TcpClient::Connection() const {
+TcpConnectionPtr TcpClient::Connection() {
     std::lock_guard<std::mutex> lk(mtx);
     return connection;
 }
- 
-EventLoop* TcpClient::Get_loop() const { return loop; }
+
+Poll::EventLoop* TcpClient::Get_loop() const { return loop; }
 
 const std::string& TcpClient::TcpClient::Get_name() const { return name; }
 
-bool Get_retry()const { return retry; }
+bool TcpClient::Get_retry() const { return retry; }
 
 TcpClient::~TcpClient() {
     std::cout << "TcpClient::~TcpClient [" << name << "] connector "
@@ -128,8 +130,8 @@ TcpClient::~TcpClient() {
     }
     if (conn) {
         assert(loop == conn->Get_loop());
-        CloseCallback callback = std::bind(&Remove_connection, loop, _1);
-        loop->Run_in_loop(std:bind(&TcpClient::Se, conn, callback));
+        CloseCallback callback = std::bind(&Wasi::Server::Remove_connection, loop, std::placeholders::_1);
+        loop->Run_in_loop(std::bind(&TcpConnection::Set_close_callback, conn, callback));
         if (unique) { conn->Force_close(); }
     }
     else {

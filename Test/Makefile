@@ -12,7 +12,10 @@ OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 OBJECTS2 = test2.o
 OBJECTS3 = thread.o test3.o
 OBJECTS4 = buffer.o test4.o 
-OBJECTS5 = buffer.o test5.o 
+OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
+	poller.o eventloop.o channel.o thread.o eventloopthread.o \
+	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
+	buffer.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
 FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
 HTTP = ../Net/Http
