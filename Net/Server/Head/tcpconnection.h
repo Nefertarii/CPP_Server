@@ -52,6 +52,7 @@ namespace Wasi {
             const std::string name;
             ConnState state;
             bool reading;
+            size_t high_water_mark;
             Base::Buffer input_buffer;
             Base::Buffer output_buffer;
             std::unique_ptr<Sockets::Socket> socket;
@@ -90,7 +91,7 @@ namespace Wasi {
             void Set_connection_callback(const ConnectionCallback& cb);
             void Set_message_callback(const MessageCallback& cb);
             void Set_write_complete_callback(const WriteCompleteCallback& cb);
-            void Set_high_water_mark_callback(const HighWaterMarkCallback& cb);
+            void Set_high_water_mark_callback(const HighWaterMarkCallback& cb, size_t high_water_mark_);
             void Set_close_callback(const CloseCallback& cb);
             void Connect_established();
             void Connect_destroyed();

@@ -18,7 +18,7 @@ void TcpServer::New_connection(int sockfd, const Sockets::InetAddress peeraddr) 
     TcpConnectionPtr conn(new TcpConnection(loop, conn_name, sockfd, localaddr, peeraddr));
     std::cout << conn->Get_local_address().To_string_ip_port()
         << " -> " << conn->Get_peer_address().To_string_ip_port()
-        << " is " << (conn->Connected() ? "Up" : "Down");
+        << " is " << (conn->Connected() ? "Up" : "Down") << "\n";
     conntions[conn_name] = conn;
     conn->Set_connection_callback(connection_callback);
     conn->Set_message_callback(message_callback);
@@ -34,6 +34,7 @@ TcpServer::TcpServer(Poll::EventLoop* loop_, const Sockets::InetAddress& listena
     loop(loop_),
     name(name_),
     acceptor(new Sockets::Acceptor(loop, listenaddr, (opt == REUSEPORT))),
+    started(0),
     next_conn_id(1) {
     acceptor->Set_new_connection_callback(std::bind(&TcpServer::New_connection, this, std::placeholders::_1, std::placeholders::_2));
 }
@@ -63,7 +64,6 @@ void TcpServer::Set_write_callback(const WriteCompleteCallback& callback_) {
 void TcpServer::Start() {
     if (started.fetch_add(1) == 0) {
         assert(!acceptor->Listening());
-        started = true;
         loop->Run_in_loop(std::bind(&Sockets::Acceptor::Listen, acceptor.get()));
         //loop_->runInLoop(std::bind(&Sockets::Acceptor::Listen,  (acceptor_)));
     }

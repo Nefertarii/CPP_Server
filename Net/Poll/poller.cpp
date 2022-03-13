@@ -47,7 +47,7 @@ void Poller::Update(int operation, Channel* channel) {
     event.data.ptr = channel;
     int fd = channel->Fd();
     std::cout << "epoll_ctl:" << Operation_to_string(operation)
-        << " fd:" << fd << "\n";//<<vent to string
+        << " fd:" << fd << "\n";
     if (epoll_ctl(epollfd, operation, fd, &event) < 0) {
         if (operation == EPOLL_CTL_DEL) {
             std::cout << "epoll_ctl:" << Operation_to_string(operation)
@@ -92,24 +92,34 @@ Wasi::Time::TimeStamp Poller::Poll(int timeout_ms, ChannelList* active_channels)
 
 void Poller::Update_channel(Channel* channel) {
     Assert_in_loop_thread();
-    int index = channel->Index();
-    int fd_ = channel->Fd();
-    assert(channels.find(fd_) == channels.end());
-    std::cout << "fd:" << channel->Fd() << " events:" << channel->Events() <<
-        " index:" << index << "\n";
-    if (index == poller_new || index == poller_del) {
-        if (index == poller_new) { channels[fd_] = channel; }
-        else { assert(channels[fd_] == channel); }
-        channel->Set_index(poller_add);
+    const int index = channel->Index();
+    std::cout << "fd = " << channel->Fd()
+        << " events = " << channel->Events()
+        << " index = " << index << "\n";
+    if (index == NEW || index == DELETED) {
+        // a new one, add with EPOLL_CTL_ADD
+        int fd = channel->Fd();
+        if (index == NEW) {
+            assert(channels.find(fd) == channels.end());
+            channels[fd] = channel;
+        }
+        else {// index == kDeleted
+            assert(channels.find(fd) != channels.end());
+            assert(channels[fd] == channel);
+        }
+        channel->Set_index(ADDED);
         Update(EPOLL_CTL_ADD, channel);
     }
     else {
-        (void)fd_;
-        assert(channels[fd_] == channel);
-        assert(index == poller_add);
+        // update existing one with EPOLL_CTL_MOD/DEL
+        int fd = channel->Fd();
+        (void)fd;
+        assert(channels.find(fd) != channels.end());
+        assert(channels[fd] == channel);
+        assert(index == ADDED);
         if (channel->Is_none_event()) {
             Update(EPOLL_CTL_DEL, channel);
-            channel->Set_index(poller_del);
+            channel->Set_index(DELETED);
         }
         else { Update(EPOLL_CTL_MOD, channel); }
     }

@@ -24,7 +24,7 @@ void TcpClient::New_connection(int sockfd) {
     Sockets::InetAddress peeraddr(Sockets::Get_peer_addr(sockfd));
     std::string buf;
     buf += ":" + peeraddr.To_string_ip_port()
-        + std::to_string(next_conn_id);
+        + "#" + std::to_string(next_conn_id);
     std::string conn_name = name + buf;
     Sockets::InetAddress localaddr(Sockets::Get_local_addr(sockfd));
     TcpConnectionPtr conn(new TcpConnection(loop, conn_name, sockfd,

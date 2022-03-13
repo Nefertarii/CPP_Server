@@ -54,11 +54,11 @@ void Connector::Connect() {
     case EBADF:
     case EFAULT:
     case ENOTSOCK:
-        std::cout << "Connector::ConnectConnect error" << tmp_errno;
+        std::cout << "Connector::ConnectConnect error" << tmp_errno << "\n";
         Sockets::Close(sockfd);
         break;
     default:
-        std::cout << "Connector::Connect:Unexpected error" << tmp_errno;
+        std::cout << "Connector::Connect:Unexpected error" << tmp_errno << "\n";
         Sockets::Close(sockfd);
         break;
     }
@@ -74,13 +74,13 @@ void Connector::Connecting(int sockfd) {
 }
 
 void Connector::Handle_write() {
-    std::cout << "Connector::Handle_write " << state;
+    std::cout << "Connector::Handle_write " << state << "\n";
     if (state == CONNECTING) {
         int sockfd = Remove_and_Reset();
         int err = Sockets::Get_socket_error(sockfd);
         if (err) {
             std::cout << "Connector::Handle_write SO_ERROR = "
-                << err << " " << String_error(err);
+                << err << " " << String_error(err) << "\n";
             Retry(sockfd);
         }
         else {
@@ -97,7 +97,7 @@ void Connector::Handle_error() {
         int sockfd = Remove_and_Reset();
         int err = Sockets::Get_socket_error(sockfd);
         std::cout << "Connector::Handle_error SO_ERROR = " << state
-            << " " << String_error(err);
+            << " " << String_error(err) << "\n";
     }
 }
 

@@ -109,7 +109,7 @@ bool InetAddress::Resolve(std::string host_name, InetAddress* result) {
     }
     else {
         if (ret) {
-            std::cout << "InetAddress::Resolve error.";
+            std::cout << "InetAddress::Resolve error.\n";
         }
         return false;
     }

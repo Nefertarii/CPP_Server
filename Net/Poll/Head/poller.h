@@ -7,19 +7,24 @@
 #include <sys/epoll.h>
 
 namespace Wasi {
-    namespace Time{
+    namespace Time {
         class TimeStamp;
     }
     namespace Poll {
         class Channel;
         class EventLoop;
-        
+
         //using PollFdList = std::vector<pollfd>;
         using ChannelList = std::vector<Channel*>;
         using ChannelMap = std::map<int, Channel*>;
         using EventList = std::vector<epoll_event>;
         class Poller : Noncopyable {
         private:
+            enum PollState {
+                NEW = -1,
+                ADDED = 1,
+                DELETED = 2
+            };
             const char* Operation_to_string(int operation);
             void Fill_active_channel(int num_events, ChannelList* active_channels) const;
             void Update(int operation, Channel* channel);

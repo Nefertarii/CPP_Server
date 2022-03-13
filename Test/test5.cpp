@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <signal.h>
 #include "../Timer/Head/clock.h"
 #include "../Net/Base/Head/buffer.h"
 #include "../Net/Sockets/Head/socketapi.h"
@@ -45,10 +46,11 @@ void Message(const TcpConnectionPtr& conn, Buffer* buffer,
 }
 
 void func1() {
-    EventLoop loop;
-    InetAddress servaddr("localhost", 9902);
-    TcpClient client(&loop, servaddr, "client1");
 
+    //signal(SIGPIPE, SIG_IGN);
+    EventLoop loop;
+    InetAddress servaddr("127.0.0.1", 9002);
+    TcpClient client(&loop, servaddr, "client1");
     client.Set_connection_callback(Connection);
     client.Set_message_callback(Message);
     client.Enable_retry();
@@ -68,6 +70,7 @@ void func2() {
     std::string str3 = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890~!@#$%^&*(){}:\">?\n";
     inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr);
     std::cout << "connect:" << connect(sockfd, (sockaddr*)&servaddr, sizeof(servaddr)) << "\n";
+    sleep(1);
     std::cout << "write:" << write(sockfd, str3.c_str(), str3.size()) << "bytes\n";
     close(sockfd);
 }
