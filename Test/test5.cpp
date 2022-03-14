@@ -42,14 +42,14 @@ void Message(const TcpConnectionPtr& conn, Buffer* buffer,
              TimeStamp receive_time) {
     std::cout << "Message: received " << buffer->Size()
         << " bytes from connection [" << conn->Get_name() << "] at "
-        << Clock::To_string(receive_time) << "\n";
+        << Clock::To_string(receive_time) << "\n["
+        << buffer->Content() << "]\n";
 }
 
 void func1() {
-
-    //signal(SIGPIPE, SIG_IGN);
+    signal(SIGPIPE, SIG_IGN);
     EventLoop loop;
-    InetAddress servaddr("127.0.0.1", 9002);
+    InetAddress servaddr("127.0.0.1", 9981);
     TcpClient client(&loop, servaddr, "client1");
     client.Set_connection_callback(Connection);
     client.Set_message_callback(Message);
@@ -58,7 +58,6 @@ void func1() {
     loop.Loop();
 }
 
-
 void func2() {
     int sockfd = 0;
     sockaddr_in servaddr;
@@ -66,7 +65,7 @@ void func2() {
     memset(&servaddr, 0, sizeof(servaddr));
     sockfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(9002);
+    servaddr.sin_port = htons(9981);
     std::string str3 = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890~!@#$%^&*(){}:\">?\n";
     inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr);
     std::cout << "connect:" << connect(sockfd, (sockaddr*)&servaddr, sizeof(servaddr)) << "\n";

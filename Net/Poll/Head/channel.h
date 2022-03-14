@@ -19,12 +19,10 @@ namespace Wasi {
 			EventLoop* loop;
 			const int fd;
 			bool in_loop;
-			bool tied;
 			bool event_handling;
 			int events;
 			int revents;
 			int index;
-			std::weak_ptr<void> tie;
 			ReadEventCallBack read_callback;
 			EventCallBack write_callback;
 			EventCallBack error_callback;
@@ -42,7 +40,7 @@ namespace Wasi {
 			int Revents();
 			//void Remove():
 			void Handle_event(Time::TimeStamp receive_time);
-			void Handle_event_with_guard(Time::TimeStamp receive_time);
+			//void Handle_event_with_guard(Time::TimeStamp receive_time);
 			void Set_revents(int revents_);
 			void Set_index(int index_);
 			void Set_read_callback(ReadEventCallBack cb);
@@ -55,7 +53,6 @@ namespace Wasi {
 			void Disable_writing();
 			void Disable_all();
 			void Remove();
-			void Tie(const std::shared_ptr<void>& obj);
 			bool Is_none_event();
 			bool Is_writing();
 			bool Is_reading();

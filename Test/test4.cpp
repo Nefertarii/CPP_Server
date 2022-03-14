@@ -22,7 +22,7 @@ int main() {
     }
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons(9002);
+    address.sin_port = htons(9981);
     if (bind(server_fd, (struct sockaddr*)&address,
              sizeof(address)) < 0) {
         perror("bind failed");

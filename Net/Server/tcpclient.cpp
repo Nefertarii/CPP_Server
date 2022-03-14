@@ -41,7 +41,7 @@ void TcpClient::New_connection(int sockfd) {
 }
 
 void TcpClient::Remove_connection(const TcpConnectionPtr& conn) {
-    loop->Assert_in_loop_thread();
+    loop->Assert_in_loop_thread(); 
     assert(loop == conn->Get_loop());
     {
         std::lock_guard<std::mutex> lk(mtx);
@@ -51,7 +51,7 @@ void TcpClient::Remove_connection(const TcpConnectionPtr& conn) {
     loop->Queue_in_loop(std::bind(&TcpConnection::Connect_destroyed, conn));
     if (retry && connect) {
         std::cout << "TcpClient::Connect[" << name << "] reconnecting to"
-            << connector->Get_servaddr().To_string_ip_port();
+            << connector->Get_servaddr().To_string_ip_port() << "\n";
         connector->Restart();
     }
 }
@@ -95,15 +95,15 @@ void TcpClient::Stop() {
 
 void TcpClient::Enable_retry() { retry = true; }
 
-void TcpClient::Set_message_callback(MessageCallback callback) {
+void TcpClient::Set_message_callback(const MessageCallback& callback) {
     message_callback = callback;
 }
 
-void TcpClient::Set_write_complete_callback(WriteCompleteCallback callback) {
+void TcpClient::Set_write_complete_callback(const WriteCompleteCallback& callback) {
     write_complete_callback = callback;
 }
 
-void TcpClient::Set_connection_callback(ConnectionCallback callback) {
+void TcpClient::Set_connection_callback(const ConnectionCallback& callback) {
     connection_callback = callback;
 }
 

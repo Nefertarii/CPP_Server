@@ -25,7 +25,8 @@ void Connector::Stop_in_loop() {
     loop->Assert_in_loop_thread();
     if (state == CONNECTING) {
         Set_state(DISCONNECTED);
-        Retry(Remove_and_Reset());
+        int sockfd = Remove_and_Reset();
+        Retry(sockfd);
     }
 }
 
@@ -98,6 +99,7 @@ void Connector::Handle_error() {
         int err = Sockets::Get_socket_error(sockfd);
         std::cout << "Connector::Handle_error SO_ERROR = " << state
             << " " << String_error(err) << "\n";
+        Retry(sockfd);
     }
 }
 
@@ -139,6 +141,7 @@ Connector::Connector(Poll::EventLoop* loop_,
 void Connector::Set_new_connection_callback(const NewConnectionCallback& callback) {
     new_connection_callback = callback;
 }
+
 void Connector::Start() {
     connect = true;
     loop->Run_in_loop(std::bind(&Connector::Start_in_loop, this));
@@ -163,16 +166,3 @@ Connector::~Connector() {
     std::cout << "Connector dtor[" << this << "]\n";
     assert(!channel);
 }
-/*
-
-
-    Poll::EventLoop* loop;
-    InetAddress servaddr;
-    int retry_delay_ms;
-    bool connect;
-    States state;
-    std::unique_ptr<Poll::Channel> channel;
-    NewConnectionCallback new_connection_callback;
-public:
-
-*/

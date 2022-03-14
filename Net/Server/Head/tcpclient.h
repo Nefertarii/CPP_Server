@@ -42,9 +42,9 @@ namespace Wasi {
             void Disconnect();
             void Stop();
             void Enable_retry();
-            void Set_message_callback(MessageCallback callback);
-            void Set_write_complete_callback(WriteCompleteCallback callback);
-            void Set_connection_callback(ConnectionCallback callback);
+            void Set_message_callback(const MessageCallback& callback);
+            void Set_write_complete_callback(const WriteCompleteCallback& callback);
+            void Set_connection_callback(const ConnectionCallback& callback);
             TcpConnectionPtr Connection();
             Poll::EventLoop* Get_loop() const;
             const std::string& Get_name() const;

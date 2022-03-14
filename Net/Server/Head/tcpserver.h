@@ -21,6 +21,9 @@ namespace Wasi {
 
         class TcpServer : Noncopyable {
         private:
+            void New_connection(int sockfd, const Sockets::InetAddress& peeraddr);
+            void Remove_connection(const TcpConnectionPtr& conn);
+            void Remove_connection_in_loop(const TcpConnectionPtr& conn);
             Poll::EventLoop* loop;
             const std::string name;
             const std::string ip_port;
@@ -33,9 +36,6 @@ namespace Wasi {
             std::atomic<int> started;
             ConnectionMap conntions;
             int next_conn_id;
-            void New_connection(int sockfd, const Sockets::InetAddress peeraddr);
-            void Remove_connection(const TcpConnectionPtr& conn);
-            void Remove_connection_in_loop(const TcpConnectionPtr& conn);
         public:
             enum OptReusePort {
                 NOREUSEPORT,
@@ -50,7 +50,7 @@ namespace Wasi {
             //void Set_thread_init_callback(const ThreadInitCallback& callback_)
             void Set_connection_callback(const ConnectionCallback& callback_);
             void Set_message_callback(const MessageCallback& callback_);
-            void Set_write_callback(const WriteCompleteCallback& callback_);
+            void Set_write_complete_callback(const WriteCompleteCallback& callback_);
             void Start();
             ~TcpServer();
 

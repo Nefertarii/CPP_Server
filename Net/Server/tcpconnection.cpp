@@ -280,7 +280,6 @@ void TcpConnection::Connect_established() {
     loop->Assert_in_loop_thread();
     assert(state == CONNECTING);
     Set_state(CONNECTED);
-    channel->Tie(shared_from_this());
     channel->Enable_reading();
     connection_callback(shared_from_this());
 }

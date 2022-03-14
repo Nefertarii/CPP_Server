@@ -7,7 +7,7 @@
 using namespace Wasi;
 using namespace Wasi::Server;
 
-void TcpServer::New_connection(int sockfd, const Sockets::InetAddress peeraddr) {
+void TcpServer::New_connection(int sockfd, const Sockets::InetAddress& peeraddr) {
     loop->Assert_in_loop_thread();
     std::string conn_name = name + std::to_string(next_conn_id);
     ++next_conn_id;
@@ -22,12 +22,25 @@ void TcpServer::New_connection(int sockfd, const Sockets::InetAddress peeraddr) 
     conntions[conn_name] = conn;
     conn->Set_connection_callback(connection_callback);
     conn->Set_message_callback(message_callback);
-    conn->Connect_established();
+    conn->Set_write_complete_callback(write_complete_callback);
+    conn->Set_close_callback(std::bind(&TcpServer::Remove_connection, this, std::placeholders::_1));
+    loop->Run_in_loop(std::bind(&TcpConnection::Connect_established, conn));
+    //conn->Connect_established();
 }
 
-void TcpServer::Remove_connection(const TcpConnectionPtr& conn) {}
+void TcpServer::Remove_connection(const TcpConnectionPtr& conn) {
+    loop->Run_in_loop(std::bind(&TcpServer::Remove_connection_in_loop, this, conn));
+}
 
-void TcpServer::Remove_connection_in_loop(const TcpConnectionPtr& conn) {}
+void TcpServer::Remove_connection_in_loop(const TcpConnectionPtr& conn) {
+    loop->Assert_in_loop_thread();
+    std::cout << "TcpServer::Remove_connection_in_loop [" << name
+        << "] connection " << conn->Get_name();
+    size_t n = conntions.erase(conn->Get_name());
+    assert(n == 1);
+    Poll::EventLoop* io_loop = conn->Get_loop();
+    io_loop->Queue_in_loop(std::bind(&TcpConnection::Connect_destroyed, conn));
+}
 
 TcpServer::TcpServer(Poll::EventLoop* loop_, const Sockets::InetAddress& listenaddr,
                      const std::string& name_, OptReusePort opt) :
@@ -57,7 +70,7 @@ void TcpServer::Set_message_callback(const MessageCallback& callback_) {
     message_callback = callback_;
 }
 
-void TcpServer::Set_write_callback(const WriteCompleteCallback& callback_) {
+void TcpServer::Set_write_complete_callback(const WriteCompleteCallback& callback_) {
     write_complete_callback = callback_;
 }
 

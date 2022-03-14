@@ -17,7 +17,6 @@ Channel::Channel(EventLoop* loop_, int fd_) :
     loop(loop_),
     fd(fd_),
     in_loop(false),
-    tied(false),
     event_handling(false),
     events(0),
     revents(0),
@@ -87,25 +86,8 @@ void Channel::Remove() {
     loop->Remove_channel(this);
 }
 
-void Channel::Tie(const std::shared_ptr<void>& obj) {
-    tie = obj;
-    tied = true;
-}
 
 void Channel::Handle_event(Time::TimeStamp receive_time) {
-    std::shared_ptr<void> guard;
-    if (tied) {
-        guard == tie.lock();
-        if (guard) {
-            Handle_event_with_guard(receive_time);
-        }
-    }
-    else {
-        Handle_event_with_guard(receive_time);
-    }
-}
-
-void Channel::Handle_event_with_guard(Time::TimeStamp receive_time) {
     event_handling = true;
     if ((revents & POLLHUP) && !(revents & POLLIN)) {
         std::cout << "fd:" << fd << " channel pollhup.\n";
