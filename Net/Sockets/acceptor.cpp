@@ -30,8 +30,8 @@ void Acceptor::Handle_read() {
 
 Acceptor::Acceptor(Poll::EventLoop* loop_, const InetAddress& listen_addr, bool reuse_port) :
     loop(loop_),
-    accept_channel(loop, accept_socket.Fd()),
     accept_socket(Create_socket(listen_addr.Family())),
+    accept_channel(loop, accept_socket.Fd()),
     listening(false),
     idle_fd(open("/dev/null", O_RDONLY | O_CLOEXEC)) {
     assert(idle_fd >= 0);

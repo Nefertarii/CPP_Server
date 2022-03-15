@@ -136,4 +136,4 @@ clean :
 	-rm *.o
 
 cleanall:
-	-rm *.o $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5)
+	-rm *.o $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5) $(TARGET6)
