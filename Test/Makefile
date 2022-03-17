@@ -10,7 +10,7 @@ OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test.o 
 OBJECTS2 = test2.o
-OBJECTS3 = thread.o test3.o
+OBJECTS3 = buffer.o test3.o
 OBJECTS4 = buffer.o test4.o 
 OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \

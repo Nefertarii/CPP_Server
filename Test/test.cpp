@@ -40,8 +40,8 @@ using namespace Wasi::Sockets;
 using namespace Wasi::Server;
 using namespace std;
 
-void NewConnection(int sockfd, const InetAddress& peeraddr) {
-    cout << "NewConnection(): accepted a new connection from"
+void New_connection(int sockfd, const InetAddress& peeraddr) {
+    cout << "New_connection(): accepted a new connection from"
         << peeraddr.To_string_ip_port() << "\n";
     Write(sockfd, "How are you?\n", 13);
 }
@@ -51,27 +51,41 @@ void func8() {
     InetAddress listenaddr(9981);
     EventLoop loop;
     Acceptor acceptor(&loop, listenaddr, true);
-    acceptor.Set_new_connection_callback(NewConnection);
+    acceptor.Set_new_connection_callback(New_connection);
     acceptor.Listen();
 
     loop.Loop();
 }
 
-void NewConnection2(const TcpConnectionPtr& conn) {
+void New_connection2(const TcpConnectionPtr& conn) {
     if (conn->Connected()) {
-        std::cout << "onConnection(): new connection [" << conn->Get_name()
-            << "] form" << conn->Get_peer_address().To_string_ip_port() << "\n";
+        std::cout << "New_connection(): new connection [" << conn->Get_name()
+            << "] form " << conn->Get_peer_address().To_string_ip_port() << "\n";
     }
     else {
-        std::cout << "onConnection(): connection [" << conn->Get_name()
+        std::cout << "New_connection(): connection [" << conn->Get_name()
             << "] is down\n";
     }
 }
 
 void Message(const TcpConnectionPtr& conn, Buffer* buf, TimeStamp receiveTime) {
-    std::cout << "Message(): received" << buf->Size()
-        << "bytes from connection [" << conn->Get_name() << "] at "
-        << Clock::To_string(receiveTime);
+    if (buf->State()) {
+        std::string message = "How are you?";
+        conn->Send(message);
+        std::cout << "Send_message: Send " << message.size()
+            << " bytes from connection [" << conn->Get_name() << "] at "
+            << Clock::To_string(receiveTime) << "\n";
+    }
+    else {
+        std::cout << "Read_message: received:"
+            << buf->Content() << "\nTotal:" << buf->Size()
+            << " bytes from connection [" << conn->Get_name() << "] at "
+            << Clock::To_string(receiveTime) << "\n";
+    }
+}
+
+void Send_message(const TcpConnectionPtr& conn, Buffer* buf, TimeStamp receiveTime) {
+
 }
 
 void func9() {
@@ -79,7 +93,7 @@ void func9() {
     InetAddress listenaddr(9981);
     EventLoop loop;
     TcpServer server(&loop, listenaddr, "server1", TcpServer::REUSEPORT);
-    server.Set_connection_callback(NewConnection2);
+    server.Set_connection_callback(New_connection2);
     server.Set_message_callback(Message);
     server.Start();
     loop.Loop();

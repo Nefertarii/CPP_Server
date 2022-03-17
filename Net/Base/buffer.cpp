@@ -2,21 +2,25 @@
 #include <algorithm>
 #include <assert.h>
 #include <sys/uio.h>
+#include <iostream>
 
 using namespace Wasi::Base;
 
-
 const char Buffer::CRLF[] = "\r\n";
-const size_t Buffer::initial_size = 1024;
+//const size_t Buffer::initial_size = 1024;
 
-Buffer::Buffer(size_t size) :
-    index(0) {
-    buffer.resize(size);
-}
+Buffer::Buffer() :
+    index(0),
+    state(READ) {}
+
+Buffer::Buffer(BufferState state_) :
+    index(0),
+    state(state_) {}
 
 Buffer::Buffer(std::string str) :
     index(0),
-    buffer(str) {}
+    buffer(str),
+    state(WRITE) {}
 
 size_t Buffer::Find(const char* str) { return buffer.find(str); }
 
@@ -35,6 +39,8 @@ size_t Buffer::Index() const { return index; }
 size_t Buffer::Size() const { return buffer.length(); }
 
 size_t Buffer::Remaining() const { return buffer.length() - index; }
+
+Buffer::BufferState Buffer::State() const { return state; }
 
 void Buffer::Add_index(int num) {
     int remaining = buffer.length() - index;
@@ -58,8 +64,6 @@ void Buffer::Init() {
     buffer.clear();
 }
 
-
-
 Buffer Buffer::operator+(const Buffer& rhs) {
     buffer += rhs.buffer;
     return *this;
@@ -82,21 +86,23 @@ Buffer& Buffer::operator+=(const Buffer& rhs) {
 }
 
 ssize_t Buffer::Read_fd(int fd, int* tmp_errno) {
-    iovec vec;
-    char extrabuf[65536];
-    vec.iov_base = extrabuf;
-    vec.iov_len = sizeof(extrabuf);
-    const int iovcnt = 1;
-    const int read = readv(fd, &vec, iovcnt);
-    if (read < 0) {
-        *tmp_errno = errno;
-        return 0;
+    if (state == READ) {
+        iovec vec;
+        char extrabuf[65536];
+        vec.iov_base = extrabuf;
+        vec.iov_len = sizeof(extrabuf);
+        const int iovcnt = 1;
+        const int read = readv(fd, &vec, iovcnt);
+        if (read < 0) {
+            *tmp_errno = errno;
+            return 0;
+        }
+        Append(extrabuf, read);
+        return read;
     }
-    Append(extrabuf, read);
-    return read;
+    std::cout << "Buffer::Read_fd() Buffer state is WRITE.\n";
+    return 0;
 }
-
-//ssize_t Buffer::Send_fd(int fd, int* tmp_errno) {}
 
 std::string Buffer::Content() { return buffer; }
 

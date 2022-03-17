@@ -9,7 +9,7 @@ using namespace Wasi::Server;
 
 void TcpServer::New_connection(int sockfd, const Sockets::InetAddress& peeraddr) {
     loop->Assert_in_loop_thread();
-    std::string conn_name = name + std::to_string(next_conn_id);
+    std::string conn_name = name + "#" + std::to_string(next_conn_id);
     ++next_conn_id;
     std::cout << "TcpServer::New_connection [" << name
         << "] new connection [" << conn_name
@@ -35,7 +35,7 @@ void TcpServer::Remove_connection(const TcpConnectionPtr& conn) {
 void TcpServer::Remove_connection_in_loop(const TcpConnectionPtr& conn) {
     loop->Assert_in_loop_thread();
     std::cout << "TcpServer::Remove_connection_in_loop [" << name
-        << "] connection " << conn->Get_name();
+        << "] connection " << conn->Get_name() << "\n";
     size_t n = conntions.erase(conn->Get_name());
     assert(n == 1);
     Poll::EventLoop* io_loop = conn->Get_loop();

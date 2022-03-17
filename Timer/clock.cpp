@@ -27,10 +27,19 @@ long Clock::Nowtime_ms() { return Nowtime_us() / TimeStamp::microseconds_per_mil
 long Clock::Nowtime_sec() { return Nowtime_us() / TimeStamp::microseconds_per_second; }
 
 std::string Clock::To_string(TimeStamp time) {
-    char temp[80];
+    char temp[40];
     long time_sec = time.Microseconds_since_epoch() / TimeStamp::microseconds_per_second;
     struct tm* time_tm = localtime(&time_sec);
-    strftime(temp, 80, "Data:%a, %b %m %Y %H:%M:%S GMT", time_tm);
-    std::string str = temp;
-    return str;
+    strftime(temp, 40, "GMT: %b %m %Y %H:%M:%S ", time_tm);
+    std::string str_time = temp;
+    return str_time;
+}
+
+std::string Clock::To_string(long timestamp_us) {
+    char temp[40];
+    long time_sec = timestamp_us / TimeStamp::microseconds_per_second;
+    struct tm* time_tm = localtime(&time_sec);
+    strftime(temp, 40, "GMT: %b %m %Y %H:%M:%S ", time_tm);
+    std::string str_time = temp;
+    return str_time;
 }

@@ -18,6 +18,7 @@ void TcpConnection::Handle_read(Time::TimeStamp receive_time) {
     ssize_t read = input_buffer.Read_fd(channel->Fd(), &tmp_errno);
     if (read > 0) {
         message_callback(shared_from_this(), &input_buffer, receive_time);
+        message_callback(shared_from_this(), &output_buffer, receive_time);
     }
     else if (read == 0) {
         Handle_close();
@@ -162,11 +163,13 @@ TcpConnection::TcpConnection(Poll::EventLoop* loop_, const std::string& name_, i
     state(CONNECTING),
     reading(true),
     high_water_mark(64 * 1024 * 1024),
+    input_buffer(Base::Buffer::BufferState::READ),
+    output_buffer(Base::Buffer::BufferState::WRITE),
     socket(new Sockets::Socket(sockfd_)),
     channel(new Poll::Channel(loop, sockfd_)),
     local_addr(local_addr_),
     peer_addr(peer_addr_) {
-    channel->Set_read_callback(std::bind(&TcpConnection::Handle_read, this, std::placeholders::_1));
+    channel->Set_read_callback(std::bind(&TcpConnection::Handle_read, this, Time::TimeStamp(Time::Clock::Nowtime_us())));
     channel->Set_write_callback(std::bind(&TcpConnection::Handle_write, this));
     channel->Set_close_callback(std::bind(&TcpConnection::Handle_close, this));
     channel->Set_error_callback(std::bind(&TcpConnection::Handle_error, this));

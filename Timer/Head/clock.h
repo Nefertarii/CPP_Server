@@ -31,6 +31,7 @@ namespace Wasi {
             static long Nowtime_ms();
             static long Nowtime_sec();
             static std::string To_string(TimeStamp time);
+            static std::string To_string(long timestamp_us);
             //static std::string Ms_to_string(long time);
             //static std::string Us_to_string(long time);
             ~Clock() {};

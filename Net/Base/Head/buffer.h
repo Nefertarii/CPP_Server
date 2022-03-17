@@ -7,13 +7,20 @@
 namespace Wasi {
     namespace Base {
         class Buffer {
+        public:
+            enum BufferState {
+                READ,
+                WRITE
+            };
         private:
             static const char CRLF[];
             size_t index; //tcp send index
             std::string buffer;
+            BufferState const state;
         public:
             static const size_t initial_size;
-            explicit Buffer(size_t size = initial_size);
+            explicit Buffer();
+            Buffer(BufferState state_);
             Buffer(std::string str);
             size_t Find(const char* str);
             size_t Find(const char* str, size_t begin);
@@ -24,6 +31,7 @@ namespace Wasi {
             size_t Index() const;
             size_t Size() const;
             size_t Remaining() const;
+            BufferState State() const;
             void Add_index(int num);
             void Append(const std::string& str);
             void Append(const char* str, size_t len);
@@ -34,7 +42,6 @@ namespace Wasi {
             Buffer& operator=(const std::string& str);
             Buffer& operator+=(const Buffer&);
             ssize_t Read_fd(int fd, int* tmp_errno);
-            //ssize_t Send_fd(int fd, int* tmp_errno);
             std::string Content();
             ~Buffer();
         };
