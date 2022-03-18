@@ -15,7 +15,16 @@ void Formatter::Set_flag(bool concurrency_flag_) {
     concurrency_flag = concurrency_flag_;
 }
 
-std::string Formatter::Trans_date(long date) {
+std::string Formatter::Trans_date_sec(long date) {
+    std::string date_tmp;
+    memset(date_tmp_c, 0, 80);
+    struct tm* time_tm = localtime(&date);
+    strftime(date_tmp_c, 80, "%T", time_tm);
+    date_tmp = date_tmp_c;
+    return date_tmp;
+}
+
+std::string Formatter::Trans_date_ms(long date) {
     std::string date_tmp;
     memset(date_tmp_c, 0, 80);
     struct tm* time_tm = localtime(&date);

@@ -1,4 +1,9 @@
 ## 随便写写
+2022-3-18  
+今天阅读了一下folly库的log和spdlog库  
+决定按这两个库的日志进行自己的日志库开发,更详细的计划仍在构思    
+同时修改了一下README  
+
 2022-3-17  
 将tcpserver和tcpclient都完善了,发现是buffer的问题,修改了buffer类  
 同时修改和增加了Clock的to_string格式,目前的网络库大致模式已经完成  

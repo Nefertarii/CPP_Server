@@ -18,7 +18,8 @@ namespace Wasi {
             Formatter();
             Formatter(bool concurrency_flag_);
             void Set_flag(bool concurrency_flag_);
-            std::string Trans_date(long date);
+            std::string Trans_date_sec(long date);
+            std::string Trans_date_ms(long date);
             std::string Trans_date(std::string date);
             std::string Trans_log(LogLevel level, long date, std::string from, std::string detail);
             std::string Trans_log(LogLine log);
