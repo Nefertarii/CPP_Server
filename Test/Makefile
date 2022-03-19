@@ -5,7 +5,6 @@ TARGET4 = test4
 TARGET5 = test5
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
-	formatter.o sink.o record.o core.o netlog.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test.o 
@@ -25,7 +24,7 @@ SOCKETS = ../Net/Sockets
 SERVER = ../Net/Server
 THREAD = ../Thread
 TIMER = ../Timer
-LOG = ../Log
+#LOG = ../Log
 #test
 test: $(OBJECTS1)
 	$(CC) $(FLAGS) -o $(TARGET1) $(OBJECTS1)
@@ -57,17 +56,7 @@ timerid.o : $(TIMER)/Head/timerid.h
 timerqueue.o : $(TIMER)/Head/timerqueue.h
 	$(CC) $(FLAGS) -c $(TIMER)/timerqueue.cpp
 #logging
-formatter.o : $(LOG)/Head/formatter.h
-	$(CC) $(FLAGS) -c $(LOG)/formatter.cpp
 
-sink.o : $(LOG)/Head/sink.h
-	$(CC) $(FLAGS) -c $(LOG)/sink.cpp
-
-record.o : $(LOG)/Head/record.h
-	$(CC) $(FLAGS) -c $(LOG)/record.cpp
-
-core.o : $(LOG)/Head/core.h
-	$(CC) $(FLAGS) -c $(LOG)/core.cpp
 #base
 thread.o : $(BASE)/Head/thread.h
 	$(CC) $(FLAGS) -c $(BASE)/thread.cpp
