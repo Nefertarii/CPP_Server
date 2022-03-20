@@ -2,7 +2,8 @@
 
 using namespace Wasi::Time;
 
-Clock::Clock():create_time(Nowtime_us()) {}
+Clock::Clock() :
+    create_time(Nowtime_us()) {}
 
 long Clock::Runtime_us() {
     long time_us = Nowtime_us();
@@ -28,18 +29,18 @@ long Clock::Nowtime_sec() { return Nowtime_us() / TimeStamp::microseconds_per_se
 
 std::string Clock::To_string(TimeStamp time) {
     char temp[40];
-    long time_sec = time.Microseconds_since_epoch() / TimeStamp::microseconds_per_second;
+    long time_sec      = time.Microseconds_since_epoch() / TimeStamp::microseconds_per_second;
     struct tm* time_tm = localtime(&time_sec);
-    strftime(temp, 40, "GMT: %b %m %Y %H:%M:%S ", time_tm);
+    strftime(temp, 40, "%b %m %Y %H:%M:%S ", time_tm);
     std::string str_time = temp;
     return str_time;
 }
 
 std::string Clock::To_string(long timestamp_us) {
     char temp[40];
-    long time_sec = timestamp_us / TimeStamp::microseconds_per_second;
+    long time_sec      = timestamp_us / TimeStamp::microseconds_per_second;
     struct tm* time_tm = localtime(&time_sec);
-    strftime(temp, 40, "GMT: %b %m %Y %H:%M:%S ", time_tm);
+    strftime(temp, 40, "%b %m %Y %H:%M:%S ", time_tm);
     std::string str_time = temp;
     return str_time;
 }

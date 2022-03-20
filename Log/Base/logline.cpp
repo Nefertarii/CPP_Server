@@ -20,24 +20,22 @@ std::string LogLine::process(std::string& str, char stop) {
 }
 
 LogLine::LogLine(std::string log) {
-    std::string tmp = process(log, ']');
-    level           = String_to_Level(tmp);
-    tmp             = process(log, ']');
-    date            = std::stol(tmp);
-    info            = process(log, ':');
-    detail          = log;
+    level  = process(log, ']'); // get level
+    date   = process(log, ']'); // get date
+    info   = process(log, ':'); // get info
+    detail = log;               // remaning detail
 }
 
-LogLine::LogLine(LogLevel level_, long date_,
+LogLine::LogLine(std::string level_, std::string date_,
                  std::string info_, std::string detail_) :
     level(level_),
-    data(date_),
+    date(date_),
     info(info_),
     detail(detail_) {}
 
-LogLevel& LogLine::Change_level() { return level; }
+std::string& LogLine::Change_level() { return level; }
 
-long& LogLine::Change_date() { return date; }
+std::string& LogLine::Change_date() { return date; }
 
 std::string& LogLine::Change_info() { return info; }
 

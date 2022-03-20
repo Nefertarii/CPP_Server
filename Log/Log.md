@@ -1,5 +1,5 @@
 ### 日志格式化
-#### LogFomatter
+#### LogFormatter
 
 ### 日志处理
 #### LogProcess
@@ -22,6 +22,8 @@
 #### TcpClient
 #### ThreadPool
 #### LogConfig
+日志设置的细分
 #### LogLevel
-#### LogContent
+日志等级
 #### LogLine
+日志内容的细分

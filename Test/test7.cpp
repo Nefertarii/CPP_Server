@@ -50,5 +50,6 @@ void func1() {
 }
 
 int main() {
-    func1();
+    // func1();
+    std::cout << "\033[5mred text\033[0m\n";
 }
