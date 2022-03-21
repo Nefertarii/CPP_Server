@@ -5,5 +5,5 @@ using namespace Wasi::Log;
 
 LogFormatter::LogFormatter() {}
 
-std::string LogFormatter::Format(LogLine logline) {
+std::string LogFormatter::Format(LogMsg logmsg) {
 }

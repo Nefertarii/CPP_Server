@@ -1,55 +1,26 @@
+#include "../Log/Base/Head/fontcolor.h"
 #include <iostream>
 #include <string>
 
 using namespace std;
 
-std::string process2(std::string& str, char stop) {
-    size_t size = str.size();
-    if (size == 0) { std::string(); }
-    size_t index = 0;
-    while (1) {
-        if (str[index] == stop) {
-            std::string tmp(str.begin(), str.begin() + index);
-            str.erase(str.begin(), str.begin() + index + 1);
-            return tmp;
-        }
-        index += 1;
-    }
-    return std::string();
-}
-
-string process(string& str, char stop) {
-    size_t size = str.size();
-    if (size == 0) { return std::string(); }
-    size_t index = 0;
-    while (1) {
-        index = str.find_first_of(stop);
-        if (index >= size) {
-            std::string tmp(str.begin() + 1, str.begin() + index);
-            str.erase(str.begin(), str.begin() + index + 1);
-            return tmp;
-        }
-        std::cout << "";
-        return std::string();
-    }
-    return std::string();
-}
-
-void func1() {
-    string log1 = "[] :";
-    cout << "process get:"
-         << process(log1, ']')
-         << "\tlog remaning:" << log1 << "\n";
-    cout << "process get:"
-         << process(log1, ']')
-         << "\tlog remaning:" << log1 << "\n";
-    cout << "process get:"
-         << process(log1, ':')
-         << "\tlog remaning:" << log1 << "\n";
-    // std::cout <<""
-}
-
 int main() {
     // func1();
-    std::cout << "\033[5mred text\033[0m\n";
+    std::cout << "RESET      " << RESET << "hello" << RESET << "\n";
+    std::cout << "BLACK      " << BLACK << "hello" << RESET << "\n";
+    std::cout << "RED        " << RED << "hello" << RESET << "\n";
+    std::cout << "GREEN      " << GREEN << "hello" << RESET << "\n";
+    std::cout << "YELLOW     " << YELLOW << "hello" << RESET << "\n";
+    std::cout << "BLUE       " << BLUE << "hello" << RESET << "\n";
+    std::cout << "MAGENTA    " << MAGENTA << "hello" << RESET << "\n";
+    std::cout << "CYAN       " << CYAN << "hello" << RESET << "\n";
+    std::cout << "WHITE      " << WHITE << "hello" << RESET << "\n";
+    std::cout << "BOLDBLACK  " << BOLDBLACK << "hello" << RESET << "\n";
+    std::cout << "BOLDRED    " << BOLDRED << "hello" << RESET << "\n";
+    std::cout << "BOLDGREEN  " << BOLDGREEN << "hello" << RESET << "\n";
+    std::cout << "BOLDYELLOW " << BOLDYELLOW << "hello" << RESET << "\n";
+    std::cout << "BOLDBLUE   " << BOLDBLUE << "hello" << RESET << "\n";
+    std::cout << "BOLDMAGENTA" << BOLDMAGENTA << "hello" << RESET << "\n";
+    std::cout << "BOLDCYAN   " << BOLDCYAN << "hello" << RESET << "\n";
+    std::cout << "BOLDWHITE  " << BOLDWHITE << "hello" << RESET << "\n";
 }

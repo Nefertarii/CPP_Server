@@ -1,8 +1,8 @@
 #ifndef LOG_FORMATTER_H_
 #define LOG_FORMATTER_H_
 
-#include "Base/Head/loglevel.h"
-#include "Base/Head/logline.h"
+#include "loglevel.h"
+#include "logmsg.h"
 #include <Timer/Head/clock.h>
 
 namespace Wasi {
@@ -14,9 +14,8 @@ private:
 
 public:
     LogFormatter();
-    std::string Format(LogLine logline);
+    std::string Format(LogMsg logmsg);
     LogLevel Format_level(std::string level);
-    
     ~LogFormatter();
 };
 
