@@ -10,9 +10,10 @@ namespace Log {
 
 class LogSink {
 public:
-    virtual Log(LogMsg logmsg) = 0;
-    virtual Flush()            = 0;
-    virtual ~LogSink()         = default;
+    virtual LogSink()                  = default;
+    virtual void Logger(LogMsg logmsg) = 0;
+    virtual void Flush()               = 0;
+    virtual ~LogSink()                 = 0;
 };
 
 }

@@ -18,18 +18,20 @@ public:
         OUTFILE,
         OUTNETWORK
     };
-
-private:
     LogOutput output;
     std::string filedir;
     std::string netaddr;
     std::vector<LogLevel> filter_in;
     std::vector<LogLevel> filter_out;
-    std::vector<LogLevel> output_immed;
-    std::map<LogLevel, std::string> consoles_color;
 
-public:
-    LogConfig();
+    LogConfig() :
+        output(LogOutput::OUTINIT),
+        filedir("log1.txt"),
+        netaddr("127.0.0.1:9021") {
+        filter_in.clear();
+        filter_out.clear();
+    }
+    /*
     void Set_output(LogOutput location);
     void Set_filedir(std::string filedir_);
     void Set_netaddr(std::string netaddr_);
@@ -47,8 +49,8 @@ public:
     bool Find_filter_in(LogLevel level) const;
     bool Find_filter_out(LogLevel level) const;
     bool Find_output_immed(LogLevel level) const;
-
     ~LogConfig();
+    */
 };
 
 }

@@ -1,4 +1,7 @@
 ## 随便写写
+2322-3-23
+补充了formatter,同时参照spdlog的输出格式,大幅修改了logconfig和logmsg使得整体调用更合理  
+
 2022-3-22  
 完成了Log的大部分操作,剩下的sink和logging只需整合一下操作即可  
 新添加了异常处理  

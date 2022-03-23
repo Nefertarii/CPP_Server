@@ -1,3 +1,4 @@
+/*
 #include "Head/logconfig.h"
 #include "Head/fontcolor.h"
 #include "Head/loglevel.h"
@@ -5,27 +6,7 @@
 
 using namespace Wasi::Log;
 
-/*
-    std::vector<LogLevel> filter_in;
-    std::vector<LogLevel> filter_out;
-    std::vector<LogLevel> output_immed;
-*/
-
 LogConfig::LogConfig() :
-    output(LogOutput::OUTINIT),
-    filedir("log1.txt"),
-    netaddr("127.0.0.1:9021") {
-    filter_in.clear();
-    filter_out.clear();
-    output_immed.clear();
-    consoles_color[LogLevel::UNINITIALIZED] = WHITE;
-    consoles_color[LogLevel::NONE]          = WHITE;
-    consoles_color[LogLevel::DBG]           = BLUE;
-    consoles_color[LogLevel::INFO]          = BLUE;
-    consoles_color[LogLevel::WARN]          = YELLOW;
-    consoles_color[LogLevel::ERR]           = RED;
-    consoles_color[LogLevel::CRITICAL]      = RED;
-    consoles_color[LogLevel::FATAL]         = BOLDRED;
 }
 
 void LogConfig::Set_output(LogOutput location) { output = location; }
@@ -100,3 +81,4 @@ bool LogConfig::Find_output_immed(LogLevel level) const {
 }
 
 LogConfig::~LogConfig();
+*/
