@@ -8,27 +8,26 @@
 namespace Wasi {
 namespace Log {
 
-class LogFormatter {
-public:
-    struct LogFormat {
-        bool print_thread_id;
-        bool print_source_location;
-        const char* data_format;
-        std::map<LogLevel, std::string> consoles_color;
-    };
+struct LogFormat {
+    bool print_thread_id;
+    bool print_source_location;
+    const char* data_format;
+    std::map<LogLevel, std::string> consoles_color;
+    LogFormat();
+};
 
+class LogFormatter {
 private:
     std::string tmp_logmsg;
     LogFormat log_format;
-    void process_date(long timestamp_ms, const char* format);
+    std::string process_date(long timestamp_ms, const char* format);
 
 public:
-    // [Thread:1000][FILE,FUNC,LINE][2022-3-23 21:00:00.000] print log
+    // [Thread:1000][FILE,FUNC,LINE][2022-3-23 21:00:00.000][LEVEL] print log
     LogFormatter();
     std::string Format(LogMsg& logmsg);
     void Format(LogMsg& logmsg, std::string& dest);
-    void Set_format();
-    void Set_consoles_color(LogLevel level, std::string color);
+    void Set_format(LogFormat log_format_);
     ~LogFormatter();
 };
 

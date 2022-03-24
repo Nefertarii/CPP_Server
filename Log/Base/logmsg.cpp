@@ -1,4 +1,5 @@
 #include "Head/logmsg.h"
+#include "../../Class/exception.h"
 
 using namespace Wasi;
 using namespace Wasi::Log;
@@ -14,8 +15,7 @@ std::string LogMsg::process(std::string& str, char stop) {
             str.erase(str.begin(), str.begin() + index + 1);
             return tmp;
         }
-        std::cout << "LogMsg::process LogMsg input error\n";
-        return std::string();
+        throw Exception("LogMsg::process() LogMsg input error \n");
     }
     return std::string();
 }
@@ -25,14 +25,13 @@ LogMsg::LogMsg(std::string log) :
     thread_id(0),
     source_location(std::string()),
     formatted_msg(std::string()) {
-    date   = process(log, ']'); // get date
-    level  = process(log, ']'); // get level
-    detail = log;               // remaning detail
+    date   = stol(process(log, ']')); // get date
+    level  = process(log, ']');       // get level
+    detail = log;                     // remaning detail
 }
 
-LogMsg::LogMsg(int thread_id_, std::string date,
-               std::string level_, std::string detail_,
-               std::string source_location_) :
+LogMsg::LogMsg(std::string date_, std::string level_, std::string detail_,
+               int thread_id_, std::string source_location_) :
     formatted(false),
     thread_id(thread_id_),
     level(level_),
@@ -42,12 +41,11 @@ LogMsg::LogMsg(int thread_id_, std::string date,
     date = std::stol(date_);
 }
 
-LogMsg::LogMsg(int thread_id_, long timestamp_ms,
-               LogLevel level_, const char* detail_,
-               const char* source_location_) :
+LogMsg::LogMsg(long timestamp_ms, LogLevel level_, const char* detail_,
+               int thread_id_, const char* source_location_) :
     formatted(false),
-    date(timestamp_ms),
     thread_id(thread_id_),
+    date(timestamp_ms),
     detail(detail_),
     source_location(source_location_),
     formatted_msg(std::string()) {
@@ -59,11 +57,11 @@ void LogMsg::Format(std::string formatted_msg_) {
     formatted     = true;
 }
 
-std::string& LogMsg::Get_thread_id() { return thread_id; }
+int& LogMsg::Get_thread_id() { return thread_id; }
+
+long& LogMsg::Get_date() { return date; }
 
 std::string& LogMsg::Get_level() { return level; }
-
-std::string& LogMsg::Get_date() { return date; }
 
 std::string& LogMsg::Get_detail() { return detail; }
 

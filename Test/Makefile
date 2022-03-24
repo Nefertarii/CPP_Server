@@ -3,6 +3,7 @@ TARGET2 = test2
 TARGET3 = test3
 TARGET4 = test4
 TARGET5 = test5
+TARGET6 = test7
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
@@ -15,6 +16,8 @@ OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
+OBJECTS6 = filehandler.o logformatter.o loglevel.o logmsg.o \
+	stdsink.o clock.o timestamp.o test7.o
 FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
 HTTP = ../Net/Http
@@ -24,7 +27,9 @@ SOCKETS = ../Net/Sockets
 SERVER = ../Net/Server
 THREAD = ../Thread
 TIMER = ../Timer
-#LOG = ../Log
+LOG = ../Log/Base
+SINK = ../Log/Sink
+
 #test
 test: $(OBJECTS1)
 	$(CC) $(FLAGS) -o $(TARGET1) $(OBJECTS1)
@@ -40,6 +45,10 @@ test4: $(OBJECTS4)
 
 test5: $(OBJECTS5)
 	$(CC) $(FLAGS) -o $(TARGET5) $(OBJECTS5)
+
+test7: $(OBJECTS6)
+	$(CC) $(FLAGS) -o $(TARGET6) $(OBJECTS6)
+
 #timer
 clock.o : $(TIMER)/Head/clock.h
 	$(CC) $(FLAGS) -c $(TIMER)/clock.cpp
@@ -55,8 +64,24 @@ timerid.o : $(TIMER)/Head/timerid.h
 
 timerqueue.o : $(TIMER)/Head/timerqueue.h
 	$(CC) $(FLAGS) -c $(TIMER)/timerqueue.cpp
-#logging
+#log
+filehandler.o : $(LOG)/Head/filehandler.h
+	$(CC) $(FLAGS) -c $(LOG)/filehandler.cpp
 
+logformatter.o : $(LOG)/Head/logformatter.h $(LOG)/Head/fontcolor.h
+	$(CC) $(FLAGS) -c $(LOG)/logformatter.cpp
+
+loglevel.o : $(LOG)/Head/loglevel.h
+	$(CC) $(FLAGS) -c $(LOG)/loglevel.cpp
+
+logmsg.o : $(LOG)/Head/logmsg.h
+	$(CC) $(FLAGS) -c $(LOG)/logmsg.cpp
+
+logsink.o : $(LOG)/Head/logsink.h
+	$(CC) $(FLAGS) -c $(LOG)/logsink.cpp
+#sink
+stdsink.o : $(SINK)/Head/stdsink.h
+	$(CC) $(FLAGS) -c $(SINK)/stdsink.cpp
 #base
 thread.o : $(BASE)/Head/thread.h
 	$(CC) $(FLAGS) -c $(BASE)/thread.cpp
@@ -120,6 +145,9 @@ test4.o : test4.cpp
 
 test5.o : test5.cpp
 	$(CC) $(FLAGS) -c test5.cpp
+
+test7.o : test7.cpp
+	$(CC) $(FLAGS) -c test7.cpp
 
 clean : 
 	-rm *.o

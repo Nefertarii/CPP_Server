@@ -5,6 +5,20 @@
 using namespace Wasi;
 using namespace Wasi::Log;
 
+LogFormat::LogFormat() {
+    print_thread_id                         = false;
+    print_source_location                   = false;
+    data_format                             = "%Y-%m-%d %H:%M:%S";
+    consoles_color[LogLevel::UNINITIALIZED] = WHITE;
+    consoles_color[LogLevel::NONE]          = WHITE;
+    consoles_color[LogLevel::DBG]           = BLUE;
+    consoles_color[LogLevel::INFO]          = BLUE;
+    consoles_color[LogLevel::WARN]          = YELLOW;
+    consoles_color[LogLevel::ERR]           = RED;
+    consoles_color[LogLevel::CRITICAL]      = RED;
+    consoles_color[LogLevel::FATAL]         = BOLDRED;
+}
+
 std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
     long timestamp_sec = timestamp_ms / 1000;
     int time_ms        = timestamp_ms % 1000;
@@ -15,19 +29,7 @@ std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
     return str_time + "." + std::to_string(time_ms);
 }
 
-LogFormatter::LogFormatter() {
-    log_format.print_thread_id                         = false;
-    log_format.print_source_location                   = false;
-    log_format.data_format                             = "%Y-%m-%d %H:%M:%S";
-    log_format.consoles_color[LogLevel::UNINITIALIZED] = WHITE;
-    log_format.consoles_color[LogLevel::NONE]          = WHITE;
-    log_format.consoles_color[LogLevel::DBG]           = BLUE;
-    log_format.consoles_color[LogLevel::INFO]          = BLUE;
-    log_format.consoles_color[LogLevel::WARN]          = YELLOW;
-    log_format.consoles_color[LogLevel::ERR]           = RED;
-    log_format.consoles_color[LogLevel::CRITICAL]      = RED;
-    log_format.consoles_color[LogLevel::FATAL]         = BOLDRED;
-}
+LogFormatter::LogFormatter() {}
 
 std::string LogFormatter::Format(LogMsg& logmsg) {
     tmp_logmsg.clear();
@@ -41,6 +43,11 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
         tmp_logmsg += logmsg.Get_source_location();
         tmp_logmsg += "]";
     }
+
+    tmp_logmsg += "[";
+    tmp_logmsg += log_format.consoles_color[String_to_Level(logmsg.Get_level())];
+    tmp_logmsg += logmsg.Get_level();
+    tmp_logmsg += "]";
     tmp_logmsg += "[";
     tmp_logmsg += process_date(logmsg.Get_date(), log_format.data_format);
     tmp_logmsg += "]";
@@ -52,3 +59,9 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
 void LogFormatter::Format(LogMsg& logmsg, std::string& dest) {
     dest = Format(logmsg);
 }
+
+void LogFormatter::Set_format(LogFormat log_format_) {
+    log_format = log_format_;
+}
+
+LogFormatter::~LogFormatter() {}

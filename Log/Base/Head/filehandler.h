@@ -1,7 +1,7 @@
 #ifndef LOG_FILEHANDLER_H_
 #define LOG_FILEHANDLER_H_
 
-#include "Class/noncopyable.h"
+#include "../../../Class/noncopyable.h"
 //#include <filesystem>
 #include <fstream>
 #include <functional>
@@ -11,10 +11,10 @@ namespace Wasi {
 namespace Log {
 
 struct FileEvents {
-    std::function<void*(std::string& filename)> before_open;
-    std::function<void*(std::string& filename, std::ifstream* file_stream)> after_open;
-    std::function<void*(std::string& filename, std::ifstream* file_stream)> before_close;
-    std::function<void*(std::string& filename)> after_close;
+    std::function<void(std::string& filename)> before_open;
+    std::function<void(std::string& filename, std::fstream* file_stream)> after_open;
+    std::function<void(std::string& filename, std::fstream* file_stream)> before_close;
+    std::function<void(std::string& filename)> after_close;
     FileEvents() :
         before_open(nullptr),
         after_open(nullptr),

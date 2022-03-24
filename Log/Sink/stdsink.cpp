@@ -1,17 +1,28 @@
 #include "Head/stdsink.h"
-#include "Head/fontcolor.h"
+#include "../Base/Head/fontcolor.h"
 #include <iostream>
 
 using namespace Wasi::Log;
 
 void StdSink::Stdout() {
-    // std::cout << sink_settings->consoles_color[]
+    std::lock_guard<std::mutex> lk(mtx);
+    std::cout << logline;
+    logline.clear();
+    ++logcount;
 }
 
-StdSink::StdSink(LogConfig* sink_settings_);
+StdSink::StdSink(LogFormat logformat) {
+    formatter.Set_format(logformat);
+}
 
-void StdSink::Logger(const LogMsg& logmsg);
+void StdSink::Logger(LogMsg& logmsg) {
+    logline = formatter.Format(logmsg);
+}
 
-void StdSink::Flush();
+void StdSink::Flush() {
+    std::cout << "flust" << std::endl;
+}
 
-StdSink::~StdSink();
+StdSink::~StdSink() {
+    std::cout << "Total print " << logcount << " log message\n";
+}

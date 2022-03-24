@@ -3,7 +3,6 @@
 
 #include "../../../Class/noncopyable.h"
 #include "../../Base/Head/filehandler.h"
-#include "../../Base/Head/logconfig.h"
 #include "../../Base/Head/logformatter.h"
 #include "logsink.h"
 #include <atomic>
@@ -15,16 +14,17 @@ namespace Log {
 class StdSink : public LogSink,
                 Noncopyable {
 private:
-    LogConfig* sink_settings;
     LogFormatter formatter;
     std::string logline;
     std::atomic<uint> logcount;
+    LogLevel filter_in;
+    LogLevel fileter_out;
     std::mutex mtx;
     void Stdout();
 
 public:
-    StdSink(LogConfig* sink_settings_);
-    void Logger(const LogMsg& logmsg);
+    StdSink(LogFormat logformat);
+    void Logger(LogMsg& logmsg);
     void Flush();
     ~StdSink();
 };
