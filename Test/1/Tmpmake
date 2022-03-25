@@ -1,0 +1,50 @@
+CC = g++
+CPPFLAGS = -pthread -std=c++17 -Og -Wall -g
+OBJECTS = test7.o filehandler.o logformatter.o loglevel.o logmsg.o\
+	stdsink.o clock.o timestamp.o
+LOGBASE = ../Log/Base
+LOGSINK = ../Log/Sink
+TIMER = ../Timer
+CLASS = ../Class
+
+test7 : $(OBJECTS)
+	$(CC) -o test7 $(OBJECTS)
+
+%.d: %.c
+	@set -e; \
+	rm -f $@; \
+	$(CC) -MM $(CPPFLAGS) $< > $@.$$$$; \
+	sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; 
+#	rm -f $@.$$$$
+
+test7.o test7.d : test7.cpp $(CLASS)/exception.h $(LOGBASE)/Head/fontcolor.h \
+	$(LOGSINK)/Head/stdsink.h $(TIMER)/Head/clock.h $(CLASS)/exception.h
+	$(CC) $(CPPFLAGS) -c test7.cpp
+
+filehandler.o : $(LOGBASE)/Head/filehandler.h
+	$(CC) $(CPPFLAGS) -c $(LOGBASE)/filehandler.cpp
+
+logmsg.o : $(LOGBASE)/Head/logmsg.h $(LOGBASE)/Head/loglevel.h
+	$(CC) $(CPPFLAGS) -c $(LOGBASE)/logmsg.cpp
+
+logformatter.o : $(LOGBASE)/Head/logmsg.h $(LOGBASE)/Head/logformatter.h
+	$(CC) $(CPPFLAGS) -c $(LOGBASE)/logformatter.cpp
+
+loglevel.o : $(LOGBASE)/Head/loglevel.h
+	$(CC) $(CPPFLAGS) -c $(LOGBASE)/loglevel.cpp
+
+stdsink.o : $(CLASS)/noncopyable.h $(LOGBASE)/Head/filehandler.h \
+	$(LOGBASE)/Head/logformatter.h $(LOGSINK)/Head/stdsink.h
+	$(CC) $(CPPFLAGS) -c $(LOGSINK)/stdsink.cpp
+
+clock.o : $(TIMER)/Head/timestamp.h $(TIMER)/Head/clock.h
+	$(CC) $(CPPFLAGS) -c $(TIMER)/clock.cpp
+
+timestamp.o : $(TIMER)/Head/timestamp.h
+	$(CC) $(CPPFLAGS) -c $(TIMER)/timestamp.cpp
+
+.PHONY : clean cleanall
+clean : 
+	-rm test7 *.o
+cleanall:
+	-rm *.o 

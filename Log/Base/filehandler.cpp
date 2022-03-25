@@ -18,9 +18,9 @@ void FileHandler::Open(std::string file_name_, bool trunc) {
     }
     for (uint i = 0; i < open_tries; i++) {
         if (trunc) {
-            file_stream.open(file_name.c_str(), std::ios::trunc | std::ios::binary | std::ios::out);
+            file_stream.open(file_name.c_str(), std::ios::trunc | std::ios::binary | std::ios::in | std::ios::out);
         } else {
-            file_stream.open(file_name.c_str(), std::ios::binary | std::ios::out);
+            file_stream.open(file_name.c_str(), std::ios::ate | std::ios::binary | std::ios::in | std::ios::out);
         }
         if (file_stream) {
             if (file_events.after_open) {
@@ -30,12 +30,12 @@ void FileHandler::Open(std::string file_name_, bool trunc) {
         }
         continue;
     }
-    throw Exception("FileHandler() Failed open " + file_name + " for writing.");
+    throw Exception("FileHandler() Failed open " + file_name + " for writing.\n");
 }
 
 void FileHandler::Reopen(bool trunc) {
     if (file_name.empty()) {
-        throw Exception("FileHandler::Reopen() filename is empty.");
+        throw Exception("FileHandler::Reopen() filename is empty.\n");
     }
     Open(file_name, trunc);
 }
@@ -48,7 +48,7 @@ void FileHandler::Write(const std::string& buf) {
     if (file_stream.write(buf.c_str(), buf.size())) {
         return;
     }
-    throw Exception("FileHandler::Write() Failed Write " + file_name + "");
+    throw Exception("FileHandler::Write() Failed Write " + file_name + "\n");
 }
 
 void FileHandler::Close() {

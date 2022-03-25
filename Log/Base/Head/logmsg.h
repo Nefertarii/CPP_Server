@@ -16,11 +16,11 @@ private:
     std::string detail;
     std::string source_location; // file func line
     std::string formatted_msg;
-    std::string process(std::string& str, char stop);
-    std::string process(long timestamp_ms);
+    std::string Process(std::string& str, char stop);
+    long Process(std::string& date);
 
 public:
-    LogMsg(std::string log); //[date][level] detail
+    LogMsg(std::string log); //[date][level]detail
     LogMsg(std::string date_, std::string level_, std::string detail_,
            int thread_id_ = 0, std::string source_location_ = "");
     LogMsg(long timestamp_ms, LogLevel level_, const char* detail_,

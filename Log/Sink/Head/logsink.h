@@ -1,12 +1,13 @@
 #ifndef LOG_SINK_H_
 #define LOG_SINK_H_
 
-#include "../../Base/Head/logmsg.h"
 #include <mutex>
 #include <string>
 
 namespace Wasi {
 namespace Log {
+
+class LogMsg;
 
 class LogSink {
 public:

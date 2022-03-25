@@ -1,7 +1,6 @@
 #ifndef LOG_FORMATTER_H_
 #define LOG_FORMATTER_H_
 
-#include "loglevel.h"
 #include "logmsg.h"
 #include <map>
 

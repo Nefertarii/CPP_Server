@@ -3,22 +3,29 @@
 namespace Wasi {
 namespace Log {
 
-LogLevel String_to_Level(std::string name) {
-    if (name == "uninitialized" || name == "uinit") {
+LogLevel String_to_Level(std::string level) {
+    for (uint i = 0; i < level.size(); ++i) {
+        if (65 <= level[i]) {
+            if (level[i] <= 90) {
+                level[i] += 32;
+            }
+        }
+    }
+    if (level == "uninitialized" || level == "uinit") {
         return LogLevel::UNINITIALIZED;
-    } else if (name == "none") {
+    } else if (level == "none") {
         return LogLevel::NONE;
-    } else if (name == "debug") {
+    } else if (level == "debug") {
         return LogLevel::DBG;
-    } else if (name == "info") {
+    } else if (level == "info") {
         return LogLevel::INFO;
-    } else if (name == "warning" || name == "warn") {
+    } else if (level == "warning" || level == "warn") {
         return LogLevel::WARN;
-    } else if (name == "error" || name == "err") {
+    } else if (level == "error" || level == "err") {
         return LogLevel::ERR;
-    } else if (name == "critical") {
+    } else if (level == "critical") {
         return LogLevel::CRITICAL;
-    } else if (name == "fatal") {
+    } else if (level == "fatal") {
         return LogLevel::FATAL;
     } else {
         return LogLevel::UNINITIALIZED;

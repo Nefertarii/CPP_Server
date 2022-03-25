@@ -1,8 +1,6 @@
 #ifndef LOG_FILEHANDLER_H_
 #define LOG_FILEHANDLER_H_
 
-#include "../../../Class/noncopyable.h"
-//#include <filesystem>
 #include <fstream>
 #include <functional>
 #include <string>

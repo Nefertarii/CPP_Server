@@ -1,23 +1,60 @@
 #include "Head/logmsg.h"
 #include "../../Class/exception.h"
+#include <iomanip>
+
+#include <iostream>
 
 using namespace Wasi;
 using namespace Wasi::Log;
 
-std::string LogMsg::process(std::string& str, char stop) {
+// Find char stop
+std::string LogMsg::Process(std::string& str, char stop) {
     size_t size = str.size();
     if (size == 0) { return std::string(); }
     size_t index = 0;
     while (1) {
         index = str.find_first_of(stop);
-        if (index >= size) {
+        if (index <= size) {
             std::string tmp(str.begin() + 1, str.begin() + index);
             str.erase(str.begin(), str.begin() + index + 1);
             return tmp;
         }
-        throw Exception("LogMsg::process() LogMsg input error \n");
+        throw Exception("LogMsg::process() LogMsg " + str + " input error\n");
     }
-    return std::string();
+}
+
+std::string split_date(std::string& str) {
+    if (str.size() == 0) {
+        return std::string();
+    }
+    for (uint i = 0; i < str.size(); i++) {
+        if (48 <= str[i] && str[i] <= 57) {
+            continue;
+        }
+        std::string ret(str.begin(), str.begin() + i);
+        str.erase(str.begin(), str.begin() + i + 1);
+        return ret;
+    }
+    if (!str.empty()) {
+        std::string ret(str);
+        str.clear();
+        return ret;
+    }
+    return str;
+}
+
+long LogMsg::Process(std::string& date) {
+    std::tm t   = {};
+    t.tm_year   = std::stoi(split_date(date)) - 1900;
+    t.tm_mon    = std::stoi(split_date(date)) - 1;
+    t.tm_mday   = std::stoi(split_date(date));
+    t.tm_hour   = std::stoi(split_date(date));
+    t.tm_min    = std::stoi(split_date(date));
+    t.tm_sec    = std::stoi(split_date(date));
+    int tm_msec = std::stoi(split_date(date));
+    return mktime(&t) * 1000 + tm_msec;
+    //%Y-%m-%d %H:%M:%S.%ms
+    // return 0;
 }
 
 LogMsg::LogMsg(std::string log) :
@@ -25,9 +62,13 @@ LogMsg::LogMsg(std::string log) :
     thread_id(0),
     source_location(std::string()),
     formatted_msg(std::string()) {
-    date   = stol(process(log, ']')); // get date
-    level  = process(log, ']');       // get level
-    detail = log;                     // remaning detail
+    std::string tmp_date = Process(log, ']'); // get date
+    date                 = Process(tmp_date);
+    level                = Process(log, ']'); // get level
+    detail               = log;               // remaning detail
+    if (detail[detail.size() - 1] == '\n') {
+        detail.erase(detail.end() - 1);
+    }
 }
 
 LogMsg::LogMsg(std::string date_, std::string level_, std::string detail_,
@@ -38,7 +79,7 @@ LogMsg::LogMsg(std::string date_, std::string level_, std::string detail_,
     detail(detail_),
     source_location(source_location_),
     formatted_msg(std::string()) {
-    date = std::stol(date_);
+    date = Process(date_);
 }
 
 LogMsg::LogMsg(long timestamp_ms, LogLevel level_, const char* detail_,

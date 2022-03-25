@@ -17,7 +17,7 @@ enum class LogLevel : uint32_t {
     FATAL         = 0x7fffffff, // fatal
 };
 
-LogLevel String_to_Level(std::string name);
+LogLevel String_to_Level(std::string level);
 std::string Level_to_string(LogLevel level);
 // std::ostream &operator<<(std::ostream &os, LogLevel level);
 
