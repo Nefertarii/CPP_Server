@@ -1,14 +1,18 @@
 #include "Head/filehandler.h"
 #include "../../Class/exception.h"
+#include <chrono>
 #include <cstring>
 #include <iostream>
 #include <sys/stat.h>
+#include <thread>
 
 using namespace Wasi;
 using namespace Wasi::Log;
 
 FileHandler::FileHandler(const FileEvents& filevents) :
-    file_events(filevents) {}
+    file_events(filevents),
+    open_tries(5),
+    open_interval(1000) {}
 
 void FileHandler::Open(std::string file_name_, bool trunc) {
     Close();
@@ -18,7 +22,7 @@ void FileHandler::Open(std::string file_name_, bool trunc) {
     }
     for (uint i = 0; i < open_tries; i++) {
         if (trunc) {
-            file_stream.open(file_name.c_str(), std::ios::trunc | std::ios::binary | std::ios::in | std::ios::out);
+            file_stream.open(file_name.c_str(), std::ios::trunc | std::ios::binary | std::ios::out);
         } else {
             file_stream.open(file_name.c_str(), std::ios::ate | std::ios::binary | std::ios::in | std::ios::out);
         }
@@ -28,6 +32,7 @@ void FileHandler::Open(std::string file_name_, bool trunc) {
             }
             return;
         }
+        std::this_thread::sleep_for(std::chrono::milliseconds(open_interval));
         continue;
     }
     throw Exception("FileHandler() Failed open " + file_name + " for writing.\n");
@@ -38,6 +43,15 @@ void FileHandler::Reopen(bool trunc) {
         throw Exception("FileHandler::Reopen() filename is empty.\n");
     }
     Open(file_name, trunc);
+}
+
+void FileHandler::Create(std::string file_name_) {
+    file_name = file_name_;
+    file_stream.open(file_name, std::ios::binary | std::ios::in | std::ios::out);
+    if (!file_stream) {
+        file_stream.open(file_name, std::ios::trunc | std::ios::binary | std::ios::out);
+        file_stream.close();
+    }
 }
 
 void FileHandler::Flush() {
@@ -63,9 +77,9 @@ void FileHandler::Close() {
     }
 }
 
-int FileHandler::Get_file_size() {
+long int FileHandler::Get_file_size() {
     struct stat stat_buf;
-    size_t size = stat(file_name.c_str(), &stat_buf);
+    int size = stat(file_name.c_str(), &stat_buf);
     return size == 0 ? stat_buf.st_size : -1;
 }
 

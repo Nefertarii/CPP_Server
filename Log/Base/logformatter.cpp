@@ -6,6 +6,7 @@ using namespace Wasi;
 using namespace Wasi::Log;
 
 LogFormat::LogFormat() {
+    print_color                             = true;
     print_thread_id                         = false;
     print_source_location                   = false;
     data_format                             = "%Y-%m-%d %H:%M:%S";
@@ -21,7 +22,7 @@ LogFormat::LogFormat() {
 
 std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
     long timestamp_sec = timestamp_ms / 1000;
-    int time_ms        = timestamp_ms % 1000;
+    long time_ms       = timestamp_ms % 1000;
     char time[40];
     struct tm* time_tm = localtime(&timestamp_sec);
     strftime(time, 40, format, time_tm);
@@ -43,16 +44,21 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
         tmp_logmsg += logmsg.Get_source_location();
         tmp_logmsg += "]";
     }
-    tmp_logmsg += log_format.consoles_color[String_to_Level(logmsg.Get_level())];
+    if (log_format.print_color) {
+        tmp_logmsg += log_format.consoles_color[String_to_Level(logmsg.Get_level())];
+    }
     tmp_logmsg += "[";
     tmp_logmsg += logmsg.Get_level();
     tmp_logmsg += "]";
-    tmp_logmsg += RESET;
+    if (log_format.print_color) {
+        tmp_logmsg += RESET;
+    }
     tmp_logmsg += "[";
     tmp_logmsg += process_date(logmsg.Get_date(), log_format.data_format);
     tmp_logmsg += "]";
     tmp_logmsg += logmsg.Get_detail();
     tmp_logmsg += "\n";
+    logmsg.Format(tmp_logmsg);
     return tmp_logmsg;
 }
 

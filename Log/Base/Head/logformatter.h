@@ -8,6 +8,7 @@ namespace Wasi {
 namespace Log {
 
 struct LogFormat {
+    bool print_color;
     bool print_thread_id;
     bool print_source_location;
     const char* data_format;

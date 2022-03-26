@@ -1,13 +1,13 @@
 #include "Head/buffer.h"
 #include <algorithm>
 #include <assert.h>
-#include <sys/uio.h>
 #include <iostream>
+#include <sys/uio.h>
 
 using namespace Wasi::Base;
 
 const char Buffer::CRLF[] = "\r\n";
-//const size_t Buffer::initial_size = 1024;
+// const size_t Buffer::initial_size = 1024;
 
 Buffer::Buffer() :
     index(0),
@@ -42,13 +42,12 @@ size_t Buffer::Remaining() const { return buffer.length() - index; }
 
 Buffer::BufferState Buffer::State() const { return state; }
 
-void Buffer::Add_index(int num) {
-    int remaining = buffer.length() - index;
+void Buffer::Add_index(size_t num) {
+    size_t remaining = buffer.length() - index;
     assert(num <= remaining);
     if (num < remaining) {
         index += num;
-    }
-    else {
+    } else {
         Init();
     }
 }
@@ -71,7 +70,7 @@ Buffer Buffer::operator+(const Buffer& rhs) {
 
 Buffer& Buffer::operator=(const Buffer& rhs) {
     buffer = rhs.buffer;
-    index = rhs.index;
+    index  = rhs.index;
     return *this;
 }
 
@@ -89,10 +88,10 @@ ssize_t Buffer::Read_fd(int fd, int* tmp_errno) {
     if (state == READ) {
         iovec vec;
         char extrabuf[65536];
-        vec.iov_base = extrabuf;
-        vec.iov_len = sizeof(extrabuf);
-        const int iovcnt = 1;
-        const int read = readv(fd, &vec, iovcnt);
+        vec.iov_base       = extrabuf;
+        vec.iov_len        = sizeof(extrabuf);
+        const int iovcnt   = 1;
+        const ssize_t read = readv(fd, &vec, iovcnt);
         if (read < 0) {
             *tmp_errno = errno;
             return 0;

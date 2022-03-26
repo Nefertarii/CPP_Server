@@ -20,6 +20,8 @@ private:
     long Process(std::string& date);
 
 public:
+    LogMsg();
+    LogMsg(const LogMsg& other);
     LogMsg(std::string log); //[date][level]detail
     LogMsg(std::string date_, std::string level_, std::string detail_,
            int thread_id_ = 0, std::string source_location_ = "");
@@ -32,6 +34,7 @@ public:
     std::string& Get_detail();
     std::string& Get_source_location();
     std::string Output() const;
+    LogMsg& operator=(const LogMsg& other);
     ~LogMsg();
 };
 

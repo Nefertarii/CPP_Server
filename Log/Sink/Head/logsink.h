@@ -12,7 +12,7 @@ class LogMsg;
 class LogSink {
 public:
     LogSink()                           = default;
-    virtual void Logger(LogMsg& logmsg) = 0;
+    virtual void Logger(LogMsg logmsg) = 0;
     virtual void Flush()                = 0;
     virtual ~LogSink()                  = default;
 };

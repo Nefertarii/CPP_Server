@@ -57,6 +57,19 @@ long LogMsg::Process(std::string& date) {
     // return 0;
 }
 
+LogMsg::LogMsg() :
+    formatted(false),
+    thread_id(0),
+    date(0),
+    level(std::string()),
+    detail(std::string()),
+    source_location(std::string()),
+    formatted_msg(std::string()) {}
+
+LogMsg::LogMsg(const LogMsg& other) {
+    operator=(other);
+}
+
 LogMsg::LogMsg(std::string log) :
     formatted(false),
     thread_id(0),
@@ -111,6 +124,17 @@ std::string& LogMsg::Get_source_location() { return source_location; }
 std::string LogMsg::Output() const {
     if (formatted) { return formatted_msg; }
     return std::string();
+}
+
+LogMsg& LogMsg::operator=(const LogMsg& other) {
+    this->formatted       = other.formatted;
+    this->thread_id       = other.thread_id;
+    this->date            = other.date;
+    this->level           = other.level;
+    this->detail          = other.detail;
+    this->source_location = other.source_location;
+    this->formatted_msg   = other.formatted_msg;
+    return *this;
 }
 
 LogMsg::~LogMsg() {}

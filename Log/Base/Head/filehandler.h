@@ -27,17 +27,18 @@ private:
     std::string file_name;
     std::fstream file_stream;
     uint open_tries;
-    uint open_interval;
+    uint open_interval; // ms
 
 public:
     FileHandler() = default;
     FileHandler(const FileEvents& filevents);
     void Open(std::string file_name_, bool trunc);
     void Reopen(bool trunc);
+    void Create(std::string file_name_);
     void Flush();
     void Write(const std::string& buf);
     void Close();
-    int Get_file_size();
+    long int Get_file_size();
     std::string Get_file_name() const;
     ~FileHandler();
 };

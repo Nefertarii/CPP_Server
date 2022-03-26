@@ -17,7 +17,7 @@ OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
 OBJECTS6 = filehandler.o logformatter.o loglevel.o logmsg.o \
-	stdsink.o clock.o timestamp.o test7.o
+	stdsink.o filesink.o clock.o timestamp.o test7.o
 FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
 HTTP = ../Net/Http
@@ -82,6 +82,10 @@ logsink.o : $(LOG)/Head/logsink.h
 #sink
 stdsink.o : $(SINK)/Head/stdsink.h
 	$(CC) $(FLAGS) -c $(SINK)/stdsink.cpp
+
+filesink.o : $(SINK)/Head/filesink.h
+	$(CC) $(FLAGS) -c $(SINK)/filesink.cpp
+
 #base
 thread.o : $(BASE)/Head/thread.h
 	$(CC) $(FLAGS) -c $(BASE)/thread.cpp

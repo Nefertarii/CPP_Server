@@ -2,7 +2,6 @@
 #define STD_SINK_H_
 
 #include "../../../Class/noncopyable.h"
-#include "../../Base/Head/filehandler.h"
 #include "../../Base/Head/logformatter.h"
 #include "logsink.h"
 #include <atomic>
@@ -15,17 +14,21 @@ class StdSink : public LogSink,
                 Noncopyable {
 private:
     LogFormatter formatter;
-    std::string logline;
+    LogMsg logline;
     std::atomic<uint> logcount;
     LogLevel filter_in;
-    LogLevel fileter_out;
+    LogLevel filter_out;
     std::mutex mtx;
     void Stdout();
 
 public:
     StdSink(LogFormat logformat);
-    void Logger(LogMsg& logmsg);
+    void Logger(LogMsg logmsg);
     void Flush();
+    void Set_format(LogFormat logformat);
+    void Set_filter_in(LogLevel level);
+    void Set_filter_out(LogLevel level);
+    uint Get_count();
     ~StdSink();
 };
 
