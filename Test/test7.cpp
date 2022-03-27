@@ -106,36 +106,10 @@ void T_formatter() {
 }
 
 void T_stdsink() {
-    LogFormat logformat;
-    StdSink stdsink(logformat);
-    LogMsg msg1("[2022/03/25 16:42:28.100][debug]test msg1\n");
-    string data   = "2022/03/25 21:13:25.123";
-    string level  = "warn";
-    string detail = "test msg2";
-    LogMsg msg2(data, level, detail);
-    stdsink.Logger(msg1);
-    stdsink.Logger(msg2);
-    // stdsink.Logger();
 }
 
 void T_filesink() {
-    LogMsg msg1;
-    LogFormat logformat;
-    logformat.print_color = false;
-    FileSink filesink(logformat);
-    msg1.Get_level()  = "debug";
-    msg1.Get_detail() = "file test";
-    for (int i = 0; i < 400; i++) {
-        msg1.Get_date() = Clock::Nowtime_ms();
-        filesink.Logger(msg1);
-    }
-    filesink.Flush();
 }
 
 int main() {
-    try {
-        T_filesink();
-    } catch (Exception& e) {
-        cout << e.What() << '\n';
-    }
 }

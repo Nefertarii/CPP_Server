@@ -2,10 +2,8 @@
 #define STD_SINK_H_
 
 #include "../../../Class/noncopyable.h"
-#include "../../Base/Head/logformatter.h"
 #include "logsink.h"
-#include <atomic>
-#include <mutex>
+#include <fstream>
 
 namespace Wasi {
 namespace Log {
@@ -13,23 +11,20 @@ namespace Log {
 class StdSink : public LogSink,
                 Noncopyable {
 private:
-    LogFormatter formatter;
-    LogMsg logline;
-    std::atomic<uint> logcount;
-    LogLevel filter_in;
-    LogLevel filter_out;
+    std::unique_ptr<LogFormatter> formatter;
+    std::atomic<uint> count;
     std::mutex mtx;
-    void Stdout();
+    std::filebuf file;
+    std::ostream os;
+    void Stdout(std::string message);
 
 public:
-    StdSink(LogFormat logformat);
-    void Logger(LogMsg logmsg);
+    explicit StdSink(LogFormat logformat);
+    void Logger(LogMsg& logmsg);
     void Flush();
-    void Set_format(LogFormat logformat);
-    void Set_filter_in(LogLevel level);
-    void Set_filter_out(LogLevel level);
+    void Set_format(LogFormat fmt);
     uint Get_count();
-    ~StdSink();
+    ~StdSink() override;
 };
 
 }

@@ -14,31 +14,21 @@ namespace Log {
 class FileSink : public LogSink,
                  Noncopyable {
 private:
-    LogFormatter formatter;
-    LogMsg logline;
-    FileHandler filehandler;
-    LogLevel filter_in;
-    LogLevel filter_out;
-    uint max_buffer;
-    std::string log_filename;
+    std::unique_ptr<LogFormatter> formatter;
+    std::atomic<uint> count;
     std::mutex mtx;
-    std::vector<LogMsg> logvec;
-    std::atomic<uint> logcount;
-    void Fileout();
-    void Save_to_file();
+    std::string logs;
+    FileHandler file;
+    void Fileout(std::string message);
 
 public:
-    FileSink(LogFormat logformat);
-    void Logger(LogMsg logmsg);
+    FileSink(LogFormat logformat, std::string filename);
+    FileSink(LogFormat logformat, std::string filename, FileEvents events);
+    void Logger(LogMsg& logmsg);
     void Flush();
     void Set_format(LogFormat logformat);
-    void Set_filter_in(LogLevel level);
-    void Set_filter_out(LogLevel level);
-    void Set_max_buffer(uint size);
-    void Set_filename(std::string filename);
     uint Get_count();
-    std::string Get_filename();
-    ~FileSink();
+    ~FileSink() override;
 };
 
 }

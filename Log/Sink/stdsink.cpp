@@ -1,51 +1,53 @@
 #include "Head/stdsink.h"
+#include "../../Class/exception.h"
 #include "../Base/Head/fontcolor.h"
 #include <iostream>
 
 using namespace Wasi::Log;
 
-void StdSink::Stdout() {
-    std::lock_guard<std::mutex> lk(mtx);
-    if (filter_out == LogLevel::UNINITIALIZED || filter_out == LogLevel::NONE) {
-        std::cout << logline.Output();
-        logcount.fetch_add(1);
-    } else if (String_to_Level(logline.Get_level()) != filter_out) {
-        return;
-    } else {
-        std::cout << logline.Output();
-        logcount.fetch_add(1);
+void StdSink::Stdout(std::string message) {
+    mtx.lock();
+    os << message;
+    count.fetch_add();
+    mtx.unlock();
+}
+
+StdSink::StdSink() :
+    count(0),
+    os(&file) {
+    LogFormat format;
+    formatter->Set_format(format);
+    file.open("/dev/tty", ios::out);
+    if (!file) {
+        throw Exception("can't open /dev/tty\n");
     }
 }
 
-StdSink::StdSink(LogFormat logformat) :
-    logcount(0),
-    filter_in(LogLevel::UNINITIALIZED),
-    filter_out(LogLevel::UNINITIALIZED) {
-    formatter.Set_format(logformat);
-}
-
-void StdSink::Logger(LogMsg logmsg) {
-    logline = logmsg;
-    formatter.Format(logline);
-    if (filter_in == LogLevel::UNINITIALIZED || filter_in == LogLevel::NONE) {
-        Stdout();
-    } else if (String_to_Level(logline.Get_level()) <= filter_in) {
-        return;
-    } else {
-        Stdout();
+StdSink::StdSink(LogFormat format) :
+    count(0),
+    os(&file) {
+    formatter->Set_format(format);
+    file.open("/dev/tty", ios::out);
+    if (!file) {
+        throw Exception("can't open /dev/tty\n");
     }
 }
 
-void StdSink::Flush() { std::cout << "flush" << std::endl; } //???
+void StdSink::Logger(LogMsg& logmsg) {
+    formatter->Format(logmsg);
+    Stdout(logmsg.Output());
+}
 
-void StdSink::Set_format(LogFormat logformat) { formatter.Set_format(logformat); }
+void StdSink::Flush() {
+    Stdout("Flush\n");
+    os.flush();
+}
 
-void StdSink::Set_filter_in(LogLevel level) { filter_in = level; }
+void StdSink::Set_format(LogFormat fmt) { formatter->Set_format(fmt); }
 
-void StdSink::Set_filter_out(LogLevel level) { filter_out = level; }
-
-uint StdSink::Get_count() { return logcount.load(); }
+uint StdSink::Get_count() { return count.load(); }
 
 StdSink::~StdSink() {
-    std::cout << "Total print " << logcount << " log message\n";
+    file.close();
+    std::cout << "Total process " << count->load() << " log message\n";
 }
