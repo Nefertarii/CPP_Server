@@ -9,6 +9,15 @@
 using namespace Wasi;
 using namespace Wasi::Log;
 
+FileHandler::FileHandler() :
+    open_tries(5),
+    open_interval(1000) {
+    file_events.before_open  = nullptr;
+    file_events.after_open   = nullptr;
+    file_events.before_close = nullptr;
+    file_events.after_close  = nullptr;
+}
+
 FileHandler::FileHandler(const FileEvents& filevents) :
     file_events(filevents),
     open_tries(5),
@@ -62,7 +71,7 @@ void FileHandler::Write(const std::string& buf) {
     if (file_stream.write(buf.c_str(), buf.size())) {
         return;
     }
-    throw Exception("FileHandler::Write() Failed Write " + file_name + "\n");
+    throw Exception("FileHandler::Write() Failed Write " + file_name + "\n", errno);
 }
 
 void FileHandler::Close() {

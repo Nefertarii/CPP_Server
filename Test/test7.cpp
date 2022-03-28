@@ -1,5 +1,5 @@
 #include "../Class/exception.h"
-#include "../Log/Base/Head/fontcolor.h"
+#include "../Log/Head/logger.h"
 #include "../Log/Sink/Head/filesink.h"
 #include "../Log/Sink/Head/stdsink.h"
 #include "../Timer/Head/clock.h"
@@ -10,6 +10,7 @@
 #include <map>
 #include <string>
 #include <sys/time.h>
+#include <thread>
 #include <unistd.h>
 
 using namespace std;
@@ -106,10 +107,40 @@ void T_formatter() {
 }
 
 void T_stdsink() {
+    StdSink stdsink;
+    LogMsg msg1("[2022/03/25 16:42:28.100][debug]test msg1\n");
+    string data   = "2022/03/25 21:13:25.123";
+    string level  = "warn";
+    string detail = "test msg2";
+    LogMsg msg2(data, level, detail);
+    stdsink.Logger(msg1);
+    stdsink.Logger(msg2);
 }
 
 void T_filesink() {
+    FileSink filesink("test.txt");
+    LogMsg msg1;
+    msg1.Get_level()  = "debug";
+    msg1.Get_detail() = "file test";
+    for (int i = 0; i < 500; i++) {
+        msg1.Get_date() = Clock::Nowtime_ms();
+        this_thread::sleep_for(Ms(10));
+        filesink.Logger(msg1);
+    }
+}
+
+void T_logger() {
+    // Logger logger("logger1");
+    // StdSink stdsink;
+    // FileSink filesink;
+    // SinkPtr stdsinkptr  = &stdsink;
+    // SinkPtr filesinkptr = &filesink;
+    // Logger logger2("logger1", {stdsinkptr, filesinkptr});
 }
 
 int main() {
+    T_stdsink();
+    T_filehandler();
+    // sT_filesink();
+    //   T_logger();
 }

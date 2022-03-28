@@ -11,7 +11,7 @@ namespace Log {
 class StdSink : public LogSink,
                 Noncopyable {
 private:
-    std::unique_ptr<LogFormatter> formatter;
+    LogFormatter formatter;
     std::atomic<uint> count;
     std::mutex mtx;
     std::filebuf file;
@@ -19,6 +19,7 @@ private:
     void Stdout(std::string message);
 
 public:
+    StdSink();
     explicit StdSink(LogFormat logformat);
     void Logger(LogMsg& logmsg);
     void Flush();

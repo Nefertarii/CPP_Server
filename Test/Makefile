@@ -17,7 +17,7 @@ OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
 OBJECTS6 = filehandler.o logformatter.o loglevel.o logmsg.o \
-	stdsink.o filesink.o clock.o timestamp.o test7.o
+	stdsink.o filesink.o logger.o clock.o timestamp.o test7.o
 FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
 HTTP = ../Net/Http
@@ -50,89 +50,93 @@ test7: $(OBJECTS6)
 	$(CC) $(FLAGS) -o $(TARGET6) $(OBJECTS6)
 
 #timer
-clock.o : $(TIMER)/Head/clock.h
+clock.o : $(TIMER)/Head/clock.h $(TIMER)/clock.cpp
 	$(CC) $(FLAGS) -c $(TIMER)/clock.cpp
 
-timer.o : $(TIMER)/Head/timer.h
+timer.o : $(TIMER)/Head/timer.h $(TIMER)/timer.cpp
 	$(CC) $(FLAGS) -c $(TIMER)/timer.cpp
 
-timestamp.o : $(TIMER)/Head/timestamp.h
+timestamp.o : $(TIMER)/Head/timestamp.h $(TIMER)/timestamp.cpp
 	$(CC) $(FLAGS) -c $(TIMER)/timestamp.cpp
 
-timerid.o : $(TIMER)/Head/timerid.h
+timerid.o : $(TIMER)/Head/timerid.h $(TIMER)/timerid.cpp
 	$(CC) $(FLAGS) -c $(TIMER)/timerid.cpp
 
-timerqueue.o : $(TIMER)/Head/timerqueue.h
+timerqueue.o : $(TIMER)/Head/timerqueue.h $(TIMER)/timerqueue.cpp
 	$(CC) $(FLAGS) -c $(TIMER)/timerqueue.cpp
 #log
-filehandler.o : $(LOG)/Head/filehandler.h
+filehandler.o : $(LOG)/Head/filehandler.h $(LOG)/filehandler.cpp
 	$(CC) $(FLAGS) -c $(LOG)/filehandler.cpp
 
-logformatter.o : $(LOG)/Head/logformatter.h $(LOG)/Head/fontcolor.h
+logformatter.o : $(LOG)/Head/logformatter.h $(LOG)/Head/fontcolor.h $(LOG)/logformatter.cpp
 	$(CC) $(FLAGS) -c $(LOG)/logformatter.cpp
 
-loglevel.o : $(LOG)/Head/loglevel.h
+loglevel.o : $(LOG)/Head/loglevel.h $(LOG)/loglevel.cpp
 	$(CC) $(FLAGS) -c $(LOG)/loglevel.cpp
 
-logmsg.o : $(LOG)/Head/logmsg.h
+logmsg.o : $(LOG)/Head/logmsg.h $(LOG)/logmsg.cpp
 	$(CC) $(FLAGS) -c $(LOG)/logmsg.cpp
 
-logsink.o : $(LOG)/Head/logsink.h
+logsink.o : $(LOG)/Head/logsink.h $(LOG)/logsink.cpp
 	$(CC) $(FLAGS) -c $(LOG)/logsink.cpp
+
+logger.o : ../Log/Head/logger.h ../Log/logger.cpp
+	$(CC) $(FLAGS) -c ../Log/logger.cpp
+
 #sink
-stdsink.o : $(SINK)/Head/stdsink.h
+stdsink.o : $(SINK)/Head/stdsink.h $(SINK)/stdsink.cpp
 	$(CC) $(FLAGS) -c $(SINK)/stdsink.cpp
 
-filesink.o : $(SINK)/Head/filesink.h
+filesink.o : $(SINK)/Head/filesink.h $(SINK)/filesink.cpp
 	$(CC) $(FLAGS) -c $(SINK)/filesink.cpp
 
 #base
-thread.o : $(BASE)/Head/thread.h
+thread.o : $(BASE)/Head/thread.h $(BASE)/thread.cpp
 	$(CC) $(FLAGS) -c $(BASE)/thread.cpp
 
-latch.o : $(BASE)/Head/latch.h
+latch.o : $(BASE)/Head/latch.h $(BASE)/latch.cpp
 	$(CC) $(FLAGS) -c $(BASE)/latch.cpp
 
-netlog.o : $(BASE)/Head/netlog.h
+netlog.o : $(BASE)/Head/netlog.h $(BASE)/netlog.cpp
 	$(CC) $(FLAGS) -c $(BASE)/netlog.cpp
 
-buffer.o : $(BASE)/Head/buffer.h
+buffer.o : $(BASE)/Head/buffer.h $(BASE)/buffer.cpp
 	$(CC) $(FLAGS) -c $(BASE)/buffer.cpp
 #poll
-poller.o : $(POLL)/Head/poller.h
+poller.o : $(POLL)/Head/poller.h $(POLL)/poller.cpp
 	$(CC) $(FLAGS) -c $(POLL)/poller.cpp
 
-eventloop.o : $(POLL)/Head/eventloop.h
+eventloop.o : $(POLL)/Head/eventloop.h $(POLL)/eventloop.cpp
 	$(CC) $(FLAGS) -c $(POLL)/eventloop.cpp
 
-channel.o : $(POLL)/Head/channel.h
+channel.o : $(POLL)/Head/channel.h $(POLL)/channel.cpp
 	$(CC) $(FLAGS) -c $(POLL)/channel.cpp
 
-eventloopthread.o : $(POLL)/Head/eventloopthread.h
+eventloopthread.o : $(POLL)/Head/eventloopthread.h $(POLL)/eventloopthread.cpp
 	$(CC) $(FLAGS) -c $(POLL)/eventloopthread.cpp
 #sockets
-socket.o : $(SOCKETS)/Head/socket.h
+socket.o : $(SOCKETS)/Head/socket.h $(SOCKETS)/socket.cpp
 	$(CC) $(FLAGS) -c $(SOCKETS)/socket.cpp 
 
-inetaddress.o : $(SOCKETS)/Head/inetaddress.h
+inetaddress.o : $(SOCKETS)/Head/inetaddress.h $(SOCKETS)/inetaddress.cpp
 	$(CC) $(FLAGS) -c $(SOCKETS)/inetaddress.cpp
 
-socketapi.o : $(SOCKETS)/Head/socketapi.h
+socketapi.o : $(SOCKETS)/Head/socketapi.h $(SOCKETS)/socketapi.cpp
 	$(CC) $(FLAGS) -c $(SOCKETS)/socketapi.cpp
 
-acceptor.o : $(SOCKETS)/Head/acceptor.h
+acceptor.o : $(SOCKETS)/Head/acceptor.h $(SOCKETS)/acceptor.cpp
 	$(CC) $(FLAGS) -c $(SOCKETS)/acceptor.cpp
 
-connector.o : $(SOCKETS)/Head/connector.h
+connector.o : $(SOCKETS)/Head/connector.h $(SOCKETS)/connector.cpp
 	$(CC) $(FLAGS) -c $(SOCKETS)/connector.cpp	
 #server
-tcpconnection.o : $(SERVER)/Head/tcpconnection.h
+tcpconnection.o : $(SERVER)/Head/tcpconnection.h $(SERVER)/tcpconnection.cpp
 	$(CC) $(FLAGS) -c $(SERVER)/tcpconnection.cpp
 
-tcpserver.o : $(SERVER)/Head/tcpserver.h
+tcpserver.o : $(SERVER)/Head/tcpserver.h $(SERVER)/tcpserver.cpp
 	$(CC) $(FLAGS) -c $(SERVER)/tcpserver.cpp
 
-tcpclient.o : $(SERVER)/Head/tcpclient.h
+tcpclient.o : $(SERVER)/Head/tcpclient.h $(SERVER)/tcpclient.cpp
 	$(CC) $(FLAGS) -c $(SERVER)/tcpclient.cpp
 #test
 test.o : test.cpp

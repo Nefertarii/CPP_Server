@@ -21,7 +21,7 @@ public:
     virtual void Logger(LogMsg& msg)       = 0;
     virtual void Flush()                   = 0;
     virtual void Set_format(LogFormat fmt) = 0;
-    virtual void Get_count()               = 0;
+    virtual uint Get_count()               = 0;
     virtual ~LogSink()                     = default;
 };
 

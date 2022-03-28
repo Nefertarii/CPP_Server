@@ -95,6 +95,16 @@ LogMsg::LogMsg(std::string date_, std::string level_, std::string detail_,
     date = Process(date_);
 }
 
+LogMsg::LogMsg(long timestamp_ms, LogLevel level_, std::string detail_,
+               int thread_id_, std::string source_location_) :
+    formatted(false),
+    thread_id(thread_id_),
+    date(timestamp_ms),
+    detail(detail_),
+    source_location(source_location_),
+    formatted_msg(std::string()) {
+}
+
 LogMsg::LogMsg(long timestamp_ms, LogLevel level_, const char* detail_,
                int thread_id_, const char* source_location_) :
     formatted(false),

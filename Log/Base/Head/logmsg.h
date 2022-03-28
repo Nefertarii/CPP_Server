@@ -25,6 +25,8 @@ public:
     LogMsg(std::string log); //[date][level]detail
     LogMsg(std::string date_, std::string level_, std::string detail_,
            int thread_id_ = 0, std::string source_location_ = "");
+    LogMsg(long timestamp_ms, LogLevel level_, std::string detail_,
+           int thread_id_ = 0, std::string source_location_ = "");
     LogMsg(long timestamp_ms, LogLevel level_, const char* detail_,
            int thread_id_ = 0, const char* source_location_ = "");
     void Format(std::string formatted_msg_);

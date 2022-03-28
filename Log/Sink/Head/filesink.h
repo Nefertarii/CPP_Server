@@ -14,14 +14,16 @@ namespace Log {
 class FileSink : public LogSink,
                  Noncopyable {
 private:
-    std::unique_ptr<LogFormatter> formatter;
+    LogFormatter formatter;
     std::atomic<uint> count;
+    std::atomic<uint> suc_count;
     std::mutex mtx;
     std::string logs;
-    FileHandler file;
-    void Fileout(std::string message);
+    FileHandler filehandler;
+    void Fileout();
 
 public:
+    FileSink(std::string filename);
     FileSink(LogFormat logformat, std::string filename);
     FileSink(LogFormat logformat, std::string filename, FileEvents events);
     void Logger(LogMsg& logmsg);

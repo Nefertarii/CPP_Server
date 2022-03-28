@@ -30,7 +30,7 @@ private:
     uint open_interval; // ms
 
 public:
-    FileHandler() = default;
+    FileHandler();
     FileHandler(const FileEvents& filevents);
     void Open(std::string file_name_, bool trunc);
     void Reopen(bool trunc);
