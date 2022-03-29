@@ -154,7 +154,7 @@ test4.o : test4.cpp
 test5.o : test5.cpp
 	$(CC) $(FLAGS) -c test5.cpp
 
-test7.o : test7.cpp
+test7.o : test7.cpp ../Log/Head/logging.h
 	$(CC) $(FLAGS) -c test7.cpp
 
 .PHONY : clean cleanall

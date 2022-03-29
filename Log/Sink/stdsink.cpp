@@ -45,5 +45,5 @@ uint StdSink::Get_count() { return count.load(); }
 
 StdSink::~StdSink() {
     file.close();
-    std::cout << "Total process " << count.load() << " log message\n";
+    // std::cout << "Total print " << count.load() << " log message\n";
 }

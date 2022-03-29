@@ -27,36 +27,46 @@ std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
     struct tm* time_tm = localtime(&timestamp_sec);
     strftime(time, 40, format, time_tm);
     std::string str_time = time;
+    // if(str_time.size() == )
     return str_time + "." + std::to_string(time_ms);
 }
 
 LogFormatter::LogFormatter() {}
 
 std::string LogFormatter::Format(LogMsg& logmsg) {
+    // [date]
     tmp_logmsg.clear();
+    tmp_logmsg += "[";
+    tmp_logmsg += process_date(logmsg.Get_date(), log_format.data_format);
+    tmp_logmsg += "] ";
+    // [thread]
     if (log_format.print_thread_id) {
-        tmp_logmsg += "[Thread:";
-        tmp_logmsg += std::to_string(logmsg.Get_thread_id());
-        tmp_logmsg += "]";
+        if (logmsg.Get_thread_id() != 0) {
+            tmp_logmsg += "[Thread:";
+            tmp_logmsg += std::to_string(logmsg.Get_thread_id());
+            tmp_logmsg += "] ";
+        }
     }
+    // [file:line func()]
     if (log_format.print_source_location) {
         tmp_logmsg += "[";
         tmp_logmsg += logmsg.Get_source_location();
-        tmp_logmsg += "]";
+        tmp_logmsg += "] ";
     }
+    // [level]
+    tmp_logmsg += "[";
     if (log_format.print_color) {
         tmp_logmsg += log_format.consoles_color[String_to_Level(logmsg.Get_level())];
     }
-    tmp_logmsg += "[";
     tmp_logmsg += logmsg.Get_level();
-    tmp_logmsg += "]";
     if (log_format.print_color) {
         tmp_logmsg += RESET;
     }
-    tmp_logmsg += "[";
-    tmp_logmsg += process_date(logmsg.Get_date(), log_format.data_format);
-    tmp_logmsg += "]";
+    tmp_logmsg += "] ";
+    // detail
     tmp_logmsg += logmsg.Get_detail();
+    tmp_logmsg += " ";
+
     tmp_logmsg += "\n";
     logmsg.Format(tmp_logmsg);
     return tmp_logmsg;

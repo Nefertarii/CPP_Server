@@ -1,5 +1,6 @@
 #include "../Class/exception.h"
-#include "../Log/Head/logger.h"
+#include "../Log/Base/Head/filehandler.h"
+#include "../Log/Head/logging.h"
 #include "../Log/Sink/Head/filesink.h"
 #include "../Log/Sink/Head/stdsink.h"
 #include "../Timer/Head/clock.h"
@@ -122,7 +123,7 @@ void T_filesink() {
     LogMsg msg1;
     msg1.Get_level()  = "debug";
     msg1.Get_detail() = "file test";
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 50; i++) {
         msg1.Get_date() = Clock::Nowtime_ms();
         this_thread::sleep_for(Ms(10));
         filesink.Logger(msg1);
@@ -130,17 +131,50 @@ void T_filesink() {
 }
 
 void T_logger() {
-    // Logger logger("logger1");
-    // StdSink stdsink;
-    // FileSink filesink;
-    // SinkPtr stdsinkptr  = &stdsink;
-    // SinkPtr filesinkptr = &filesink;
-    // Logger logger2("logger1", {stdsinkptr, filesinkptr});
+    Logger logger1("logger1", make_shared<StdSink>());
+    logger1.Flush_on(LogLevel::CRITICAL);
+    logger1.Debug("testlog1");
+    logger1.Info("testlog2");
+    logger1.Warning("testlog3");
+    logger1.Error("testlog4");
+    logger1.Critical("testlog5");
+    logger1.Fatal("testlog6");
+
+    SinkPtr stdsinkptr  = make_shared<StdSink>();
+    SinkPtr filesinkptr = make_shared<FileSink>("test.txt");
+    Logger logger2("logger2", {stdsinkptr, filesinkptr});
+    LogFormat fmt;
+    fmt.print_thread_id       = true;
+    fmt.print_source_location = true;
+    logger2.Set_formatter(fmt);
+    logger2.Debug("testlog1", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    logger2.Info("testlog2", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    logger2.Warning("testlog3", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    logger2.Error("testlog4", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    logger2.Critical("testlog5", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    logger2.Fatal("testlog6", gettid(), __FILE__, __FUNCTION__, __LINE__);
+
+    logger2.Remove(0);
+    std::cout << "remove\n";
+    logger2.Debug("testlog1", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    logger2.Info("testlog2", gettid(), __FILE__, __FUNCTION__, __LINE__);
+
+    SinkPtr stdsinkptr2 = make_shared<StdSink>();
+    logger2.Push_back(stdsinkptr2);
+    std::cout << "push\n";
+
+    logger2.Debug("testlog1", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    logger2.Info("testlog2", gettid(), __FILE__, __FUNCTION__, __LINE__);
+}
+
+void T_logging() {
+        Debug("123");
 }
 
 int main() {
-    T_stdsink();
-    T_filehandler();
-    // sT_filesink();
-    //   T_logger();
+    // T_stdsink();
+    // T_filehandler();
+    // T_filesink();
+    // T_logger();
+    T_logging();
 }

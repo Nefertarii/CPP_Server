@@ -6,14 +6,22 @@ using namespace Wasi;
 using namespace Wasi::Log;
 
 void Logger::Log(LogMsg& logmsg) {
+    for (auto it : sinks) {
+        it->Logger(logmsg);
+    }
     if (String_to_Level(logmsg.Get_level()) == flush_level) {
         for (auto it : sinks) {
             it->Flush();
         }
     }
-    for (auto it : sinks) {
-        it->Logger(logmsg);
-    }
+}
+
+void Logger::Splice(std::string& file, std::string func, int line) {
+    file += ":";
+    file += std::to_string(line);
+    file += " ";
+    file += func;
+    file += "()";
 }
 
 Logger::Logger(std::string name_) :
@@ -42,39 +50,51 @@ Logger::Logger(std::string name_, SinkIt beg, SinkIt end) :
     sinks(beg, end),
     flush_level(LogLevel::NONE) {}
 
-void Logger::Debug(std::string detail, int tid, std::string source) {
+void Logger::Debug(std::string detail, int tid, std::string file,
+                   std::string func, int line) {
+    if (!file.empty()) { Splice(file, func, line); }
     LogMsg tmp_log(Time::Clock::Nowtime_ms(), LogLevel::DBG,
-                   detail, tid, source);
+                   detail, tid, file);
     Log(tmp_log);
 }
 
-void Logger::Info(std::string detail, int tid, std::string source) {
+void Logger::Info(std::string detail, int tid, std::string file,
+                  std::string func, int line) {
+    if (!file.empty()) { Splice(file, func, line); }
     LogMsg tmp_log(Time::Clock::Nowtime_ms(), LogLevel::INFO,
-                   detail, tid, source);
+                   detail, tid, file);
     Log(tmp_log);
 }
 
-void Logger::Warning(std::string detail, int tid, std::string source) {
+void Logger::Warning(std::string detail, int tid, std::string file,
+                     std::string func, int line) {
+    if (!file.empty()) { Splice(file, func, line); }
     LogMsg tmp_log(Time::Clock::Nowtime_ms(), LogLevel::WARN,
-                   detail, tid, source);
+                   detail, tid, file);
     Log(tmp_log);
 }
 
-void Logger::Error(std::string detail, int tid, std::string source) {
+void Logger::Error(std::string detail, int tid, std::string file,
+                   std::string func, int line) {
+    if (!file.empty()) { Splice(file, func, line); }
     LogMsg tmp_log(Time::Clock::Nowtime_ms(), LogLevel::ERR,
-                   detail, tid, source);
+                   detail, tid, file);
     Log(tmp_log);
 }
 
-void Logger::Critical(std::string detail, int tid, std::string source) {
+void Logger::Critical(std::string detail, int tid, std::string file,
+                      std::string func, int line) {
+    if (!file.empty()) { Splice(file, func, line); }
     LogMsg tmp_log(Time::Clock::Nowtime_ms(), LogLevel::CRITICAL,
-                   detail, tid, source);
+                   detail, tid, file);
     Log(tmp_log);
 }
 
-void Logger::Fatal(std::string detail, int tid, std::string source) {
+void Logger::Fatal(std::string detail, int tid, std::string file,
+                   std::string func, int line) {
+    if (!file.empty()) { Splice(file, func, line); }
     LogMsg tmp_log(Time::Clock::Nowtime_ms(), LogLevel::FATAL,
-                   detail, tid, source);
+                   detail, tid, file);
     Log(tmp_log);
 }
 
@@ -93,6 +113,15 @@ void Logger::Flush() {
 
 void Logger::Flush_on(LogLevel level) {
     flush_level = level;
+}
+
+void Logger::Push_back(SinkPtr sink_) {
+    sinks.push_back(sink_);
+}
+
+void Logger::Remove(uint i) {
+    if (i > sinks.size()) { return; }
+    sinks.erase(sinks.begin() + i);
 }
 
 void Logger::Set_formatter(LogFormat format) {

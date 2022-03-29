@@ -1,1 +1,38 @@
-12345
+[2022-03-29 22:20:02.174] [DEBUG] testlog1 
+[2022-03-29 22:20:02.174] [INFO] testlog2 
+[2022-03-29 22:20:02.174] [WARNING] testlog3 
+[2022-03-29 22:20:02.174] [ERROR] testlog4 
+[2022-03-29 22:20:02.174] [CRITICAL] testlog5 
+Flush
+[2022-03-29 22:20:02.174] [FATAL] testlog6 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:148 T_logger()] [DEBUG] testlog1 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:149 T_logger()] [INFO] testlog2 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:150 T_logger()] [WARNING] testlog3 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:151 T_logger()] [ERROR] testlog4 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:152 T_logger()] [CRITICAL] testlog5 
+Flush
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:153 T_logger()] [FATAL] testlog6 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:155 T_logger()] [DEBUG] testlog1 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:156 T_logger()] [INFO] testlog2 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:159 T_logger()] [DEBUG] testlog1 
+[2022-03-29 22:20:02.174] [Thread:23222] [test7.cpp:160 T_logger()] [INFO] testlog2 
+Flush
+[2022-03-29 22:23:20.815] [DEBUG] testlog1 
+[2022-03-29 22:23:20.815] [INFO] testlog2 
+[2022-03-29 22:23:20.815] [WARNING] testlog3 
+[2022-03-29 22:23:20.815] [ERROR] testlog4 
+[2022-03-29 22:23:20.815] [CRITICAL] testlog5 
+Flush
+[2022-03-29 22:23:20.815] [FATAL] testlog6 
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:148 T_logger()] [DEBUG] testlog1 
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:149 T_logger()] [INFO] testlog2 
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:150 T_logger()] [WARNING] testlog3 
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:151 T_logger()] [ERROR] testlog4 
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:152 T_logger()] [CRITICAL] testlog5 
+Flush
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:153 T_logger()] [FATAL] testlog6 
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:157 T_logger()] [DEBUG] testlog1 
+[2022-03-29 22:23:20.815] [Thread:23272] [test7.cpp:158 T_logger()] [INFO] testlog2 
+[2022-03-29 22:23:20.816] [Thread:23272] [test7.cpp:164 T_logger()] [DEBUG] testlog1 
+[2022-03-29 22:23:20.816] [Thread:23272] [test7.cpp:165 T_logger()] [INFO] testlog2 
+Flush

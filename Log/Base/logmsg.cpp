@@ -103,6 +103,7 @@ LogMsg::LogMsg(long timestamp_ms, LogLevel level_, std::string detail_,
     detail(detail_),
     source_location(source_location_),
     formatted_msg(std::string()) {
+    level = Level_to_string(level_);
 }
 
 LogMsg::LogMsg(long timestamp_ms, LogLevel level_, const char* detail_,

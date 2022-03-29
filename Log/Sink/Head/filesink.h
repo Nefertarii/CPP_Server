@@ -21,6 +21,7 @@ private:
     std::string logs;
     FileHandler filehandler;
     void Fileout();
+    void Init_open(std::string filename);
 
 public:
     FileSink(std::string filename);

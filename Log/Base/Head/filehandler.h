@@ -32,8 +32,8 @@ private:
 public:
     FileHandler();
     FileHandler(const FileEvents& filevents);
-    void Open(std::string file_name_, bool trunc);
-    void Reopen(bool trunc);
+    void Open(std::string file_name_, bool trunc = false);
+    void Reopen(bool trunc = false);
     void Create(std::string file_name_);
     void Flush();
     void Write(const std::string& buf);
