@@ -1,9 +1,8 @@
 #include "Head/channel.h"
+#include "../../Log/Head/logging.h"
 #include "Head/eventloop.h"
-#include <sys/poll.h>
-#include <iostream>
 #include <cassert>
-
+#include <sys/poll.h>
 
 using namespace Wasi;
 using namespace Wasi::Poll;
@@ -86,15 +85,14 @@ void Channel::Remove() {
     loop->Remove_channel(this);
 }
 
-
 void Channel::Handle_event(Time::TimeStamp receive_time) {
     event_handling = true;
     if ((revents & POLLHUP) && !(revents & POLLIN)) {
-        std::cout << "fd:" << fd << " channel pollhup.\n";
+        LOG_DEBUG("fd:" + std::to_string(fd) + "channel pollhup.");
         if (close_callback) { close_callback(); }
     }
     if (revents & POLLNVAL) {
-        std::cout << "fd:" << fd << " channel pollnval\n";
+        LOG_DEBUG("fd:" + std::to_string(fd) + "channel pollnval.");
     }
     if (revents & (POLLERR | POLLNVAL)) {
         if (error_callback) { error_callback(); }

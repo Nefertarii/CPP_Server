@@ -6,6 +6,8 @@ TARGET5 = test5
 TARGET6 = test7
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
+	filehandler.o logformatter.o loglevel.o logmsg.o \
+	stdsink.o filesink.o logger.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test.o 
@@ -96,9 +98,6 @@ thread.o : $(BASE)/Head/thread.h $(BASE)/thread.cpp
 
 latch.o : $(BASE)/Head/latch.h $(BASE)/latch.cpp
 	$(CC) $(FLAGS) -c $(BASE)/latch.cpp
-
-netlog.o : $(BASE)/Head/netlog.h $(BASE)/netlog.cpp
-	$(CC) $(FLAGS) -c $(BASE)/netlog.cpp
 
 buffer.o : $(BASE)/Head/buffer.h $(BASE)/buffer.cpp
 	$(CC) $(FLAGS) -c $(BASE)/buffer.cpp

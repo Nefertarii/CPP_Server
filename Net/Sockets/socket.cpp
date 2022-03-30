@@ -1,13 +1,14 @@
 #include "Head/socket.h"
-#include "Head/socketapi.h"
+#include "../../Log/Head/logging.h"
 #include "Head/inetaddress.h"
-#include <netinet/in.h>
+#include "Head/socketapi.h"
 #include <cstring>
-#include <iostream>
-
+#include <netinet/in.h>
+#include <unistd.h>
 using namespace Wasi::Sockets;
 
-Socket::Socket(int sockfd_) :sockfd(sockfd_) {}
+Socket::Socket(int sockfd_) :
+    sockfd(sockfd_) {}
 
 int Socket::Fd() const { return sockfd; }
 
@@ -50,7 +51,7 @@ void Socket::Set_reuse_port(bool status) {
     int ret = setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT,
                          &opt, static_cast<socklen_t>(sizeof(opt)));
     if (ret < 0 && status == true) {
-        std::cout<<"Sockets::reuse port fail.\n";
+        LOG_ERROR("Reuse port fail.");
     }
 }
 
@@ -64,19 +65,8 @@ bool Socket::Get_tcp_info(std::string* buf) const {
     tcp_info tcpi;
     std::string tmp_str;
     if (Get_tcp_info(&tcpi)) {
-        tmp_str = "unrecovered = " + std::to_string(tcpi.tcpi_retransmits) +
-            "rto = " + std::to_string(tcpi.tcpi_rto) +
-            "ato = " + std::to_string(tcpi.tcpi_ato) +
-            "snd_mss = " + std::to_string(tcpi.tcpi_snd_mss) +
-            "rcv_mss = " + std::to_string(tcpi.tcpi_rcv_mss) +
-            "lost = " + std::to_string(tcpi.tcpi_lost) +
-            "retrans = " + std::to_string(tcpi.tcpi_retrans) +
-            "rtt = " + std::to_string(tcpi.tcpi_rtt) +
-            "rttvar = " + std::to_string(tcpi.tcpi_rttvar) +
-            "sshthresh = " + std::to_string(tcpi.tcpi_snd_ssthresh) +
-            "cwnd = " + std::to_string(tcpi.tcpi_snd_cwnd) +
-            "total_retrans = " + std::to_string(tcpi.tcpi_total_retrans);
-        *buf = tmp_str;
+        tmp_str = "unrecovered = " + std::to_string(tcpi.tcpi_retransmits) + "rto = " + std::to_string(tcpi.tcpi_rto) + "ato = " + std::to_string(tcpi.tcpi_ato) + "snd_mss = " + std::to_string(tcpi.tcpi_snd_mss) + "rcv_mss = " + std::to_string(tcpi.tcpi_rcv_mss) + "lost = " + std::to_string(tcpi.tcpi_lost) + "retrans = " + std::to_string(tcpi.tcpi_retrans) + "rtt = " + std::to_string(tcpi.tcpi_rtt) + "rttvar = " + std::to_string(tcpi.tcpi_rttvar) + "sshthresh = " + std::to_string(tcpi.tcpi_snd_ssthresh) + "cwnd = " + std::to_string(tcpi.tcpi_snd_cwnd) + "total_retrans = " + std::to_string(tcpi.tcpi_total_retrans);
+        *buf    = tmp_str;
         return true;
     }
     return false;

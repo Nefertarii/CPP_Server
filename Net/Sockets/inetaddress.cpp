@@ -1,11 +1,12 @@
 #include "Head/inetaddress.h"
+#include "../../Log/Head/logging.h"
 #include "Head/socketapi.h"
-#include <stddef.h>
-#include <cstring>
 #include <cassert>
+#include <cstring>
 #include <netdb.h>
+#include <stddef.h>
 #include <sys/socket.h>
-#include <iostream>
+#include <unistd.h>
 
 using namespace Wasi::Sockets;
 
@@ -15,16 +16,15 @@ InetAddress::InetAddress(uint16_t port, bool loopback, bool ipv6) {
     if (ipv6) {
         memset(&addr6, 0, sizeof(addr6));
         addr6.sin6_family = AF_INET6;
-        in6_addr ip = loopback ? in6addr_loopback : in6addr_any;
-        addr6.sin6_addr = ip;
-        addr6.sin6_port = Host_to_network_16(port);
-    }
-    else {
+        in6_addr ip       = loopback ? in6addr_loopback : in6addr_any;
+        addr6.sin6_addr   = ip;
+        addr6.sin6_port   = Host_to_network_16(port);
+    } else {
         memset(&addr, 0, sizeof(addr));
-        addr.sin_family = AF_INET;
-        in_addr_t ip = loopback ? INADDR_LOOPBACK : INADDR_ANY;
+        addr.sin_family      = AF_INET;
+        in_addr_t ip         = loopback ? INADDR_LOOPBACK : INADDR_ANY;
         addr.sin_addr.s_addr = Host_to_network_32(ip);
-        addr.sin_port = Host_to_network_16(port);
+        addr.sin_port        = Host_to_network_16(port);
     }
 }
 
@@ -32,8 +32,7 @@ InetAddress::InetAddress(std::string ip, uint16_t port, bool ipv6) {
     if (ipv6 || strchr(ip.c_str(), ':')) {
         memset(&addr6, 0, sizeof(addr6));
         From_ip_port(ip.c_str(), port, &addr6);
-    }
-    else {
+    } else {
         memset(&addr, 0, sizeof(addr));
         From_ip_port(ip.c_str(), port, &addr);
     }
@@ -98,7 +97,7 @@ bool InetAddress::Resolve(std::string host_name, InetAddress* result) {
     assert(result != nullptr);
     hostent hentry;
     hostent* hentry2 = nullptr;
-    int tmp_errno = 0;
+    int tmp_errno    = 0;
     memset(&hentry, 0, sizeof(hentry));
     int ret = gethostbyname_r(host_name.c_str(), &hentry, resolve_buffer,
                               sizeof(resolve_buffer), &hentry2, &tmp_errno);
@@ -106,13 +105,10 @@ bool InetAddress::Resolve(std::string host_name, InetAddress* result) {
         assert(hentry2->h_addrtype == AF_INET && hentry2->h_length == sizeof(uint32_t));
         result->addr.sin_addr = *reinterpret_cast<in_addr*>(hentry2->h_addr_list[0]);
         return true;
-    }
-    else {
+    } else {
         if (ret) {
-            std::cout << "InetAddress::Resolve error.\n";
+            LOG_ERROR("Error.");
         }
         return false;
     }
-
 }
-

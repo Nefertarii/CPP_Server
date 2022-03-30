@@ -6,6 +6,7 @@
 
 namespace Wasi {
 namespace Base {
+
 class Buffer {
 public:
     enum BufferState {
@@ -47,7 +48,8 @@ public:
     std::string Content();
     ~Buffer();
 };
+
 }
 } // namespace Wasi::Base
 
-#endif
+#endif // !BASE_BUFFER_H_

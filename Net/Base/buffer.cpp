@@ -1,9 +1,11 @@
 #include "Head/buffer.h"
+#include "../../Log/Head/logging.h"
 #include <algorithm>
 #include <assert.h>
-#include <iostream>
 #include <sys/uio.h>
+#include <unistd.h>
 
+using namespace Wasi;
 using namespace Wasi::Base;
 
 const char Buffer::CRLF[] = "\r\n";
@@ -99,7 +101,7 @@ ssize_t Buffer::Read_fd(int fd, int* tmp_errno) {
         Append(extrabuf, read);
         return read;
     }
-    std::cout << "Buffer::Read_fd() Buffer state is WRITE.\n";
+    LOG_INFO("Buffer::Read_fd() Buffer state is WRITE.");
     return 0;
 }
 

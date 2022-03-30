@@ -17,8 +17,7 @@ void Timer::Run() const { callback(); }
 void Timer::Restart(TimeStamp now) {
     if (repeat) {
         expiration = Time_stamp_add(now, interval);
-    }
-    else {
+    } else {
         expiration = TimeStamp::Invalid();
     }
 }
@@ -34,6 +33,6 @@ TimeStamp Timer::Expiration() { return expiration; }
 /*
 
 
-            
+
             ~Timer();
 */

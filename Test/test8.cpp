@@ -6,9 +6,9 @@
 
 using namespace std;
 
-template <class..Args>
-void func1(Args... args) {
-}
-
 int main() {
+    int a        = 1;
+    int* p       = &a;
+    string str_p = (const char*)p;
+    cout << str_p;
 }

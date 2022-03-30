@@ -1,8 +1,8 @@
 #include "Head/tcpserver.h"
+#include "../../Log/Head/logging.h"
 #include "../Poll/Head/eventloop.h"
 #include "../Sockets/Head/socketapi.h"
 #include <cassert>
-#include <iostream>
 
 using namespace Wasi;
 using namespace Wasi::Server;
@@ -11,21 +11,23 @@ void TcpServer::New_connection(int sockfd, const Sockets::InetAddress& peeraddr)
     loop->Assert_in_loop_thread();
     std::string conn_name = name + "#" + std::to_string(next_conn_id);
     ++next_conn_id;
-    std::cout << "TcpServer::New_connection [" << name
-        << "] new connection [" << conn_name
-        << "] from" << peeraddr.To_string_ip_port() << "\n";
+    std::string msg = "TcpServer::New_connection [" + name
+                      + "] new connection [" + conn_name
+                      + "] from" + peeraddr.To_string_ip_port();
+    LOG_INFO(msg);
     Sockets::InetAddress localaddr(Sockets::Get_local_addr(sockfd));
     TcpConnectionPtr conn(new TcpConnection(loop, conn_name, sockfd, localaddr, peeraddr));
-    std::cout << conn->Get_local_address().To_string_ip_port()
-        << " -> " << conn->Get_peer_address().To_string_ip_port()
-        << " is " << (conn->Connected() ? "Up" : "Down") << "\n";
+    msg = conn->Get_local_address().To_string_ip_port() + " -> "
+          + conn->Get_peer_address().To_string_ip_port() + " is ";
+    msg += conn->Connected() ? "Up" : "Down";
+    LOG_INFO(msg);
     conntions[conn_name] = conn;
     conn->Set_connection_callback(connection_callback);
     conn->Set_message_callback(message_callback);
     conn->Set_write_complete_callback(write_complete_callback);
     conn->Set_close_callback(std::bind(&TcpServer::Remove_connection, this, std::placeholders::_1));
     loop->Run_in_loop(std::bind(&TcpConnection::Connect_established, conn));
-    //conn->Connect_established();
+    // conn->Connect_established();
 }
 
 void TcpServer::Remove_connection(const TcpConnectionPtr& conn) {
@@ -34,8 +36,9 @@ void TcpServer::Remove_connection(const TcpConnectionPtr& conn) {
 
 void TcpServer::Remove_connection_in_loop(const TcpConnectionPtr& conn) {
     loop->Assert_in_loop_thread();
-    std::cout << "TcpServer::Remove_connection_in_loop [" << name
-        << "] connection " << conn->Get_name() << "\n";
+    std::string msg = "TcpServer::Remove_connection_in_loop [" + name
+                      + "] connection " + conn->Get_name();
+    LOG_INFO(msg);
     size_t n = conntions.erase(conn->Get_name());
     assert(n == 1);
     Poll::EventLoop* io_loop = conn->Get_loop();
@@ -58,9 +61,9 @@ const std::string& TcpServer::Get_name() { return name; }
 
 Poll::EventLoop* TcpServer::Get_loop() { return loop; }
 
-//void TcpServer::Set_thread_num(int num_threads) {}
+// void TcpServer::Set_thread_num(int num_threads) {}
 
-//void TcpServer::Set_thread_init_callback(const ThreadInitCallback& callback_) {}
+// void TcpServer::Set_thread_init_callback(const ThreadInitCallback& callback_) {}
 
 void TcpServer::Set_connection_callback(const ConnectionCallback& callback_) {
     connection_callback = callback_;
@@ -78,7 +81,7 @@ void TcpServer::Start() {
     if (started.fetch_add(1) == 0) {
         assert(!acceptor->Listening());
         loop->Run_in_loop(std::bind(&Sockets::Acceptor::Listen, acceptor.get()));
-        //loop_->runInLoop(std::bind(&Sockets::Acceptor::Listen,  (acceptor_)));
+        // loop_->runInLoop(std::bind(&Sockets::Acceptor::Listen,  (acceptor_)));
     }
 }
 

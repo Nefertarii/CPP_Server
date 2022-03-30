@@ -1,11 +1,12 @@
 #include "Head/tcpclient.h"
-#include "../Poll/Head/eventloop.h"
-#include "../Sockets/Head/inetaddress.h"
-#include "../Sockets/Head/connector.h"
-#include "../Sockets/Head/socketapi.h"
+#include "../../Log/Head/logging.h"
 #include "../../Timer/Head/timerid.h"
+#include "../Poll/Head/eventloop.h"
+#include "../Sockets/Head/connector.h"
+#include "../Sockets/Head/inetaddress.h"
+#include "../Sockets/Head/socketapi.h"
 #include <cassert>
-#include <iostream>
+#include <sstream>
 
 using namespace Wasi;
 using namespace Wasi::Server;
@@ -16,7 +17,6 @@ void Wasi::Server::Remove_connection(Poll::EventLoop* loop,
 }
 
 void Wasi::Server::Remove_connector(const ConnectorPtr& connector) {
-
 }
 
 void TcpClient::New_connection(int sockfd) {
@@ -24,7 +24,7 @@ void TcpClient::New_connection(int sockfd) {
     Sockets::InetAddress peeraddr(Sockets::Get_peer_addr(sockfd));
     std::string buf;
     buf += ":" + peeraddr.To_string_ip_port()
-        + "#" + std::to_string(next_conn_id);
+           + "#" + std::to_string(next_conn_id);
     std::string conn_name = name + buf;
     Sockets::InetAddress localaddr(Sockets::Get_local_addr(sockfd));
     TcpConnectionPtr conn(new TcpConnection(loop, conn_name, sockfd,
@@ -41,7 +41,7 @@ void TcpClient::New_connection(int sockfd) {
 }
 
 void TcpClient::Remove_connection(const TcpConnectionPtr& conn) {
-    loop->Assert_in_loop_thread(); 
+    loop->Assert_in_loop_thread();
     assert(loop == conn->Get_loop());
     {
         std::lock_guard<std::mutex> lk(mtx);
@@ -50,8 +50,9 @@ void TcpClient::Remove_connection(const TcpConnectionPtr& conn) {
     }
     loop->Queue_in_loop(std::bind(&TcpConnection::Connect_destroyed, conn));
     if (retry && connect) {
-        std::cout << "TcpClient::Connect[" << name << "] reconnecting to"
-            << connector->Get_servaddr().To_string_ip_port() << "\n";
+        std::string msg = "TcpClient::Connect[" + name + "] reconnecting to"
+                          + connector->Get_servaddr().To_string_ip_port();
+        LOG_INFO(msg);
         connector->Restart();
     }
 }
@@ -69,13 +70,20 @@ TcpClient::TcpClient(Poll::EventLoop* loop_,
     next_conn_id(1) {
     connector->Set_new_connection_callback(
         std::bind(&TcpClient::New_connection, this, std::placeholders::_1));
-    std::cout << "TcpClient::TcpClient[" << this << "] connector "
-        << connector.get() << "\n";
+    const void* address = static_cast<const void*>(this);
+    std::stringstream point;
+    point << address;
+    std::string msg = "TcpClient::TcpClient[" + point.str() + "] connector ";
+    address         = static_cast<const void*>(connector.get());
+    point << address;
+    msg += point.str();
+    LOG_INFO(msg);
 }
 
 void TcpClient::Connect() {
-    std::cout << "TcpClient::Connect [" << name << "] connecting to "
-        << connector->Get_servaddr().To_string_ip_port() << "\n";
+    std::string msg = "TcpClient::TcpClient[" + name + "] connector "
+                      + connector->Get_servaddr().To_string_ip_port();
+    LOG_INFO(msg);
     connect = true;
     connector->Start();
 }
@@ -119,22 +127,24 @@ const std::string& TcpClient::TcpClient::Get_name() const { return name; }
 bool TcpClient::Get_retry() const { return retry; }
 
 TcpClient::~TcpClient() {
-    std::cout << "TcpClient::~TcpClient [" << name << "] connector "
-        << connector.get() << "\n";
+    const void* address = static_cast<const void*>(connector.get());
+    std::stringstream point;
+    point << address;
+    std::string msg = "TcpClient::~TcpClient [" + name + "] connector " + point.str();
+    LOG_DEBUG(msg);
     TcpConnectionPtr conn;
     bool unique = false;
     {
         std::lock_guard<std::mutex> lk(mtx);
         unique = connection.unique();
-        conn = connection;
+        conn   = connection;
     }
     if (conn) {
         assert(loop == conn->Get_loop());
         CloseCallback callback = std::bind(&Wasi::Server::Remove_connection, loop, std::placeholders::_1);
         loop->Run_in_loop(std::bind(&TcpConnection::Set_close_callback, conn, callback));
         if (unique) { conn->Force_close(); }
-    }
-    else {
+    } else {
         connector->Stop();
         loop->Run_after(1, std::bind(&Remove_connector, connector));
     }

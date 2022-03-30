@@ -11,13 +11,13 @@ void FileSink::Fileout() {
     try {
         filehandler.Reopen();
         filehandler.Write(logs);
-        suc_count.fetch_add(count.load());
-        count.store(0);
+        suc_count += count;
+        count = 0;
         logs.clear();
         filehandler.Close();
     } catch (const Exception& e) {
         std::cerr << e.What();
-        count.store(0);
+        count = 0;
         filehandler.Close();
     }
 }
@@ -58,15 +58,15 @@ FileSink::FileSink(LogFormat logformat, std::string filename, FileEvents events)
 void FileSink::Logger(LogMsg& logmsg) {
     formatter.Format(logmsg);
     logs += logmsg.Output();
-    count.fetch_add(1);
+    ++count;
     if (count % 10 == 0 && count != 1) {
         Fileout();
     }
 }
 
 void FileSink::Flush() {
-    logs += "Flush\n";
-    count.fetch_add(1);
+    // logs += "Flush\n";
+    // ++count;
     Fileout();
 }
 
@@ -75,7 +75,7 @@ void FileSink::Set_format(LogFormat logformat) {
     formatter.Set_format(logformat);
 }
 
-uint FileSink::Get_count() { return suc_count.load(); }
+uint FileSink::Get_count() { return suc_count; }
 
 FileSink::~FileSink() {
     Fileout();

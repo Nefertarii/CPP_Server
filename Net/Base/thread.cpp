@@ -1,16 +1,17 @@
 #include "Head/thread.h"
+#include "../../Log/Head/logging.h"
+#include <cassert>
 #include <errno.h>
-#include <unistd.h>
+#include <exception>
+#include <linux/unistd.h>
+#include <memory>
+#include <pthread.h>
+#include <sys/prctl.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
-#include <sys/prctl.h>
-#include <linux/unistd.h>
-#include <pthread.h>
-#include <cassert>
-#include <memory>
-#include <exception>
-#include <iostream>
+#include <unistd.h>
 
+using namespace Wasi;
 using namespace Wasi::Base;
 
 struct ThreadData {
@@ -27,19 +28,17 @@ struct ThreadData {
 
 void* Start_thread(void* obj) {
     ThreadData* thread_data = static_cast<ThreadData*>(obj);
-    *(thread_data->tid) = gettid();
-    thread_data->tid = nullptr;
+    *(thread_data->tid)     = gettid();
+    thread_data->tid        = nullptr;
     thread_data->latch->Count_down();
     thread_data->latch = nullptr;
     prctl(PR_SET_NAME, thread_data->name);
     try {
         thread_data->func();
         thread_data->name = "Finished";
-    }
-    catch (...) {
+    } catch (...) {
         thread_data->name = "crashed";
-        std::cout << "thread" << thread_data->name << " crashed.";
-        //reason;
+        LOG_WARN("thread" + thread_data->name + " crashed.");
     }
     delete thread_data;
     return nullptr;
@@ -51,7 +50,7 @@ void Thread::Set_default_name() {
         char buf[32];
         snprintf(buf, sizeof(buf), "Thread%d", num);
         name = buf;
-        std::cout << "thread name:" << name << "\n";
+        LOG_DEBUG("thread name:" + name);
     }
 }
 
@@ -70,14 +69,13 @@ std::atomic<int> Thread::num_created(0);
 
 void Thread::Start() {
     assert(!started);
-    started = true;
+    started          = true;
     ThreadData* data = new ThreadData(name, func, &latch, &tid);
     if (pthread_create(&pthread_id, nullptr, Start_thread, data)) {
         started = false;
         delete data;
-        std::cout << "Failed create pthread.\n";
-    }
-    else {
+        Log::Warning("Failed create pthread.");
+    } else {
         latch.Wait();
         assert(tid > 0);
     }

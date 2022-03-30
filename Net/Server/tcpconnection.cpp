@@ -1,13 +1,14 @@
 #include "Head/tcpconnection.h"
+#include "../../Log/Head/logging.h"
 #include "../../Timer/Head/clock.h"
 #include "../../Timer/Head/timerid.h"
 #include "../Poll/Head/channel.h"
 #include "../Poll/Head/eventloop.h"
 #include "../Sockets/Head/socket.h"
 #include "../Sockets/Head/socketapi.h"
-#include <netinet/tcp.h>
 #include <assert.h>
-#include <iostream>
+#include <netinet/tcp.h>
+#include <sstream>
 
 using namespace Wasi;
 using namespace Wasi::Server;
@@ -15,17 +16,15 @@ using namespace Wasi::Server;
 void TcpConnection::Handle_read(Time::TimeStamp receive_time) {
     loop->Assert_in_loop_thread();
     int tmp_errno = 0;
-    ssize_t read = input_buffer.Read_fd(channel->Fd(), &tmp_errno);
+    ssize_t read  = input_buffer.Read_fd(channel->Fd(), &tmp_errno);
     if (read > 0) {
         message_callback(shared_from_this(), &input_buffer, receive_time);
         message_callback(shared_from_this(), &output_buffer, receive_time);
-    }
-    else if (read == 0) {
+    } else if (read == 0) {
         Handle_close();
-    }
-    else {
+    } else {
         errno = tmp_errno;
-        std::cout << "TcpConnection::Handle_read error\n";
+        LOG_ERROR("TcpConnection::Handle_read error");
         Handle_error();
     }
 }
@@ -43,15 +42,18 @@ void TcpConnection::Handle_write() {
                 if (write_complete_callback) { loop->Queue_in_loop(std::bind(write_complete_callback, shared_from_this())); }
                 if (state == DISCONNECTING) { Shutdown(); }
             }
+        } else {
+            LOG_ERROR("TcpConnection::Handle_write error");
         }
-        else { std::cout << "TcpConnection::Handle_write error\n"; }
+    } else {
+        LOG_ERROR("Connection fd:" + std::to_string(channel->Fd()) + "no more writing");
     }
-    else { std::cout << "Connection fd:" << channel->Fd() << "no more writing\n"; }
 }
 
 void TcpConnection::Handle_close() {
     loop->Assert_in_loop_thread();
-    std::cout << "Channel fd:" << channel->Fd() << " state:" << State_to_string() << "\n";
+    std::string msg = "Channel fd:" + std::to_string(channel->Fd()) + " state:" + State_to_string();
+    LOG_INFO(msg);
     assert(state == CONNECTED || state == DISCONNECTING);
     Set_state(DISCONNECTED);
     channel->Disable_all();
@@ -61,19 +63,20 @@ void TcpConnection::Handle_close() {
 }
 
 void TcpConnection::Handle_error() {
-    int err = Sockets::Get_socket_error(channel->Fd());
-    std::cout << "TcpConnection[" << name << "] SO_ERROR:"
-        << err << ", " << Sockets::String_error(err) << "\n";
+    int err         = Sockets::Get_socket_error(channel->Fd());
+    std::string msg = "TcpConnection[" + name + "] SO_ERROR:"
+                      + std::to_string(err) + ", " + Sockets::String_error(err);
+    LOG_INFO(msg);
 }
 
 void TcpConnection::Send_in_loop() {
     loop->Assert_in_loop_thread();
-    ssize_t wrote = 0;
-    size_t len = output_buffer.Size();
+    ssize_t wrote    = 0;
+    size_t len       = output_buffer.Size();
     size_t remaining = output_buffer.Remaining();
-    bool fault = false;
+    bool fault       = false;
     if (state == DISCONNECTED) {
-        std::cout << "Disconnected, give up write.\n";
+        LOG_INFO("Disconnected, give up write.");
         return;
     }
     if (!channel->Is_writing() && remaining != 0) {
@@ -85,10 +88,9 @@ void TcpConnection::Send_in_loop() {
                 output_buffer.Init();
                 loop->Queue_in_loop(std::bind(write_complete_callback, shared_from_this()));
             }
-        }
-        else {
+        } else {
             if (errno != EWOULDBLOCK) {
-                std::cout << "TcpConnection::Send_in_loop error\n";
+                LOG_INFO("Error");
                 if (errno == EPIPE || errno == ECONNRESET) {
                     fault = true;
                 }
@@ -96,14 +98,14 @@ void TcpConnection::Send_in_loop() {
         }
     }
     assert(remaining <= len);
-    //high_water_mark
+    // high_water_mark
     if (!fault && remaining > 0) {
         if (len + remaining >= high_water_mark
             && len < high_water_mark
             && high_water_mark_callback) {
             loop->Queue_in_loop(std::bind(high_water_mark_callback, shared_from_this(), len + remaining));
         }
-        //output_buffer.Append()
+        // output_buffer.Append()
         if (!channel->Is_writing()) { channel->Enable_writing(); }
     }
 }
@@ -173,7 +175,11 @@ TcpConnection::TcpConnection(Poll::EventLoop* loop_, const std::string& name_, i
     channel->Set_write_callback(std::bind(&TcpConnection::Handle_write, this));
     channel->Set_close_callback(std::bind(&TcpConnection::Handle_close, this));
     channel->Set_error_callback(std::bind(&TcpConnection::Handle_error, this));
-    std::cout << "TcpConnection[" << name << "] ctor at " << this << " fd:" << sockfd_ << "\n";
+    const void* address = static_cast<const void*>(this);
+    std::stringstream this_point;
+    this_point << address;
+    std::string msg = "TcpConnection[" + name + "] ctor at " + this_point.str()
+                      + " fd:" + std::to_string(sockfd_);
     socket->Set_keep_alive(true);
 }
 
@@ -210,8 +216,7 @@ void TcpConnection::Send(const std::string message) {
     if (state == CONNECTED) {
         if (loop->Is_in_loop_thread()) {
             Send_in_loop();
-        }
-        else {
+        } else {
             loop->Run_in_loop(std::bind(&TcpConnection::Send_in_loop, this));
         }
     }
@@ -272,7 +277,7 @@ void TcpConnection::Set_write_complete_callback(const WriteCompleteCallback& cb)
 
 void TcpConnection::Set_high_water_mark_callback(const HighWaterMarkCallback& cb, size_t high_water_mark_) {
     high_water_mark_callback = cb;
-    high_water_mark = high_water_mark_;
+    high_water_mark          = high_water_mark_;
 }
 
 void TcpConnection::Set_close_callback(const CloseCallback& cb) {
@@ -298,7 +303,12 @@ void TcpConnection::Connect_destroyed() {
 }
 
 TcpConnection::~TcpConnection() {
-    std::cout << "TcpConnection[" << name << "] dtor at "
-        << this << " fd:" << channel->Fd() << " state:" << State_to_string() << "\n";
+    const void* address = static_cast<const void*>(this);
+    std::stringstream this_point;
+    this_point << address;
+    std::string msg = "TcpConnection[" + name + "] dtor at "
+                      + this_point.str() + " fd:" + std::to_string(channel->Fd())
+                      + " state:" + State_to_string();
+    LOG_INFO(msg);
     assert(state == DISCONNECTED);
 }

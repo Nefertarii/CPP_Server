@@ -16,8 +16,8 @@ LogFormat::LogFormat() {
     consoles_color[LogLevel::INFO]          = GREEN;
     consoles_color[LogLevel::WARN]          = BOLDYELLOW;
     consoles_color[LogLevel::ERR]           = RED;
-    consoles_color[LogLevel::CRITICAL]      = RED;
-    consoles_color[LogLevel::FATAL]         = BOLDRED;
+    consoles_color[LogLevel::CRITICAL]      = BOLDRED;
+    consoles_color[LogLevel::FATAL]         = INVERSERED;
 }
 
 std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
@@ -49,9 +49,11 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
     }
     // [file:line func()]
     if (log_format.print_source_location) {
-        tmp_logmsg += "[";
-        tmp_logmsg += logmsg.Get_source_location();
-        tmp_logmsg += "] ";
+        if (logmsg.Get_source_location().size() != 0) {
+            tmp_logmsg += "[";
+            tmp_logmsg += logmsg.Get_source_location();
+            tmp_logmsg += "] ";
+        }
     }
     // [level]
     tmp_logmsg += "[";
@@ -65,8 +67,6 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
     tmp_logmsg += "] ";
     // detail
     tmp_logmsg += logmsg.Get_detail();
-    tmp_logmsg += " ";
-
     tmp_logmsg += "\n";
     logmsg.Format(tmp_logmsg);
     return tmp_logmsg;

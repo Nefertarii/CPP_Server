@@ -1,11 +1,11 @@
 #include "Head/acceptor.h"
-#include "Head/socketapi.h"
+#include "../../Log/Head/logging.h"
 #include "../Poll/Head/eventloop.h"
+#include "Head/socketapi.h"
+#include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <assert.h>
-#include <iostream>
 
 using namespace Wasi::Sockets;
 
@@ -14,11 +14,13 @@ void Acceptor::Handle_read() {
     InetAddress peeraddr;
     int connfd = accept_socket.Accept(&peeraddr);
     if (connfd >= 0) {
-        if (callback) { callback(connfd, peeraddr); }
-        else { Close(connfd); }
-    }
-    else {
-        std::cout << "Acceptor::Handle_read error\n";
+        if (callback) {
+            callback(connfd, peeraddr);
+        } else {
+            Close(connfd);
+        }
+    } else {
+        LOG_ERROR("Error");
         if (errno == EMFILE) {
             close(idle_fd);
             idle_fd = accept(accept_socket.Fd(), nullptr, nullptr);

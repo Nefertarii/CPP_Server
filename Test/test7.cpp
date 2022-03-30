@@ -168,7 +168,50 @@ void T_logger() {
 }
 
 void T_logging() {
+    Debug("123");
+    Debug("123", gettid());
+    Debug("123", gettid(), __FILE__, __FUNCTION__);
+    Debug("123", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    Info("123");
+    Info("123", gettid());
+    Info("123", gettid(), __FILE__, __FUNCTION__);
+    Info("123", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    Warning("123");
+    Warning("123", gettid());
+    Warning("123", gettid(), __FILE__, __FUNCTION__);
+    Warning("123", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    Error("123");
+    Error("123", gettid());
+    Error("123", gettid(), __FILE__, __FUNCTION__);
+    Error("123", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    Critical("123");
+    Critical("123", gettid());
+    Critical("123", gettid(), __FILE__, __FUNCTION__);
+    Critical("123", gettid(), __FILE__, __FUNCTION__, __LINE__);
+    Fatal("123");
+    Fatal("123", gettid());
+    Fatal("123", gettid(), __FILE__, __FUNCTION__);
+    Fatal("123", gettid(), __FILE__, __FUNCTION__, __LINE__);
+}
+
+void T_speed() {
+    long begin = Clock::Nowtime_ms();
+    for (int i = 0; i != 50000; i++) {
         Debug("123");
+    }
+    long end = Clock::Nowtime_ms();
+    std::cout << "global log Using " << begin - end << " ms\n";
+    sleep(5);
+
+    begin = Clock::Nowtime_ms();
+    Logger logger("logger", make_shared<StdSink>());
+    for (int i = 0; i != 50000; i++) {
+        logger.Debug("123");
+    }
+    end = Clock::Nowtime_ms();
+    sleep(1);
+    std::cout << endl;
+    std::cout << "logger Using " << begin - end << " ms\n";
 }
 
 int main() {
@@ -176,5 +219,6 @@ int main() {
     // T_filehandler();
     // T_filesink();
     // T_logger();
-    T_logging();
+    // T_logging();
+    T_speed();
 }
