@@ -13,18 +13,8 @@ void product(double x, double y) {
     std::cout << x << "*" << y << " == " << x * y << std::endl;
 }
 
-using namespace std;
-
-void func1(string str, fstream* filestream) {
-    filestream->write();
-    
-}
-
-    
-
 int main() {
-    /*
-    double arg[] = { 1, 2, 3 };
+    double arg[] = {1, 2, 3};
 
     std::for_each(&arg[0], &arg[3], square);
     std::cout << std::endl;
@@ -33,8 +23,6 @@ int main() {
     std::cout << std::endl;
 
     std::for_each(&arg[0], &arg[3], std::bind(square, _1));
-    */
 
-    ifstream filestream;
     return 0;
 }

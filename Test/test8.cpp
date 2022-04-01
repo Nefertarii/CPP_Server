@@ -6,9 +6,10 @@
 
 using namespace std;
 
+inline std::string Filename(std::string name) {
+    return std::string(name.begin() + name.find_last_of('/'), name.end());
+}
+
 int main() {
-    int a        = 1;
-    int* p       = &a;
-    string str_p = (const char*)p;
-    cout << str_p;
+    cout << Filename(__FILE__);
 }

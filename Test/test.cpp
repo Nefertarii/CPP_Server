@@ -1,3 +1,4 @@
+#include "../Log/Head/logging.h"
 #include "../Net/Base/Head/buffer.h"
 #include "../Net/Poll/Head/channel.h"
 #include "../Net/Poll/Head/eventloop.h"
@@ -36,23 +37,6 @@ using namespace Wasi::Sockets;
 using namespace Wasi::Server;
 using namespace std;
 
-void New_connection(int sockfd, const InetAddress& peeraddr) {
-    cout << "New_connection(): accepted a new connection from"
-         << peeraddr.To_string_ip_port() << "\n";
-    Write(sockfd, "How are you?\n", 13);
-}
-
-void func8() {
-    cout << "main pid:" << getpid() << "\n";
-    InetAddress listenaddr(9981);
-    EventLoop loop;
-    Acceptor acceptor(&loop, listenaddr, true);
-    acceptor.Set_new_connection_callback(New_connection);
-    acceptor.Listen();
-
-    loop.Loop();
-}
-
 void New_connection2(const TcpConnectionPtr& conn) {
     if (conn->Connected()) {
         std::cout << "New_connection(): new connection [" << conn->Get_name()
@@ -67,18 +51,14 @@ void Message(const TcpConnectionPtr& conn, Buffer* buf, TimeStamp receiveTime) {
     if (buf->State()) {
         std::string message = "How are you?";
         conn->Send(message);
-        std::cout << "Send_message: Send " << message.size()
-                  << " bytes from connection [" << conn->Get_name() << "] at "
-                  << Clock::To_string(receiveTime) << "\n";
+        std::string msg = "Send " + to_string(message.size())
+                          + " bytes to connection [" + conn->Get_name() + "]";
+        LOG_INFO(msg);
     } else {
-        std::cout << "Read_message: received:"
-                  << buf->Content() << "\nTotal:" << buf->Size()
-                  << " bytes from connection [" << conn->Get_name() << "] at "
-                  << Clock::To_string(receiveTime) << "\n";
+        std::string msg = "Read :" + buf->Content() + "\nTotal:" + to_string(buf->Size())
+                          + " bytes from connection [" + conn->Get_name() + "]";
+        LOG_INFO(msg);
     }
-}
-
-void Send_message(const TcpConnectionPtr& conn, Buffer* buf, TimeStamp receiveTime) {
 }
 
 void func9() {

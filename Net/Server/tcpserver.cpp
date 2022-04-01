@@ -36,7 +36,7 @@ void TcpServer::Remove_connection(const TcpConnectionPtr& conn) {
 
 void TcpServer::Remove_connection_in_loop(const TcpConnectionPtr& conn) {
     loop->Assert_in_loop_thread();
-    std::string msg = "TcpServer::Remove_connection_in_loop [" + name
+    std::string msg = "Remove [" + name
                       + "] connection " + conn->Get_name();
     LOG_INFO(msg);
     size_t n = conntions.erase(conn->Get_name());

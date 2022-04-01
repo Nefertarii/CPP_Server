@@ -16,6 +16,8 @@ OBJECTS3 = buffer.o test3.o
 OBJECTS4 = buffer.o test4.o 
 OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	poller.o eventloop.o channel.o thread.o eventloopthread.o \
+	filehandler.o logformatter.o loglevel.o logmsg.o \
+	stdsink.o filesink.o logger.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
 OBJECTS6 = filehandler.o logformatter.o loglevel.o logmsg.o \
@@ -138,7 +140,7 @@ tcpserver.o : $(SERVER)/Head/tcpserver.h $(SERVER)/tcpserver.cpp
 tcpclient.o : $(SERVER)/Head/tcpclient.h $(SERVER)/tcpclient.cpp
 	$(CC) $(FLAGS) -c $(SERVER)/tcpclient.cpp
 #test
-test.o : test.cpp
+test.o : test.cpp ../Log/Head/logging.h
 	$(CC) $(FLAGS) -c test.cpp
 
 test2.o : test2.cpp

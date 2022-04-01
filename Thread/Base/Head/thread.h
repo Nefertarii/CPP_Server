@@ -3,29 +3,30 @@
 
 #include "../../../Class/noncopyable.h"
 #include "latch.h"
-#include "thread"
 #include <atomic>
 #include <functional>
 #include <string>
+#include <thread>
 
 namespace Wasi {
 namespace Base {
-using ThreadFunc = std::function<void()>;
+
+using Function = std::function<void()>;
 
 class Thread : Noncopyable {
 private:
     void Set_default_name();
     bool started;
     bool joined;
+    std::string name;
+    Function func;
+    Latch latch;
     pthread_t pthread_id;
     pid_t tid;
-    std::string name;
-    ThreadFunc func;
-    Latch latch;
     static std::atomic<int> num_created;
 
 public:
-    explicit Thread(ThreadFunc func_, const std::string& name_ = std::string());
+    explicit Thread(Function func_, const std::string& name_ = std::string());
     void Start();
     int Join();
     bool Started() const;

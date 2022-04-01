@@ -200,7 +200,7 @@ void T_speed() {
         Debug("123");
     }
     long end = Clock::Nowtime_ms();
-    std::cout << "global log Using " << begin - end << " ms\n";
+    std::cout << "global log Using " << end - begin << " ms\n";
     sleep(5);
 
     begin = Clock::Nowtime_ms();
@@ -211,7 +211,7 @@ void T_speed() {
     end = Clock::Nowtime_ms();
     sleep(1);
     std::cout << endl;
-    std::cout << "logger Using " << begin - end << " ms\n";
+    std::cout << "logger Using " << end - begin << " ms\n";
 }
 
 int main() {

@@ -6,15 +6,19 @@
 
 inline const char* default_logger_name = "";
 
-#define LOG_DEBUG(detail) Wasi::Log::Debug(detail, gettid(), __FILE__, __FUNCTION__, __LINE__);
-#define LOG_INFO(detail) Wasi::Log::Info(detail, gettid(), __FILE__, __FUNCTION__, __LINE__);
-#define LOG_WARN(detail) Wasi::Log::Warning(detail, gettid(), __FILE__, __FUNCTION__, __LINE__);
-#define LOG_ERROR(detail) Wasi::Log::Error(detail, gettid(), __FILE__, __FUNCTION__, __LINE__);
-#define LOG_CRITICAL(detail) Wasi::Log::Critical(detail, gettid(), __FILE__, __FUNCTION__, __LINE__);
-#define LOG_FATAL(detail) Wasi::Log::Fatal(detail, gettid(), __FILE__, __FUNCTION__, __LINE__);
+#define LOG_DEBUG(detail) Wasi::Log::Debug(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
+#define LOG_INFO(detail) Wasi::Log::Info(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
+#define LOG_WARN(detail) Wasi::Log::Warning(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
+#define LOG_ERROR(detail) Wasi::Log::Error(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
+#define LOG_CRITICAL(detail) Wasi::Log::Critical(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
+#define LOG_FATAL(detail) Wasi::Log::Fatal(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
 
 namespace Wasi {
 namespace Log {
+
+inline std::string Filename(std::string name) {
+    return std::string(name.begin() + name.find_last_of('/') + 1, name.end());
+}
 
 inline std::shared_ptr<Logger> default_logger() {
     std::shared_ptr<Logger> default_logger_;
