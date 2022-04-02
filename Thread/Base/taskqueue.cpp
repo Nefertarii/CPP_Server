@@ -2,17 +2,17 @@
 
 using namespace Wasi::Base;
 
-void TaskQueue::push(Task task) {
+void TaskQueue::Push(Task task) {
     std::lock_guard<std::mutex> lk(mtx);
-    task_deque.push(std::move(task));
+    task_deque.push_front(std::move(task));
 }
 
-bool TaskQueue::empty() const {
+bool TaskQueue::Empty() const {
     std::lock_guard<std::mutex> lk(mtx);
     return task_deque.empty();
 }
 
-bool TaskQueue::try_pop(Task& task) {
+bool TaskQueue::Try_pop(Task& task) {
     std::lock_guard<std::mutex> lk(mtx);
     if (task_deque.empty()) {
         return false;
@@ -23,7 +23,7 @@ bool TaskQueue::try_pop(Task& task) {
     }
 }
 
-bool TaskQueue::try_steal_task(Task& task) {
+bool TaskQueue::Try_steal_task(Task& task) {
     std::lock_guard<std::mutex> lk(mtx);
     if (task_deque.empty()) {
         return false;

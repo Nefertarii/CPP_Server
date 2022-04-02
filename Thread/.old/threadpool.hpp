@@ -1,48 +1,21 @@
 #ifndef THREAD_THREADPOOL_H_
 #define THREAD_THREADPOOL_H_
 
-#include "deque.hpp"
 #include "queue.hpp"
-#include "vector.hpp"
+#include "thread.h"
+#include <deque>
 #include <exception>
 #include <functional>
 #include <future>
 #include <iostream>
-#include <thread>
+#include <vector>
 
 namespace Wasi {
-namespace Thread {
+namespace Base {
+
 class Thread_Pool {
 private:
-    struct Impl_base {
-        virtual void call() = 0;
-        virtual ~Impl_base() {}
-    };
-    template <typename Func>
-    struct Impl_type : Impl_base {
-        Func func;
-        Impl_type(Func&& func_) :
-            func(std::move(func_)) {}
-        void call() { func(); }
-    };
-    class Function_wrap {
-    private:
-        std::unique_ptr<Impl_base> impl;
-
-    public:
-        Function_wrap() = default;
-        template <typename Func>
-        Function_wrap(Func&& func) :
-            impl(new Impl_type<Func>(std::move(func))) {}
-        void operator()() { impl->call(); }
-        Function_wrap(Function_wrap&& other) :
-            impl(std::move(other.impl)) {}
-        Function_wrap& operator             =(Function_wrap&& other);
-        Function_wrap(const Function_wrap&) = delete;
-        Function_wrap(Function_wrap&)       = delete;
-        Function_wrap& operator=(const Function_wrap&) = delete;
-    };
-    using Task = Function_wrap;
+    using Task = std::function<void()>;
     class Task_queue {
     private:
         std::deque<Task> deque;
@@ -57,20 +30,10 @@ private:
         bool try_pop(Task& task);
         bool try_steal_task(Task& task);
     };
-    class Join_threads {
-    private:
-        std::vector<std::thread>& threads;
-
-    public:
-        explicit Join_threads(std::vector<std::thread>& threads_) :
-            threads(threads_) {}
-        ~Join_threads();
-    };
     std::atomic_bool done;
-    Wasi::Thread::Safe_Queue<Task> pool_work_queue;
+    Wasi::Base::Safe_Queue<Task> pool_work_queue;
     std::vector<std::unique_ptr<Task_queue>> tasks;
-    std::vector<std::thread> threads;
-    Join_threads joiner;
+    std::vector<std::unique_ptr<Thread>> threads;
     inline static thread_local Task_queue* local_work_queue;
     inline static thread_local int index;
     void worker_thread(uint index_);
@@ -80,31 +43,25 @@ private:
 
 public:
     Thread_Pool();
-    template <typename Func>
-    std::future<typename std::result_of<Func()>::type> submit(Func func);
+    void submit(Task func);
     void run_pending_task();
     ~Thread_Pool() { done = true; }
 };
 
 }
-} // namespace Wasi::Thread
+} // namespace Wasi::Base
 
-Wasi::Thread::Thread_Pool::Function_wrap& Wasi::Thread::Thread_Pool::Function_wrap::operator=(Function_wrap&& other) {
-    impl = std::move(other.impl);
-    return *this;
-}
-
-void Wasi::Thread::Thread_Pool::Task_queue::push(Task data) {
+void Wasi::Base::Thread_Pool::Task_queue::push(Task data) {
     std::lock_guard<std::mutex> lk(mtx);
     deque.push_front(std::move(data));
 }
 
-bool Wasi::Thread::Thread_Pool::Task_queue::empty() const {
+bool Wasi::Base::Thread_Pool::Task_queue::empty() const {
     std::lock_guard<std::mutex> lk(mtx);
     return deque.empty();
 }
 
-bool Wasi::Thread::Thread_Pool::Task_queue::try_pop(Task& res) {
+bool Wasi::Base::Thread_Pool::Task_queue::try_pop(Task& res) {
     std::lock_guard<std::mutex> lk(mtx);
     if (deque.empty()) {
         return false;
@@ -115,7 +72,7 @@ bool Wasi::Thread::Thread_Pool::Task_queue::try_pop(Task& res) {
     }
 }
 
-bool Wasi::Thread::Thread_Pool::Task_queue::try_steal_task(Task& res) {
+bool Wasi::Base::Thread_Pool::Task_queue::try_steal_task(Task& res) {
     std::lock_guard<std::mutex> lk(mtx);
     if (deque.empty()) {
         return false;
@@ -126,25 +83,23 @@ bool Wasi::Thread::Thread_Pool::Task_queue::try_steal_task(Task& res) {
     }
 }
 
-Wasi::Thread::Thread_Pool::Join_threads::~Join_threads() {
-    for (uint i = 0; i < threads.size(); i++) {
-        if (threads[i].joinable()) { threads[i].join(); }
-    }
-}
-
-void Wasi::Thread::Thread_Pool::worker_thread(uint index_) {
+void Wasi::Base::Thread_Pool::worker_thread(uint index_) {
     index            = index_;
     local_work_queue = tasks[index].get();
     while (!done) { run_pending_task(); }
 }
 
-Wasi::Thread::Thread_Pool::Thread_Pool() :
-    done(false), joiner(threads) {
+Wasi::Base::Thread_Pool::Thread_Pool() :
+    done(false) {
     const uint thread_count = std::thread::hardware_concurrency();
+    tasks.reserve(thread_count);
+    threads.reserve(thread_count);
     try {
         for (uint i = 0; i < thread_count; i++) {
-            tasks.push_back(std::unique_ptr<Task_queue>(new Task_queue));
-            threads.push_back(std::thread(&Thread_Pool::worker_thread, this, i));
+            tasks.emplace_back(std::make_unique<Task_queue>());
+            std::string thread_name = "thread" + std::to_string(i);
+            threads.emplace_back(std::make_unique<Thread>(
+                std::bind(&Thread_Pool::worker_thread, this, i), thread_name));
         }
     } catch (...) {
         done = true;
@@ -152,38 +107,33 @@ Wasi::Thread::Thread_Pool::Thread_Pool() :
     }
 }
 
-// thread_local Wasi::Thread::Thread_Pool::Task_queue* Wasi::Thread::Thread_Pool::local_work_queue = 0;
-bool Wasi::Thread::Thread_Pool::pop_task_from_local_queue(Task& task) {
+// thread_local Wasi::Base::Thread_Pool::Task_queue* Wasi::Base::Thread_Pool::local_work_queue = 0;
+bool Wasi::Base::Thread_Pool::pop_task_from_local_queue(Task& task) {
     return local_work_queue && local_work_queue->try_pop(task);
 }
 
-bool Wasi::Thread::Thread_Pool::pop_task_from_pool_queue(Task& task) {
+bool Wasi::Base::Thread_Pool::pop_task_from_pool_queue(Task& task) {
     return pool_work_queue.try_pop(task);
 }
 
-// thread_local int Wasi::Thread::Thread_Pool::index = 0;
-bool Wasi::Thread::Thread_Pool::pop_task_from_other_thread_queue(Task& task) {
+// thread_local int Wasi::Base::Thread_Pool::index = 0;
+bool Wasi::Base::Thread_Pool::pop_task_from_other_thread_queue(Task& task) {
     for (uint i = 0; i < tasks.size(); i++) {
-        const size_t new_index = (Wasi::Thread::Thread_Pool::index + i + 1) % tasks.size();
+        const size_t new_index = (Wasi::Base::Thread_Pool::index + i + 1) % tasks.size();
         if (tasks[new_index]->try_steal_task(task)) { return true; }
     }
     return false;
 }
 
-template <typename Func>
-std::future<typename std::result_of<Func()>::type> Wasi::Thread::Thread_Pool::submit(Func func) {
-    using ResultType = typename std::result_of<Func()>::type;
-    std::packaged_task<ResultType()> task(func);
-    std::future<ResultType> res(task.get_future());
+void Wasi::Base::Thread_Pool::submit(Task task_) {
     if (local_work_queue) {
-        local_work_queue->push(std::move(task));
+        local_work_queue->push(std::move(task_));
     } else {
-        pool_work_queue.push(std::move(task));
+        pool_work_queue.push(std::move(task_));
     }
-    return res;
 }
 
-void Wasi::Thread::Thread_Pool::run_pending_task() {
+void Wasi::Base::Thread_Pool::run_pending_task() {
     Task task;
     if (pop_task_from_local_queue(task) || pop_task_from_pool_queue(task) || pop_task_from_other_thread_queue(task)) {
         task();

@@ -4,6 +4,7 @@ TARGET3 = test3
 TARGET4 = test4
 TARGET5 = test5
 TARGET6 = test7
+TARGET7 = test9
 CC = g++
 OBJECTS1 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	filehandler.o logformatter.o loglevel.o logmsg.o \
@@ -22,6 +23,11 @@ OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	buffer.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
 OBJECTS6 = filehandler.o logformatter.o loglevel.o logmsg.o \
 	stdsink.o filesink.o logger.o clock.o timestamp.o test7.o
+OBJECTS7 = latch.o taskqueue.o thread.o threadpool.o \
+	filehandler.o logformatter.o loglevel.o logmsg.o \
+	clock.o timestamp.o timer.o timerid.o timerqueue.o \
+	poller.o eventloop.o channel.o \
+	stdsink.o filesink.o logger.o test9.o
 FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
 HTTP = ../Net/Http
@@ -52,6 +58,10 @@ test5: $(OBJECTS5)
 
 test7: $(OBJECTS6)
 	$(CC) $(FLAGS) -o $(TARGET6) $(OBJECTS6)
+
+test9: $(OBJECTS7)
+	$(CC) $(FLAGS) -o $(TARGET7) $(OBJECTS7)
+
 
 #timer
 clock.o : $(TIMER)/Head/clock.h $(TIMER)/clock.cpp
@@ -95,14 +105,28 @@ filesink.o : $(SINK)/Head/filesink.h $(SINK)/filesink.cpp
 	$(CC) $(FLAGS) -c $(SINK)/filesink.cpp
 
 #base
-thread.o : $(BASE)/Head/thread.h $(BASE)/thread.cpp
-	$(CC) $(FLAGS) -c $(BASE)/thread.cpp
+#thread.o : $(BASE)/Head/thread.h $(BASE)/thread.cpp
+#	$(CC) $(FLAGS) -c $(BASE)/thread.cpp
 
-latch.o : $(BASE)/Head/latch.h $(BASE)/latch.cpp
-	$(CC) $(FLAGS) -c $(BASE)/latch.cpp
+#latch.o : $(BASE)/Head/latch.h $(BASE)/latch.cpp
+#	$(CC) $(FLAGS) -c $(BASE)/latch.cpp
 
 buffer.o : $(BASE)/Head/buffer.h $(BASE)/buffer.cpp
 	$(CC) $(FLAGS) -c $(BASE)/buffer.cpp
+
+#thread
+latch.o : $(THREAD)/Base/Head/latch.h $(THREAD)/Base/latch.cpp
+	$(CC) $(FLAGS) -c $(THREAD)/Base/latch.cpp
+
+taskqueue.o : $(THREAD)/Base/Head/taskqueue.h $(THREAD)/Base/taskqueue.cpp
+	$(CC) $(FLAGS) -c $(THREAD)/Base/taskqueue.cpp
+
+thread.o : $(THREAD)/Base/Head/thread.h $(THREAD)/Base/thread.cpp
+	$(CC) $(FLAGS) -c $(THREAD)/Base/thread.cpp
+
+threadpool.o : $(THREAD)/Head/threadpool.h $(THREAD)/threadpool.cpp $(THREAD)/Base/Head/safequeue.h
+	$(CC) $(FLAGS) -c $(THREAD)/threadpool.cpp
+
 #poll
 poller.o : $(POLL)/Head/poller.h $(POLL)/poller.cpp
 	$(CC) $(FLAGS) -c $(POLL)/poller.cpp
@@ -157,6 +181,9 @@ test5.o : test5.cpp
 
 test7.o : test7.cpp ../Log/Head/logging.h
 	$(CC) $(FLAGS) -c test7.cpp
+
+test9.o : test9.cpp 
+	$(CC) $(FLAGS) -c test9.cpp
 
 .PHONY : clean cleanall
 

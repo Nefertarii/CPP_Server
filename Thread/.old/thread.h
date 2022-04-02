@@ -1,5 +1,41 @@
-#include "Head/thread.h"
-#include "../../Log/Head/logging.h"
+#ifndef BASE_THREAD_H_
+#define BASE_THREAD_H_
+
+#include "../../Class/noncopyable.h"
+#include "latch.h"
+#include <atomic>
+#include <functional>
+#include <string>
+#include <thread>
+
+namespace Wasi {
+namespace Base {
+
+using Function = std::function<void()>;
+
+class Thread : Noncopyable {
+private:
+    void Set_default_name();
+    bool started;
+    bool joined;
+    std::string name;
+    Function func;
+    Latch latch;
+    pthread_t pthread_id;
+    pid_t tid;
+    static std::atomic<int> num_created;
+
+public:
+    explicit Thread(Function func_, const std::string& name_ = std::string());
+    void Start();
+    int Join();
+    bool Started() const;
+    pid_t Tid() const;
+    const std::string& Name() const;
+    static int Num_created() { return num_created.load(); }
+    ~Thread();
+};
+
 #include <cassert>
 #include <errno.h>
 #include <exception>
@@ -10,9 +46,6 @@
 #include <sys/syscall.h>
 #include <sys/types.h>
 #include <unistd.h>
-
-using namespace Wasi;
-using namespace Wasi::Base;
 
 struct ThreadData {
     std::string name;
@@ -36,10 +69,8 @@ void* Start_thread(void* obj) {
     try {
         thread_data->func();
         thread_data->name = "Finished";
-        LOG_INFO("thread:" + thread_data->name + " finished.");
     } catch (...) {
         thread_data->name = "crashed";
-        LOG_WARN("thread:" + thread_data->name + " crashed.");
     }
     delete thread_data;
     return nullptr;
@@ -52,8 +83,6 @@ void Thread::Set_default_name() {
         snprintf(buf, sizeof(buf), "Thread%d", num);
         name = buf;
     }
-    std::string msg = "Thread:" + name + " Create";
-    LOG_INFO(msg);
 }
 
 Thread::Thread(Function func_, const std::string& name_) :
@@ -63,7 +92,10 @@ Thread::Thread(Function func_, const std::string& name_) :
     func(std::move(func_)),
     latch(1),
     pthread_id(0),
-    tid(0) { Set_default_name(); }
+    tid(0) {
+    Set_default_name();
+    std::string msg = "Thread:" + name + " Create";
+}
 
 std::atomic<int> Thread::num_created(0);
 
@@ -74,7 +106,6 @@ void Thread::Start() {
     if (pthread_create(&pthread_id, nullptr, Start_thread, data)) {
         started = false;
         delete data;
-        LOG_ERROR("pthread_create Fail");
     } else {
         latch.Wait();
         assert(tid > 0);
@@ -99,3 +130,8 @@ Thread::~Thread() {
         pthread_detach(pthread_id);
     }
 }
+
+}
+} // namespace Wasi::Base
+
+#endif // !BASE_THREAD_H_

@@ -8,7 +8,7 @@
 namespace Wasi {
 namespace Base {
 
-class Latch : Noncopyable {
+class Latch : Noncopyable { 
 private:
     mutable std::mutex mtx;
     std::condition_variable cond;
