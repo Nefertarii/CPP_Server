@@ -1,8 +1,7 @@
 nginx处理分11个阶段 能在阶段添加自定义的处理方式  
 typedef enum {
-    NGX_HTTP_POST_READ_PHASE = 0, 
-  
-    NGX_HTTP_SERVER_REWRITE_PHASE,  //server块中配置了rewrite指令，重写url
+    NGX_HTTP_POST_READ_PHASE = 0, // 接收完请求头之后的第一个阶段，它位于uri重写之前，实际上很少有模块会注册在该阶段，默认的情况下，该阶段被跳过
+    NGX_HTTP_SERVER_REWRITE_PHASE, //server块中配置了rewrite指令，重写url
   
     NGX_HTTP_FIND_CONFIG_PHASE,   //查找匹配的location配置；不能自定义handler；
     NGX_HTTP_REWRITE_PHASE,       //location块中配置了rewrite指令，重写url
@@ -22,3 +21,7 @@ ngx_http_phases;
 均衡负载 upstream  
 正/反向代理  
 限流  
+
+稍微根据nginx的阶段进行编写,不会写得那么具体
+
+http server

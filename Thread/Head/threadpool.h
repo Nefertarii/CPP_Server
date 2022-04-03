@@ -12,6 +12,8 @@ namespace Base {
 
 class ThreadPool {
 private:
+    int thread_count;
+    mutable std::mutex mtx;
     std::atomic<bool> done;
     SafeQueue<Task> pool_work_queue;
     std::vector<std::unique_ptr<TaskQueue>> tasks;
@@ -26,7 +28,8 @@ private:
 public:
     ThreadPool();
     void Submit(Task task_);
-    void Run_pending_task();
+    void Start();
+    void Stop();
     ~ThreadPool();
 };
 

@@ -30,8 +30,8 @@ public:
     void Start();
     int Join();
     bool Started() const;
-    pid_t Tid() const;
-    const std::string& Name() const;
+    pid_t Get_tid() const;
+    const std::string& Get_name() const;
     static int Num_created() { return num_created.load(); }
     ~Thread();
 };
