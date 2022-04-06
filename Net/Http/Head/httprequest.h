@@ -2,8 +2,6 @@
 #define HTTP_REQUEST_H_
 
 #include "httpenum.h"
-#include <map>
-#include <string>
 
 namespace Wasi {
 namespace Http {
@@ -15,13 +13,12 @@ private:
     Method method;
     Version version;
     std::string path;
-    std::string body;
     std::string target;
-    HttpHead request_head;
-    void Parse(std::string message);
+    std::string body;
+    void Parse(std::string* message);
 
 public:
-    HttpRequest(std::string http_request);
+    HttpRequest(std::string* http_request);
     Method Get_method() const;
     Version Get_version() const;
     std::string Get_path() const;

@@ -31,16 +31,16 @@ enum class HttpCode {
     CODE500 = 500, // 500 Internal Server Error
     CODE501 = 501, // 501 Method Not Implemented
 };
-struct HttpHead {
+struct ResponeHead {
+    std::string code_num;
+    std::string server_name;
+    std::string connection_type;
     std::string content_type;
     std::string content_length;
-    std::string content_encoding;
-    std::string cache_control;
-    std::string date;
-    std::string etag;
-    std::string location;
     std::string last_modified;
-    std::string server;
+    // std::string etag;
+    // std::string content_encoding;
+    // std::string cache_control;
 };
 
 }

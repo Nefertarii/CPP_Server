@@ -6,8 +6,10 @@ namespace Http {
 
 class HttpServer {
 private:
+    void Connection();
+    void Message();
+    void Request();
 };
-
 }
 } // namespace Wasi::Http
 
