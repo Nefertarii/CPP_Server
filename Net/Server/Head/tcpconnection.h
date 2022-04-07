@@ -79,8 +79,8 @@ public:
     const std::string& Get_name() const;
     const Sockets::InetAddress& Get_local_address() const;
     const Sockets::InetAddress& Get_peer_address() const;
-    Base::Buffer* Get_input_buffer();
-    Base::Buffer* Get_output_buffer();
+    Base::Buffer* Get_input_buffer();  // read
+    Base::Buffer* Get_output_buffer(); // write
     std::string Get_tcp_info() const;
     bool Get_tcp_info(tcp_info* tcpi) const;
     bool Connected() const;

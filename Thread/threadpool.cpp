@@ -97,6 +97,14 @@ void ThreadPool::Stop() {
     }
 }
 
+void ThreadPool::Set_thread_count(int num) {
+    if (num > 0) {
+        Stop();
+        thread_count = num;
+        Start();
+    }
+}
+
 ThreadPool::~ThreadPool() {
     if (done == false) {
         Stop();

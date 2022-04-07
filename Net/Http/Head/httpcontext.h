@@ -12,7 +12,7 @@ private:
         BODY,
         ALLDONE,
     };
-
+    
 public:
     HttpContext();
     void Process_request();

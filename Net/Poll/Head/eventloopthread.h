@@ -24,11 +24,8 @@ private:
     ThreadInitCallback callback;
 
 public:
-    /*
     EventLoopThread(const ThreadInitCallback& callback_ = ThreadInitCallback(),
-                    const std::string& name = std::string());
-    */
-    EventLoopThread();
+                    const std::string& name             = std::string());
     EventLoop* Start_loop();
     ~EventLoopThread();
 };

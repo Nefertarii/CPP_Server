@@ -30,6 +30,7 @@ public:
     void Submit(Task task_);
     void Start();
     void Stop();
+    void Set_thread_count(int num);
     ~ThreadPool();
 };
 

@@ -15,12 +15,14 @@ void EventLoopThread::Thread_func() {
     loop = nullptr;
 }
 
-EventLoopThread::EventLoopThread() :
+EventLoopThread::EventLoopThread(const ThreadInitCallback& callback_ = ThreadInitCallback(),
+                                 const std::string& name             = std::string()) :
     loop(nullptr),
     exiting(false),
-    thread(std::bind(&EventLoopThread::Thread_func, this)),
+    thread(std::bind(&EventLoopThread::Thread_func, this), name),
     mtx(),
-    cond() {}
+    cond(),
+    callback(cb) {}
 
 EventLoop* EventLoopThread::Start_loop() {
     assert(!thread.Started());
