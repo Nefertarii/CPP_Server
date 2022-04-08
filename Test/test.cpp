@@ -9,13 +9,6 @@
 #include "../Net/Sockets/Head/inetaddress.h"
 #include "../Net/Sockets/Head/socket.h"
 #include "../Net/Sockets/Head/socketapi.h"
-#include "../Thread/deque.hpp"
-#include "../Thread/list.hpp"
-#include "../Thread/map.hpp"
-#include "../Thread/queue.hpp"
-#include "../Thread/stack.hpp"
-#include "../Thread/threadpool.hpp"
-#include "../Thread/vector.hpp"
 #include "../Timer/Head/clock.h"
 #include "../Timer/Head/timerid.h"
 #include <iostream>

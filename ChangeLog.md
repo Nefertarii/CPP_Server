@@ -1,4 +1,7 @@
 ## 随便写写
+2022-4-08  
+试了一天,线程池和事件循环只能单独用不能配合使用,还是得用muduo的Eventloopthreadpool  
+
 2022-4-07  
 今天把整体处理的框架整理分析了一下,对原muduo的tcpconnection和httpserver分析了一下,考虑实现使用不同的方式  
 

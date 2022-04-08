@@ -1,3 +1,6 @@
+#include "../Net/Poll/Head/eventloop.h"
+#include "../Net/Poll/Head/eventloopthread.h"
+#include "../Net/Poll/Head/eventloopthreadpool.h"
 #include "../Thread/Head/threadpool.h"
 //#include "../Thread/.old/threadpool.hpp"
 #include <cassert>
@@ -11,12 +14,20 @@
 
 using namespace std;
 using namespace Wasi::Base;
+using namespace Wasi::Poll;
 using Task = std::function<void()>;
 
 SafeQueue<Task> pool_work_queue;
 
 void print(int num) {
     printf("tid:%d get task, num:%d\n", gettid(), num);
+}
+void while_print(int num) {
+    int i = 5;
+    while (--i) {
+        printf("tid:%d get task, num:%d\n", gettid(), num);
+        this_thread::sleep_for(chrono::seconds(2));
+    }
 }
 void func1() {
     this_thread::sleep_for(chrono::seconds(1));
@@ -42,20 +53,40 @@ void func2() {
         this_thread::sleep_for(chrono::seconds(1));
     }
 }
+void func3() {
+    ThreadPool threadpool;
+    vector<unique_ptr<EventLoopThread>> loops;
+
+    loops.push_back(make_unique<EventLoopThread>());
+    loops.push_back(make_unique<EventLoopThread>());
+    loops.push_back(make_unique<EventLoopThread>());
+    loops.push_back(make_unique<EventLoopThread>());
+    loops.push_back(make_unique<EventLoopThread>());
+    loops.push_back(make_unique<EventLoopThread>());
+    loops.push_back(make_unique<EventLoopThread>());
+    loops.push_back(make_unique<EventLoopThread>());
+
+    EventLoop* loop  = loops[0]->Start_loop();
+    EventLoop* loop2 = loops[1]->Start_loop();
+    EventLoop* loop3 = loops[2]->Start_loop();
+    EventLoop* loop4 = loops[3]->Start_loop();
+    EventLoop* loop5 = loops[4]->Start_loop();
+    EventLoop* loop6 = loops[5]->Start_loop();
+    EventLoop* loop7 = loops[6]->Start_loop();
+    EventLoop* loop8 = loops[7]->Start_loop();
+
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop));
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop2));
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop3));
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop4));
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop5));
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop6));
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop7));
+    // threadpool.Submit(std::bind(&EventLoop::Loop, loop8));
+
+    threadpool.Start();
+}
 
 int main() {
-    Wasi::Base::ThreadPool tp;
-    this_thread::sleep_for(chrono::seconds(1));
-    tp.Start();
-    for (int i = 0; i < 10; i++) {
-        if (i == 5) {
-            tp.Stop();
-        }
-        if (i == 8) {
-            tp.Start();
-        }
-        tp.Submit(std::bind(&print, i));
-        this_thread::sleep_for(chrono::seconds(1));
-    }
-    return 0;
+    func3();
 }

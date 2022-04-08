@@ -26,7 +26,7 @@ OBJECTS6 = filehandler.o logformatter.o loglevel.o logmsg.o \
 OBJECTS7 = latch.o taskqueue.o thread.o threadpool.o \
 	filehandler.o logformatter.o loglevel.o logmsg.o \
 	clock.o timestamp.o timer.o timerid.o timerqueue.o \
-	poller.o eventloop.o channel.o \
+	poller.o eventloop.o eventloopthread.o eventloopthreadpool.o channel.o \
 	stdsink.o filesink.o logger.o test9.o
 FLAGS = -pthread -std=c++17 -Og -Wall -g
 BASE = ../Net/Base
@@ -139,6 +139,10 @@ channel.o : $(POLL)/Head/channel.h $(POLL)/channel.cpp
 
 eventloopthread.o : $(POLL)/Head/eventloopthread.h $(POLL)/eventloopthread.cpp
 	$(CC) $(FLAGS) -c $(POLL)/eventloopthread.cpp
+
+eventloopthreadpool.o : $(POLL)/Head/eventloopthreadpool.h $(POLL)/eventloopthreadpool.cpp
+	$(CC) $(FLAGS) -c $(POLL)/eventloopthreadpool.cpp
+	
 #sockets
 socket.o : $(SOCKETS)/Head/socket.h $(SOCKETS)/socket.cpp
 	$(CC) $(FLAGS) -c $(SOCKETS)/socket.cpp 

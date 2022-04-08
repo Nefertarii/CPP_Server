@@ -53,8 +53,11 @@ public:
     Poll::EventLoop* Get_loop();
     // void Set_thread_num(int num_threads);
     // void Set_thread_init_callback(const ThreadInitCallback& callback_)
+    //当accept接受到一个新的连接产生一个新的文件描述符而创造了一个通信套接字的时进行回调
     void Set_connection_callback(const ConnectionCallback& callback_);
+    //当通信套接字可读时进行回调 (epoll)
     void Set_message_callback(const MessageCallback& callback_);
+    //当通信套接字可写时进行回调 (epoll)
     void Set_write_complete_callback(const WriteCompleteCallback& callback_);
     void Start();
     ~TcpServer();

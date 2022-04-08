@@ -1,6 +1,8 @@
 #include "Head/eventloopthreadpool.h"
 #include "Head/eventloop.h"
+#include "Head/eventloopthread.h"
 #include <cassert>
+#include <cstring>
 
 using namespace Wasi::Poll;
 using namespace Wasi;
@@ -14,27 +16,25 @@ using namespace Wasi;
 // std::vector<EventLoop*> loops;
 
 EventLoopThreadPool::EventLoopThreadPool(EventLoop* baseloop_, const std::string& name_) :
-    baseloop(baseloop_),
-    thread_pool(),
-    loops(),
-    name(name_),
     started(false),
+    index(0),
     num_threads(0),
-    index(0) {
-    // thread_pool;
-}
+    name(name_),
+    baseloop(baseloop_),
+    loops() {}
 
 void EventLoopThreadPool::Set_thread_num(int num_threads_) { num_threads = num_threads_; }
 
-void EventLoopThreadPool::Start(const ThreadInitCallback& cb) {
+void EventLoopThreadPool::Start(const ThreadInitCallback& callback) {
     assert(!started);
     baseloop->Assert_in_loop_thread();
     started = true;
     for (int i = 0; i < num_threads; ++i) {
-        loops.push_back(std::make_unique<EventLoop>());
+        threads.push_back(std::make_unique<EventLoopThread>(callback, (name + std::to_string(i))));
+        loops.push_back(threads.end()->get()->Start_loop());
     }
-    if (num_threads == 0 && cb) {
-        baseloop->Run_in_loop(cb);
+    if (num_threads == 0 && callback) {
+        callback(baseloop);
     }
 }
 
@@ -56,6 +56,4 @@ std::string EventLoopThreadPool::Get_name() const { return name; }
 
 bool EventLoopThreadPool::Started() { return started; }
 
-EventLoopThreadPool::~EventLoopThreadPool() {
-    thread_pool.Stop();
-}
+EventLoopThreadPool::~EventLoopThreadPool() {}
