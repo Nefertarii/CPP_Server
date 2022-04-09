@@ -2,6 +2,7 @@
 #include "../Net/Poll/Head/eventloopthread.h"
 #include "../Net/Poll/Head/eventloopthreadpool.h"
 #include "../Thread/Head/threadpool.h"
+#include "../Timer/Head/timerid.h"
 //#include "../Thread/.old/threadpool.hpp"
 #include <cassert>
 #include <chrono>
@@ -19,6 +20,9 @@ using Task = std::function<void()>;
 
 SafeQueue<Task> pool_work_queue;
 
+void print1(EventLoop* eventloop = nullptr) {
+    printf("tid:%d get task, num:1\n", gettid());
+}
 void print(int num) {
     printf("tid:%d get task, num:%d\n", gettid(), num);
 }
@@ -29,6 +33,14 @@ void while_print(int num) {
         this_thread::sleep_for(chrono::seconds(2));
     }
 }
+void while_print1(EventLoop* eventloop = nullptr) {
+    int i = 5;
+    while (--i) {
+        printf("tid:%d get task, num:%d\n", gettid(), i);
+        this_thread::sleep_for(chrono::seconds(2));
+    }
+}
+
 void func1() {
     this_thread::sleep_for(chrono::seconds(1));
     while (1) {
@@ -75,18 +87,54 @@ void func3() {
     EventLoop* loop7 = loops[6]->Start_loop();
     EventLoop* loop8 = loops[7]->Start_loop();
 
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop));
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop2));
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop3));
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop4));
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop5));
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop6));
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop7));
-    // threadpool.Submit(std::bind(&EventLoop::Loop, loop8));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop2));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop3));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop4));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop5));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop6));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop7));
+    threadpool.Submit(std::bind(&EventLoop::Loop, loop8));
 
     threadpool.Start();
 }
+void func4() {
+    EventLoop loop;
+    loop.Run_after(3, std::bind(&EventLoop::Quit, &loop));
+    EventLoopThreadPool loop_threadpool(&loop, "threadpool");
+    loop_threadpool.Set_thread_num(4);
+    loop_threadpool.Start(print1);
+    EventLoop* Loop1 = loop_threadpool.Get_loop();
+    EventLoop* Loop2 = loop_threadpool.Get_loop();
+    EventLoop* Loop3 = loop_threadpool.Get_loop();
+    EventLoop* Loop4 = loop_threadpool.Get_loop();
+    Loop1->Run_in_loop(std::bind(while_print, 1));
+    Loop2->Run_in_loop(std::bind(while_print, 2));
+    Loop3->Run_in_loop(std::bind(while_print, 3));
+    Loop4->Run_in_loop(std::bind(while_print, 4));
+}
+class Class1 {
+private:
+    int i = 0;
 
+public:
+    void Add() {
+        ++i;
+        printf("tid:%d get task, num:%d\n", gettid(), i);
+    };
+    void Print() { cout << i << "\n"; }
+};
+void func5() {
+    Class1 T1;
+    ThreadPool tp;
+    tp.Start();
+    tp.Submit(std::bind(&Class1::Add, &T1));
+    tp.Submit(std::bind(&Class1::Add, &T1));
+    tp.Submit(std::bind(&Class1::Add, &T1));
+    tp.Submit(std::bind(&Class1::Add, &T1));
+    this_thread::sleep_for(chrono::seconds(1));
+    T1.Print();
+}
 int main() {
-    func3();
+    func5();
 }

@@ -30,8 +30,8 @@ void EventLoopThreadPool::Start(const ThreadInitCallback& callback) {
     baseloop->Assert_in_loop_thread();
     started = true;
     for (int i = 0; i < num_threads; ++i) {
-        threads.push_back(std::make_unique<EventLoopThread>(callback, (name + std::to_string(i))));
-        loops.push_back(threads.end()->get()->Start_loop());
+        threads.emplace_back(std::make_unique<EventLoopThread>(callback, (name + std::to_string(i))));
+        loops.emplace_back(threads[i]->Start_loop());
     }
     if (num_threads == 0 && callback) {
         callback(baseloop);

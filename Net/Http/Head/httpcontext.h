@@ -1,24 +1,34 @@
 #ifndef HTTP_CONTEXT_H_
 #define HTTP_CONTEXT_H_
 
+#include <memory>
+
 namespace Wasi {
 namespace Http {
+
+class HttpRequest;
+class HttpRespone;
 
 class HttpContext {
 private:
     enum class ParseState {
-        LINE,
+        PARSE,
         HEAD,
         BODY,
         ALLDONE,
     };
-    
+    ParseState parse_state;
+    std::shared_ptr<HttpRequest> request;
+    std::shared_ptr<HttpRespone> respone;
+
 public:
     HttpContext();
-    void Process_request();
-    
+    void Set_request();
+    ParseState Get_State();
+    HttpRespone Get_respone();
     ~HttpContext();
 };
+
 }
 } // namespace Wasi::Http
 

@@ -13,8 +13,7 @@ namespace Wasi {
 namespace Poll {
 
 class EventLoop;
-
-class EventLoopThread;
+class EventLoopThreadPool;
 
 } // namespace Poll
 
@@ -28,15 +27,15 @@ private:
     void New_connection(int sockfd, const Sockets::InetAddress& peeraddr);
     void Remove_connection(const TcpConnectionPtr& conn);
     void Remove_connection_in_loop(const TcpConnectionPtr& conn);
-    Poll::EventLoop* loop;
     const std::string name;
     const std::string ip_port;
+    Poll::EventLoop* loop;                                  // acceptor loop;
+    std::unique_ptr<Poll::EventLoopThreadPool> thread_pool; // process loop
     std::unique_ptr<Sockets::Acceptor> acceptor;
-    // std::shared_ptr<Poll::EventLoop> threadloop;
-    // threadpoll loop
     ConnectionCallback connection_callback;
-    MessageCallback message_callback;
-    WriteCompleteCallback write_complete_callback;
+    MessageCallback read_callback;
+    WriteCompleteCallback write_callback;
+    ThreadInitCallback thread_init_callback;
     std::atomic<int> started;
     ConnectionMap conntions;
     int next_conn_id;
@@ -51,14 +50,14 @@ public:
     const std::string& Get_ip_port();
     const std::string& Get_name();
     Poll::EventLoop* Get_loop();
-    // void Set_thread_num(int num_threads);
-    // void Set_thread_init_callback(const ThreadInitCallback& callback_)
     //当accept接受到一个新的连接产生一个新的文件描述符而创造了一个通信套接字的时进行回调
     void Set_connection_callback(const ConnectionCallback& callback_);
     //当通信套接字可读时进行回调 (epoll)
     void Set_message_callback(const MessageCallback& callback_);
     //当通信套接字可写时进行回调 (epoll)
     void Set_write_complete_callback(const WriteCompleteCallback& callback_);
+    void Set_thread_init_callback(const ThreadInitCallback& callback);
+    void Set_thread_num(int num);
     void Start();
     ~TcpServer();
 };

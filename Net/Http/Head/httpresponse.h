@@ -9,6 +9,8 @@ namespace Http {
 class HttpRespone {
 private:
     ResponeHead respone_head;
+    std::string respone_string;
+    // std::string respone_file;
 
 public:
     HttpRespone(std::string http_request);

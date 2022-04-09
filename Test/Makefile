@@ -1,3 +1,4 @@
+MODE = NORMAL
 TARGET1 = test
 TARGET2 = test2
 TARGET3 = test3
@@ -28,7 +29,11 @@ OBJECTS7 = latch.o taskqueue.o thread.o threadpool.o \
 	clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	poller.o eventloop.o eventloopthread.o eventloopthreadpool.o channel.o \
 	stdsink.o filesink.o logger.o test9.o
-FLAGS = -pthread -std=c++17 -Og -Wall -g
+ifeq ($(MODE),DEBUG)
+FLAGS = -pthread -std=c++17 -Og -Wall -g 
+else
+FLAGS = -pthread -std=c++17 -O2 -Wall -g -DNOPRINTDEBUG
+endif
 BASE = ../Net/Base
 HTTP = ../Net/Http
 INSPECT = ../Net/Inspect
@@ -195,4 +200,4 @@ clean :
 	-rm *.o
 
 cleanall:
-	-rm $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5) $(TARGET6) *.o 
+	-rm $(TARGET1) $(TARGET2) $(TARGET3) $(TARGET4) $(TARGET5) $(TARGET6) $(TARGET7) *.o 

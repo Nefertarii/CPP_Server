@@ -6,7 +6,11 @@
 
 inline const char* default_logger_name = "";
 
+#ifdef NOPRINTDEBUG
+#define LOG_DEBUG(detail) ;
+#else
 #define LOG_DEBUG(detail) Wasi::Log::Debug(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
+#endif
 #define LOG_INFO(detail) Wasi::Log::Info(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
 #define LOG_WARN(detail) Wasi::Log::Warning(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
 #define LOG_ERROR(detail) Wasi::Log::Error(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
