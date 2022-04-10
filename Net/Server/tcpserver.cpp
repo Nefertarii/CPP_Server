@@ -17,17 +17,17 @@ void TcpServer::New_connection(int sockfd, const Sockets::InetAddress& peeraddr)
                       + "] from" + peeraddr.To_string_ip_port();
     LOG_INFO(msg);
     Sockets::InetAddress localaddr(Sockets::Get_local_addr(sockfd));
-    TcpConnection conn = std::make_shared<TcpConnection>(loop, conn_name, sockfd,
-                                                         localaddr, peeraddr);
+    TcpConnectionPtr conn = std::make_shared<TcpConnection>(loop, conn_name, sockfd,
+                                                            localaddr, peeraddr);
 
-    msg = conn.Get_local_address().To_string_ip_port() + " -> "
-          + conn.Get_peer_address().To_string_ip_port() + " is ";
-    msg += conn.Connected() ? "Up" : "Down";
+    msg = conn->Get_local_address().To_string_ip_port() + " -> "
+          + conn->Get_peer_address().To_string_ip_port() + " is ";
+    msg += conn->Connected() ? "Up" : "Down";
     LOG_INFO(msg);
     conntions[conn_name] = conn;
     conn->Set_connection_callback(connection_callback);
-    conn->Set_message_callback(message_callback);
-    conn->Set_write_complete_callback(write_complete_callback);
+    conn->Set_message_callback(read_callback);
+    conn->Set_write_complete_callback(write_callback);
     conn->Set_close_callback(std::bind(&TcpServer::Remove_connection, this, std::placeholders::_1));
     loop->Run_in_loop(std::bind(&TcpConnection::Connect_established, conn));
     // conn->Connect_established();

@@ -1,9 +1,9 @@
+#include "../Net/Http/Head/httpserver.h"
 #include "../Net/Poll/Head/eventloop.h"
 #include "../Net/Poll/Head/eventloopthread.h"
 #include "../Net/Poll/Head/eventloopthreadpool.h"
 #include "../Thread/Head/threadpool.h"
 #include "../Timer/Head/timerid.h"
-//#include "../Thread/.old/threadpool.hpp"
 #include <cassert>
 #include <chrono>
 #include <functional>
@@ -14,8 +14,10 @@
 #include <vector>
 
 using namespace std;
+using namespace Wasi;
 using namespace Wasi::Base;
 using namespace Wasi::Poll;
+using namespace Wasi::Http;
 using Task = std::function<void()>;
 
 SafeQueue<Task> pool_work_queue;
@@ -135,6 +137,14 @@ void func5() {
     this_thread::sleep_for(chrono::seconds(1));
     T1.Print();
 }
+void func6() {
+    EventLoop server_loop;
+    Sockets::InetAddress linsten("127.0.0.1", 8000);
+    HttpServer httpserver(&server_loop, linsten, "httpserver");
+    httpserver.Start();
+    server_loop.Loop();
+}
+
 int main() {
-    func5();
+    func6();
 }

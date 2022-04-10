@@ -60,7 +60,7 @@ HttpRequest::HttpRequest(std::string* message) :
     Parse(message);
 }
 
-Method HttpRequest::Get_method() const { return Method; }
+Method HttpRequest::Get_method() const { return method; }
 
 Version HttpRequest::Get_version() const { return version; }
 

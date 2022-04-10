@@ -7,6 +7,7 @@
 #include "../Sockets/Head/socket.h"
 #include "../Sockets/Head/socketapi.h"
 #include <assert.h>
+#include <cstring>
 #include <netinet/tcp.h>
 #include <sstream>
 
@@ -90,7 +91,7 @@ void TcpConnection::Send_in_loop() {
             }
         } else {
             if (errno != EWOULDBLOCK) {
-                LOG_INFO("Error");
+                LOG_INFO("Error " + std::string(strerror(errno)));
                 if (errno == EPIPE || errno == ECONNRESET) {
                     fault = true;
                 }

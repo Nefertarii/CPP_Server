@@ -78,6 +78,7 @@ void ThreadPool::Start() {
 
 void ThreadPool::Stop() {
     LOG_INFO("thread pool stop");
+    if (threads.empty()) { return; }
     {
         std::lock_guard<std::mutex> lk(mtx);
         done = true;

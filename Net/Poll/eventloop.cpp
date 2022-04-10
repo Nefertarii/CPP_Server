@@ -7,6 +7,7 @@
 #include "Head/channel.h"
 #include "Head/poller.h"
 #include <cassert>
+#include <signal.h>
 #include <sstream>
 #include <sys/eventfd.h>
 
@@ -69,6 +70,7 @@ EventLoop::EventLoop() :
     LOG_INFO(msg);
     wakeup_channel->Set_read_callback(std::bind(&EventLoop::Handle_read, this));
     wakeup_channel->Enable_reading();
+    signal(SIGPIPE, SIG_IGN);
 }
 
 void EventLoop::Loop() {

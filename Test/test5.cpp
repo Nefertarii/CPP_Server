@@ -1,21 +1,20 @@
-#include <vector>
-#include <algorithm>
-#include <string>
-#include <cstring>
-#include <iostream>
-#include <sys/socket.h>
-#include <unistd.h>
-#include <signal.h>
-#include "../Timer/Head/clock.h"
 #include "../Net/Base/Head/buffer.h"
-#include "../Net/Sockets/Head/socketapi.h"
-#include "../Net/Sockets/Head/inetaddress.h"
-#include "../Net/Sockets/Head/connector.h"
-#include "../Net/Sockets/Head/socketapi.h"
-#include "../Net/Poll/Head/eventloop.h"
 #include "../Net/Poll/Head/channel.h"
+#include "../Net/Poll/Head/eventloop.h"
 #include "../Net/Server/Head/tcpclient.h"
 #include "../Net/Server/Head/tcpconnection.h"
+#include "../Net/Sockets/Head/connector.h"
+#include "../Net/Sockets/Head/inetaddress.h"
+#include "../Net/Sockets/Head/socketapi.h"
+#include "../Timer/Head/clock.h"
+#include <algorithm>
+#include <cstring>
+#include <iostream>
+#include <signal.h>
+#include <string>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <vector>
 
 using namespace std;
 using namespace Wasi::Base;
@@ -29,27 +28,26 @@ std::string message = "Hello\n";
 void Connection(const TcpConnectionPtr& conn) {
     if (conn->Connected()) {
         std::cout << "Connection: new connection [" << conn->Get_name() << "]"
-            << " from " << conn->Get_peer_address().To_string_ip() << "\n";
+                  << " from " << conn->Get_peer_address().To_string_ip() << "\n";
         conn->Send(message);
-    }
-    else {
+    } else {
         std::cout << "Connection: connection [" << conn->Get_name() << "]"
-            << " is down\n";
+                  << " is down\n";
     }
 }
 
 void Message(const TcpConnectionPtr& conn, Buffer* buffer,
              TimeStamp receive_time) {
     std::cout << "Message: received " << buffer->Size()
-        << " bytes from connection [" << conn->Get_name() << "] at "
-        << Clock::To_string(receive_time) << "\n["
-        << buffer->Content() << "]\n";
+              << " bytes from connection [" << conn->Get_name() << "] at "
+              << Clock::To_string(receive_time) << "\n["
+              << buffer->Content() << "]\n";
 }
 
 void func1() {
     signal(SIGPIPE, SIG_IGN);
     EventLoop loop;
-    InetAddress servaddr("127.0.0.1", 9981);
+    InetAddress servaddr("127.0.0.1", 8000);
     TcpClient client(&loop, servaddr, "client1");
     client.Set_connection_callback(Connection);
     client.Set_message_callback(Message);
@@ -63,10 +61,10 @@ void func2() {
     sockaddr_in servaddr;
     std::string recv, send;
     memset(&servaddr, 0, sizeof(servaddr));
-    sockfd = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
+    sockfd              = socket(AF_INET, SOCK_STREAM | SOCK_NONBLOCK | SOCK_CLOEXEC, IPPROTO_TCP);
     servaddr.sin_family = AF_INET;
-    servaddr.sin_port = htons(9981);
-    std::string str3 = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890~!@#$%^&*(){}:\">?\n";
+    servaddr.sin_port   = htons(9981);
+    std::string str3    = "aAbBcCdDeEfFgGhHiIjJkKlLmMnNoOpPqQrRsStTuUvVwWxXyYzZ1234567890~!@#$%^&*(){}:\">?\n";
     inet_pton(AF_INET, "127.0.0.1", &servaddr.sin_addr);
     std::cout << "connect:" << connect(sockfd, (sockaddr*)&servaddr, sizeof(servaddr)) << "\n";
     sleep(1);
