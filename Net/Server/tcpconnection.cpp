@@ -20,7 +20,7 @@ void TcpConnection::Handle_read(Time::TimeStamp receive_time) {
     ssize_t read  = input_buffer.Read_fd(channel->Fd(), &tmp_errno);
     if (read > 0) {
         message_callback(shared_from_this(), &input_buffer, receive_time);
-        message_callback(shared_from_this(), &output_buffer, receive_time);
+        // message_callback(shared_from_this(), &output_buffer, receive_time);
     } else if (read == 0) {
         Handle_close();
     } else {

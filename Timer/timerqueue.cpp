@@ -31,7 +31,7 @@ void Read_timerfd(int timerfd_, TimeStamp now) {
     ssize_t ret     = read(timerfd_, &remaining, sizeof(remaining));
     std::string msg = "Handle read " + std::to_string(remaining)
                       + " at:" + std::to_string(now.Microseconds_since_epoch());
-    LOG_INFO(msg);
+    LOG_DEBUG(msg);
     if (ret != sizeof(remaining)) {
         msg = "Handle read " + std::to_string(ret) + " bytes, Should be 8.";
         LOG_ERROR(msg);

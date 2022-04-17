@@ -10,13 +10,13 @@ void HttpRequest::Parse(std::string* message) {
         line = message->substr(0, msg_posi);
     }
     if (line[0] == 'G') {
-        method == Method::GET;
+        method = Method::GET;
         line.assign(line.begin() + 4, line.end());
     } else if (line[0] == 'P') {
-        method == Method::POST;
+        method = Method::POST;
         line.assign(line.begin() + 5, line.end());
     } else {
-        method == Method::INVAILD;
+        method = Method::INVAILD;
         return;
     }
     size_t tmp_posi = line.find_first_of(' ');

@@ -7,6 +7,7 @@
 #include "../Net/Sockets/Head/inetaddress.h"
 #include "../Net/Sockets/Head/socketapi.h"
 #include "../Timer/Head/clock.h"
+#include "../Timer/Head/timerid.h"
 #include <algorithm>
 #include <cstring>
 #include <iostream>
@@ -23,9 +24,10 @@ using namespace Wasi::Poll;
 using namespace Wasi::Sockets;
 using namespace Wasi::Time;
 
-std::string message = "Hello\n";
+std::string message = "Hello";
 
 void Connection(const TcpConnectionPtr& conn) {
+    // while (1) {
     if (conn->Connected()) {
         std::cout << "Connection: new connection [" << conn->Get_name() << "]"
                   << " from " << conn->Get_peer_address().To_string_ip() << "\n";
@@ -34,6 +36,8 @@ void Connection(const TcpConnectionPtr& conn) {
         std::cout << "Connection: connection [" << conn->Get_name() << "]"
                   << " is down\n";
     }
+
+    //}
 }
 
 void Message(const TcpConnectionPtr& conn, Buffer* buffer,
@@ -42,6 +46,15 @@ void Message(const TcpConnectionPtr& conn, Buffer* buffer,
               << " bytes from connection [" << conn->Get_name() << "] at "
               << Clock::To_string(receive_time) << "\n["
               << buffer->Content() << "]\n";
+    buffer->Init();
+}
+
+void process(TcpClient* client) {
+    TcpConnectionPtr conn = client->Connection();
+    if (conn) {
+        this_thread::sleep_for(chrono::seconds(1));
+        conn->Send(message);
+    }
 }
 
 void func1() {
@@ -53,7 +66,10 @@ void func1() {
     client.Set_message_callback(Message);
     client.Enable_retry();
     client.Connect();
+    loop.Run_every(2.0, std::bind(process, &client));
     loop.Loop();
+
+    // cout << "\n\n\n\n";
 }
 
 void func2() {

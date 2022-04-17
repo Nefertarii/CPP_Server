@@ -12,18 +12,13 @@ void TcpServer::New_connection(int sockfd, const Sockets::InetAddress& peeraddr)
     loop->Assert_in_loop_thread();
     std::string conn_name = name + "-#" + std::to_string(next_conn_id);
     ++next_conn_id;
-    std::string msg = "TcpServer::New_connection [" + name
+    std::string msg = "New_connection " + name
                       + "] new connection [" + conn_name
                       + "] from" + peeraddr.To_string_ip_port();
     LOG_INFO(msg);
     Sockets::InetAddress localaddr(Sockets::Get_local_addr(sockfd));
-    TcpConnectionPtr conn = std::make_shared<TcpConnection>(loop, conn_name, sockfd,
-                                                            localaddr, peeraddr);
-
-    msg = conn->Get_local_address().To_string_ip_port() + " -> "
-          + conn->Get_peer_address().To_string_ip_port() + " is ";
-    msg += conn->Connected() ? "Up" : "Down";
-    LOG_INFO(msg);
+    TcpConnectionPtr conn = std::make_shared<TcpConnection>(
+        loop, conn_name, sockfd, localaddr, peeraddr);
     conntions[conn_name] = conn;
     conn->Set_connection_callback(connection_callback);
     conn->Set_message_callback(read_callback);
@@ -50,9 +45,9 @@ void TcpServer::Remove_connection_in_loop(const TcpConnectionPtr& conn) {
 
 TcpServer::TcpServer(Poll::EventLoop* loop_, const Sockets::InetAddress& listenaddr,
                      const std::string& name_, OptReusePort opt) :
-    loop(loop_),
-    ip_port(listenaddr.To_string_ip_port()),
     name(name_),
+    ip_port(listenaddr.To_string_ip_port()),
+    loop(loop_),
     thread_pool(std::make_unique<Poll::EventLoopThreadPool>(loop, name)),
     acceptor(std::make_unique<Sockets::Acceptor>(loop, listenaddr, REUSEPORT)),
     connection_callback(),

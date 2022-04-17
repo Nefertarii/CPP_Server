@@ -80,7 +80,7 @@ void Connector::Connecting(int sockfd) {
 }
 
 void Connector::Handle_write() {
-    LOG_ERROR("Error, " + std::to_string(state));
+    LOG_ERROR("Error, " + Str_state());
     if (state == CONNECTING) {
         int sockfd = Remove_and_Reset();
         int err    = Sockets::Get_socket_error(sockfd);
@@ -99,12 +99,15 @@ void Connector::Handle_write() {
 }
 
 void Connector::Handle_error() {
-    LOG_ERROR("Error, " + std::to_string(state));
+    std::string msg = "Error, " + Str_state() + " ";
     if (state == CONNECTING) {
         int sockfd = Remove_and_Reset();
         int err    = Sockets::Get_socket_error(sockfd);
-        LOG_ERROR("Error, " + std::to_string(state) + " " + std::string(strerror(err)));
+        msg += std::string(strerror(err));
+        LOG_ERROR(msg);
         Retry(sockfd);
+    } else {
+        LOG_ERROR(msg);
     }
 }
 
@@ -131,6 +134,17 @@ int Connector::Remove_and_Reset() {
     int sockfd = channel->Fd();
     loop->Queue_in_loop(std::bind(&Connector::Reset_channel, this));
     return sockfd;
+}
+
+std::string Connector::Str_state() {
+    if (state == DISCONNECTED) {
+        return "disconnected";
+    } else if (state == CONNECTING) {
+        return "connecting";
+    } else if (state == CONNECTED) {
+        return "connected";
+    }
+    return "unexpected state";
 }
 
 Connector::Connector(Poll::EventLoop* loop_,

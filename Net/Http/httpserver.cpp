@@ -9,15 +9,20 @@ using namespace Wasi;
 void HttpServer::connection(const Server::TcpConnectionPtr& conn) {
     if (conn->Connected()) {
         LOG_INFO("Get connection");
-        conn->Send("Get connection\n");
+        //
+        conn->Send("Get connection");
+        //
     }
 }
 
 void HttpServer::message(const Server::TcpConnectionPtr& conn) {
     Base::Buffer* read = conn->Get_input_buffer();
-    std::string msg    = "Get: " + read->Content();
+    std::string msg    = "From " + conn->Get_peer_address().To_string_ip_port() + " get message: " + read->Content();
+    // parse msg
+    parse_request(read->Content());
     LOG_INFO(msg);
     conn->Send(msg);
+    read->Init();
 }
 
 void HttpServer::write_complete(const Server::TcpConnectionPtr& conn) {
@@ -51,8 +56,8 @@ void HttpServer::Start() {
     std::string msg = "HttpServer [" + listen_server.Get_name()
                       + "] starts listening on " + listen_server.Get_ip_port();
     LOG_INFO(msg);
-    // threadpool.Start();
     listen_server.Start();
+    threadpool.Start();
 }
 
 void HttpServer::Set_thread_num(int num) {
