@@ -61,6 +61,7 @@ private:
     size_t high_water_mark;
     Base::Buffer input_buffer;
     Base::Buffer output_buffer;
+    std::shared_ptr<void> user_data;
     std::unique_ptr<Sockets::Socket> socket;
     std::unique_ptr<Poll::Channel> channel;
     const Sockets::InetAddress local_addr;
@@ -79,9 +80,10 @@ public:
     const std::string& Get_name() const;
     const Sockets::InetAddress& Get_local_address() const;
     const Sockets::InetAddress& Get_peer_address() const;
-    // read message
+    std::shared_ptr<void> Get_data_pointer();
+    // input buffer read message
     Base::Buffer* Get_input_buffer();
-    // write message
+    // output buffer write message
     Base::Buffer* Get_output_buffer();
     std::string Get_tcp_info() const;
     bool Get_tcp_info(tcp_info* tcpi) const;

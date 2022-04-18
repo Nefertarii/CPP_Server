@@ -168,6 +168,7 @@ TcpConnection::TcpConnection(Poll::EventLoop* loop_, const std::string& name_, i
     high_water_mark(64 * 1024 * 1024),
     input_buffer(Base::Buffer::BufferState::READ),
     output_buffer(Base::Buffer::BufferState::WRITE),
+    user_data(nullptr),
     socket(new Sockets::Socket(sockfd_)),
     channel(new Poll::Channel(loop, sockfd_)),
     local_addr(local_addr_),
@@ -191,6 +192,8 @@ const std::string& TcpConnection::Get_name() const { return name; }
 const Sockets::InetAddress& TcpConnection::Get_local_address() const { return local_addr; }
 
 const Sockets::InetAddress& TcpConnection::Get_peer_address() const { return peer_addr; }
+
+std::shared_ptr<void> TcpConnection::Get_data_pointer() { return user_data; }
 
 Base::Buffer* TcpConnection::Get_input_buffer() { return &input_buffer; }
 

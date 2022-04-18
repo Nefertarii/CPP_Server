@@ -55,17 +55,13 @@ std::string body;   // 00100
 std::string target; // 01000
 std::string path;   // 10000
 
-class A {
-private:
-    int T;
-
+class Test {
 public:
-    int print() { return T; }
+    int i = 0;
+    Test(int num) :
+        i(num) { cout << "test create " << i << "\n"; }
+    ~Test() { cout << "test earse " << i << "\n"; }
 };
-
-void func1(A& a) {
-    a.T = 2;
-}
 
 int main() {
     // clang-format off
@@ -73,7 +69,12 @@ int main() {
     //Parse(&message);
     //  clang-format on
     //  cout << message;
-    A a;
-    func1(a);
-    cout << a.print();
+    shared_ptr<void> ptr_1 = nullptr;
+    shared_ptr<Test> ptr_2 = make_shared<Test>(5);
+    
+    ptr_1 = static_pointer_cast<Test>(ptr_2);
+    Test* ptr_1_data = (Test*)ptr_1.get();
+    cout<<ptr_1_data->i<<"\n";
+    cout<<ptr_2.use_count()<<"\n";
+    cout<<ptr_2->i<<"\n";
 }

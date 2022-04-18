@@ -51,14 +51,19 @@ void HttpRequest::Parse(std::string* message) {
     }
 }
 
-HttpRequest::HttpRequest(std::string* message) :
+HttpRequest::HttpRequest() :
     method(Method::INVAILD),
     version(Version::UNKNOWN),
     path(),
     target(),
-    body() {
-    Parse(message);
-}
+    body() {}
+
+HttpRequest::HttpRequest(std::string* http_request) :
+    method(Method::INVAILD),
+    version(Version::UNKNOWN),
+    path(),
+    target(),
+    body() {}
 
 Method HttpRequest::Get_method() const { return method; }
 

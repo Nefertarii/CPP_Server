@@ -15,10 +15,11 @@ private:
     std::string path;
     std::string target;
     std::string body;
-    void Parse(std::string* message);
 
 public:
+    HttpRequest();
     HttpRequest(std::string* http_request);
+    void Parse(std::string* message);
     Method Get_method() const;
     Version Get_version() const;
     std::string Get_path() const;

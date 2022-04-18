@@ -16,10 +16,11 @@ private:
     Server::TcpServer listen_server;
     // Server::TcpServer process_server;
     Base::ThreadPool threadpool;
-    std::vector<HttpContext> contexts;
+    //std::vector<HttpContext> contexts;
     void connection(const Server::TcpConnectionPtr& conn);
     void message(const Server::TcpConnectionPtr& conn);
     void write_complete(const Server::TcpConnectionPtr& conn);
+
     void parse_request();
     void process_request();
     void send_respone();

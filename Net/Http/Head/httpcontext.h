@@ -17,15 +17,16 @@ private:
         BODY,
         ALLDONE,
     };
-    ParseState parse_state;
+    // ParseState parse_state;
     std::shared_ptr<HttpRequest> request;
     std::shared_ptr<HttpRespone> respone;
 
 public:
     HttpContext();
-    void Set_request();
-    ParseState Get_State();
-    HttpRespone Get_respone();
+    void Set_request(std::string* http_request);
+    // void Set_request_body(std::string* http_request);
+    // ParseState Get_State();
+    std::shared_ptr<HttpRespone> Get_respone();
     ~HttpContext();
 };
 

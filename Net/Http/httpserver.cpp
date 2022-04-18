@@ -10,6 +10,9 @@ void HttpServer::connection(const Server::TcpConnectionPtr& conn) {
     if (conn->Connected()) {
         LOG_INFO("Get connection");
         //
+        std::shared_ptr<void> data_ptr = conn->Get_data_pointer();
+        data_ptr                       = std::static_pointer_cast<HttpContext>();
+        //HttpContext* message           = (HttpContext*)conn->Get_data_pointer().get();
         conn->Send("Get connection");
         //
     }
@@ -42,8 +45,9 @@ HttpServer::HttpServer(Poll::EventLoop* loop,
                        const std::string& name,
                        Server::TcpServer::OptReusePort option) :
     listen_server(loop, listen_addr, name, option),
-    threadpool(),
-    contexts() {
+    threadpool()
+// contexts() {
+{
     listen_server.Set_connection_callback(std::bind(
         &HttpServer::connection, this, std::placeholders::_1));
     listen_server.Set_message_callback(std::bind(
