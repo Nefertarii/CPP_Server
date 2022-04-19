@@ -23,10 +23,10 @@ private:
 
 public:
     HttpContext();
-    void Set_request(std::string* http_request);
-    // void Set_request_body(std::string* http_request);
-    // ParseState Get_State();
+    // void Set_State(ParseState state);
+    std::shared_ptr<HttpRequest> Get_request();
     std::shared_ptr<HttpRespone> Get_respone();
+    // ParseState Get_State();
     ~HttpContext();
 };
 

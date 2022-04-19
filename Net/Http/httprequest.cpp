@@ -2,12 +2,32 @@
 
 using namespace Wasi::Http;
 
-void HttpRequest::Parse(std::string* message) {
+HttpRequest::HttpRequest() :
+    method(Method::INVAILD),
+    version(Version::UNKNOWN),
+    path(),
+    target(),
+    body() {}
+
+HttpRequest::HttpRequest(std::string http_request) :
+    request(nullptr),
+    method(Method::INVAILD),
+    version(Version::UNKNOWN),
+    path(),
+    target(),
+    body() {}
+
+void HttpRequest::Set_request(std::string http_request) { request = http_request; }
+
+void HttpRequest::Paese() { Parse(request); }
+
+void HttpRequest::Parse(std::string message) {
+    if (message.empty()) { return; }
     std::string line;
     size_t msg_posi = 0;
-    msg_posi        = message->find_first_of("\n"); // get first line
+    msg_posi        = message.find_first_of("\n"); // get first line
     if (msg_posi != std::string::npos) {
-        line = message->substr(0, msg_posi);
+        line = message.substr(0, msg_posi);
     }
     if (line[0] == 'G') {
         method = Method::GET;
@@ -45,25 +65,11 @@ void HttpRequest::Parse(std::string* message) {
             version = Version::UNKNOWN;
         }
     }
-    msg_posi = message->find_last_of("\r\n");
+    msg_posi = message.find_last_of("\r\n");
     if (msg_posi != std::string::npos) {
-        body = message->substr(msg_posi + 1, message->size());
+        body = message.substr(msg_posi + 1, message.size());
     }
 }
-
-HttpRequest::HttpRequest() :
-    method(Method::INVAILD),
-    version(Version::UNKNOWN),
-    path(),
-    target(),
-    body() {}
-
-HttpRequest::HttpRequest(std::string* http_request) :
-    method(Method::INVAILD),
-    version(Version::UNKNOWN),
-    path(),
-    target(),
-    body() {}
 
 Method HttpRequest::Get_method() const { return method; }
 

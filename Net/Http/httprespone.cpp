@@ -2,7 +2,7 @@
 
 using namespace Wasi::Http;
 
-HttpRespone::HttpRespone(std::string http_request) :
+HttpRespone::HttpRespone() :
     respone_head() {}
 
 void HttpRespone::Swap(HttpRespone& other) {

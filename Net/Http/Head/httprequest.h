@@ -10,6 +10,7 @@ namespace Http {
 
 class HttpRequest {
 private:
+    std::string request;
     Method method;
     Version version;
     std::string path;
@@ -18,8 +19,10 @@ private:
 
 public:
     HttpRequest();
-    HttpRequest(std::string* http_request);
-    void Parse(std::string* message);
+    HttpRequest(std::string http_request);
+    void Set_request(std::string http_request);
+    void Paese();
+    void Parse(std::string message);
     Method Get_method() const;
     Version Get_version() const;
     std::string Get_path() const;

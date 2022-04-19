@@ -74,6 +74,7 @@ int main() {
     
     ptr_1 = static_pointer_cast<Test>(ptr_2);
     Test* ptr_1_data = (Test*)ptr_1.get();
+    
     cout<<ptr_1_data->i<<"\n";
     cout<<ptr_2.use_count()<<"\n";
     cout<<ptr_2->i<<"\n";

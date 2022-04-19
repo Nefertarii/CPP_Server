@@ -13,7 +13,7 @@ private:
     // std::string respone_file;
 
 public:
-    HttpRespone(std::string http_request);
+    HttpRespone();
     void Swap(HttpRespone& other);
     void Set_code_num(std::string code_num);
     void Set_server_name(std::string server_name);

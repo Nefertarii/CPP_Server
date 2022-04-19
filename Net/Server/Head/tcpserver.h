@@ -30,7 +30,7 @@ private:
     const std::string name;
     const std::string ip_port;
     Poll::EventLoop* loop;                                  // acceptor loop;
-    std::unique_ptr<Poll::EventLoopThreadPool> thread_pool; // process loop
+    std::shared_ptr<Poll::EventLoopThreadPool> thread_pool; // process loop
     std::unique_ptr<Sockets::Acceptor> acceptor;
     ConnectionCallback connection_callback;
     MessageCallback read_callback;
@@ -50,6 +50,7 @@ public:
     const std::string& Get_ip_port();
     const std::string& Get_name();
     Poll::EventLoop* Get_loop();
+    std::shared_ptr<Poll::EventLoopThreadPool> Get_thread_pool();
     //当accept接受到一个新的连接产生一个新的文件描述符而创造了一个通信套接字的时进行回调
     void Set_connection_callback(const ConnectionCallback& callback_);
     //当通信套接字可读时进行回调 (epoll)

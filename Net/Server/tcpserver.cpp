@@ -48,7 +48,7 @@ TcpServer::TcpServer(Poll::EventLoop* loop_, const Sockets::InetAddress& listena
     name(name_),
     ip_port(listenaddr.To_string_ip_port()),
     loop(loop_),
-    thread_pool(std::make_unique<Poll::EventLoopThreadPool>(loop, name)),
+    thread_pool(std::make_shared<Poll::EventLoopThreadPool>(loop, name)),
     acceptor(std::make_unique<Sockets::Acceptor>(loop, listenaddr, REUSEPORT)),
     connection_callback(),
     read_callback(),
@@ -65,6 +65,10 @@ const std::string& TcpServer::Get_ip_port() { return ip_port; }
 const std::string& TcpServer::Get_name() { return name; }
 
 Poll::EventLoop* TcpServer::Get_loop() { return loop; }
+
+std::shared_ptr<Poll::EventLoopThreadPool> TcpServer::Get_thread_pool() {
+    return thread_pool;
+}
 
 void TcpServer::Set_connection_callback(const ConnectionCallback& callback_) {
     connection_callback = callback_;
@@ -92,7 +96,7 @@ void TcpServer::Set_thread_init_callback(const ThreadInitCallback& callback_) {
 
 void TcpServer::Start() {
     if (started.fetch_add(1) == 0) {
-        thread_pool->Start(thread_init_callback);
+        // thread_pool->Start(thread_init_callback);
         assert(!acceptor->Listening());
         loop->Run_in_loop(std::bind(&Sockets::Acceptor::Listen, acceptor.get()));
     }

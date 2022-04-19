@@ -8,12 +8,10 @@ HttpContext::HttpContext() :
     request(std::make_shared<HttpRequest>()),
     respone(std::make_shared<HttpRespone>()) {}
 
-void HttpContext::Set_request(std::string* http_request) {
-    request->Parse(http_request);
-}
+// void HttpContext::Set_State(ParseState state) { parse_state = state; }
 
-std::shared_ptr<HttpRespone> HttpContext::Get_respone() {
-    return respone;
-}
+std::shared_ptr<HttpRequest> HttpContext::Get_request() { return request; }
+
+std::shared_ptr<HttpRespone> HttpContext::Get_respone() { return respone; }
 
 HttpContext::~HttpContext() {}

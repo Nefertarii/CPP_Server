@@ -145,6 +145,24 @@ void func6() {
     server_loop.Loop();
 }
 
+void change_num(int* p) {
+    cout << "change " << p << "\n";
+    *p = 20;
+}
+
+void func7() {
+    EventLoop base_loop;
+    string name = "tp1";
+    EventLoopThreadPool evttp(&base_loop, name);
+    evttp.Set_thread_num(4);
+    evttp.Start();
+    int i = 10;
+    while (i--) {
+        this_thread::sleep_for(chrono::seconds(1));
+        base_loop.Run_in_loop(std::bind(&print, 1));
+    }
+}
+
 int main() {
     func6();
 }
