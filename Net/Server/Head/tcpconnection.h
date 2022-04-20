@@ -5,6 +5,7 @@
 #include "../../../Timer/Head/timestamp.h"
 #include "../../Base/Head/buffer.h"
 #include "../../Sockets/Head/inetaddress.h"
+#include <any>
 #include <functional>
 #include <memory>
 
@@ -61,7 +62,7 @@ private:
     size_t high_water_mark;
     Base::Buffer input_buffer;
     Base::Buffer output_buffer;
-    std::shared_ptr<void> user_data;
+    std::any context;
     std::unique_ptr<Sockets::Socket> socket;
     std::unique_ptr<Poll::Channel> channel;
     const Sockets::InetAddress local_addr;
@@ -80,12 +81,12 @@ public:
     const std::string& Get_name() const;
     const Sockets::InetAddress& Get_local_address() const;
     const Sockets::InetAddress& Get_peer_address() const;
-    std::shared_ptr<void> Get_data_pointer();
     // input buffer read message
     Base::Buffer* Get_input_buffer();
     // output buffer write message
     Base::Buffer* Get_output_buffer();
     std::string Get_tcp_info() const;
+    std::any Get_context();
     bool Get_tcp_info(tcp_info* tcpi) const;
     bool Connected() const;
     bool Disconnected() const;
@@ -99,6 +100,7 @@ public:
     void Start_read();
     void Stop_read();
     void Set_no_delay(bool on);
+    void Set_context(const std::any& context_);
     void Set_connection_callback(const ConnectionCallback& cb);
     void Set_message_callback(const MessageCallback& cb);
     void Set_write_complete_callback(const WriteCompleteCallback& cb);

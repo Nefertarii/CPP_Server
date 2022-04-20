@@ -1,3 +1,4 @@
+#include <any>
 #include <cassert>
 #include <fstream>
 #include <iostream>
@@ -69,13 +70,54 @@ int main() {
     //Parse(&message);
     //  clang-format on
     //  cout << message;
-    shared_ptr<void> ptr_1 = nullptr;
-    shared_ptr<Test> ptr_2 = make_shared<Test>(5);
-    
-    ptr_1 = static_pointer_cast<Test>(ptr_2);
-    Test* ptr_1_data = (Test*)ptr_1.get();
-    
-    cout<<ptr_1_data->i<<"\n";
-    cout<<ptr_2.use_count()<<"\n";
-    cout<<ptr_2->i<<"\n";
+    // shared_ptr<void> ptr_1 = nullptr;
+    // shared_ptr<Test> ptr_2 = make_shared<Test>(5);
+    // 
+    // ptr_1 = static_pointer_cast<Test>(ptr_2);
+    // Test* ptr_1_data = (Test*)ptr_1.get();
+
+    // cout<<ptr_1_data->i<<"\n";
+    // cout<<ptr_2.use_count()<<"\n";
+    // cout<<ptr_2->i<<"\n";
+
+        std::cout << std::boolalpha;
+ 
+    // any type
+    std::any a = 1;
+    std::cout << a.type().name() << ": " << std::any_cast<int>(a) << '\n';
+    a = 3.14;
+    std::cout << a.type().name() << ": " << std::any_cast<double>(a) << '\n';
+    a = true;
+    std::cout << a.type().name() << ": " << std::any_cast<bool>(a) << '\n';
+ 
+    // bad cast
+    try{
+        a = 1;
+        std::cout << std::any_cast<float>(a) << '\n';
+    }
+    catch (const std::bad_any_cast& e){
+        std::cout << e.what() << '\n';
+    }
+ 
+    // has value
+    a = 2;
+    if (a.has_value()){
+        std::cout << a.type().name() << ": " << std::any_cast<int>(a) << '\n';
+    }
+ 
+    // reset
+    a.reset();
+    if (!a.has_value()) {
+        std::cout << "no value\n";
+    }
+ 
+    // pointer to contained data
+    a = 3;
+    int* i = std::any_cast<int>(&a);
+    std::cout << *i << "\n";
+
+    any* a_p;
+
+
 }
+

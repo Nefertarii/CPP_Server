@@ -168,7 +168,7 @@ TcpConnection::TcpConnection(Poll::EventLoop* loop_, const std::string& name_, i
     high_water_mark(64 * 1024 * 1024),
     input_buffer(Base::Buffer::BufferState::READ),
     output_buffer(Base::Buffer::BufferState::WRITE),
-    user_data(nullptr),
+    context(),
     socket(new Sockets::Socket(sockfd_)),
     channel(new Poll::Channel(loop, sockfd_)),
     local_addr(local_addr_),
@@ -193,8 +193,6 @@ const Sockets::InetAddress& TcpConnection::Get_local_address() const { return lo
 
 const Sockets::InetAddress& TcpConnection::Get_peer_address() const { return peer_addr; }
 
-std::shared_ptr<void> TcpConnection::Get_data_pointer() { return user_data; }
-
 Base::Buffer* TcpConnection::Get_input_buffer() { return &input_buffer; }
 
 Base::Buffer* TcpConnection::Get_output_buffer() { return &output_buffer; }
@@ -203,6 +201,10 @@ std::string TcpConnection::Get_tcp_info() const {
     std::string tcp_info;
     socket->Get_tcp_info(&tcp_info);
     return tcp_info;
+}
+
+std::any TcpConnection::Get_context() {
+    return context;
 }
 
 bool TcpConnection::Get_tcp_info(tcp_info* tcpi) const {
@@ -266,6 +268,10 @@ void TcpConnection::Stop_read() {
 }
 
 void TcpConnection::Set_no_delay(bool on) { socket->Set_tcp_delay(on); }
+
+void TcpConnection::Set_context(const std::any& context_) {
+    context = context_;
+}
 
 void TcpConnection::Set_connection_callback(const ConnectionCallback& cb) {
     connection_callback = cb;

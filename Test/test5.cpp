@@ -66,7 +66,7 @@ void func1() {
     client.Set_message_callback(Message);
     client.Enable_retry();
     client.Connect();
-    loop.Run_every(2.0, std::bind(process, &client));
+    //loop.Run_every(2.0, std::bind(process, &client));
     loop.Loop();
 
     // cout << "\n\n\n\n";

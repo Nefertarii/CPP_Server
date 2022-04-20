@@ -15,11 +15,11 @@ using namespace Wasi;
 // void Send_respone() {}
 
 void Request_process(const Server::TcpConnectionPtr& conn) {
+    std::any conn_context = conn->Get_context();
+    std::string msg       = conn_context.type().name();
+    LOG_DEBUG(msg);
     // parse_request
     // std::shared_ptr<HttpContext> context = std::static_pointer_cast<HttpContext>(conn->Get_data_pointer());
-    HttpContext* context                 = (HttpContext*)conn->Get_data_pointer().get();
-    std::shared_ptr<HttpRequest> request = context->Get_request();
-    std::shared_ptr<HttpRespone> respone = context->Get_respone();
     // process_request
 
     // prepare_respone
@@ -32,12 +32,9 @@ void HttpServer::Connection(const Server::TcpConnectionPtr& conn) {
     if (conn->Connected()) {
         LOG_INFO("Get connection");
         // use reserve and index can set max client;
-        std::shared_ptr<HttpContext> new_conn_context = std::make_shared<HttpContext>();
+        HttpContext new_conn_context;
         contexts.push_back(new_conn_context);
-        std::shared_ptr<HttpContext> data_ptr = std::static_pointer_cast<HttpContext>(conn->Get_data_pointer());
-        data_ptr                              = new_conn_context;
-        // HttpContext* context_ptr              = data_ptr.get();
-        // context_ptr                           = new_conn_context.get();
+        conn->Set_context(new_conn_context);
         conn->Send("Get connection");
     }
 }
