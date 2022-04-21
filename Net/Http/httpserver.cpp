@@ -1,5 +1,6 @@
 #include "Head/httpserver.h"
 #include "../../Log/Head/logging.h"
+#include "../../Timer/Head/clock.h"
 #include "../Poll/Head/eventloop.h"
 #include "../Poll/Head/eventloopthreadpool.h"
 #include "../Sockets/Head/socketapi.h"
@@ -9,23 +10,68 @@
 using namespace Wasi::Http;
 using namespace Wasi;
 
-// void Parse_request(std::string http_request) {}
-// void Process_request() {}
-// void Prepare_respone() {}
-// void Send_respone() {}
+int Parse_request(const Server::TcpConnectionPtr& conn) {
+    // Preaccess phase: IP control(black list)
+    // ...
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    conn_request->Parse(conn->Get_input_buffer()->Content());
+}
+
+int Get_process(const Server::TcpConnectionPtr& conn) {
+}
+
+int Post_process(const Server::TcpConnectionPtr& conn) {
+    // Access phase: Access control(file)
+    // fill HttpRequest body
+    // fill HttpRequest
+}
+
+int Process_request(const Server::TcpConnectionPtr& conn) {
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    if (conn_request->Get_method() == Method::GET) {
+        // Get_process();
+    } else if (conn_request->Get_method() == Method::POST) {
+        // Post_process();
+    }
+    return -1;
+}
+
+int Prepare_respone(const Server::TcpConnectionPtr& conn) {
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    // conn_respone->Set_code_num(conn_request->Get_code_num());
+    if (conn_request->Get_version() == Version::HTTP11) {
+        conn_respone->Set_connection_type("keep-alive");
+    }
+    conn_respone->Set_content_type("UTF-8");
+    conn_respone->Set_server_name("HttpServer");
+    int content_length = conn_request->Get_body().length();
+    conn_respone->Set_content_length(std::to_string(content_length));
+    // conn_respone->Set_last_modified(file_modify_time);
+}
+
+int Send_respone(const Server::TcpConnectionPtr& conn) {
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    // conn->Send(conn_respone->Get_respone_head());
+    conn->Send(conn_respone->Get_respone_body());
+}
 
 void Request_process(const Server::TcpConnectionPtr& conn) {
-    std::any conn_context = conn->Get_context();
-    std::string msg       = conn_context.type().name();
-    LOG_DEBUG(msg);
+    std::string msg;
     // parse_request
-    // std::shared_ptr<HttpContext> context = std::static_pointer_cast<HttpContext>(conn->Get_data_pointer());
+    Parse_request(conn);
     // process_request
-
+    Process_request(conn);
     // prepare_respone
-
+    Prepare_respone(conn);
     // send_respone
-    conn->Send("process done");
+    Send_respone(conn);
+    LOG_INFO(msg);
 }
 
 void HttpServer::Connection(const Server::TcpConnectionPtr& conn) {

@@ -3,23 +3,36 @@
 using namespace Wasi::Http;
 
 HttpRequest::HttpRequest() :
+    request(),
     method(Method::INVAILD),
     version(Version::UNKNOWN),
     path(),
     target(),
-    body() {}
+    code_num(HttpCode::CODE200),
+    body(),
+    modify_time() {}
 
 HttpRequest::HttpRequest(std::string http_request) :
-    request(nullptr),
+    request(),
     method(Method::INVAILD),
     version(Version::UNKNOWN),
     path(),
     target(),
-    body() {}
+    code_num(HttpCode::CODE200),
+    body(),
+    modify_time() {}
 
 void HttpRequest::Set_request(std::string http_request) { request = http_request; }
 
-void HttpRequest::Paese() { Parse(request); }
+void HttpRequest::Set_code_num(HttpCode code) { code_num = code; }
+
+void HttpRequest::Set_body(std::string body_) { body = body_; }
+
+void HttpRequest::Set_modify_time(std::string modify_time_) {
+    modify_time = modify_time_;
+}
+
+void HttpRequest::Parse() { Parse(request); }
 
 void HttpRequest::Parse(std::string message) {
     if (message.empty()) { return; }
@@ -70,6 +83,8 @@ void HttpRequest::Parse(std::string message) {
         body = message.substr(msg_posi + 1, message.size());
     }
 }
+
+HttpCode HttpRequest::Get_code_num() const { return code_num; }
 
 Method HttpRequest::Get_method() const { return method; }
 

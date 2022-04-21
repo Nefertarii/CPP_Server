@@ -9,7 +9,7 @@ namespace Http {
 class HttpRespone {
 private:
     ResponeHead respone_head;
-    std::string respone_string;
+    std::string respone_body;
     // std::string respone_file;
 
 public:
@@ -22,6 +22,7 @@ public:
     void Set_content_length(std::string content_length);
     void Set_last_modified(std::string last_modified);
     ResponeHead Get_respone_head();
+    std::string Get_respone_body();
     ~HttpRespone();
 };
 

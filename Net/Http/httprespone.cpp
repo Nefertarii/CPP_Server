@@ -35,4 +35,6 @@ void HttpRespone::Set_last_modified(std::string last_modified) {
 
 ResponeHead HttpRespone::Get_respone_head() { return respone_head; }
 
+std::string HttpRespone::Get_respone_body() { return respone_body; }
+
 HttpRespone::~HttpRespone() {}
