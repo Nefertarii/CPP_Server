@@ -19,10 +19,18 @@ int Parse_request(const Server::TcpConnectionPtr& conn) {
 }
 
 int Get_process(const Server::TcpConnectionPtr& conn) {
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    // Access phase: Access control(file)
+    if (conn_request->Target_is_file()) {
+        std::string file = conn_request->Get_path() + "/" + conn_request->Get_target();
+        
+    }
 }
 
 int Post_process(const Server::TcpConnectionPtr& conn) {
-    // Access phase: Access control(file)
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     // fill HttpRequest body
     // fill HttpRequest
 }

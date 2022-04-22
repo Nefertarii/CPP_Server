@@ -7,6 +7,7 @@ HttpRequest::HttpRequest() :
     method(Method::INVAILD),
     version(Version::UNKNOWN),
     path(),
+    is_file(false),
     target(),
     code_num(HttpCode::CODE200),
     body(),
@@ -17,20 +18,11 @@ HttpRequest::HttpRequest(std::string http_request) :
     method(Method::INVAILD),
     version(Version::UNKNOWN),
     path(),
+    is_file(false),
     target(),
     code_num(HttpCode::CODE200),
     body(),
     modify_time() {}
-
-void HttpRequest::Set_request(std::string http_request) { request = http_request; }
-
-void HttpRequest::Set_code_num(HttpCode code) { code_num = code; }
-
-void HttpRequest::Set_body(std::string body_) { body = body_; }
-
-void HttpRequest::Set_modify_time(std::string modify_time_) {
-    modify_time = modify_time_;
-}
 
 void HttpRequest::Parse() { Parse(request); }
 
@@ -43,10 +35,12 @@ void HttpRequest::Parse(std::string message) {
         line = message.substr(0, msg_posi);
     }
     if (line[0] == 'G') {
-        method = Method::GET;
+        method  = Method::GET;
+        is_file = true;
         line.assign(line.begin() + 4, line.end());
     } else if (line[0] == 'P') {
-        method = Method::POST;
+        method  = Method::POST;
+        is_file = false;
         line.assign(line.begin() + 5, line.end());
     } else {
         method = Method::INVAILD;
@@ -84,24 +78,16 @@ void HttpRequest::Parse(std::string message) {
     }
 }
 
-HttpCode HttpRequest::Get_code_num() const { return code_num; }
-
-Method HttpRequest::Get_method() const { return method; }
-
-Version HttpRequest::Get_version() const { return version; }
-
-std::string HttpRequest::Get_path() const { return path; }
-
-std::string HttpRequest::Get_body() const { return body; }
-
-std::string HttpRequest::Get_target() const { return target; }
-
 void HttpRequest::Swap(HttpRequest& other) {
+    request.swap(other.request);
     std::swap(method, other.method);
     std::swap(version, other.version);
     path.swap(other.path);
+    std::swap(is_file, other.is_file);
     target.swap(other.target);
+    std::swap(code_num, other.code_num);
     body.swap(other.body);
+    modify_time.swap(other.body);
 }
 
 HttpRequest::~HttpRequest() {}
