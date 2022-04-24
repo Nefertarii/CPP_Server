@@ -14,12 +14,14 @@ enum class Method {
     PUT,
     DELETE
 };
+
 enum class Version {
     UNKNOWN,
     HTTP10,
     HTTP11,
     HTTP20
 };
+
 enum class HttpCode {
     CODE200 = 200, // 200 OK
     CODE301 = 301, // 301 Moved Permanently
@@ -31,13 +33,18 @@ enum class HttpCode {
     CODE500 = 500, // 500 Internal Server Error
     CODE501 = 501, // 501 Method Not Implemented
 };
+
 struct ResponeHead {
-    std::string code_num;
-    std::string server_name;
-    std::string connection_type;
-    std::string content_type;
-    std::string content_length;
-    std::string last_modified;
+    std::string code_num;       // HTTP/1.1 (...) (...)
+    std::string server;         // Server: (...)
+    std::string connection;     // Connection: (...)
+    std::string keep_alive;     // Keep-Alive: (timeout=(...), max=(...))
+    std::string content_type;   //
+    std::string charset;        // Content-Type: (...); charset=(....)
+    std::string content_length; // Content_length: (...)
+    std::string last_modified;  // Last-Modified: (...)
+    std::string date;           // date = Week, Day Month Year HH:MM:SS GMT
+
     // std::string etag;
     // std::string content_encoding;
     // std::string cache_control;

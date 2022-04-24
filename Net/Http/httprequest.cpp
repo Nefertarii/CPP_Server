@@ -27,6 +27,7 @@ HttpRequest::HttpRequest(std::string http_request) :
 void HttpRequest::Parse() { Parse(request); }
 
 void HttpRequest::Parse(std::string message) {
+    // need add Accept-Charset paese
     if (message.empty()) { return; }
     std::string line;
     size_t msg_posi = 0;

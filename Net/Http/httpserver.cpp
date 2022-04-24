@@ -6,6 +6,7 @@
 #include "../Sockets/Head/socketapi.h"
 #include "Head/httprequest.h"
 #include "Head/httprespone.h"
+#include <sys/stat.h>
 
 using namespace Wasi::Http;
 using namespace Wasi;
@@ -21,10 +22,16 @@ int Parse_request(const Server::TcpConnectionPtr& conn) {
 int Get_process(const Server::TcpConnectionPtr& conn) {
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
-    // Access phase: Access control(file)
-    if (conn_request->Target_is_file()) {
-        std::string file = conn_request->Get_path() + "/" + conn_request->Get_target();
-        
+    if (conn_request->is_file) {
+        conn_respone->respone_file = conn_request->path + '/' + conn_request->target;
+        struct stat file_stat;
+        stat(conn_respone->respone_file.c_str(), &file_stat);
+
+        // Access phase: Access control(file)
+        //...
+        conn_respone->respone_head.code_num = HttpCode::CODE200;
+    } else {
+        conn_respone->respone_head.code_num = HttpCode::CODE404;
     }
 }
 
@@ -39,10 +46,16 @@ int Process_request(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
-    if (conn_request->Get_method() == Method::GET) {
-        // Get_process();
-    } else if (conn_request->Get_method() == Method::POST) {
-        // Post_process();
+    conn_respone->respone_head.server         = "Test_C++_Server";
+    if (conn_request->version == Version::HTTP11) {
+        conn_respone->respone_head.connection = "Keep-Alive";
+        conn_respone->respone_head.keep_alive = "timeout=5, max=1000";
+    }
+
+    if (conn_request->method == Method::GET) {
+        Get_process();
+    } else if (conn_request->method == Method::POST) {
+        Post_process();
     }
     return -1;
 }
@@ -52,7 +65,7 @@ int Prepare_respone(const Server::TcpConnectionPtr& conn) {
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     // conn_respone->Set_code_num(conn_request->Get_code_num());
-    if (conn_request->Get_version() == Version::HTTP11) {
+    if (conn_request->version == Version::HTTP11) {
         conn_respone->Set_connection_type("keep-alive");
     }
     conn_respone->Set_content_type("UTF-8");
