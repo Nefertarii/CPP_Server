@@ -17,29 +17,36 @@ int Parse_request(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     conn_request->Parse(conn->Get_input_buffer()->Content());
+    return 0;
 }
 
 int Get_process(const Server::TcpConnectionPtr& conn) {
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     if (conn_request->is_file) {
         conn_respone->respone_file = conn_request->path + '/' + conn_request->target;
         struct stat file_stat;
         stat(conn_respone->respone_file.c_str(), &file_stat);
-
+        timespec file_modify_time = file_stat.st_mtim;
+        
         // Access phase: Access control(file)
         //...
-        conn_respone->respone_head.code_num = HttpCode::CODE200;
+        conn_respone->respone_head.code_num = "200";
+        return 0;
     } else {
-        conn_respone->respone_head.code_num = HttpCode::CODE404;
+        conn_respone->respone_head.code_num = "404";
+        return 0;
     }
 }
 
 int Post_process(const Server::TcpConnectionPtr& conn) {
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     // fill HttpRequest body
     // fill HttpRequest
+    return 0;
 }
 
 int Process_request(const Server::TcpConnectionPtr& conn) {
@@ -48,14 +55,17 @@ int Process_request(const Server::TcpConnectionPtr& conn) {
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     conn_respone->respone_head.server         = "Test_C++_Server";
     if (conn_request->version == Version::HTTP11) {
-        conn_respone->respone_head.connection = "Keep-Alive";
-        conn_respone->respone_head.keep_alive = "timeout=5, max=1000";
+        conn_respone->respone_head.connection         = "Keep-Alive";
+        conn_respone->respone_head.keep_alive_timeout = "5";
+        conn_respone->respone_head.keep_alive_max     = "1000";
     }
 
     if (conn_request->method == Method::GET) {
-        Get_process();
+        Get_process(conn);
+        return 0;
     } else if (conn_request->method == Method::POST) {
-        Post_process();
+        Post_process(conn);
+        return 0;
     }
     return -1;
 }
@@ -65,21 +75,31 @@ int Prepare_respone(const Server::TcpConnectionPtr& conn) {
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     // conn_respone->Set_code_num(conn_request->Get_code_num());
-    if (conn_request->version == Version::HTTP11) {
-        conn_respone->Set_connection_type("keep-alive");
-    }
-    conn_respone->Set_content_type("UTF-8");
-    conn_respone->Set_server_name("HttpServer");
-    int content_length = conn_request->Get_body().length();
-    conn_respone->Set_content_length(std::to_string(content_length));
+
+    conn_respone->respone_head.content_type   = "UTF-8";
+    int content_length                        = conn_respone->respone_body.length();
+    conn_respone->respone_head.content_length = std::to_string(content_length);
     // conn_respone->Set_last_modified(file_modify_time);
+    return 0;
 }
 
 int Send_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     // conn->Send(conn_respone->Get_respone_head());
-    conn->Send(conn_respone->Get_respone_body());
+    std::string respone_head;
+    respone_head += "HTTP/1.1 200 OK\r\n";
+    respone_head += "Content-Charset: UTF-8\r\n";
+    respone_head += "Content-Language: zh-CN\r\n";
+    respone_head += "Content-Length: 15\r\n";
+    respone_head += "Content-Type: text/plain\r\n";
+    respone_head += "Date: Mon, 25 Apr 2022 20:01:33 GMT\r\n";
+    respone_head += "Server: Empty\r\n";
+    respone_head += "\r\n";
+    respone_head += "<h1> test </h1>";
+    conn->Send(respone_head);
+    // conn->Send("HTTP/1.0 403 Forbidden\r\n\r\n");
+    return 0;
 }
 
 void Request_process(const Server::TcpConnectionPtr& conn) {
@@ -102,7 +122,7 @@ void HttpServer::Connection(const Server::TcpConnectionPtr& conn) {
         HttpContext new_conn_context;
         contexts.push_back(new_conn_context);
         conn->Set_context(new_conn_context);
-        conn->Send("Get connection");
+        // conn->Send("Get connection");
     }
 }
 

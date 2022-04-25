@@ -35,16 +35,16 @@ enum class HttpCode {
 };
 
 struct ResponeHead {
-    std::string code_num;       // HTTP/1.1 (...) (...)
-    std::string server;         // Server: (...)
-    std::string connection;     // Connection: (...)
-    std::string keep_alive;     // Keep-Alive: (timeout=(...), max=(...))
-    std::string content_type;   //
-    std::string charset;        // Content-Type: (...); charset=(....)
-    std::string content_length; // Content_length: (...)
-    std::string last_modified;  // Last-Modified: (...)
-    std::string date;           // date = Week, Day Month Year HH:MM:SS GMT
-
+    std::string code_num;           // HTTP/1.1 (...) (...)
+    std::string server;             // Server: (...)
+    std::string connection;         // Connection: (...)
+    std::string keep_alive_timeout; //
+    std::string keep_alive_max;     // Keep-Alive: (timeout=(...), max=(...))
+    std::string content_type;       //
+    std::string charset;            // Content-Type: (...); charset=(....)
+    std::string content_length;     // Content_length: (...)
+    std::string last_modified;      // Last-Modified: (...)
+    std::string date;               // date = Week, Day Month Year HH:MM:SS GMT
     // std::string etag;
     // std::string content_encoding;
     // std::string cache_control;

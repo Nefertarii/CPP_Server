@@ -18,6 +18,7 @@ public:
     static TimeStamp Invalid();
     static const int microseconds_per_second       = 1000 * 1000;
     static const int microseconds_per_milliseconds = 1000;
+    static const int millisecond_per_second        = 1000;
 };
 
 inline TimeStamp Time_stamp_add(TimeStamp timestamp, double seconds) {

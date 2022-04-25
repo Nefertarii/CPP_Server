@@ -28,19 +28,32 @@ long Clock::Nowtime_ms() { return Nowtime_us() / TimeStamp::microseconds_per_mil
 long Clock::Nowtime_sec() { return Nowtime_us() / TimeStamp::microseconds_per_second; }
 
 std::string Clock::To_string(TimeStamp time) {
+    long t_sec = time.Microseconds_since_epoch() / TimeStamp::microseconds_per_second;
+    return To_string_sec(t_sec, "%b %m %Y %H:%M:%S");
+}
+
+std::string TimeStamp::To_string_sec(long timestamp_sec, std::string format) {
     char temp[40];
-    long time_sec      = time.Microseconds_since_epoch() / TimeStamp::microseconds_per_second;
-    struct tm* time_tm = localtime(&time_sec);
-    strftime(temp, 40, "%b %m %Y %H:%M:%S ", time_tm);
+    struct tm* time_tm = localtime(&timestamp_sec);
+    strftime(temp, 40, format.c_str(), time_tm);
     std::string str_time = temp;
     return str_time;
 }
 
-std::string Clock::To_string(long timestamp_us) {
-    char temp[40];
-    long time_sec      = timestamp_us / TimeStamp::microseconds_per_second;
-    struct tm* time_tm = localtime(&time_sec);
-    strftime(temp, 40, "%b %m %Y %H:%M:%S ", time_tm);
-    std::string str_time = temp;
-    return str_time;
+std::string TimeStamp::To_string_ms(long timestamp_ms, std::string format) {
+    long t_sec       = timestamp_ms / TimeStamp::millisecond_per_second;
+    long t_msec      = timestamp_ms % TimeStamp::millisecond_per_second;
+    std::string time = To_string_sec(t_sec, format);
+    time += '.';
+    time += std::to_string(t_msec);
+    return time;
+}
+
+std::string TimeStamp::To_string_us(long timestamp_us, std::string format) {
+    long t_sec       = timestamp_us / TimeStamp::microseconds_per_second;
+    long t_usec      = timestamp_us % TimeStamp::microseconds_per_second;
+    std::string time = To_string_sec(t_sec, format);
+    time += '.';
+    time += std::to_string(t_usec);
+    return time;
 }

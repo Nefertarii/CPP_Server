@@ -32,8 +32,10 @@ public:
     static long Nowtime_us();
     static long Nowtime_ms();
     static long Nowtime_sec();
-    static std::string To_string(TimeStamp time);
-    static std::string To_string(long timestamp_us);
+    static std::string To_string(TimeStamp time); // default use sec
+    static std::string To_string_sec(long timestamp_sec, std::string format);
+    static std::string To_string_ms(long timestamp_ms, std::string format);
+    static std::string To_string_us(long timestamp_us, std::string format);
     // static std::string Ms_to_string(long time);
     // static std::string Us_to_string(long time);
     ~Clock(){};

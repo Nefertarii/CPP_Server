@@ -1,9 +1,11 @@
 #include <any>
 #include <cassert>
+#include <chrono>
 #include <fstream>
 #include <iostream>
 #include <memory>
 #include <string>
+#include <sys/time.h>
 #include <vector>
 
 using namespace std;
@@ -64,60 +66,58 @@ public:
     ~Test() { cout << "test earse " << i << "\n"; }
 };
 
-int main() {
-    // clang-format off
-    //std::string message("POST /path/path2/home.html HTTP/1.1\r\nHost: developer.mozilla.org\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Language: en-US,en;q=0.5\r\nAccept-Encoding: gzip, deflate, br\r\nConnection: keep-alive\r\nIf-Modified-Since: Mon, 18 Jul 2016 02:36:04 GMT\r\n\r\nbody123456" );
-    //Parse(&message);
-    //  clang-format on
-    //  cout << message;
-    // shared_ptr<void> ptr_1 = nullptr;
-    // shared_ptr<Test> ptr_2 = make_shared<Test>(5);
-    // 
-    // ptr_1 = static_pointer_cast<Test>(ptr_2);
-    // Test* ptr_1_data = (Test*)ptr_1.get();
+const int microseconds_per_second       = 1000 * 1000;
+const int microseconds_per_milliseconds = 1000;
+const int millisecond_per_second        = 1000;
+using Us                                = std::chrono::microseconds;
+using Ms                                = std::chrono::milliseconds;
+using Sec                               = std::chrono::seconds;
+using SysClock                          = std::chrono::system_clock;
+using HighResClock                      = std::chrono::high_resolution_clock;
+using SteadyClock                       = std::chrono::steady_clock;
+template <typename Rep, typename Period>
+using Duration = std::chrono::duration<Rep, Period>;
+template <typename type>
+using TimePoint = std::chrono::time_point<HighResClock, type>;
 
-    // cout<<ptr_1_data->i<<"\n";
-    // cout<<ptr_2.use_count()<<"\n";
-    // cout<<ptr_2->i<<"\n";
-
-        std::cout << std::boolalpha;
- 
-    // any type
-    std::any a = 1;
-    std::cout << a.type().name() << ": " << std::any_cast<int>(a) << '\n';
-    a = 3.14;
-    std::cout << a.type().name() << ": " << std::any_cast<double>(a) << '\n';
-    a = true;
-    std::cout << a.type().name() << ": " << std::any_cast<bool>(a) << '\n';
- 
-    // bad cast
-    try{
-        a = 1;
-        std::cout << std::any_cast<float>(a) << '\n';
-    }
-    catch (const std::bad_any_cast& e){
-        std::cout << e.what() << '\n';
-    }
- 
-    // has value
-    a = 2;
-    if (a.has_value()){
-        std::cout << a.type().name() << ": " << std::any_cast<int>(a) << '\n';
-    }
- 
-    // reset
-    a.reset();
-    if (!a.has_value()) {
-        std::cout << "no value\n";
-    }
- 
-    // pointer to contained data
-    a = 3;
-    int* i = std::any_cast<int>(&a);
-    std::cout << *i << "\n";
-
-    any* a_p;
-
-
+long Nowtime_us() {
+    TimePoint<Us> now_us = std::chrono::time_point_cast<Us>(HighResClock::now());
+    return now_us.time_since_epoch().count();
 }
 
+long Nowtime_ms() { return Nowtime_us() / microseconds_per_milliseconds; }
+
+long Nowtime_sec() { return Nowtime_us() / microseconds_per_second; }
+
+std::string To_string_sec(long timestamp_sec, std::string format) {
+    char temp[40];
+    struct tm* time_tm = localtime(&timestamp_sec);
+    strftime(temp, 40, format.c_str(), time_tm);
+    std::string str_time = temp;
+    return str_time;
+}
+
+std::string To_string_ms(long timestamp_ms, std::string format) {
+    long t_sec       = timestamp_ms / millisecond_per_second;
+    long t_msec      = timestamp_ms % millisecond_per_second;
+    std::string time = To_string_sec(t_sec, format);
+    time += '.';
+    time += std::to_string(t_msec);
+    return time;
+}
+
+std::string To_string_us(long timestamp_us, std::string format) {
+    long t_sec       = timestamp_us / microseconds_per_second;
+    long t_usec      = timestamp_us % microseconds_per_second;
+    std::string time = To_string_sec(t_sec, format);
+    time += '.';
+    time += std::to_string(t_usec);
+    return time;
+}
+
+int main() {
+    // clang-format off
+    cout << To_string_sec(Nowtime_sec(), "%b %m %Y %H:%M:%S") << "\n";
+    cout << To_string_ms(Nowtime_ms(), "%b %m %Y %H:%M:%S") << "\n";
+    cout << To_string_us(Nowtime_us(), "%b %m %Y %H:%M:%S") << "\n";
+}

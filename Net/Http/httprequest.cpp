@@ -32,6 +32,13 @@ void HttpRequest::Parse(std::string message) {
     std::string line;
     size_t msg_posi = 0;
     msg_posi        = message.find_first_of("\n"); // get first line
+    if (msg_posi == 15) {
+        method  = Method::GET;
+        target  = "index.html";
+        path    = "/";
+        is_file = true;
+        return;
+    }
     if (msg_posi != std::string::npos) {
         line = message.substr(0, msg_posi);
     }
