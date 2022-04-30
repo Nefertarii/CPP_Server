@@ -13,20 +13,20 @@ public:
     std::string request;
 
     Method method;
-    Version version;
+    HttpVersion version;
     std::string path;
     bool is_file;
     std::string target;
 
     HttpCode code_num;
     std::string body;
-    std::string modify_time;
 
     HttpRequest();
     HttpRequest(std::string http_request);
     void Parse();
     void Parse(std::string message);
     void Swap(HttpRequest& other);
+    void Init();
     ~HttpRequest();
 };
 

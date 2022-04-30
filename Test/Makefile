@@ -21,7 +21,7 @@ OBJECTS5 = clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	filehandler.o logformatter.o loglevel.o logmsg.o \
 	stdsink.o filesink.o logger.o eventloopthreadpool.o \
 	latch.o socketapi.o acceptor.o connector.o socket.o inetaddress.o \
-	buffer.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
+	buffer.o filestat.o tcpconnection.o tcpserver.o tcpclient.o test5.o 
 OBJECTS6 = filehandler.o logformatter.o loglevel.o logmsg.o \
 	stdsink.o filesink.o logger.o clock.o timestamp.o test7.o
 OBJECTS7 = latch.o taskqueue.o thread.o threadpool.o \
@@ -29,7 +29,7 @@ OBJECTS7 = latch.o taskqueue.o thread.o threadpool.o \
 	clock.o timestamp.o timer.o timerid.o timerqueue.o \
 	poller.o eventloop.o eventloopthread.o eventloopthreadpool.o channel.o \
 	stdsink.o filesink.o logger.o httpcontext.o httprequest.o httprespone.o \
-	socketapi.o inetaddress.o acceptor.o tcpconnection.o buffer.o socket.o \
+	socketapi.o inetaddress.o acceptor.o tcpconnection.o buffer.o filestat.o socket.o \
 	tcpserver.o httpserver.o test9.o
 ifeq ($(MODE),DEBUG)
 FLAGS = -pthread -std=c++17 -Og -Wall -g 
@@ -120,6 +120,9 @@ filesink.o : $(SINK)/Head/filesink.h $(SINK)/filesink.cpp
 
 buffer.o : $(BASE)/Head/buffer.h $(BASE)/buffer.cpp
 	$(CC) $(FLAGS) -c $(BASE)/buffer.cpp
+
+filestat.o : $(BASE)/Head/filestat.h $(BASE)/filestat.cpp
+	$(CC) $(FLAGS) -c $(BASE)/filestat.cpp
 
 #thread
 latch.o : $(THREAD)/Base/Head/latch.h $(THREAD)/Base/latch.cpp

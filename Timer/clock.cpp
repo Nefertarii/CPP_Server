@@ -32,7 +32,7 @@ std::string Clock::To_string(TimeStamp time) {
     return To_string_sec(t_sec, "%b %m %Y %H:%M:%S");
 }
 
-std::string TimeStamp::To_string_sec(long timestamp_sec, std::string format) {
+std::string Clock::To_string_sec(long timestamp_sec, std::string format) {
     char temp[40];
     struct tm* time_tm = localtime(&timestamp_sec);
     strftime(temp, 40, format.c_str(), time_tm);
@@ -40,7 +40,7 @@ std::string TimeStamp::To_string_sec(long timestamp_sec, std::string format) {
     return str_time;
 }
 
-std::string TimeStamp::To_string_ms(long timestamp_ms, std::string format) {
+std::string Clock::To_string_ms(long timestamp_ms, std::string format) {
     long t_sec       = timestamp_ms / TimeStamp::millisecond_per_second;
     long t_msec      = timestamp_ms % TimeStamp::millisecond_per_second;
     std::string time = To_string_sec(t_sec, format);
@@ -49,7 +49,7 @@ std::string TimeStamp::To_string_ms(long timestamp_ms, std::string format) {
     return time;
 }
 
-std::string TimeStamp::To_string_us(long timestamp_us, std::string format) {
+std::string Clock::To_string_us(long timestamp_us, std::string format) {
     long t_sec       = timestamp_us / TimeStamp::microseconds_per_second;
     long t_usec      = timestamp_us % TimeStamp::microseconds_per_second;
     std::string time = To_string_sec(t_sec, format);

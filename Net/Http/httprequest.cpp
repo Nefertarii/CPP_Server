@@ -5,7 +5,7 @@ using namespace Wasi::Http;
 HttpRequest::HttpRequest() :
     request(),
     method(Method::INVAILD),
-    version(Version::UNKNOWN),
+    version(HttpVersion::UNKNOWN),
     path(),
     is_file(false),
     target(),
@@ -16,13 +16,12 @@ HttpRequest::HttpRequest() :
 HttpRequest::HttpRequest(std::string http_request) :
     request(),
     method(Method::INVAILD),
-    version(Version::UNKNOWN),
+    version(HttpVersion::UNKNOWN),
     path(),
     is_file(false),
     target(),
     code_num(HttpCode::CODE200),
-    body(),
-    modify_time() {}
+    body() {}
 
 void HttpRequest::Parse() { Parse(request); }
 
@@ -68,16 +67,16 @@ void HttpRequest::Parse(std::string message) {
     if (line.size() > 8) { // http version
         if (line[5] == '1') {
             if (line[7] == '0') {
-                version = Version::HTTP10;
+                version = HttpVersion::HTTP10;
             } else if (line[7] == '1') {
-                version = Version::HTTP11;
+                version = HttpVersion::HTTP11;
             }
         } else if (line[5] == '2') {
             if (line[7] == '0') {
-                version = Version::HTTP20;
+                version = HttpVersion::HTTP20;
             }
         } else {
-            version = Version::UNKNOWN;
+            version = HttpVersion::UNKNOWN;
         }
     }
     msg_posi = message.find_last_of("\r\n");
@@ -96,6 +95,17 @@ void HttpRequest::Swap(HttpRequest& other) {
     std::swap(code_num, other.code_num);
     body.swap(other.body);
     modify_time.swap(other.body);
+}
+
+void HttpRequest::Init() {
+    request.clear();
+    method  = Method::INVAILD;
+    version = HttpVersion::UNKNOWN;
+    path.clear();
+    is_file = false;
+    target.clear();
+    code_num = HttpCode::CODE200;
+    body.clear();
 }
 
 HttpRequest::~HttpRequest() {}

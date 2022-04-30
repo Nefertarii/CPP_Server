@@ -4,6 +4,7 @@
 #include "../../../Class/noncopyable.h"
 #include "../../../Timer/Head/timestamp.h"
 #include "../../Base/Head/buffer.h"
+#include "../../Base/Head/filestat.h"
 #include "../../Sockets/Head/inetaddress.h"
 #include <any>
 #include <functional>
@@ -49,6 +50,7 @@ private:
     void Handle_close();
     void Handle_error();
     void Send_in_loop();
+    void Send_file_in_loop();
     void Shutdown_in_loop();
     void Force_close_in_loop();
     void Set_state(ConnState state_);
@@ -62,6 +64,7 @@ private:
     size_t high_water_mark;
     Base::Buffer input_buffer;
     Base::Buffer output_buffer;
+    Base::FileStat file;
     std::any context;
     std::unique_ptr<Sockets::Socket> socket;
     std::unique_ptr<Poll::Channel> channel;
@@ -85,6 +88,7 @@ public:
     Base::Buffer* Get_input_buffer();
     // output buffer write message
     Base::Buffer* Get_output_buffer();
+    Base::FileStat* Get_file_stat();
     std::string Get_tcp_info() const;
     std::any Get_context();
     bool Get_tcp_info(tcp_info* tcpi) const;
@@ -94,6 +98,7 @@ public:
     void Send(const std::string message);
     void Send(const std::string message, size_t len);
     void Send(const char* message, size_t len);
+    void Sendfile(const std::string filename);
     void Shutdown();
     void Force_close();
     void Force_close_delay(double seconds);

@@ -10,6 +10,9 @@
 #include <cstring>
 #include <netinet/tcp.h>
 #include <sstream>
+#include <sys/fcntl.h>
+#include <sys/sendfile.h>
+#include <sys/stat.h>
 
 using namespace Wasi;
 using namespace Wasi::Server;
@@ -111,6 +114,35 @@ void TcpConnection::Send_in_loop() {
     }
 }
 
+void TcpConnection::Send_file_in_loop() {
+    bool fault = false;
+    if (state == DISCONNECTED) {
+        LOG_INFO("Disconnected, give up write.");
+        return;
+    }
+    if (!channel->Is_writing() && file.Remaning() > 0) {
+        if (sendfile(socket->Fd(), file.filefd, &file.file_offset, 4096) > 0) {
+            if (file.Remaning() > 0 && write_complete_callback) {
+                loop->Queue_in_loop(std::bind(write_complete_callback, shared_from_this()));
+            }
+            if (file.Remaning() == 0) {
+                close(file.filefd);
+                file.Init();
+            }
+        } else {
+            if (errno != EWOULDBLOCK) {
+                LOG_ERROR("Send file error " + std::string(strerror(errno)));
+                if (errno == EPIPE || errno == ECONNRESET) {
+                    fault = true;
+                }
+            }
+        }
+    }
+    // high_water_mark
+    if (fault == true)
+        ;
+}
+
 void TcpConnection::Shutdown_in_loop() {
     loop->Assert_in_loop_thread();
     if (!channel->Is_writing()) {
@@ -168,6 +200,7 @@ TcpConnection::TcpConnection(Poll::EventLoop* loop_, const std::string& name_, i
     high_water_mark(64 * 1024 * 1024),
     input_buffer(Base::Buffer::BufferState::READ),
     output_buffer(Base::Buffer::BufferState::WRITE),
+    file(),
     context(),
     socket(new Sockets::Socket(sockfd_)),
     channel(new Poll::Channel(loop, sockfd_)),
@@ -196,6 +229,8 @@ const Sockets::InetAddress& TcpConnection::Get_peer_address() const { return pee
 Base::Buffer* TcpConnection::Get_input_buffer() { return &input_buffer; }
 
 Base::Buffer* TcpConnection::Get_output_buffer() { return &output_buffer; }
+
+Base::FileStat* TcpConnection::Get_file_stat() { return &file; }
 
 std::string TcpConnection::Get_tcp_info() const {
     std::string tcp_info;
@@ -236,6 +271,22 @@ void TcpConnection::Send(const std::string message, size_t len) {
 void TcpConnection::Send(const char* message, size_t len) {
     std::string tmp_str(message, 0, len);
     Send(tmp_str);
+}
+
+void TcpConnection::Sendfile(const std::string filename) {
+    if (filename.empty()) { return; }
+    struct stat sys_file_stat;
+    stat(filename.c_str(), &sys_file_stat);
+    file.file_name = filename.c_str();
+    file.file_size = sys_file_stat.st_size;
+    file.filefd    = open(filename.c_str(), O_RDONLY);
+    if (state == CONNECTED) {
+        if (loop->Is_in_loop_thread()) {
+            Send_file_in_loop();
+        } else {
+            loop->Run_in_loop(std::bind(&TcpConnection::Send_file_in_loop, this));
+        }
+    }
 }
 
 void TcpConnection::Shutdown() {

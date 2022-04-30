@@ -18,7 +18,7 @@ enum class Method {
     PUT,
     DELETE
 };
-enum class Version {
+enum class HttpVersion {
     UNKNOWN,
     HTTP10,
     HTTP11,
@@ -51,12 +51,12 @@ inline std::string Filename(std::string name) {
     return std::string(name.begin() + name.find_last_of('/'), name.end());
 }
 
-int flag;           // 11111
-Method method;      // 00001
-Version version;    // 00010
-std::string body;   // 00100
-std::string target; // 01000
-std::string path;   // 10000
+int flag;            // 11111
+Method method;       // 00001
+HttpVersion version; // 00010
+std::string body;    // 00100
+std::string target;  // 01000
+std::string path;    // 10000
 
 class Test {
 public:

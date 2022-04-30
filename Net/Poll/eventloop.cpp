@@ -18,7 +18,7 @@ const int poll_timeout_ms = 5000;
 int Create_event_fd() {
     int evtfd = eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
     if (evtfd < 0) {
-        LOG_WARN("Event fd create fail.");
+        LOG_FATAL("Event fd create fail.");
     }
     return evtfd;
 }
@@ -27,7 +27,7 @@ void EventLoop::Abort_not_in_loop_thread() {
     if (!Is_in_loop_thread()) {
         std::string msg = "EventLoop:" + std::to_string(thread_id)
                           + " not current, Should be: " + std::to_string(gettid());
-        LOG_WARN(msg);
+        LOG_FATAL(msg);
     }
 }
 
