@@ -275,16 +275,26 @@ void TcpConnection::Send(const char* message, size_t len) {
 
 void TcpConnection::Sendfile(const std::string filename) {
     if (filename.empty()) { return; }
-    struct stat sys_file_stat;
-    stat(filename.c_str(), &sys_file_stat);
-    file.file_name = filename.c_str();
-    file.file_size = sys_file_stat.st_size;
-    file.filefd    = open(filename.c_str(), O_RDONLY);
-    if (state == CONNECTED) {
-        if (loop->Is_in_loop_thread()) {
-            Send_file_in_loop();
-        } else {
-            loop->Run_in_loop(std::bind(&TcpConnection::Send_file_in_loop, this));
+    if (filename == file.file_name) {
+        if (state == CONNECTED) {
+            if (loop->Is_in_loop_thread()) {
+                Send_file_in_loop();
+            } else {
+                loop->Run_in_loop(std::bind(&TcpConnection::Send_file_in_loop, this));
+            }
+        }
+    } else {
+        struct stat sys_file_stat;
+        stat(filename.c_str(), &sys_file_stat);
+        file.file_name = filename.c_str();
+        file.file_size = sys_file_stat.st_size;
+        file.filefd    = open(filename.c_str(), O_RDONLY);
+        if (state == CONNECTED) {
+            if (loop->Is_in_loop_thread()) {
+                Send_file_in_loop();
+            } else {
+                loop->Run_in_loop(std::bind(&TcpConnection::Send_file_in_loop, this));
+            }
         }
     }
 }

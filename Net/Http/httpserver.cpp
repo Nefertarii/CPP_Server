@@ -29,9 +29,11 @@ int Get_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    // Base::FileStat* conn_file_stat            = conn->Get_file_stat();
     if (conn_request->is_file) {
         struct stat sys_file_stat;
         conn_respone->respone_file = conn_request->path + local_dir + conn_request->target;
+        LOG_DEBUG("File:" + conn_respone->respone_file);
         if (stat(conn_respone->respone_file.c_str(), &sys_file_stat) < 0) {
             LOG_ERROR("not find file:" + conn_respone->respone_file);
             return -1;
@@ -108,6 +110,7 @@ int Prepare_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    // Base::FileStat* conn_file_stat            = conn->Get_file_stat();
     std::string tmp_string;
     conn_respone->prepare_respone_head.clear();
     // version code
@@ -217,6 +220,12 @@ int Prepare_respone(const Server::TcpConnectionPtr& conn) {
     tmp_string += Time::Clock::To_string_sec(conn_respone->respone_head.date, "%a, %d %b %G %T GMT\r\n");
     conn_respone->prepare_respone_head += tmp_string;
 
+    tmp_string = "Server: " + conn_respone->respone_head.server + "\r\n";
+    conn_respone->prepare_respone_head += tmp_string;
+
+    tmp_string = "\r\n";
+    conn_respone->prepare_respone_head += tmp_string;
+
     return 0;
 }
 
@@ -277,20 +286,23 @@ void HttpServer::Write_complete(const Server::TcpConnectionPtr& conn) {
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     Base::FileStat* conn_file_stat            = conn->Get_file_stat();
     // head write complete
-    if (conn_respone->respone_file.empty()) {
-        conn->Send(conn_respone->respone_body);
-        conn_respone->
-    }
-
     // write body
-
-    // write file
-    if (conn_file_stat->filefd == 0) { return; }
-    if (conn_file_stat->Remaning() == 0) { return; }
-    if (!conn_respone->respone_file.empty()) {
+    if (!conn_respone->respone_body.empty()) {
+        conn->Send(conn_respone->respone_body);
+        conn_respone->Init();
+        return;
+    } else if (!conn_respone->respone_file.empty()) {
         conn->Sendfile(conn_respone->respone_file);
-        conn_respone->respone_file.clear();
+        conn_respone->Init();
+    } else {
+        if (conn_file_stat->filefd == 0) { return; }
+        if (conn_file_stat->Remaning() == 0) { return; }
+        if (!conn_respone->respone_file.empty()) {
+            conn->Sendfile(conn_file_stat->file_name);
+            conn_respone->respone_file.clear();
+        }
     }
+    // write file
 }
 
 HttpServer::HttpServer(Poll::EventLoop* loop,

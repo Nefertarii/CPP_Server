@@ -64,7 +64,7 @@ struct ResponeHead {
     int keep_alive_max;        // Keep-Alive: timeout=(...), max=(...)
     FileType content_type;     //
     HttpCharset charset;       // Content-Type: (...); charset=(....)
-    int content_length;        // Content-Length: (...)
+    long content_length;       // Content-Length: (...)
     time_t last_modified;      // Last-Modified: (...) Week, Day Month Year HH:MM:SS GMT
     time_t date;               // date = Week, Day Month Year HH:MM:SS GMT
     // std::string etag;

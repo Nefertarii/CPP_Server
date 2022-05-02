@@ -10,8 +10,7 @@ HttpRequest::HttpRequest() :
     is_file(false),
     target(),
     code_num(HttpCode::CODE200),
-    body(),
-    modify_time() {}
+    body() {}
 
 HttpRequest::HttpRequest(std::string http_request) :
     request(),
@@ -94,7 +93,6 @@ void HttpRequest::Swap(HttpRequest& other) {
     target.swap(other.target);
     std::swap(code_num, other.code_num);
     body.swap(other.body);
-    modify_time.swap(other.body);
 }
 
 void HttpRequest::Init() {

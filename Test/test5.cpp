@@ -24,9 +24,19 @@ using namespace Wasi::Poll;
 using namespace Wasi::Sockets;
 using namespace Wasi::Time;
 
-std::string message = "Hello";
-
 void Connection(const TcpConnectionPtr& conn) {
+    std::string message = "GET / HTTP/1.1\r\n";
+    message += "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9\r\n";
+    message += "Accept-Encoding: gzip, deflate, br\r\n";
+    message += "Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7\r\n";
+    message += "Cache-Control: no-cache\r\n";
+    message += "Connection: keep-alive\r\n";
+    message += "Host: 127.0.0.1:8000\r\n";
+    message += "Pragma: no-cache\r\n";
+    message += "sec-ch-ua-mobile: ?0\r\n";
+    message += "Sec-Fetch-Dest: document\r\n";
+    message += "Sec-Fetch-Mode: navigate\r\n";
+
     // while (1) {
     if (conn->Connected()) {
         std::cout << "Connection: new connection [" << conn->Get_name() << "]"
@@ -53,7 +63,7 @@ void process(TcpClient* client) {
     TcpConnectionPtr conn = client->Connection();
     if (conn) {
         this_thread::sleep_for(chrono::seconds(1));
-        conn->Send(message);
+        conn->Send("1");
     }
 }
 
@@ -66,7 +76,7 @@ void func1() {
     client.Set_message_callback(Message);
     client.Enable_retry();
     client.Connect();
-    //loop.Run_every(2.0, std::bind(process, &client));
+    // loop.Run_every(2.0, std::bind(process, &client));
     loop.Loop();
 
     // cout << "\n\n\n\n";
