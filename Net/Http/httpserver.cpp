@@ -14,7 +14,17 @@
 using namespace Wasi::Http;
 using namespace Wasi;
 
-static std::string local_dir = "home/nefertarii/vscode/HTML/";
+static std::string local_dir = "/home/nefertarii/vscode/HTML";
+
+int Send_bad_respone(const Server::TcpConnectionPtr& conn) {
+    conn->Send("HTTP/1.0 404 BadRequest\r\n\r\n");
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    conn_request->Init();
+    conn_respone->Init();
+    return 0;
+}
 
 int Parse_request(const Server::TcpConnectionPtr& conn) {
     // Preaccess phase: IP control(black list)
@@ -32,7 +42,7 @@ int Get_process(const Server::TcpConnectionPtr& conn) {
     // Base::FileStat* conn_file_stat            = conn->Get_file_stat();
     if (conn_request->is_file) {
         struct stat sys_file_stat;
-        conn_respone->respone_file = conn_request->path + local_dir + conn_request->target;
+        conn_respone->respone_file = local_dir + conn_request->path + conn_request->target;
         LOG_DEBUG("File:" + conn_respone->respone_file);
         if (stat(conn_respone->respone_file.c_str(), &sys_file_stat) < 0) {
             LOG_ERROR("not find file:" + conn_respone->respone_file);
@@ -73,6 +83,7 @@ int Post_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    Send_bad_respone(conn);
     // fill HttpRequest body
     // fill HttpRequest
     return 0;
@@ -93,6 +104,7 @@ int Process_request(const Server::TcpConnectionPtr& conn) {
     if (conn_request->method == Method::GET) {
         if (Get_process(conn) < 0) {
             LOG_ERROR("Get request process fail");
+            Send_bad_respone(conn);
             return -1;
         }
         return 0;

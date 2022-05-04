@@ -32,8 +32,8 @@ void HttpRequest::Parse(std::string message) {
     msg_posi        = message.find_first_of("\n"); // get first line
     if (msg_posi == 15) {
         method  = Method::GET;
-        target  = "index.html";
-        path    = "/";
+        target  = "/index.html";
+        path    = "";
         is_file = true;
         return;
     }
@@ -54,7 +54,7 @@ void HttpRequest::Parse(std::string message) {
     }
     size_t tmp_posi = line.find_first_of(' ');
     if (tmp_posi != std::string::npos) { // http path
-        line.assign(line.begin() + tmp_posi + 1, line.end());
+        line.assign(line.begin(), line.begin() + tmp_posi + 1);
         path     = line.substr(0, tmp_posi);
         tmp_posi = path.find_last_of('/');
         if (tmp_posi != std::string::npos) { // get path & target
