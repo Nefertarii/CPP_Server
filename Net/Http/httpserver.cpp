@@ -32,6 +32,9 @@ int Parse_request(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     conn_request->Parse(conn->Get_input_buffer()->Content());
+    if (conn_request->parse_state == false) {
+        return -1;
+    }
     return 0;
 }
 
@@ -45,7 +48,7 @@ int Get_process(const Server::TcpConnectionPtr& conn) {
         conn_respone->respone_file = local_dir + conn_request->path + conn_request->target;
         LOG_DEBUG("File:" + conn_respone->respone_file);
         if (stat(conn_respone->respone_file.c_str(), &sys_file_stat) < 0) {
-            LOG_ERROR("not find file:" + conn_respone->respone_file);
+            LOG_ERROR("Can't find file:" + conn_respone->respone_file);
             return -1;
         }
         size_t dot = conn_request->target.find_first_of('.');
@@ -83,10 +86,39 @@ int Post_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
-    Send_bad_respone(conn);
+    switch (conn_request->post_method) {
+    case PostMethod::LOGIN: {
+        LOG_DEBUG("post login");
+        break;
+    }
+    case PostMethod::RESET: {
+        LOG_DEBUG("post reset");
+        break;
+    }
+    case PostMethod::REGISTER: {
+        LOG_DEBUG("post register");
+        break;
+    }
+    case PostMethod::VOTE: {
+        LOG_DEBUG("post vote");
+        break;
+    }
+    case PostMethod::COMMENT: {
+        LOG_DEBUG("post comment");
+        break;
+    }
+    case PostMethod::CONTENT: {
+        LOG_DEBUG("post content");
+        break;
+    }
+    default: {
+        LOG_DEBUG("post unknown");
+        break;
+    }
+    }
     // fill HttpRequest body
     // fill HttpRequest
-    return 0;
+    return -1;
 }
 
 int Process_request(const Server::TcpConnectionPtr& conn) {
@@ -103,14 +135,11 @@ int Process_request(const Server::TcpConnectionPtr& conn) {
     }
     if (conn_request->method == Method::GET) {
         if (Get_process(conn) < 0) {
-            LOG_ERROR("Get request process fail");
-            Send_bad_respone(conn);
             return -1;
         }
         return 0;
     } else if (conn_request->method == Method::POST) {
         if (Post_process(conn) < 0) {
-            LOG_ERROR("Post request process fail");
             return -1;
         }
         return 0;
@@ -249,29 +278,44 @@ int Send_respone(const Server::TcpConnectionPtr& conn) {
 }
 
 void Request_process(const Server::TcpConnectionPtr& conn) {
-    std::string msg;
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    std::string msg                           = conn->Get_peer_address().To_string_ip_port();
     // parse_request
     if (Parse_request(conn) < 0) {
-        LOG_INFO("parse_request fail");
+        msg += " request phase: parse request fail";
+        // LOG_DEBUG("Path: " + conn_request->path);
+        // LOG_DEBUG("Target: " + conn_request->target);
+        // LOG_DEBUG("Http version: " + conn_request->version);
+        // LOG_DEBUG("Request method: " + conn_request->method);
+        // LOG_DEBUG("Request post method: " + conn_request->post_method);
+        LOG_ERROR(msg);
+        Send_bad_respone(conn);
         return;
     }
     // process_request
     if (Process_request(conn) < 0) {
-        LOG_INFO("process_request fail");
+        msg += " request phase: process request fail";
+        LOG_ERROR(msg);
+        Send_bad_respone(conn);
         return;
     }
     // prepare_respone
     if (Prepare_respone(conn) < 0) {
-        LOG_INFO("prepare_respone fail");
+        msg += " request phase: prepare respone fail";
+        LOG_ERROR(msg);
+        Send_bad_respone(conn);
         return;
     }
     // send_respone
     if (Send_respone(conn) < 0) {
-        LOG_INFO("send_respone fail");
+        msg += " request phase: send respone fail";
+        LOG_ERROR(msg);
         return;
     }
-
-    LOG_INFO("success");
+    msg += " request process success.";
+    LOG_INFO(msg);
 }
 
 void HttpServer::Connection(const Server::TcpConnectionPtr& conn) {
@@ -281,7 +325,6 @@ void HttpServer::Connection(const Server::TcpConnectionPtr& conn) {
         HttpContext new_conn_context;
         contexts.push_back(new_conn_context);
         conn->Set_context(new_conn_context);
-        // conn->Send("Get connection");
     }
 }
 

@@ -65,8 +65,20 @@ bool Socket::Get_tcp_info(std::string* buf) const {
     tcp_info tcpi;
     std::string tmp_str;
     if (Get_tcp_info(&tcpi)) {
-        tmp_str = "unrecovered = " + std::to_string(tcpi.tcpi_retransmits) + "rto = " + std::to_string(tcpi.tcpi_rto) + "ato = " + std::to_string(tcpi.tcpi_ato) + "snd_mss = " + std::to_string(tcpi.tcpi_snd_mss) + "rcv_mss = " + std::to_string(tcpi.tcpi_rcv_mss) + "lost = " + std::to_string(tcpi.tcpi_lost) + "retrans = " + std::to_string(tcpi.tcpi_retrans) + "rtt = " + std::to_string(tcpi.tcpi_rtt) + "rttvar = " + std::to_string(tcpi.tcpi_rttvar) + "sshthresh = " + std::to_string(tcpi.tcpi_snd_ssthresh) + "cwnd = " + std::to_string(tcpi.tcpi_snd_cwnd) + "total_retrans = " + std::to_string(tcpi.tcpi_total_retrans);
-        *buf    = tmp_str;
+        tmp_str = "unrecovered = ";
+        tmp_str += std::to_string(tcpi.tcpi_retransmits);
+        tmp_str += "rto = " + std::to_string(tcpi.tcpi_rto);
+        tmp_str += "ato = " + std::to_string(tcpi.tcpi_ato);
+        tmp_str += "snd_mss = " + std::to_string(tcpi.tcpi_snd_mss);
+        tmp_str += "rcv_mss = " + std::to_string(tcpi.tcpi_rcv_mss);
+        tmp_str += "lost = " + std::to_string(tcpi.tcpi_lost);
+        tmp_str += "retrans = " + std::to_string(tcpi.tcpi_retrans);
+        tmp_str += "rtt = " + std::to_string(tcpi.tcpi_rtt);
+        tmp_str += "rttvar = " + std::to_string(tcpi.tcpi_rttvar);
+        tmp_str += "sshthresh = " + std::to_string(tcpi.tcpi_snd_ssthresh);
+        tmp_str += "cwnd = " + std::to_string(tcpi.tcpi_snd_cwnd);
+        tmp_str += +" total_retrans = " + std::to_string(tcpi.tcpi_total_retrans);
+        *buf = tmp_str;
         return true;
     }
     return false;

@@ -55,6 +55,16 @@ enum class HttpCharset {
     UTF8
 };
 
+enum class PostMethod {
+    UNKNOWN,
+    LOGIN,
+    RESET,
+    REGISTER,
+    VOTE,
+    COMMENT,
+    CONTENT
+};
+
 struct ResponeHead {
     HttpVersion http_version;  //
     HttpCode code_num;         // HTTP/1.1 (...) (...)
@@ -83,7 +93,6 @@ struct ResponeHead {
         last_modified(0),
         date(0) {}
 };
-
 }
 } // namespace Wasi::Http
 

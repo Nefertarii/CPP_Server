@@ -7,20 +7,22 @@ HttpRequest::HttpRequest() :
     method(Method::INVAILD),
     version(HttpVersion::UNKNOWN),
     path(),
-    is_file(false),
     target(),
     code_num(HttpCode::CODE200),
-    body() {}
+    body(),
+    is_file(false),
+    parse_state(false) {}
 
 HttpRequest::HttpRequest(std::string http_request) :
     request(),
     method(Method::INVAILD),
     version(HttpVersion::UNKNOWN),
     path(),
-    is_file(false),
     target(),
     code_num(HttpCode::CODE200),
-    body() {}
+    body(),
+    is_file(false),
+    parse_state(false) {}
 
 void HttpRequest::Parse() { Parse(request); }
 
@@ -29,17 +31,19 @@ void HttpRequest::Parse(std::string message) {
     if (message.empty()) { return; }
     std::string line;
     size_t msg_posi = 0;
-    msg_posi        = message.find_first_of("\n"); // get first line
-    if (msg_posi == 15) {
-        method  = Method::GET;
-        target  = "/index.html";
-        path    = "";
-        is_file = true;
+    msg_posi        = message.find_first_of("\n");
+    if (msg_posi == std::string::npos) {
+        return;
+    } else if (msg_posi == 15) {
+        method      = Method::GET;
+        target      = "/index.html";
+        path        = "";
+        is_file     = true;
+        parse_state = true;
         return;
     }
-    if (msg_posi != std::string::npos) {
-        line = message.substr(0, msg_posi);
-    }
+    line = message.substr(0, msg_posi); // get first line: "GET /index.html HTTP/1.1\r\n"
+
     if (line[0] == 'G') {
         method  = Method::GET;
         is_file = true;
@@ -52,17 +56,16 @@ void HttpRequest::Parse(std::string message) {
         method = Method::INVAILD;
         return;
     }
-    size_t tmp_posi = line.find_first_of(' ');
-    if (tmp_posi != std::string::npos) { // http path
-        line.assign(line.begin(), line.begin() + tmp_posi + 1);
-        path     = line.substr(0, tmp_posi);
-        tmp_posi = path.find_last_of('/');
-        if (tmp_posi != std::string::npos) { // get path & target
-            tmp_posi += 1;
-            target = path.substr(tmp_posi, path.size());
-            path.assign(path.begin(), path.begin() + tmp_posi);
-        }
+
+    msg_posi = message.find_last_of("\r\n");
+    if (msg_posi != std::string::npos) {
+        body = message.substr(msg_posi + 1, message.size());
     }
+
+    size_t tmp_posi = line.find_first_of(' ');
+    path            = line.substr(0, tmp_posi); // get request position
+    line.assign(line.begin(), line.begin() + tmp_posi + 1);
+
     if (line.size() > 8) { // http version
         if (line[5] == '1') {
             if (line[7] == '0') {
@@ -78,10 +81,41 @@ void HttpRequest::Parse(std::string message) {
             version = HttpVersion::UNKNOWN;
         }
     }
-    msg_posi = message.find_last_of("\r\n");
-    if (msg_posi != std::string::npos) {
-        body = message.substr(msg_posi + 1, message.size());
+
+    if (tmp_posi != std::string::npos) {
+        if (method == Method::GET) { // http path
+            tmp_posi = path.find_last_of('/');
+            if (tmp_posi != std::string::npos) { // get path & target
+                tmp_posi += 1;
+                target = path.substr(tmp_posi, path.size());
+                path.assign(path.begin(), path.begin() + tmp_posi);
+            }
+        } else if (method == Method::POST) {
+            if (path == "/login") {
+                post_method = PostMethod::LOGIN;
+            } else if (path == "/reset") {
+                post_method = PostMethod::RESET;
+            } else if (path == "/register") {
+                post_method = PostMethod::REGISTER;
+            } else if (path == "/vote") {
+                post_method = PostMethod::VOTE;
+            } else if (path == "/comment") {
+                post_method = PostMethod::COMMENT;
+            } else if (path == "/content") {
+                post_method = PostMethod::CONTENT;
+            } else {
+                post_method = PostMethod::UNKNOWN;
+                return;
+            }
+            // else if (path == "/readcount") {
+            //     post_method = PostMethod::;
+            // } else if (path == "/verification") {
+            //     post_method = PostMethod::;
+            // }
+        }
     }
+
+    parse_state = true;
 }
 
 void HttpRequest::Swap(HttpRequest& other) {
@@ -97,8 +131,9 @@ void HttpRequest::Swap(HttpRequest& other) {
 
 void HttpRequest::Init() {
     request.clear();
-    method  = Method::INVAILD;
-    version = HttpVersion::UNKNOWN;
+    method      = Method::INVAILD;
+    post_method = PostMethod::UNKNOWN;
+    version     = HttpVersion::UNKNOWN;
     path.clear();
     is_file = false;
     target.clear();
