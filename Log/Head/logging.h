@@ -5,6 +5,9 @@
 #include "logger.h"
 
 inline const char* default_logger_name = "";
+inline std::string log_type            = "std_log";
+inline static default_logger_                 = std::make_shared<spdlog::logger>(default_logger_name, std::move(color_sink));
+// loggers_[default_logger_name]          = default_logger_;
 
 #ifdef NOPRINTDEBUG
 #define LOG_DEBUG(detail) ;
@@ -29,6 +32,27 @@ inline std::shared_ptr<Logger> default_logger() {
     default_logger_ = std::make_shared<Logger>(default_logger_name, std::make_shared<StdSink>());
     return default_logger_;
 }
+
+inline void Change_default_logger(std::string log_type) {
+}
+
+/*
+// void replace_default_logger_example()
+// {
+//     // store the old logger so we don't break other examples.
+//     auto old_logger = spdlog::default_logger();
+//
+//     auto new_logger = spdlog::basic_logger_mt("new_default_logger", "logs/new-default-log.txt", true);
+//     spdlog::set_default_logger(new_logger);
+//     spdlog::set_level(spdlog::level::info);
+//     spdlog::debug("This message should not be displayed!");
+//     spdlog::set_level(spdlog::level::trace);
+//     spdlog::debug("This message should be displayed..");
+//
+//     spdlog::set_default_logger(old_logger);
+// }
+//
+*/
 
 inline void Debug(std::string detail, int tid = 0, std::string file = "",
                   std::string func = "", int line = 0) {

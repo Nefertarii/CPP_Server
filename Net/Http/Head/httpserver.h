@@ -1,6 +1,7 @@
 #ifndef HTTP_SERVER_H_
 #define HTTP_SERVER_H_
 
+#include "../../../Log/Head/logger.h"
 #include "../../../Thread/Head/threadpool.h"
 #include "../../Server/Head/tcpserver.h"
 #include "httpcontext.h"
@@ -18,6 +19,8 @@ private:
     // Server::TcpServer process_server;
     std::shared_ptr<Poll::EventLoopThreadPool> thread_pool;
     std::vector<HttpContext> contexts;
+
+    Log::Logger
 
     void Connection(const Server::TcpConnectionPtr& conn);
     void Message(const Server::TcpConnectionPtr& conn);

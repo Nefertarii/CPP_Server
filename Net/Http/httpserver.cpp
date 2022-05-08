@@ -16,16 +16,6 @@ using namespace Wasi;
 
 static std::string local_dir = "/home/nefertarii/vscode/HTML";
 
-int Send_bad_respone(const Server::TcpConnectionPtr& conn) {
-    conn->Send("HTTP/1.0 404 BadRequest\r\n\r\n");
-    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
-    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
-    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
-    conn_request->Init();
-    conn_respone->Init();
-    return 0;
-}
-
 int Parse_request(const Server::TcpConnectionPtr& conn) {
     // Preaccess phase: IP control(black list)
     // ...
@@ -77,8 +67,7 @@ int Get_process(const Server::TcpConnectionPtr& conn) {
         conn_respone->respone_head.content_length = sys_file_stat.st_size;
         return 0;
     } else {
-        conn_respone->respone_head.code_num = HttpCode::CODE404;
-        return 0;
+        return -1;
     }
 }
 
@@ -87,15 +76,26 @@ int Post_process(const Server::TcpConnectionPtr& conn) {
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     switch (conn_request->post_method) {
-    case PostMethod::LOGIN: {
+    case PostMethod::LOGIN: { // email & password
         LOG_DEBUG("post login");
+        // client->respone_body = "{\"Login\":[";
+        // if (accountctrl.Login(data[0], data[1])) {
+        //     client->respone_body += JsonSpliced({"state", "success"});
+        //     client->respone_body += ",";
+        //     client->respone_body += accountctrl.GetAccountInfo(data[0]);
+        // } else {
+        //     client->respone_body += JsonSpliced({"state", "false"});
+        // }
+        // client->respone_body += "]}";
+        // client->http_state = OK;
+        // processctrl.CreateResponeHead(client);
         break;
     }
-    case PostMethod::RESET: {
+    case PostMethod::RESET: { // email & oldpassword & password
         LOG_DEBUG("post reset");
         break;
     }
-    case PostMethod::REGISTER: {
+    case PostMethod::REGISTER: { // email & password & username
         LOG_DEBUG("post register");
         break;
     }
@@ -113,12 +113,13 @@ int Post_process(const Server::TcpConnectionPtr& conn) {
     }
     default: {
         LOG_DEBUG("post unknown");
-        break;
+        return -1;
     }
     }
     // fill HttpRequest body
     // fill HttpRequest
-    return -1;
+    conn_respone->respone_head.date = Time::Clock::Nowtime_sec();
+    return 0;
 }
 
 int Process_request(const Server::TcpConnectionPtr& conn) {
@@ -162,6 +163,7 @@ int Prepare_respone(const Server::TcpConnectionPtr& conn) {
     case HttpVersion::HTTP20: tmp_string = "HTTP/2.0 "; break;
     default: tmp_string = "HTTP/1.0 "; break;
     }
+
     switch (conn_respone->respone_head.code_num) {
     case HttpCode::CODE200:
         tmp_string += "200 OK\r\n";
@@ -190,14 +192,15 @@ int Prepare_respone(const Server::TcpConnectionPtr& conn) {
     case HttpCode::CODE501:
         tmp_string += "501 Method Not Implemented\r\n";
         break;
-    default: tmp_string += "404 Not Found\r\n"; break;
+    default:
+        tmp_string += "404 Not Found\r\n";
+        break;
     }
     conn_respone->prepare_respone_head += tmp_string;
 
-    tmp_string = "Connection: ";
     switch (conn_respone->respone_head.connection) {
     case ConnectionType::KEEPALIVE:
-        tmp_string += "Keep-Alive\r\n";
+        tmp_string = "Connection: Keep-Alive\r\n";
         tmp_string += "Keep-Alive: timeout=";
         tmp_string += std::to_string(conn_respone->respone_head.keep_alive_timeout);
         tmp_string += ", max=";
@@ -208,54 +211,59 @@ int Prepare_respone(const Server::TcpConnectionPtr& conn) {
     }
     conn_respone->prepare_respone_head += tmp_string;
 
-    tmp_string = "Content-Type: ";
-    switch (conn_respone->respone_head.content_type) {
-    case FileType::HTML:
-        tmp_string += "text/html; ";
-        break;
-    case FileType::CSS:
-        tmp_string += "text/css; ";
-        break;
-    case FileType::JAVASCRIPT:
-        tmp_string += "text/javascript; ";
-        break;
-    case FileType::JSON:
-        tmp_string += "application/json; ";
-        break;
-    case FileType::PNG:
-        tmp_string += "image/png; ";
-        break;
-    case FileType::SVG:
-        tmp_string += "image/svg+xml; ";
-        break;
-    case FileType::ICON:
-        tmp_string += "image/x-icon; ";
-        break;
-    case FileType::PLAIN:
-        tmp_string += "text/plain; ";
-        break;
-    default:
-        tmp_string += "text/plain; ";
-        break;
-    }
-    switch (conn_respone->respone_head.charset) {
-    case HttpCharset::UTF8:
-        tmp_string += "charset=UTF-8\r\n";
-        break;
-    default:
-        tmp_string += "charset=UTF-8\r\n";
-        break;
-    }
-    conn_respone->prepare_respone_head += tmp_string;
+    if (conn_respone->respone_head.content_length > 0) {
+        tmp_string = "Content-Length: ";
+        tmp_string += std::to_string(conn_respone->respone_head.content_length);
+        tmp_string += "\r\n";
+        conn_respone->prepare_respone_head += tmp_string;
 
-    tmp_string = "Content-Length: ";
-    tmp_string += std::to_string(conn_respone->respone_head.content_length);
-    tmp_string += "\r\n";
-    conn_respone->prepare_respone_head += tmp_string;
+        tmp_string = "Content-Type: ";
+        switch (conn_respone->respone_head.content_type) {
+        case FileType::HTML:
+            tmp_string += "text/html; ";
+            break;
+        case FileType::CSS:
+            tmp_string += "text/css; ";
+            break;
+        case FileType::JAVASCRIPT:
+            tmp_string += "text/javascript; ";
+            break;
+        case FileType::JSON:
+            tmp_string += "application/json; ";
+            break;
+        case FileType::PNG:
+            tmp_string += "image/png; ";
+            break;
+        case FileType::SVG:
+            tmp_string += "image/svg+xml; ";
+            break;
+        case FileType::ICON:
+            tmp_string += "image/x-icon; ";
+            break;
+        case FileType::PLAIN:
+            tmp_string += "text/plain; ";
+            break;
+        default:
+            tmp_string += "text/plain; ";
+            break;
+        }
 
-    tmp_string = "Last-Modified: ";
-    tmp_string += Time::Clock::To_string_sec(conn_respone->respone_head.last_modified, "%a, %d %b %G %T GMT\r\n");
-    conn_respone->prepare_respone_head += tmp_string;
+        switch (conn_respone->respone_head.charset) {
+        case HttpCharset::UTF8:
+            tmp_string += "charset=UTF-8\r\n";
+            break;
+        default:
+            tmp_string += "charset=UTF-8\r\n";
+            break;
+        }
+        conn_respone->prepare_respone_head += tmp_string;
+    }
+
+    if (conn_respone->respone_head.last_modified > 0) {
+        tmp_string = "Last-Modified: ";
+        tmp_string += Time::Clock::To_string_sec(conn_respone->respone_head.last_modified, "%a, %d %b %G %T GMT\r\n");
+        conn_respone->prepare_respone_head += tmp_string;
+    }
 
     tmp_string = "date: ";
     tmp_string += Time::Clock::To_string_sec(conn_respone->respone_head.date, "%a, %d %b %G %T GMT\r\n");
@@ -274,6 +282,48 @@ int Send_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     conn->Send(conn_respone->prepare_respone_head);
+    return 0;
+}
+
+int Set_404_page(const Server::TcpConnectionPtr& conn) {
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    conn_request->Init();
+    conn_respone->Init();
+
+    conn_request->path                      = "/Errorpage";
+    conn_request->target                    = "/Page404.html";
+    conn_request->is_file                   = true;
+    conn_respone->respone_head.http_version = HttpVersion::HTTP10;
+
+    Get_process(conn);
+
+    return 0;
+}
+
+int Send_bad_respone(const Server::TcpConnectionPtr& conn) {
+    HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
+    std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
+    std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
+    if (conn_request->method == Method::GET) {
+        Set_404_page(conn);
+        Prepare_respone(conn);
+        LOG_INFO("Get process error, Send 404 Page");
+    } else { // Post
+        conn_request->Init();
+        conn_respone->Init();
+
+        conn_respone->prepare_respone_head = "HTTP/1.0 403 Forbidden\r\n";
+        conn_respone->respone_head.date    = Time::Clock::Nowtime_sec();
+        conn_respone->prepare_respone_head += "Content-Length: 0\r\n";
+        conn_respone->prepare_respone_head += "date: ";
+        conn_respone->prepare_respone_head += Time::Clock::To_string_sec(conn_respone->respone_head.date, "%a, %d %b %G %T GMT\r\n");
+        conn_respone->prepare_respone_head += "\r\n";
+
+        LOG_INFO("Post process error, Send bad respone");
+    }
+    Send_respone(conn);
     return 0;
 }
 
