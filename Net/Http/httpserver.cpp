@@ -1,5 +1,6 @@
 #include "Head/httpserver.h"
 #include "../../Log/Head/logging.h"
+#include "../../Log/Sink/Head/filesink.h"
 #include "../../Timer/Head/clock.h"
 #include "../Base/Head/filestat.h"
 #include "../Poll/Head/eventloop.h"
@@ -427,6 +428,7 @@ HttpServer::HttpServer(Poll::EventLoop* loop,
 void HttpServer::Start() {
     std::string msg = "HttpServer [" + listen_server.Get_name()
                       + "] starts listening on " + listen_server.Get_ip_port();
+    Wasi::Log::Change_default_logger(std::make_shared<Wasi::Log::FileSink>("test.log"));
     LOG_INFO(msg);
     thread_pool->Set_thread_num(std::thread::hardware_concurrency());
     listen_server.Start();

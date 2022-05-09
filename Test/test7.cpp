@@ -214,11 +214,30 @@ void T_speed() {
     std::cout << "logger Using " << end - begin << " ms\n";
 }
 
+void T_global_log() {
+    long begin = Clock::Nowtime_ms();
+    for (int i = 0; i != 50000; i++) {
+        LOG_INFO("test");
+    }
+    long end = Clock::Nowtime_ms();
+    std::cout << "global std log Using " << end - begin << " ms\n";
+    sleep(3);
+    begin = Clock::Nowtime_ms();
+    Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
+    std::cout << "change log sink\n";
+    for (int i = 0; i != 50000; i++) {
+        LOG_INFO("test");
+    }
+    end = Clock::Nowtime_ms();
+    std::cout << "global file log Using " << end - begin << " ms\n";
+}
+
 int main() {
     // T_stdsink();
     // T_filehandler();
     // T_filesink();
     // T_logger();
     // T_logging();
-    T_speed();
+    // T_speed();
+    T_global_log();
 }

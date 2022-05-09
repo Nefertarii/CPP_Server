@@ -4,10 +4,59 @@
 #include "../Sink/Head/stdsink.h"
 #include "logger.h"
 
-inline const char* default_logger_name = "";
-inline std::string log_type            = "std_log";
-inline static default_logger_                 = std::make_shared<spdlog::logger>(default_logger_name, std::move(color_sink));
-// loggers_[default_logger_name]          = default_logger_;
+inline const char* default_logger_name                          = "";
+inline static std::shared_ptr<Wasi::Log::Logger> default_logger = std::make_shared<Wasi::Log::Logger>(default_logger_name, std::make_shared<Wasi::Log::StdSink>());
+
+namespace Wasi {
+namespace Log {
+
+inline std::string Filename(std::string name) {
+    return std::string(name.begin() + name.find_last_of('/') + 1, name.end());
+}
+
+inline std::shared_ptr<Logger> Default_logger() {
+    std::shared_ptr<Logger> default_logger_;
+    default_logger_ = std::make_shared<Logger>(default_logger_name, std::make_shared<StdSink>());
+    return default_logger_;
+}
+
+inline void Change_default_logger(Wasi::Log::SinkPtr sink) {
+    Default_logger()->Remove(0);
+    Default_logger()->Push_back(sink);
+}
+
+inline void Debug(std::string detail, int tid = 0, std::string file = "",
+                  std::string func = "", int line = 0) {
+    Default_logger()->Debug(detail, tid, file, func, line);
+}
+
+inline void Info(std::string detail, int tid = 0, std::string file = "",
+                 std::string func = "", int line = 0) {
+    Default_logger()->Info(detail, tid, file, func, line);
+}
+
+inline void Warning(std::string detail, int tid = 0, std::string file = "",
+                    std::string func = "", int line = 0) {
+    Default_logger()->Warning(detail, tid, file, func, line);
+}
+
+inline void Error(std::string detail, int tid = 0, std::string file = "",
+                  std::string func = "", int line = 0) {
+    Default_logger()->Error(detail, tid, file, func, line);
+}
+
+inline void Critical(std::string detail, int tid = 0, std::string file = "",
+                     std::string func = "", int line = 0) {
+    Default_logger()->Critical(detail, tid, file, func, line);
+}
+
+inline void Fatal(std::string detail, int tid = 0, std::string file = "",
+                  std::string func = "", int line = 0) {
+    Default_logger()->Fatal(detail, tid, file, func, line);
+}
+
+}
+} // namespace Wasi::Log
 
 #ifdef NOPRINTDEBUG
 #define LOG_DEBUG(detail) ;
@@ -19,72 +68,5 @@ inline static default_logger_                 = std::make_shared<spdlog::logger>
 #define LOG_ERROR(detail) Wasi::Log::Error(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
 #define LOG_CRITICAL(detail) Wasi::Log::Critical(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
 #define LOG_FATAL(detail) Wasi::Log::Fatal(detail, gettid(), Wasi::Log::Filename(__FILE__), __FUNCTION__, __LINE__);
-
-namespace Wasi {
-namespace Log {
-
-inline std::string Filename(std::string name) {
-    return std::string(name.begin() + name.find_last_of('/') + 1, name.end());
-}
-
-inline std::shared_ptr<Logger> default_logger() {
-    std::shared_ptr<Logger> default_logger_;
-    default_logger_ = std::make_shared<Logger>(default_logger_name, std::make_shared<StdSink>());
-    return default_logger_;
-}
-
-inline void Change_default_logger(std::string log_type) {
-}
-
-/*
-// void replace_default_logger_example()
-// {
-//     // store the old logger so we don't break other examples.
-//     auto old_logger = spdlog::default_logger();
-//
-//     auto new_logger = spdlog::basic_logger_mt("new_default_logger", "logs/new-default-log.txt", true);
-//     spdlog::set_default_logger(new_logger);
-//     spdlog::set_level(spdlog::level::info);
-//     spdlog::debug("This message should not be displayed!");
-//     spdlog::set_level(spdlog::level::trace);
-//     spdlog::debug("This message should be displayed..");
-//
-//     spdlog::set_default_logger(old_logger);
-// }
-//
-*/
-
-inline void Debug(std::string detail, int tid = 0, std::string file = "",
-                  std::string func = "", int line = 0) {
-    default_logger()->Debug(detail, tid, file, func, line);
-}
-
-inline void Info(std::string detail, int tid = 0, std::string file = "",
-                 std::string func = "", int line = 0) {
-    default_logger()->Info(detail, tid, file, func, line);
-}
-
-inline void Warning(std::string detail, int tid = 0, std::string file = "",
-                    std::string func = "", int line = 0) {
-    default_logger()->Warning(detail, tid, file, func, line);
-}
-
-inline void Error(std::string detail, int tid = 0, std::string file = "",
-                  std::string func = "", int line = 0) {
-    default_logger()->Error(detail, tid, file, func, line);
-}
-
-inline void Critical(std::string detail, int tid = 0, std::string file = "",
-                     std::string func = "", int line = 0) {
-    default_logger()->Critical(detail, tid, file, func, line);
-}
-
-inline void Fatal(std::string detail, int tid = 0, std::string file = "",
-                  std::string func = "", int line = 0) {
-    default_logger()->Fatal(detail, tid, file, func, line);
-}
-
-}
-} // namespace Wasi::Log
 
 #endif

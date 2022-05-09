@@ -41,6 +41,7 @@ public:
                   std::string func = "", int line = 0);
     void Fatal(std::string detail, int tid = 0, std::string file = "",
                std::string func = "", int line = 0);
+    size_t Size();
     void Flush();
     void Flush_on(LogLevel level);
     void Push_back(SinkPtr sink_);

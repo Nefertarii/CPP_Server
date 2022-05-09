@@ -98,6 +98,8 @@ void Logger::Fatal(std::string detail, int tid, std::string file,
     Log(tmp_log);
 }
 
+size_t Logger::Size() { return sinks.size(); }
+
 void Logger::Flush() {
     try {
         for (auto it : sinks) {
@@ -111,13 +113,9 @@ void Logger::Flush() {
     }
 }
 
-void Logger::Flush_on(LogLevel level) {
-    flush_level = level;
-}
+void Logger::Flush_on(LogLevel level) { flush_level = level; }
 
-void Logger::Push_back(SinkPtr sink_) {
-    sinks.push_back(sink_);
-}
+void Logger::Push_back(SinkPtr sink_) { sinks.push_back(sink_); }
 
 void Logger::Remove(uint i) {
     if (i > sinks.size()) { return; }
@@ -130,10 +128,6 @@ void Logger::Set_formatter(LogFormat format) {
     }
 }
 
-void Logger::Set_error_handler(ErrorHandler func) {
-    error_handler = func;
-}
+void Logger::Set_error_handler(ErrorHandler func) { error_handler = func; }
 
-Logger::~Logger() {
-    Flush();
-}
+Logger::~Logger() { Flush(); }
