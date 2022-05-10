@@ -44,7 +44,7 @@ void FileHandler::Open(std::string file_name_, bool trunc) {
         std::this_thread::sleep_for(std::chrono::milliseconds(open_interval));
         continue;
     }
-    throw Exception("FileHandler() Failed open " + file_name + " for writing.\n");
+    throw Exception("FileHandler() Failed open " + file_name + " for writing:", errno);
 }
 
 void FileHandler::Reopen(bool trunc) {

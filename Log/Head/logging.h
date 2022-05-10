@@ -4,8 +4,9 @@
 #include "../Sink/Head/stdsink.h"
 #include "logger.h"
 
-inline const char* default_logger_name                          = "";
-inline static std::shared_ptr<Wasi::Log::Logger> default_logger = std::make_shared<Wasi::Log::Logger>(default_logger_name, std::make_shared<Wasi::Log::StdSink>());
+inline const char* default_logger_name = "";
+static std::mutex global_logger_mtx;
+static std::shared_ptr<Wasi::Log::Logger> default_logger = std::make_shared<Wasi::Log::Logger>(default_logger_name, std::make_shared<Wasi::Log::StdSink>());
 
 namespace Wasi {
 namespace Log {
@@ -15,9 +16,11 @@ inline std::string Filename(std::string name) {
 }
 
 inline std::shared_ptr<Logger> Default_logger() {
-    std::shared_ptr<Logger> default_logger_;
-    default_logger_ = std::make_shared<Logger>(default_logger_name, std::make_shared<StdSink>());
-    return default_logger_;
+    std::lock_guard<std::mutex> lk(global_logger_mtx);
+    return default_logger;
+    // std::shared_ptr<Logger> default_logger_;
+    // default_logger_ = std::make_shared<Logger>(default_logger_name, std::make_shared<StdSink>());
+    // return default_logger_;
 }
 
 inline void Change_default_logger(Wasi::Log::SinkPtr sink) {

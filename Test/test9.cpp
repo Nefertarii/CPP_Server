@@ -1,3 +1,5 @@
+#include "../Log/Head/logging.h"
+#include "../Log/Sink/Head/filesink.h"
 #include "../Net/Http/Head/httpserver.h"
 #include "../Net/Poll/Head/eventloop.h"
 #include "../Net/Poll/Head/eventloopthread.h"
@@ -143,6 +145,7 @@ void func6() {
     HttpServer httpserver(&server_loop, linsten, "httpserver");
     httpserver.Start();
     server_loop.Loop();
+    Wasi::Log::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
 }
 
 void change_num(int* p) {

@@ -214,20 +214,36 @@ void T_speed() {
     std::cout << "logger Using " << end - begin << " ms\n";
 }
 
+void T_thread_log(int j) {
+    for (int i = 0; i != 5000; i++) {
+        LOG_INFO("test" + to_string(j));
+    }
+}
+
 void T_global_log() {
     long begin = Clock::Nowtime_ms();
-    for (int i = 0; i != 50000; i++) {
-        LOG_INFO("test");
+    for (int i = 0; i != 5; i++) {
+        LOG_INFO("test0");
     }
     long end = Clock::Nowtime_ms();
     std::cout << "global std log Using " << end - begin << " ms\n";
-    sleep(3);
     begin = Clock::Nowtime_ms();
+
     Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
+    cout << default_logger->Size();
     std::cout << "change log sink\n";
-    for (int i = 0; i != 50000; i++) {
-        LOG_INFO("test");
+
+    for (int i = 0; i != 500; i++) {
+        LOG_INFO("test5");
     }
+    thread t1(T_thread_log, 1);
+    thread t2(T_thread_log, 2);
+    thread t3(T_thread_log, 3);
+    thread t4(T_thread_log, 4);
+    t1.join();
+    t2.join();
+    t3.join();
+    t4.join();
     end = Clock::Nowtime_ms();
     std::cout << "global file log Using " << end - begin << " ms\n";
 }

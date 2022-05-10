@@ -6,6 +6,7 @@ using namespace Wasi;
 using namespace Wasi::Log;
 
 void Logger::Log(LogMsg& logmsg) {
+    std::lock_guard<std::mutex> lk(mtx);
     for (auto it : sinks) {
         it->Logger(logmsg);
     }
@@ -25,12 +26,14 @@ void Logger::Splice(std::string& file, std::string func, int line) {
 }
 
 Logger::Logger(std::string name_) :
+    mtx(),
     name(name_),
     error_handler(nullptr),
     sinks(),
     flush_level(LogLevel::NONE) {}
 
 Logger::Logger(std::string name_, SinkPtr sink_) :
+    mtx(),
     name(name_),
     error_handler(nullptr),
     sinks(),
@@ -39,12 +42,14 @@ Logger::Logger(std::string name_, SinkPtr sink_) :
 }
 
 Logger::Logger(std::string name_, SinkInitList sinks_) :
+    mtx(),
     name(name_),
     error_handler(nullptr),
     sinks(sinks_.begin(), sinks_.end()),
     flush_level(LogLevel::NONE) {}
 
 Logger::Logger(std::string name_, SinkIt beg, SinkIt end) :
+    mtx(),
     name(name_),
     error_handler(nullptr),
     sinks(beg, end),
@@ -115,9 +120,15 @@ void Logger::Flush() {
 
 void Logger::Flush_on(LogLevel level) { flush_level = level; }
 
-void Logger::Push_back(SinkPtr sink_) { sinks.push_back(sink_); }
+void Logger::Push_back(SinkPtr sink_) {
+    Flush();
+    std::lock_guard<std::mutex> lk(mtx);
+    sinks.push_back(sink_);
+}
 
 void Logger::Remove(uint i) {
+    Flush();
+    std::lock_guard<std::mutex> lk(mtx);
     if (i > sinks.size()) { return; }
     sinks.erase(sinks.begin() + i);
 }

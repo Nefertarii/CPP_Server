@@ -17,6 +17,7 @@ using SinkIt       = std::vector<SinkPtr>::iterator;
 
 class Logger {
 private:
+    std::mutex mtx;
     std::string name;
     std::function<void()> error_handler;
     std::vector<SinkPtr> sinks;

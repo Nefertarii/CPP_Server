@@ -16,6 +16,7 @@ class LogSink {
 protected:
     std::unique_ptr<LogFormatter> formatter;
     std::atomic<uint> count;
+    std::string name;
 
 public:
     virtual void Logger(LogMsg& msg)       = 0;

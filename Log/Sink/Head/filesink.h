@@ -17,7 +17,6 @@ private:
     LogFormatter formatter;
     std::atomic<uint> count;
     std::atomic<uint> suc_count;
-    std::mutex mtx;
     std::string logs;
     FileHandler filehandler;
     void Fileout();

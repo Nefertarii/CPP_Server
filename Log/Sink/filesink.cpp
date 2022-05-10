@@ -7,7 +7,6 @@ using namespace Wasi;
 using namespace Wasi::Log;
 
 void FileSink::Fileout() {
-    std::lock_guard<std::mutex> lk(mtx);
     try {
         filehandler.Reopen();
         filehandler.Write(logs);
@@ -16,7 +15,7 @@ void FileSink::Fileout() {
         logs.clear();
         filehandler.Close();
     } catch (const Exception& e) {
-        std::cerr << e.What();
+        std::cerr << e.What() << "\n";
         count = 0;
         filehandler.Close();
     }
@@ -34,8 +33,11 @@ void FileSink::Init_open(std::string filename) {
 FileSink::FileSink(std::string filename) :
     count(0),
     suc_count(0) {
+    name = "File Sink";
     LogFormat format;
-    format.print_color = false;
+    format.print_color           = false;
+    format.print_source_location = true;
+    format.print_thread_id       = true;
     formatter.Set_format(format);
     Init_open(filename);
 }
@@ -43,6 +45,7 @@ FileSink::FileSink(std::string filename) :
 FileSink::FileSink(LogFormat logformat, std::string filename) :
     count(0),
     suc_count(0) {
+    name = "File Sink";
     formatter.Set_format(logformat);
     Init_open(filename);
 }
@@ -51,6 +54,7 @@ FileSink::FileSink(LogFormat logformat, std::string filename, FileEvents events)
     count(0),
     suc_count(0),
     filehandler(events) {
+    name = "File Sink";
     formatter.Set_format(logformat);
     Init_open(filename);
 }

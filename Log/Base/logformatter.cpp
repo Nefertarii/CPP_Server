@@ -36,7 +36,7 @@ LogFormatter::LogFormatter() {}
 std::string LogFormatter::Format(LogMsg& logmsg) {
     // [date]
     tmp_logmsg.clear();
-    tmp_logmsg += "[";
+    tmp_logmsg = '[';
     tmp_logmsg += process_date(logmsg.Get_date(), log_format.data_format);
     tmp_logmsg += "] ";
     // [thread]
@@ -50,13 +50,13 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
     // [file:line func()]
     if (log_format.print_source_location) {
         if (logmsg.Get_source_location().size() != 0) {
-            tmp_logmsg += "[";
+            tmp_logmsg += '[';
             tmp_logmsg += logmsg.Get_source_location();
             tmp_logmsg += "] ";
         }
     }
     // [level]
-    tmp_logmsg += "[";
+    tmp_logmsg += '[';
     if (log_format.print_color) {
         tmp_logmsg += log_format.consoles_color[String_to_Level(logmsg.Get_level())];
     }
