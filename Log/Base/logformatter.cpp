@@ -2,6 +2,8 @@
 #include "../../Timer/Head/clock.h"
 #include "Head/fontcolor.h"
 
+#include <iostream>
+
 using namespace Wasi;
 using namespace Wasi::Log;
 
@@ -28,7 +30,12 @@ std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
     strftime(time, 40, format, time_tm);
     std::string str_time = time;
     // if(str_time.size() == )
-    return str_time + "." + std::to_string(time_ms);
+    if (time_ms < 10)
+        return str_time + ".00" + std::to_string(time_ms);
+    else if (time_ms < 100)
+        return str_time + ".0" + std::to_string(time_ms);
+    else
+        return str_time + "." + std::to_string(time_ms);
 }
 
 LogFormatter::LogFormatter() {}

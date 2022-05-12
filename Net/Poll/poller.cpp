@@ -48,16 +48,17 @@ void Poller::Update(int operation, Channel* channel) {
     event.events    = channel->Events();
     event.data.ptr  = channel;
     int fd          = channel->Fd();
-    std::string msg = "epoll_ctl:" + std::string(Operation_to_string(operation))
-                      + " fd:" + std::to_string(fd);
+    std::string msg = "epoll_ctl op:" + std::string(Operation_to_string(operation))
+                      + " fd:" + std::to_string(fd)
+                      + " event:" + std::to_string(channel->Fd());
     LOG_DEBUG(msg);
     if (epoll_ctl(epollfd, operation, fd, &event) < 0) {
         if (operation == EPOLL_CTL_DEL) {
-            msg = "epoll_ctl:" + std::string(Operation_to_string(operation))
+            msg = "epoll_ctl op:" + std::string(Operation_to_string(operation))
                   + " fd:" + std::to_string(fd);
             LOG_DEBUG(msg);
         } else {
-            msg = "epoll_ctl:" + std::string(Operation_to_string(operation))
+            msg = "epoll_ctl op:" + std::string(Operation_to_string(operation))
                   + " fd:" + std::to_string(fd);
             LOG_DEBUG(msg);
         }

@@ -15,6 +15,7 @@ void StdSink::Stdout(std::string message) {
 StdSink::StdSink() :
     mtx(),
     count(0) {
+    name = "Std Sink";
     LogFormat format;
     format.print_source_location = true;
     format.print_thread_id       = true;
@@ -24,6 +25,7 @@ StdSink::StdSink() :
 StdSink::StdSink(LogFormat format) :
     mtx(),
     count(0) {
+    name = "Std Sink";
     formatter.Set_format(format);
 }
 

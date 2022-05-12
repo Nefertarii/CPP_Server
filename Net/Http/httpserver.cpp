@@ -381,7 +381,7 @@ void HttpServer::Connection(const Server::TcpConnectionPtr& conn) {
 
 void HttpServer::Message(const Server::TcpConnectionPtr& conn) {
     Base::Buffer* read                = conn->Get_input_buffer();
-    std::string msg                   = "From " + conn->Get_peer_address().To_string_ip_port() + " get message: " + read->Content();
+    std::string msg                   = "From " + conn->Get_peer_address().To_string_ip_port() + " get message:\n" + read->Content();
     Poll::EventLoop* thread_pool_loop = thread_pool->Get_loop();
     thread_pool_loop->Run_in_loop(std::bind(&Request_process, conn));
     LOG_DEBUG(msg);

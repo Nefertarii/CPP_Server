@@ -140,30 +140,12 @@ void func5() {
     T1.Print();
 }
 void func6() {
+    Wasi::Log::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
     EventLoop server_loop;
     Sockets::InetAddress linsten("127.0.0.1", 8000);
     HttpServer httpserver(&server_loop, linsten, "httpserver");
     httpserver.Start();
     server_loop.Loop();
-    Wasi::Log::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
-}
-
-void change_num(int* p) {
-    cout << "change " << p << "\n";
-    *p = 20;
-}
-
-void func7() {
-    EventLoop base_loop;
-    string name = "tp1";
-    EventLoopThreadPool evttp(&base_loop, name);
-    evttp.Set_thread_num(4);
-    evttp.Start();
-    int i = 10;
-    while (i--) {
-        this_thread::sleep_for(chrono::seconds(1));
-        base_loop.Run_in_loop(std::bind(&print, 1));
-    }
 }
 
 int main() {

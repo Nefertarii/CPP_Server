@@ -39,7 +39,7 @@ void* Start_thread(void* obj) {
         thread_data->func();
         thread_data->name = "Finished";
     } catch (...) {
-        thread_data->name = "crashed";
+        thread_data->name = "Crashed";
     }
     delete thread_data;
     return nullptr;
