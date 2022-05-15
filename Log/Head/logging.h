@@ -8,7 +8,8 @@
 
 static const char* default_logger_name = "";
 static std::mutex global_logger_mtx;
-static std::shared_ptr<Wasi::Log::Logger> default_logger = std::make_shared<Wasi::Log::Logger>(default_logger_name, std::make_shared<Wasi::Log::FileSink>("test.log"));
+// static std::shared_ptr<Wasi::Log::Logger> default_logger = std::make_shared<Wasi::Log::Logger>(default_logger_name, std::make_shared<Wasi::Log::FileSink>("test.log"));
+static std::shared_ptr<Wasi::Log::Logger> default_logger = std::make_shared<Wasi::Log::Logger>(default_logger_name, std::make_shared<Wasi::Log::StdSink>());
 
 #ifdef NOPRINTDEBUG
 #define LOG_DEBUG(detail) ;

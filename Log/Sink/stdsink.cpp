@@ -30,9 +30,8 @@ StdSink::StdSink(LogFormat format) :
 }
 
 void StdSink::Logger(LogMsg& logmsg) {
-    formatter.Format(logmsg);
-    Stdout(logmsg.Output());
-}
+    Stdout(formatter.Format(logmsg));
+}   
 
 void StdSink::Flush() {
     // Stdout("Flush\n");

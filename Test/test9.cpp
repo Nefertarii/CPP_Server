@@ -148,6 +148,29 @@ void func6() {
     server_loop.Loop();
 }
 
+std::atomic<int> flag = 0;
+
+void print2(int n) {
+    while (flag != 1) {
+        std::this_thread::sleep_for(std::chrono::seconds(1));
+        std::cout << "thread:" << gettid() << " hello." << n << "\n";
+    }
+    LOG_INFO("fetadd");
+    flag.fetch_add(1);
+}
+
+void func7() {
+    Thread t1(std::bind(print2, 2));
+    t1.Start();
+    std::cout << flag.load() << "\n";
+    std::this_thread::sleep_for(std::chrono::seconds(3));
+    LOG_INFO("fetadd");
+    flag.fetch_add(1);
+    std::cout << flag.load() << "\n";
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    std::cout << flag.load() << "\n";
+}
+
 int main() {
-    func6();
+    func7();
 }
