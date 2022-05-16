@@ -428,10 +428,10 @@ HttpServer::HttpServer(Poll::EventLoop* loop,
 void HttpServer::Start() {
     std::string msg = "HttpServer [" + listen_server.Get_name()
                       + "] starts listening on " + listen_server.Get_ip_port();
-    LOG_INFO(msg);
     thread_pool->Set_thread_num(std::thread::hardware_concurrency());
     listen_server.Start();
     thread_pool->Start();
+    LOG_INFO(msg);
 }
 
 void HttpServer::Set_thread_num(int num) {

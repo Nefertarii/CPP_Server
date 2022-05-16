@@ -19,7 +19,6 @@ EventLoopThread::EventLoopThread(const ThreadInitCallback& callback_, const std:
     loop(nullptr),
     exiting(false),
     thread(std::bind(&EventLoopThread::Thread_func, this), name),
-    mtx(),
     cond(),
     callback(callback_) {}
 

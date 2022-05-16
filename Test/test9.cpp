@@ -140,7 +140,7 @@ void func5() {
     T1.Print();
 }
 void func6() {
-    Wasi::Log::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
+    // Wasi::Log::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
     EventLoop server_loop;
     Sockets::InetAddress linsten("127.0.0.1", 8000);
     HttpServer httpserver(&server_loop, linsten, "httpserver");
@@ -160,6 +160,11 @@ void print2(int n) {
 }
 
 void func7() {
+    std::vector<std::unique_ptr<Thread>> threads;
+    for (int i = 0; i < 4; ++i) {
+        threads.emplace_back(std::make_unique<Thread>(std::bind(print2, i)));
+    }
+
     Thread t1(std::bind(print2, 2));
     t1.Start();
     std::cout << flag.load() << "\n";
@@ -172,5 +177,5 @@ void func7() {
 }
 
 int main() {
-    func7();
+    func6();
 }
