@@ -140,7 +140,7 @@ void func5() {
     T1.Print();
 }
 void func6() {
-    // Wasi::Log::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
+    Wasi::Log::Logging::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
     EventLoop server_loop;
     Sockets::InetAddress linsten("127.0.0.1", 8000);
     HttpServer httpserver(&server_loop, linsten, "httpserver");
