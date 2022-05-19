@@ -1,4 +1,4 @@
-#include "Head/logging.h"
+#include "logging.h"
 
 using namespace Wasi::Log;
 

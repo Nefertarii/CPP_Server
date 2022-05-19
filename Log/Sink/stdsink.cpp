@@ -1,6 +1,6 @@
-#include "Head/stdsink.h"
-#include "../../Class/exception.h"
-#include "../Base/Head/fontcolor.h"
+#include "stdsink.h"
+#include "../../Base/exception.h"
+#include "../fontcolor.h"
 #include <iostream>
 
 using namespace Wasi::Log;
@@ -31,7 +31,7 @@ StdSink::StdSink(LogFormat format) :
 
 void StdSink::Logger(LogMsg& logmsg) {
     Stdout(formatter.Format(logmsg));
-}   
+}
 
 void StdSink::Flush() {
     // Stdout("Flush\n");

@@ -1,6 +1,6 @@
-#include "Head/filesink.h"
-#include "../../Class/exception.h"
-#include "../Base/Head/fontcolor.h"
+#include "filesink.h"
+#include "../../Base/exception.h"
+#include "../fontcolor.h"
 #include <iostream>
 
 using namespace Wasi;
