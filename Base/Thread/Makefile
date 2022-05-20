@@ -1,23 +1,25 @@
-# Thread
-objects_thread = thread.o threadpool.o
+# Timer
+FILE_DIR_NAME = Thread
 
-MODE = DEBUG
+#list of source files (with whitespace between them)
+SRC_FILES := thread.cpp threadpool.cpp
+
+#Object files
+OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
+BUILD = ../../build
+SRC = ../Base/$(FILE_DIR_NAME)
+VPATH = $(BUILD)
+
 CC = g++
-ifeq ($(MODE),DEBUG)
-FLAGS = -pthread -std=c++17 -Og -Wall -g 
-else
-FLAGS = -pthread -std=c++17 -O2 -Wall -DNOPRINTDEBUG
-endif
+FLAGS = -pthread -std=c++17 -Og -Wall -g
 
-output = ../../build
+all: $(OBJECTS)
 
-#$(objects_net): %.h: %.cpp
-#	$(CC) $(FLAGS) $< -c $@
-all: $(objects_thread)
-
-$(objects_thread): %.o: %.h
-	$(CC) -c $(FLAGS) $< -o $(output)/$@
+# compile all object file
+$(OBJECTS): %.o: %.cpp
+	@echo "Compile $(notdir $<)"
+	@$(CC) -c $(FLAGS) $< -o $(BUILD)/$@
 
 .PHONY : clean
-clean :
-	-cd $(output) && rm $(objects_thread)
+clean:
+	-cd $(BUILD) && rm -f $(OBJECTS)

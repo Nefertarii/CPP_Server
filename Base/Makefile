@@ -1,45 +1,26 @@
-# Net
-objects_net = acceptor.o connector.o channel.o poller.o socket.o socketapi.o timerqueue.o
-dir_net = Net
-# Thread
-objects_thread = thread.o threadpool.o
-dir_thread = Thread
 # Timer
-objects_timer = clock.o timer.o timerid.o timers.o
-dir_timer = Timer
-# Base
-objects_base = buffer.o eventloop.o eventloopthread.o eventloopthreadpool.o filehandler.o filestat.o latch.o
+FILE_DIR_NAME = Base
 
-MODE = DEBUG
+#list of source files (with whitespace between them)
+SRC_FILES := buffer.cpp eventloop.cpp eventloopthread.cpp eventloopthreadpool.cpp \
+	filehandler.cpp filestat.cpp latch.cpp taskqueue.cpp
+
+#Object files
+OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
+BUILD = ../build
+SRC = ../$(FILE_DIR_NAME)
+VPATH = $(BUILD)
+
 CC = g++
-ifeq ($(MODE),DEBUG)
-FLAGS = -pthread -std=c++17 -Og -Wall -g 
-else
-FLAGS = -pthread -std=c++17 -O2 -Wall -DNOPRINTDEBUG
-endif
+FLAGS = -pthread -std=c++17 -Og -Wall -g
 
-output = ../build
+all: $(OBJECTS)
 
-#$(objects_net): %.h: %.cpp
-#	$(CC) $(FLAGS) $< -c $@
-all: $(objects_net) $(objects_thread) $(objects_timer) $(objects_base)
-
-$(objects_net): %.o: %.h
-	$(CC) -c $(FLAGS) $< -o $(output)/$@
-
-$(objects_thread): %.o: %.h
-	$(CC) -c $(FLAGS) $< -o $(output)/$@
-
-$(objects_timer): %.o: %.h
-	$(CC) -c $(FLAGS) $< -o $(output)/$@
-
-$(objects_base): %.o: %.h
-	$(CC) -c $(FLAGS) $< -o $(output)/$@
-
+# compile all object file
+$(OBJECTS): %.o: %.cpp
+	@echo "Compile $(notdir $<)"
+	@$(CC) -c $(FLAGS) $< -o $(BUILD)/$@
 
 .PHONY : clean
-clean :
-	-cd $(output) && rm $(objects_net)
-	-cd $(output) && rm $(objects_thread)
-	-cd $(output) && rm $(objects_timer)
-	-cd $(output) && rm $(objects_base)
+clean:
+	-cd $(BUILD) && rm -f $(OBJECTS)

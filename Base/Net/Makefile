@@ -1,21 +1,26 @@
 # Net
-objects_net = acceptor connector channel poller socket socketapi timerqueue
+FILE_DIR_NAME = Net
 
-MODE = DEBUG
+#list of source files (with whitespace between them)
+SRC_FILES := acceptor.cpp channel.cpp connector.cpp inetaddress.cpp poller.cpp \
+	socket.cpp socketapi.cpp timerqueue.cpp
+
+#Object files
+OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
+BUILD = ../../build
+SRC = ../Base/$(FILE_DIR_NAME)
+VPATH = $(BUILD)
+
 CC = g++
-ifeq ($(MODE),DEBUG)
 FLAGS = -pthread -std=c++17 -Og -Wall -g
-else
-FLAGS = -pthread -std=c++17 -O2 -Wall -DNOPRINTDEBUG
-endif
 
-output = ../../build
+all: $(OBJECTS)
 
-all: $(objects_net)
-$(objects_net): %: %.cpp %.h
-	$(CC) $(FLAGS) $< -c $(output)/$@
+# compile all object file
+$(OBJECTS): %.o: %.cpp
+	@echo "Compile $(notdir $<)"
+	@$(CC) -c $(FLAGS) $< -o $(BUILD)/$@
 
 .PHONY : clean
-clean :
-	rm *.gch
-	-cd $(output) && rm $(objects_net)
+clean:
+	-cd $(BUILD) && rm -f $(OBJECTS)
