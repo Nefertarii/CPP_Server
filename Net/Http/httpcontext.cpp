@@ -1,6 +1,6 @@
-#include "Head/httpcontext.h"
-#include "Head/httprequest.h"
-#include "Head/httprespone.h"
+#include "httpcontext.h"
+#include "httprequest.h"
+#include "httprespone.h"
 
 using namespace Wasi::Http;
 

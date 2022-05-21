@@ -1,9 +1,8 @@
 #ifndef HTTP_SERVER_H_
 #define HTTP_SERVER_H_
 
-#include "../../../Log/Head/logger.h"
-#include "../../../Thread/Head/threadpool.h"
-#include "../../Server/Head/tcpserver.h"
+#include "../../Base/Thread/threadpool.h"
+#include "../Tcp/tcpserver.h"
 #include "httpcontext.h"
 #include <vector>
 

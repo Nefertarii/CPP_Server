@@ -1,8 +1,8 @@
 #include "threadpool.h"
-#include "../exception.h"
 #include "../../Log/logging.h"
-#include <unistd.h>
+#include "../exception.h"
 #include <exception>
+#include <unistd.h>
 
 using namespace Wasi::Base;
 

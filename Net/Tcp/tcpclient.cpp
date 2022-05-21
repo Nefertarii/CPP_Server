@@ -1,10 +1,10 @@
-#include "Head/tcpclient.h"
-#include "../../Log/Head/logging.h"
-#include "../../Timer/Head/timerid.h"
-#include "../Poll/Head/eventloop.h"
-#include "../Sockets/Head/connector.h"
-#include "../Sockets/Head/inetaddress.h"
-#include "../Sockets/Head/socketapi.h"
+#include "tcpclient.h"
+#include "../../Base/Net/connector.h"
+#include "../../Base/Net/inetaddress.h"
+#include "../../Base/Net/socketapi.h"
+#include "../../Base/Timer/timerid.h"
+#include "../../Base/eventloop.h"
+#include "../../Log/logging.h"
 #include <cassert>
 #include <sstream>
 

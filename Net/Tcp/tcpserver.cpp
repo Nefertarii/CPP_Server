@@ -1,8 +1,8 @@
-#include "Head/tcpserver.h"
-#include "../../Log/Head/logging.h"
-#include "../Poll/Head/eventloop.h"
-#include "../Poll/Head/eventloopthreadpool.h"
-#include "../Sockets/Head/socketapi.h"
+#include "tcpserver.h"
+#include "../../Base/Net/socketapi.h"
+#include "../../Base/eventloop.h"
+#include "../../Base/eventloopthreadpool.h"
+#include "../../Log/logging.h"
 #include <cassert>
 
 using namespace Wasi;

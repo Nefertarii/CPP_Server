@@ -1,5 +1,5 @@
-# Timer
-FILE_DIR_NAME = Timer
+# Base/Timer
+DIR_NAME = Timer
 
 #list of source files (with whitespace between them)
 SRC_FILES := clock.cpp timer.cpp timerid.cpp timestamp.cpp
@@ -7,11 +7,11 @@ SRC_FILES := clock.cpp timer.cpp timerid.cpp timestamp.cpp
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
 BUILD = ../../build
-SRC = ../Base/$(FILE_DIR_NAME)
+SRC = ../Base/$(DIR_NAME)
 VPATH = $(BUILD)
 
-CC = g++
-FLAGS = -pthread -std=c++17 -Og -Wall -g
+CC ?= g++
+FLAGS ?= -pthread -std=c++17 -Og -Wall -g
 
 all: $(OBJECTS)
 
@@ -22,4 +22,5 @@ $(OBJECTS): %.o: %.cpp
 
 .PHONY : clean
 clean:
-	-cd $(BUILD) && rm -f $(OBJECTS)
+	@echo "Dir($(DIR_NAME)) delete file: $(OBJECTS)"
+	@cd $(BUILD) && rm -f $(OBJECTS)

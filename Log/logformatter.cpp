@@ -1,5 +1,5 @@
 #include "logformatter.h"
-#include "../../Base/Timer/clock.h"
+#include "../Base/Timer/clock.h"
 #include "fontcolor.h"
 
 #include <iostream>

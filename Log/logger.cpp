@@ -1,6 +1,6 @@
 #include "logger.h"
-#include "../../Base/exception.h"
-#include "../../Base/Timer/clock.h"
+#include "../Base/exception.h"
+#include "../Base/Timer/clock.h"
 
 using namespace Wasi;
 using namespace Wasi::Log;

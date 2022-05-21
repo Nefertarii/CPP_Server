@@ -1,11 +1,11 @@
 #ifndef SERVER_TCPCONNECTION_H_
 #define SERVER_TCPCONNECTION_H_
 
-#include "../../../Class/noncopyable.h"
-#include "../../../Timer/Head/timestamp.h"
-#include "../../Base/Head/buffer.h"
-#include "../../Base/Head/filestat.h"
-#include "../../Sockets/Head/inetaddress.h"
+#include "../../Base/Net/inetaddress.h"
+#include "../../Base/Timer/timestamp.h"
+#include "../../Base/buffer.h"
+#include "../../Base/filestat.h"
+#include "../../Base/noncopyable.h"
 #include <any>
 #include <functional>
 #include <memory>

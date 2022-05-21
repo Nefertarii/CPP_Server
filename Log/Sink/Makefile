@@ -1,36 +1,27 @@
-# Net
-DIR_NAME = Net
+# Log/Sink
+DIR_NAME = Sink
 
 #list of source files (with whitespace between them)
-#
+SRC_FILES := filesink.cpp stdsink.cpp
 
 #Object files
-#
-BUILD = ../build
-SRC = ../$(DIR_NAME)
+OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
+BUILD = ../../build
+SRC = ../Log/$(DIR_NAME)
 VPATH = $(BUILD)
-#Sub object
-HTTP = Http
-TCP = Tcp
 
 CC ?= g++
-FLAGS ?= -pthread -std=c++17 -Og -Wall -g
-export CC FLAGS
+FLAGS ?= -I  -pthread -std=c++17 -Og -Wall -g
+export ($(CC) $(FLAGS))
 
-all: $(OBJECTS) HTTP TCP
+all: $(OBJECTS)
 
 # compile all object file
 $(OBJECTS): %.o: %.cpp
 	@echo "Compile $(notdir $<)"
 	@$(CC) -c $(FLAGS) $< -o $(BUILD)/$@
-HTTP:
-	@cd $($@) && make all
-TCP:
-	@cd $($@) && make all
 
 .PHONY : clean
 clean:
 	@echo "Dir($(DIR_NAME)) delete file: $(OBJECTS)"
 	@cd $(BUILD) && rm -f $(OBJECTS)
-	@cd $(HTTP) && make clean
-	@cd $(TCP) && make clean

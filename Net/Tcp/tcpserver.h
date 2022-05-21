@@ -1,9 +1,9 @@
 #ifndef SERVER_TCPSERVER_H_
 #define SERVER_TCPSERVER_H_
 
-#include "../../../Class/noncopyable.h"
-#include "../../Sockets/Head/acceptor.h"
-#include "../../Sockets/Head/inetaddress.h"
+#include "../../Base/Net/acceptor.h"
+#include "../../Base/Net/inetaddress.h"
+#include "../../Base/noncopyable.h"
 #include "tcpconnection.h"
 #include <atomic>
 #include <map>
