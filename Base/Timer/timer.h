@@ -1,7 +1,7 @@
 #ifndef TIMER_TIMER_H_
 #define TIMER_TIMER_H_
 
-#include "../noncopyable.h"
+#include <Base/noncopyable.h>
 #include "timestamp.h"
 #include <atomic>
 #include <functional>

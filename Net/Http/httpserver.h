@@ -1,9 +1,9 @@
 #ifndef HTTP_SERVER_H_
 #define HTTP_SERVER_H_
 
-#include "../../Base/Thread/threadpool.h"
-#include "../Tcp/tcpserver.h"
 #include "httpcontext.h"
+#include <Base/Thread/threadpool.h>
+#include <Net/Tcp/tcpserver.h>
 #include <vector>
 
 namespace Wasi {

@@ -1,7 +1,7 @@
 #ifndef LOG_SINK_H_
 #define LOG_SINK_H_
 
-#include "../logformatter.h"
+#include <Log/logformatter.h>
 #include <atomic>
 #include <memory>
 #include <mutex>

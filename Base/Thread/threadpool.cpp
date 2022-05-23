@@ -1,6 +1,6 @@
 #include "threadpool.h"
-#include "../../Log/logging.h"
-#include "../exception.h"
+#include <Log/logging.h>
+#include <Base/exception.h>
 #include <exception>
 #include <unistd.h>
 

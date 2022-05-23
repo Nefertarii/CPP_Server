@@ -1,7 +1,7 @@
 #ifndef SERVER_TCPCLIENT_H_
 #define SERVER_TCPCLIENT_H_
 
-#include "../../Base/noncopyable.h"
+#include <Base/noncopyable.h>
 #include "tcpconnection.h"
 #include <memory>
 #include <mutex>

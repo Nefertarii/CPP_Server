@@ -1,9 +1,9 @@
 #ifndef THREAD_THREADPOOL_H_
 #define THREAD_THREADPOOL_H_
 
-#include "../safequeue.h"
-#include "../taskqueue.h"
 #include "thread.h"
+#include <Base/safequeue.h>
+#include <Base/taskqueue.h>
 #include <iostream>
 #include <thread>
 

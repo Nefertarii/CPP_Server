@@ -1,9 +1,9 @@
 #ifndef TIMER_TIMERQUEUE_H_
 #define TIMER_TIMERQUEUE_H_
 
-#include "../Timer/timestamp.h"
-#include "../noncopyable.h"
 #include "channel.h"
+#include <Base/Timer/timestamp.h>
+#include <Base/noncopyable.h>
 #include <functional>
 #include <memory>
 #include <set>

@@ -1,6 +1,6 @@
 #include "stdsink.h"
-#include "../../Base/exception.h"
-#include "../fontcolor.h"
+#include <Base/exception.h>
+#include <Log/fontcolor.h>
 #include <iostream>
 
 using namespace Wasi::Log;

@@ -1,11 +1,11 @@
-#include "../Log/Head/logging.h"
-#include "../Log/Sink/Head/filesink.h"
-#include "../Net/Http/Head/httpserver.h"
-#include "../Net/Poll/Head/eventloop.h"
-#include "../Net/Poll/Head/eventloopthread.h"
-#include "../Net/Poll/Head/eventloopthreadpool.h"
-#include "../Thread/Head/threadpool.h"
-#include "../Timer/Head/timerid.h"
+#include <Base/Thread/threadpool.h>
+#include <Base/Timer/timerid.h>
+#include <Base/eventloop.h>
+#include <Base/eventloopthread.h>
+#include <Base/eventloopthreadpool.h>
+#include <Log/Sink/filesink.h>
+#include <Log/logging.h>
+#include <Net/Http/httpserver.h>
 #include <cassert>
 #include <chrono>
 #include <functional>
@@ -20,6 +20,7 @@ using namespace Wasi;
 using namespace Wasi::Base;
 using namespace Wasi::Poll;
 using namespace Wasi::Http;
+using namespace Wasi::Log;
 using Task = std::function<void()>;
 
 SafeQueue<Task> pool_work_queue;

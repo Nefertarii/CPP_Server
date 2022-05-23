@@ -1,8 +1,8 @@
 #ifndef SOCKTES_CONNECTOR_H_
 #define SOCKTES_CONNECTOR_H_
 
-#include "../noncopyable.h"
 #include "inetaddress.h"
+#include <Base/noncopyable.h>
 #include <functional>
 #include <memory>
 

@@ -1,7 +1,7 @@
 #ifndef SOCKETS_SOCKET_H_
 #define SOCKETS_SOCKET_H_
 
-#include "../noncopyable.h"
+#include <Base/noncopyable.h>
 #include <netinet/tcp.h>
 #include <string>
 

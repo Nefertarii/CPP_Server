@@ -1,5 +1,5 @@
 #include "logformatter.h"
-#include "../Base/Timer/clock.h"
+#include <Base/Timer/clock.h>
 #include "fontcolor.h"
 
 #include <iostream>
@@ -14,12 +14,12 @@ LogFormat::LogFormat() {
     data_format                             = "%Y-%m-%d %H:%M:%S";
     consoles_color[LogLevel::UNINITIALIZED] = WHITE;
     consoles_color[LogLevel::NONE]          = WHITE;
-    consoles_color[LogLevel::DBG]           = GREEN;
+    consoles_color[LogLevel::DBG]           = BLUE;
     consoles_color[LogLevel::INFO]          = GREEN;
-    consoles_color[LogLevel::WARN]          = BOLDYELLOW;
-    consoles_color[LogLevel::ERR]           = RED;
-    consoles_color[LogLevel::CRITICAL]      = BOLDRED;
-    consoles_color[LogLevel::FATAL]         = INVERSERED;
+    consoles_color[LogLevel::WARN]          = ORANGE;
+    consoles_color[LogLevel::ERR]           = BOLDORANGE;
+    consoles_color[LogLevel::CRITICAL]      = RED;
+    consoles_color[LogLevel::FATAL]         = BOLDRED;
 }
 
 std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
@@ -63,15 +63,16 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
         }
     }
     // [level]
-    tmp_logmsg += '[';
     if (log_format.print_color) {
         tmp_logmsg += log_format.consoles_color[String_to_Level(logmsg.Get_level())];
     }
+    tmp_logmsg += '[';
     tmp_logmsg += logmsg.Get_level();
+    tmp_logmsg += "]";
     if (log_format.print_color) {
         tmp_logmsg += RESET;
     }
-    tmp_logmsg += "] ";
+    tmp_logmsg += ' ';
     // detail
     tmp_logmsg += logmsg.Get_detail();
     tmp_logmsg += "\n";

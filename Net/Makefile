@@ -14,15 +14,13 @@ HTTP = Http
 TCP = Tcp
 
 CC ?= g++
-FLAGS ?= -pthread -std=c++17 -Og -Wall -g
-export CC FLAGS
+FLAGS ?= -I  -pthread -std=c++17 -Og -Wall -g
+MAKEFLAGS ?= --no-print-directory
+export CC FLAGS MAKEFLAGS
 
-all: $(OBJECTS) HTTP TCP
+all: HTTP TCP
 
 # compile all object file
-$(OBJECTS): %.o: %.cpp
-	@echo "Compile $(notdir $<)"
-	@$(CC) -c $(FLAGS) $< -o $(BUILD)/$@
 HTTP:
 	@cd $($@) && make all
 TCP:
@@ -30,7 +28,6 @@ TCP:
 
 .PHONY : clean
 clean:
-	@echo "Dir($(DIR_NAME)) delete file: $(OBJECTS)"
 	@cd $(BUILD) && rm -f $(OBJECTS)
 	@cd $(HTTP) && make clean
 	@cd $(TCP) && make clean

@@ -1,10 +1,10 @@
 #ifndef FILE_SINK_H_
 #define FILE_SINK_H_
 
-#include "../../Base/filehandler.h"
-#include "../../Base/noncopyable.h"
-#include "../logformatter.h"
 #include "logsink.h"
+#include <Base/filehandler.h>
+#include <Base/noncopyable.h>
+#include <Log/logformatter.h>
 #include <atomic>
 #include <mutex>
 

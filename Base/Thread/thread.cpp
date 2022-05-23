@@ -1,4 +1,4 @@
-#include "../../Log/logging.h"
+#include <Log/logging.h>
 #include "thread.h"
 #include <cstring>
 #include <errno.h>

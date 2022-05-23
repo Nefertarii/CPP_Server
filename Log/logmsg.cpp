@@ -1,5 +1,5 @@
 #include "logmsg.h"
-#include "../Base/exception.h"
+#include <Base/exception.h>
 #include <iomanip>
 
 #include <iostream>

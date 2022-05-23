@@ -12,16 +12,24 @@ SRC = ../Base/$(DIR_NAME)
 VPATH = $(BUILD)
 
 CC ?= g++
-FLAGS ?= -pthread -std=c++17 -Og -Wall -g
+FLAGS ?= -I  -pthread -std=c++17 -Og -Wall -g
+MAKEFLAGS ?= --no-print-directory
+export CC FLAGS MAKEFLAGS
 
-all: $(OBJECTS)
+all: $(OBJECTS) LIB
 
 # compile all object file
-$(OBJECTS): %.o: %.cpp
-	@echo "Compile $(notdir $<)"
-	@$(CC) -c $(FLAGS) $< -o $(BUILD)/$@
+$(OBJECTS): %.o: %.cpp %.h 
+	@echo "$(BLUE)Compile $(notdir $<)$(RESET)"
+	@$(CC) $(FLAGS) -c $< -o $(BUILD)/$@
+LIB:
+	@echo "$(ORANGE)ar package: libstatic$(DIR_NAME).a$(RESET)"
+	@cd $(BUILD) && ar -cr libstatic$(DIR_NAME).a $(OBJECTS)
+	@cd $(BUILD) && mv libstatic$(DIR_NAME).a lib/libstatic$(DIR_NAME).a
+	@echo "$(GREEN)$(DIR_NAME) compile done.$(RESET)"
 
 .PHONY : clean
 clean:
-	@echo "Dir($(DIR_NAME)) delete file: $(OBJECTS)"
+	@echo "$(ORANGE)Dir($(DIR_NAME)) delete file: $(OBJECTS) libstatic$(DIR_NAME).a$(RESET)"
 	@cd $(BUILD) && rm -f $(OBJECTS)
+	@cd $(BUILD)/lib && rm -f libstatic$(DIR_NAME).a

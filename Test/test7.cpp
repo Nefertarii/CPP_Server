@@ -248,6 +248,14 @@ void T_global_log() {
     std::cout << "global file log Using " << end - begin << " ms\n";
 }
 
+void color() {
+    std::string T_RESET = "\033[0m"; /* Reset */
+    for (int i = 0; i != 100; i++) {
+        std::string tmp = "\033[" + to_string(i) + "m";
+        std::cout << tmp << "||||||||| " << i << T_RESET << "\n";
+    }
+}
+
 int main() {
     // T_stdsink();
     // T_filehandler();

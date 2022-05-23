@@ -1,10 +1,10 @@
 #ifndef SOCKTES_ACCEPTOR_H_
 #define SOCKTES_ACCEPTOR_H_
 
-#include "../noncopyable.h"
 #include "channel.h"
 #include "inetaddress.h"
 #include "socket.h"
+#include <Base/noncopyable.h>
 
 namespace Wasi {
 namespace Poll {

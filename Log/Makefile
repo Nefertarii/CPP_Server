@@ -13,20 +13,27 @@ VPATH = $(BUILD)
 SINK = Sink
 
 CC ?= g++
-FLAGS ?= -pthread -std=c++17 -Og -Wall -g
-export CC FLAGS
-
-all: $(OBJECTS) SINK
+FLAGS ?= -I  -pthread -std=c++17 -Og -Wall -g
+MAKEFLAGS ?= --no-print-directory
+export CC FLAGS MAKEFLAGS
 
 # compile all object file
-$(OBJECTS): %.o: %.cpp
-	@echo "Compile $(notdir $<)"
-	@$(CC) -c $(FLAGS) $< -o $(BUILD)/$@
+all: SINK $(OBJECTS) LIB
+
 SINK:
 	@cd $($@) && make all
+$(OBJECTS): %.o: %.cpp %.h
+	@echo "$(BLUE)Compile $(notdir $<)$(RESET)"
+	@$(CC) $(FLAGS) -c $< -o $(BUILD)/$@
+LIB:
+	@echo "$(ORANGE)ar package: libstatic$(DIR_NAME).a$(RESET)"
+	@cd $(BUILD) && ar -cr libstatic$(DIR_NAME).a $(OBJECTS)
+	@cd $(BUILD) && mv libstatic$(DIR_NAME).a lib/libstatic$(DIR_NAME).a
+	@echo "$(GREEN)$(DIR_NAME) compile done.$(RESET)"
 
 .PHONY : clean
 clean:
-	@echo "Dir($(DIR_NAME)) delete file: $(OBJECTS)"
+	@echo "$(ORANGE)Dir($(DIR_NAME)) delete file: $(OBJECTS) libstatic$(DIR_NAME).a$(RESET)"
 	@cd $(BUILD) && rm -f $(OBJECTS)
 	@cd $(SINK) && make clean
+	@cd $(BUILD)/lib && rm -f libstatic$(DIR_NAME).a

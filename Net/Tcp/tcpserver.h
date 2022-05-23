@@ -1,10 +1,10 @@
 #ifndef SERVER_TCPSERVER_H_
 #define SERVER_TCPSERVER_H_
 
-#include "../../Base/Net/acceptor.h"
-#include "../../Base/Net/inetaddress.h"
-#include "../../Base/noncopyable.h"
 #include "tcpconnection.h"
+#include <Base/Net/acceptor.h>
+#include <Base/Net/inetaddress.h>
+#include <Base/noncopyable.h>
 #include <atomic>
 #include <map>
 #include <memory>

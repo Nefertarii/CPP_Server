@@ -1,7 +1,7 @@
 #ifndef POLL_CHANNEL_H_
 #define POLL_CHANNEL_H_
 
-#include "../noncopyable.h"
+#include <Base/noncopyable.h>
 #include <functional>
 #include <memory>
 
