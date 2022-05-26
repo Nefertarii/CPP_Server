@@ -1,8 +1,8 @@
 #include "poller.h"
-#include "channel.h"
-#include <Log/logging.h>
+#include "eventloop.h"
+#include <Base/Net/channel.h>
 #include <Base/Timer/clock.h>
-#include <Base/eventloop.h>
+#include <Log/logging.h>
 #include <algorithm>
 #include <cassert>
 #include <cstring>
@@ -32,7 +32,7 @@ const char* Poller::Operation_to_string(int operation) {
 void Poller::Fill_active_channel(int num_events, ChannelList* active_channels) const {
     assert((size_t)num_events <= events.size());
     for (int i = 0; i < num_events; ++i) {
-        Channel* channel              = static_cast<Channel*>(events[i].data.ptr);
+        Sockets::Channel* channel     = static_cast<Sockets::Channel*>(events[i].data.ptr);
         int fd                        = channel->Fd();
         ChannelMap::const_iterator it = channels.find(fd);
         assert(it != channels.end());
@@ -42,7 +42,7 @@ void Poller::Fill_active_channel(int num_events, ChannelList* active_channels) c
     }
 }
 
-void Poller::Update(int operation, Channel* channel) {
+void Poller::Update(int operation, Sockets::Channel* channel) {
     epoll_event event;
     memset(&event, 0, sizeof(event));
     event.events    = channel->Events();
@@ -93,7 +93,7 @@ Wasi::Time::TimeStamp Poller::Poll(int timeout_ms, ChannelList* active_channels)
 }
 // poller只负责IO multiplexing(多路复用) 不负责dispatching(事件分发)
 
-void Poller::Update_channel(Channel* channel) {
+void Poller::Update_channel(Sockets::Channel* channel) {
     Assert_in_loop_thread();
     const int index = channel->Index();
 
@@ -129,7 +129,7 @@ void Poller::Update_channel(Channel* channel) {
     }
 }
 
-void Poller::Remove_channel(Channel* channel) {
+void Poller::Remove_channel(Sockets::Channel* channel) {
     Assert_in_loop_thread();
     int fd_ = channel->Fd();
     LOG_INFO("Remove fd:" + std::to_string(fd_));

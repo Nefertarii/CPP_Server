@@ -1,8 +1,8 @@
-# Base/Net
-DIR_NAME = Net
+# Base/Eventloop
+DIR_NAME = Poll
 
 #list of source files (with whitespace between them)
-SRC_FILES := acceptor.cpp channel.cpp connector.cpp inetaddress.cpp socket.cpp socketapi.cpp 
+SRC_FILES := eventloop.cpp eventloopthread.cpp eventloopthreadpool.cpp poller.cpp timerqueue.cpp
 
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))

@@ -7,20 +7,20 @@
 
 namespace Wasi {
 namespace Time {
-
 class TimeStamp;
-
 } // namespace Time
+
 namespace Poll {
-
 class EventLoop;
+} // namespace Poll
 
+namespace Sockets {
 class Channel : Noncopyable {
 private:
     using EventCallBack     = std::function<void()>;
     using ReadEventCallBack = std::function<void(Time::TimeStamp)>;
     void Update();
-    EventLoop* loop;
+    Poll::EventLoop* loop;
     const int fd;
     bool in_loop;
     bool event_handling;
@@ -38,7 +38,7 @@ public:
         READEVENT = 3, // POLLIN | POLLPRI
         WRITEVENT = 4  // POLLOUT
     };
-    Channel(EventLoop* loop_, int fd_);
+    Channel(Poll::EventLoop* loop_, int fd_);
     int Fd();
     int Index();
     int Events();
@@ -61,11 +61,11 @@ public:
     bool Is_none_event();
     bool Is_writing();
     bool Is_reading();
-    EventLoop* Owner_loop();
+    Poll::EventLoop* Owner_loop();
     ~Channel();
 };
 
-} // namespace Poll
+} // namespace Sockets
 } // namespace Wasi
 
 #endif // !NET_CHANNEL_H_

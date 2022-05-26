@@ -1,8 +1,8 @@
 #ifndef POLL_EVENTLOOP_THREAD_H_
 #define POLL_EVENTLOOP_THREAD_H_
 
-#include "noncopyable.h"
-#include "Thread/thread.h"
+#include <Base/Thread/thread.h>
+#include <Base/noncopyable.h>
 #include <condition_variable>
 #include <mutex>
 

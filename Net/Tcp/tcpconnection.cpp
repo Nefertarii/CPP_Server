@@ -2,9 +2,9 @@
 #include <Base/Net/channel.h>
 #include <Base/Net/socket.h>
 #include <Base/Net/socketapi.h>
+#include <Base/Poll/eventloop.h>
 #include <Base/Timer/clock.h>
 #include <Base/Timer/timerid.h>
-#include <Base/eventloop.h>
 #include <Log/logging.h>
 #include <assert.h>
 #include <cstring>
@@ -203,7 +203,7 @@ TcpConnection::TcpConnection(Poll::EventLoop* loop_, const std::string& name_, i
     file(),
     context(),
     socket(new Sockets::Socket(sockfd_)),
-    channel(new Poll::Channel(loop, sockfd_)),
+    channel(new Sockets::Channel(loop, sockfd_)),
     local_addr(local_addr_),
     peer_addr(peer_addr_) {
     channel->Set_read_callback(std::bind(&TcpConnection::Handle_read, this, Time::TimeStamp(Time::Clock::Nowtime_us())));

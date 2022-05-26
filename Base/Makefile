@@ -2,8 +2,7 @@
 DIR_NAME = Base
 
 #list of source files (with whitespace between them)
-SRC_FILES := buffer.cpp eventloop.cpp eventloopthread.cpp eventloopthreadpool.cpp \
-	filehandler.cpp filestat.cpp latch.cpp taskqueue.cpp
+SRC_FILES := buffer.cpp filehandler.cpp filestat.cpp latch.cpp taskqueue.cpp
 
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
@@ -11,6 +10,7 @@ BUILD = ../build
 SRC = ../$(DIR_NAME)
 VPATH = $(BUILD)
 #Sub object
+POLL = Poll
 NET = Net
 THREAD = Thread
 TIMER = Timer
@@ -20,8 +20,10 @@ FLAGS ?= -I  -pthread -std=c++17 -Og -Wall -g
 MAKEFLAGS ?= --no-print-directory
 export CC FLAGS MAKEFLAGS
 
-all: NET THREAD TIMER $(OBJECTS) LIB
+all: POLL NET THREAD TIMER $(OBJECTS) LIB
 
+POLL:
+	@cd $($@) && make all
 NET:
 	@cd $($@) && make all
 THREAD:
@@ -43,6 +45,7 @@ clean:
 	@echo "$(ORANGE)Dir($(DIR_NAME)) delete file: $(OBJECTS) libstatic$(DIR_NAME).a$(RESET)"
 	@cd $(BUILD) && rm -f $(OBJECTS)
 	@cd $(BUILD)/lib && rm -f libstatic$(DIR_NAME).a
+	@cd $(POLL) && make clean
 	@cd $(NET) && make clean
 	@cd $(THREAD) && make clean
 	@cd $(TIMER) && make clean

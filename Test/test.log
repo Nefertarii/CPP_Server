@@ -187,3 +187,568 @@ UNINITIALIZED
 [2022-05-23 21:14:32.066] [Thread:13597] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
 [2022-05-23 21:14:32.069] [Thread:13600] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
 [2022-05-23 21:14:32.070] [Thread:13600] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:14.406] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 5 events = 3 index = -1
+[2022-05-26 17:18:14.406] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:5 event:5
+[2022-05-26 17:18:14.406] [Thread:9717] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7ffea07d53f0 in thread:9717
+[2022-05-26 17:18:14.406] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 3 events = 3 index = -1
+[2022-05-26 17:18:14.406] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:3 event:3
+[2022-05-26 17:18:14.406] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 6 events = 3 index = -1
+[2022-05-26 17:18:14.406] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:6 event:6
+[2022-05-26 17:18:14.406] [Thread:9717] [thread.cpp:31 Thread()] [INFO] Thread: httpserver0 Create
+[2022-05-26 17:18:14.406] [Thread:9717] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-05-26 17:18:14.406] [Thread:9718] [poller.cpp:103 Update_channel()] [DEBUG] fd = 10 events = 3 index = -1
+[2022-05-26 17:18:14.406] [Thread:9718] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:10 event:10
+[2022-05-26 17:18:14.406] [Thread:9718] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f6f6b766ae0 in thread:9718
+[2022-05-26 17:18:14.406] [Thread:9718] [poller.cpp:103 Update_channel()] [DEBUG] fd = 8 events = 3 index = -1
+[2022-05-26 17:18:14.406] [Thread:9718] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:8 event:8
+[2022-05-26 17:18:14.406] [Thread:9717] [thread.cpp:31 Thread()] [INFO] Thread: httpserver1 Create
+[2022-05-26 17:18:14.406] [Thread:9717] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-05-26 17:18:14.406] [Thread:9719] [poller.cpp:103 Update_channel()] [DEBUG] fd = 13 events = 3 index = -1
+[2022-05-26 17:18:14.406] [Thread:9719] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:13 event:13
+[2022-05-26 17:18:14.406] [Thread:9719] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f6f6af65ae0 in thread:9719
+[2022-05-26 17:18:14.406] [Thread:9719] [poller.cpp:103 Update_channel()] [DEBUG] fd = 11 events = 3 index = -1
+[2022-05-26 17:18:14.407] [Thread:9719] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:11 event:11
+[2022-05-26 17:18:14.407] [Thread:9717] [thread.cpp:31 Thread()] [INFO] Thread: httpserver2 Create
+[2022-05-26 17:18:14.407] [Thread:9717] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-05-26 17:18:14.407] [Thread:9720] [poller.cpp:103 Update_channel()] [DEBUG] fd = 16 events = 3 index = -1
+[2022-05-26 17:18:14.407] [Thread:9720] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:16 event:16
+[2022-05-26 17:18:14.407] [Thread:9720] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f6f6a764ae0 in thread:9720
+[2022-05-26 17:18:14.407] [Thread:9720] [poller.cpp:103 Update_channel()] [DEBUG] fd = 14 events = 3 index = -1
+[2022-05-26 17:18:14.407] [Thread:9720] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:14 event:14
+[2022-05-26 17:18:14.407] [Thread:9717] [thread.cpp:31 Thread()] [INFO] Thread: httpserver3 Create
+[2022-05-26 17:18:14.407] [Thread:9717] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-05-26 17:18:14.407] [Thread:9721] [poller.cpp:103 Update_channel()] [DEBUG] fd = 19 events = 3 index = -1
+[2022-05-26 17:18:14.407] [Thread:9721] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:19 event:19
+[2022-05-26 17:18:14.407] [Thread:9721] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f6f69f63ae0 in thread:9721
+[2022-05-26 17:18:14.407] [Thread:9721] [poller.cpp:103 Update_channel()] [DEBUG] fd = 17 events = 3 index = -1
+[2022-05-26 17:18:14.407] [Thread:9721] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:17 event:17
+[2022-05-26 17:18:14.407] [Thread:9717] [httpserver.cpp:433 Start()] [INFO] HttpServer [httpserver] starts listening on 127.0.0.1:8000
+[2022-05-26 17:18:19.410] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:19.410] [Thread:9720] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:19.410] [Thread:9720] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:19.410] [Thread:9718] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:19.410] [Thread:9721] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:19.411] [Thread:9721] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:19.410] [Thread:9719] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:19.411] [Thread:9719] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:19.412] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:19.412] [Thread:9717] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:24.415] [Thread:9719] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:24.415] [Thread:9719] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:24.415] [Thread:9720] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:24.415] [Thread:9720] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:24.415] [Thread:9721] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:24.415] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:24.415] [Thread:9718] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:24.415] [Thread:9721] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:24.418] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:24.418] [Thread:9717] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:29.418] [Thread:9720] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:29.418] [Thread:9720] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:29.418] [Thread:9719] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:29.418] [Thread:9719] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:29.418] [Thread:9721] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:29.418] [Thread:9721] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:29.418] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:29.419] [Thread:9718] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:29.422] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:29.422] [Thread:9717] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.653] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#1] from127.0.0.1:42576
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 3 index = -1
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:20 event:20
+[2022-05-26 17:18:32.653] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.653] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#2] from127.0.0.1:42578
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 21 events = 3 index = -1
+[2022-05-26 17:18:32.653] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:21 event:21
+[2022-05-26 17:18:32.653] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.680] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42576 get message:
+GET / HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+sec-ch-ua-platform: "Linux"
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
+Sec-Fetch-Site: none
+Sec-Fetch-Mode: navigate
+Sec-Fetch-User: ?1
+Sec-Fetch-Dest: document
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.680] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.680] [Thread:9718] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.680] [Thread:9718] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/index.html
+[2022-05-26 17:18:32.680] [Thread:9718] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42576 request process success.
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.680] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.681] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.707] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.707] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.707] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42578 get message:
+GET /Resource/CSS/Background.css HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: style
+Referer: http://127.0.0.1:8000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.707] [Thread:9719] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.707] [Thread:9719] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.707] [Thread:9719] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/CSS/Background.css
+[2022-05-26 17:18:32.707] [Thread:9719] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42578 request process success.
+[2022-05-26 17:18:32.707] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.707] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.707] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.707] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.709] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#3] from127.0.0.1:42580
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 22 events = 3 index = -1
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:22 event:22
+[2022-05-26 17:18:32.709] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.709] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42580 get message:
+GET /Resource/CSS/Followleft.css HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: style
+Referer: http://127.0.0.1:8000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.709] [Thread:9720] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.709] [Thread:9720] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.709] [Thread:9720] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/CSS/Followleft.css
+[2022-05-26 17:18:32.709] [Thread:9720] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42580 request process success.
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.709] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.710] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#4] from127.0.0.1:42582
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 23 events = 3 index = -1
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:23 event:23
+[2022-05-26 17:18:32.710] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.710] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#5] from127.0.0.1:42584
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 24 events = 3 index = -1
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:24 event:24
+[2022-05-26 17:18:32.710] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.710] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42582 get message:
+GET /Resource/CSS/Footer.css HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: style
+Referer: http://127.0.0.1:8000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.710] [Thread:9721] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.710] [Thread:9721] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.710] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.710] [Thread:9721] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/CSS/Footer.css
+[2022-05-26 17:18:32.710] [Thread:9718] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.710] [Thread:9721] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42582 request process success.
+[2022-05-26 17:18:32.710] [Thread:9718] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/index.css
+[2022-05-26 17:18:32.710] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42584 get message:
+GET /index.css HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: style
+Referer: http://127.0.0.1:8000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.710] [Thread:9718] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42584 request process success.
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.710] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.887] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.887] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.887] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:20 state:connected
+[2022-05-26 17:18:32.887] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 0 index = 1
+[2022-05-26 17:18:32.887] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:20 event:20
+[2022-05-26 17:18:32.887] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#1
+[2022-05-26 17:18:32.887] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:20
+[2022-05-26 17:18:32.887] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#1] dtor at 0x55d3e96edca0 fd:20 state:disconnected
+[2022-05-26 17:18:32.905] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.905] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.905] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#6] from127.0.0.1:42586
+[2022-05-26 17:18:32.905] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 3 index = -1
+[2022-05-26 17:18:32.905] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:20 event:20
+[2022-05-26 17:18:32.905] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.905] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.905] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.906] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42586 get message:
+GET /Resource/JS/Login.js HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: */*
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: script
+Referer: http://127.0.0.1:8000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.906] [Thread:9719] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.906] [Thread:9719] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.906] [Thread:9719] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/JS/Login.js
+[2022-05-26 17:18:32.906] [Thread:9719] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42586 request process success.
+[2022-05-26 17:18:32.906] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.906] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.906] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.906] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.915] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.915] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.915] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:24 state:connected
+[2022-05-26 17:18:32.915] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 24 events = 0 index = 1
+[2022-05-26 17:18:32.915] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:24 event:24
+[2022-05-26 17:18:32.915] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#5
+[2022-05-26 17:18:32.915] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:24
+[2022-05-26 17:18:32.915] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#5] dtor at 0x55d3e96f31e0 fd:24 state:disconnected
+[2022-05-26 17:18:32.916] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.916] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.916] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:23 state:connected
+[2022-05-26 17:18:32.916] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 23 events = 0 index = 1
+[2022-05-26 17:18:32.916] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:23 event:23
+[2022-05-26 17:18:32.916] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#4
+[2022-05-26 17:18:32.916] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:23
+[2022-05-26 17:18:32.916] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#4] dtor at 0x55d3e96f2ce0 fd:23 state:disconnected
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.918] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:22 state:connected
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 22 events = 0 index = 1
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:22 event:22
+[2022-05-26 17:18:32.918] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#3
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:22
+[2022-05-26 17:18:32.918] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#3] dtor at 0x55d3e96f2470 fd:22 state:disconnected
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.918] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:21 state:connected
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 21 events = 0 index = 1
+[2022-05-26 17:18:32.918] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:21 event:21
+[2022-05-26 17:18:32.919] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#2
+[2022-05-26 17:18:32.919] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:21
+[2022-05-26 17:18:32.919] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#2] dtor at 0x55d3e96ee2f0 fd:21 state:disconnected
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.945] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#7] from127.0.0.1:42588
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 21 events = 3 index = -1
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:21 event:21
+[2022-05-26 17:18:32.945] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.945] [Thread:9720] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.945] [Thread:9720] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.945] [Thread:9720] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/CSS/Color.css
+[2022-05-26 17:18:32.945] [Thread:9720] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42588 request process success.
+[2022-05-26 17:18:32.945] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42588 get message:
+GET /Resource/CSS/Color.css HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: text/css,*/*;q=0.1
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: style
+Referer: http://127.0.0.1:8000/index.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:2
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 2 events happended.
+[2022-05-26 17:18:32.945] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#8] from127.0.0.1:42590
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 22 events = 3 index = -1
+[2022-05-26 17:18:32.945] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:22 event:22
+[2022-05-26 17:18:32.945] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:32.947] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.947] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.947] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42590 get message:
+GET /Resource/JS/Bgstar.js HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: */*
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: script
+Referer: http://127.0.0.1:8000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:32.947] [Thread:9721] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.947] [Thread:9721] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.947] [Thread:9721] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/JS/Bgstar.js
+[2022-05-26 17:18:32.947] [Thread:9721] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42590 request process success.
+[2022-05-26 17:18:32.947] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.947] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:32.947] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:32.947] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.115] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.115] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.115] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:20 state:connected
+[2022-05-26 17:18:33.115] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 0 index = 1
+[2022-05-26 17:18:33.115] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:20 event:20
+[2022-05-26 17:18:33.115] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#6
+[2022-05-26 17:18:33.115] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:20
+[2022-05-26 17:18:33.115] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#6] dtor at 0x55d3e96edca0 fd:20 state:disconnected
+[2022-05-26 17:18:33.151] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.151] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.151] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:21 state:connected
+[2022-05-26 17:18:33.151] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 21 events = 0 index = 1
+[2022-05-26 17:18:33.151] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:21 event:21
+[2022-05-26 17:18:33.151] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#7
+[2022-05-26 17:18:33.151] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:21
+[2022-05-26 17:18:33.151] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#7] dtor at 0x55d3e96ee2f0 fd:21 state:disconnected
+[2022-05-26 17:18:33.155] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.155] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.155] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:22 state:connected
+[2022-05-26 17:18:33.155] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 22 events = 0 index = 1
+[2022-05-26 17:18:33.155] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:22 event:22
+[2022-05-26 17:18:33.155] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#8
+[2022-05-26 17:18:33.155] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:22
+[2022-05-26 17:18:33.155] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#8] dtor at 0x55d3e96f2470 fd:22 state:disconnected
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.173] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#9] from127.0.0.1:42592
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 3 index = -1
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:20 event:20
+[2022-05-26 17:18:33.173] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.173] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42592 get message:
+GET /Resource/Image/svg/glow.svg HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://127.0.0.1:8000/Resource/CSS/Background.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:33.173] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.173] [Thread:9718] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.173] [Thread:9718] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/Image/svg/glow.svg
+[2022-05-26 17:18:33.173] [Thread:9718] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42592 request process success.
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.173] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.198] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.198] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.198] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#10] from127.0.0.1:42594
+[2022-05-26 17:18:33.198] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 21 events = 3 index = -1
+[2022-05-26 17:18:33.198] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:21 event:21
+[2022-05-26 17:18:33.198] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:33.198] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:2
+[2022-05-26 17:18:33.199] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 2 events happended.
+[2022-05-26 17:18:33.199] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#11] from127.0.0.1:42596
+[2022-05-26 17:18:33.199] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 22 events = 3 index = -1
+[2022-05-26 17:18:33.199] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:22 event:22
+[2022-05-26 17:18:33.199] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:33.199] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42594 get message:
+GET /Resource/Image/png/logo_64.png HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://127.0.0.1:8000/Resource/CSS/Followleft.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:33.199] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.199] [Thread:9719] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.199] [Thread:9719] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.199] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.199] [Thread:9719] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/Image/png/logo_64.png
+[2022-05-26 17:18:33.199] [Thread:9720] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.199] [Thread:9720] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.199] [Thread:9720] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/Image/png/Cat1_32.png
+[2022-05-26 17:18:33.199] [Thread:9719] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42594 request process success.
+[2022-05-26 17:18:33.199] [Thread:9720] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42596 request process success.
+[2022-05-26 17:18:33.199] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42596 get message:
+GET /Resource/Image/png/Cat1_32.png HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://127.0.0.1:8000/index.css
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:33.199] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.199] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.407] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.407] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.407] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:20 state:connected
+[2022-05-26 17:18:33.407] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 0 index = 1
+[2022-05-26 17:18:33.407] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:20 event:20
+[2022-05-26 17:18:33.407] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#9
+[2022-05-26 17:18:33.407] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:20
+[2022-05-26 17:18:33.407] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#9] dtor at 0x55d3e96f2470 fd:20 state:disconnected
+[2022-05-26 17:18:33.427] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.427] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.427] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:22 state:connected
+[2022-05-26 17:18:33.427] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 22 events = 0 index = 1
+[2022-05-26 17:18:33.427] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:22 event:22
+[2022-05-26 17:18:33.427] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#11
+[2022-05-26 17:18:33.427] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:22
+[2022-05-26 17:18:33.427] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#11] dtor at 0x55d3e96edca0 fd:22 state:disconnected
+[2022-05-26 17:18:33.428] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.428] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.428] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:21 state:connected
+[2022-05-26 17:18:33.428] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 21 events = 0 index = 1
+[2022-05-26 17:18:33.428] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:21 event:21
+[2022-05-26 17:18:33.428] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#10
+[2022-05-26 17:18:33.428] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:21
+[2022-05-26 17:18:33.428] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#10] dtor at 0x55d3e96ee2f0 fd:21 state:disconnected
+[2022-05-26 17:18:33.467] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.467] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.467] [Thread:9717] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#12] from127.0.0.1:42598
+[2022-05-26 17:18:33.467] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 3 index = -1
+[2022-05-26 17:18:33.467] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:20 event:20
+[2022-05-26 17:18:33.467] [Thread:9717] [httpserver.cpp:373 Connection()] [INFO] Get connection
+[2022-05-26 17:18:33.467] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.468] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.468] [Thread:9717] [httpserver.cpp:386 Message()] [DEBUG] From 127.0.0.1:42598 get message:
+GET /Resource/Image/png/logo_32.png HTTP/1.1
+Host: 127.0.0.1:8000
+Connection: keep-alive
+sec-ch-ua: " Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"
+sec-ch-ua-mobile: ?0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36
+sec-ch-ua-platform: "Linux"
+Accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8
+Sec-Fetch-Site: same-origin
+Sec-Fetch-Mode: no-cors
+Sec-Fetch-Dest: image
+Referer: http://127.0.0.1:8000/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7
+If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
+
+
+[2022-05-26 17:18:33.468] [Thread:9721] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.468] [Thread:9721] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.468] [Thread:9721] [httpserver.cpp:39 Get_process()] [DEBUG] File:/home/nefertarii/vscode/HTML/Resource/Image/png/logo_32.png
+[2022-05-26 17:18:33.468] [Thread:9721] [httpserver.cpp:368 Request_process()] [INFO] 127.0.0.1:42598 request process success.
+[2022-05-26 17:18:33.468] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.468] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.468] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.468] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.683] [Thread:9717] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-05-26 17:18:33.683] [Thread:9717] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-05-26 17:18:33.683] [Thread:9717] [tcpconnection.cpp:60 Handle_close()] [INFO] Channel fd:20 state:connected
+[2022-05-26 17:18:33.683] [Thread:9717] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 0 index = 1
+[2022-05-26 17:18:33.683] [Thread:9717] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll del fd:20 event:20
+[2022-05-26 17:18:33.683] [Thread:9717] [tcpserver.cpp:39 Remove_connection_in_loop()] [INFO] Remove [httpserver] connection httpserver-#12
+[2022-05-26 17:18:33.683] [Thread:9717] [poller.cpp:135 Remove_channel()] [INFO] Remove fd:20
+[2022-05-26 17:18:33.683] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#12] dtor at 0x55d3e96ee2f0 fd:20 state:disconnected
+[2022-05-26 17:18:38.178] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-05-26 17:18:38.178] [Thread:9718] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.

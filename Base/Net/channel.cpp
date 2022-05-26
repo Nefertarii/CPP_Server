@@ -1,18 +1,18 @@
 #include "channel.h"
-#include <Base/eventloop.h>
+#include <Base/Poll/eventloop.h>
 #include <Log/logging.h>
 #include <cassert>
 #include <sys/poll.h>
 
 using namespace Wasi;
-using namespace Wasi::Poll;
+using namespace Wasi::Sockets;
 
 void Channel::Update() {
     in_loop = false;
     loop->Update_channel(this);
 }
 
-Channel::Channel(EventLoop* loop_, int fd_) :
+Channel::Channel(Poll::EventLoop* loop_, int fd_) :
     loop(loop_),
     fd(fd_),
     in_loop(false),
@@ -112,7 +112,7 @@ bool Channel::Is_writing() { return events & WRITEVENT; }
 
 bool Channel::Is_reading() { return events & READEVENT; }
 
-EventLoop* Channel::Owner_loop() { return loop; }
+Poll::EventLoop* Channel::Owner_loop() { return loop; }
 
 Channel::~Channel() {
     assert(!event_handling);

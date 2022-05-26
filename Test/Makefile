@@ -4,7 +4,7 @@ DIR_NAME = Test
 #list of source files (with whitespace between them)
 SRC_FILES := test.cpp test2.cpp test3.cpp test4.cpp test5.cpp \
 	test6.cpp test7.cpp test8.cpp test9.cpp test10.cpp
-
+LIBS := 
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
 #Target files
@@ -58,8 +58,8 @@ test8: test8.cpp
 test9: test9.cpp
 	$(CC) -c $(FLAGS) $<
 	$(CC) $(FLAGS) -L$(shell pwd)/../build/lib -o test9 test9.o \
-	-lstaticBase -lstaticHttp -lstaticLog -lstaticNet -lstaticSink -lstaticTcp -lstaticThread -lstaticTimer \
-	-lstaticBase -lstaticHttp -lstaticLog -lstaticNet -lstaticSink -lstaticTcp -lstaticThread -lstaticTimer
+	-lstaticBase -lstaticHttp -lstaticLog -lstaticNet -lstaticPoll -lstaticSink -lstaticTcp -lstaticThread -lstaticTimer \
+	-lstaticBase -lstaticHttp -lstaticLog -lstaticNet -lstaticPoll -lstaticSink -lstaticTcp -lstaticThread -lstaticTimer
 test10: test10.cpp
 	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
 

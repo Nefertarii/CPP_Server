@@ -7,14 +7,6 @@
 using namespace Wasi::Poll;
 using namespace Wasi;
 
-// EventLoop* baseloop;
-// Base::ThreadPool thread_pool;
-// std::string name;
-// bool started;
-// int num_threads;
-// std::vector<std::unique_ptr<EventLoopThread>> threads;
-// std::vector<EventLoop*> loops;
-
 EventLoopThreadPool::EventLoopThreadPool(EventLoop* baseloop_, const std::string& name_) :
     started(false),
     index(0),

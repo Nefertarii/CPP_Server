@@ -8,10 +8,11 @@
 
 namespace Wasi {
 namespace Poll {
-class Channel;
 class EventLoop;
 } // namespace Poll
+
 namespace Sockets {
+class Channel;
 using NewConnectionCallback = std::function<void(int)>;
 
 class Connector : Noncopyable,
@@ -40,7 +41,7 @@ private:
     int retry_delay_ms;
     bool connect;
     States state;
-    std::unique_ptr<Poll::Channel> channel;
+    std::unique_ptr<Channel> channel;
     NewConnectionCallback new_connection_callback;
 
 public:

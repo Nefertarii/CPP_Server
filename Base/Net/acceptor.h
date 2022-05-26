@@ -17,9 +17,9 @@ using NewConnectCallback = std::function<void(int, const InetAddress&)>;
 class Acceptor : Noncopyable {
 private:
     void Handle_read();
-    Poll::EventLoop* loop;
+    Poll::EventLoop* loop;  
     Socket accept_socket;
-    Poll::Channel accept_channel;
+    Channel accept_channel;
     NewConnectCallback callback;
     bool listening;
     int idle_fd;
