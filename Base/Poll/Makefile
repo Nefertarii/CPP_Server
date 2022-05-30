@@ -2,7 +2,7 @@
 DIR_NAME = Poll
 
 #list of source files (with whitespace between them)
-SRC_FILES := eventloop.cpp eventloopthread.cpp eventloopthreadpool.cpp poller.cpp timerqueue.cpp
+SRC_FILES := eventloop.cpp eventloopthread.cpp eventloopthreadpool.cpp poller.cpp channel.cpp timerqueue.cpp
 
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))

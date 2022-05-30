@@ -2,7 +2,7 @@
 DIR_NAME = Net
 
 #list of source files (with whitespace between them)
-SRC_FILES := acceptor.cpp channel.cpp connector.cpp inetaddress.cpp socket.cpp socketapi.cpp 
+SRC_FILES := acceptor.cpp connector.cpp inetaddress.cpp socket.cpp socketapi.cpp 
 
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))

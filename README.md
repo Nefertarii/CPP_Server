@@ -1,38 +1,71 @@
-# C++ Server (Readme待修改）
-### 更新日志/Change log
+# C++ Server
 [用于测试的服务器网站](http://webwasi.com/)      
-[日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)
+[更新日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)
+参照muduo网络库，在仅使用C++17标准库的条件下重新制作了一遍    
+[![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
-### 项目背景/Background
-在学习完相关知识后想将其整合，于是想到制作一个有交互功能的服务器  
-打算制作一个由多进程+多线程的服务器程序  
-对照muduo一步步进行修改完善,由此加深对基础知识的理解和大型项目制作过程的体验   
+## 目录
+- [说明](#description)
+- [背景](#background)
+- [安装](#install)
+- [用法](#usage)
+- [额外部分](#extra-sections)
+- [安全](#security)
+- [维护者](#maintainers)
+- [贡献](#contributing)
+- [许可证](#license)
+
+## Description  
+因为参考的muduo，整体基于Reactor模式实现  
+负责事件循环的部分由Eventloop实现，监听对应的事件包括有Socket可读写事件、定时器事件等  
+- EventLoop  
+采用的模型是one loop per thread + threadpool，因此每个线程至多有一个EventLoop   
+EventLoop通过Channel和Poller配合使用，使用epoll的通知机制，以在事件可用时调用相应的回调函数   
+EventLoop的定时器实现由TimerQueue、Timer、TimerId三个类实现   
+EventLoopThread  
+因为IO线程不一定是主线程，通过IO线程池来管理，对应的类是EventLoopThreadPool   
+- Tcp   
+TcpServer通过管理accept获得的TcpConnection可直接使用   
+TcpClient类似与TcpServer但只管理一个TcpConnection   
+而Tcpconnection是网络操作的封装，不对外可见，通过上级接口使用  
+- Threadpool  
+线程池通过自定义的TaskQueue来调用要求的任务，且空闲的线程可以通过窃取其他线程池的任务来保证效率   
+- Log  
+Logger通过一个vector\<Sink\>来记录保存日志，且能分发至不同的Sink方便使用   
+Logging中有一个静态logger用于默认的日志写入，方便使用  
+ 
+## Background  
+用于学习的一个简易C++ TCP服务器  
+在学习完相关知识后想将其整合，于是想到制作一个由多进程+多线程的服务器程序  
+在选择后，对照muduo一步步进行修改完善,在未使用其包含的boost三方库情况下用标准库完成了这个项目  
 配套有日志库，网络库，一个线程池及一些容器结构
-(一开始考虑搭配unreal搭配用作专属服务器使用，目前也在向能使用不同协议方便扩展的运行方式而开发 )   
-作为我的第一个大型规划，后续会不断更新  
+(作为我的第一个大型规划，后续会不断更新)     
 
-### 整体构思 
-#### 网络库(仿muduo,有删减且仅使用标准库文件)   
-muudo是Reactor模式的现代C++网络库,采用非阻塞IO模型,基于事件驱动和回调  
-#### 日志库(参考了Folly库和spdlog的设计)   
-#### 线程池   
+## Install  
+项目使用的C++17需要更新GCC至少至9.1   
+```apt install GCC```   
+项目采用Makefile进行编译，只需下载后即可使用     
 
+## Usage  
+在主文件夹下使用```make```进行编译   
+使用```./Wasi_Server```即可运行  
+若需修改参数可以在Net文件夹下的setting.conf文件中进行设置  
+项目内还包含有Test文件夹包含了其中类的一些操作示例，在Test文件夹下使用```make```即可   
+*如使用默认设置需要sudo权限以绑定端口   
+*在使用make时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化  
 
-### 项目的安装及使用/Install & Usage
-新版服务器的使用(还在开发中...)  
+## Extra sections  
+[EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Base/Poll/eventloop.md)  
+[TcpServer详细](https://github.com/Nefertarii/WebServer/blob/master/Net/Tcp/tcpserver.md)  
 
-旧版服务器的使用(真的很烂,等新写的吧)   
-项目编译使用了 Makefile  
-在文件夹HTTPserver/build中为HTTP WEB服务器  
-使用命令 ```make MODE=DEBUG``` 可启动调试模式，该模式下将直接输出各个处理的日志信息，且使用-Og编译  
-直接使用命令 ```make``` 将会储存日志信息到文件中，并使用-O2编译  
-启动时会根据目录下的Http.conf来设置相关参数  
-若不绑定0\~1024端口，使用 ```./HTTPserver [conf file]``` 即可启动服务器进程  
-绑定1\~1024端口需要添加权限，需使用 ```sudo ./HTTPserver [conf file]``` 才可成功启动  
-如 ```./HTTPserver /home/ubuntu/Http.conf``` 启动HTTP WEB服务器。  
+## Security  
+目前并未进行完整的项目测试，如果发现问题欢迎提交问题   
 
-### 项目负责/Maintainers
+## Maintainers  
 [@Nefertarii](https://github.com/Nefertarii)  
 
-### License
+## Contributing  
+这个项目会感谢所有做出帮助的人  
+<img src="https://avatars.githubusercontent.com/u/47806751?v=4" height="60" width="60" alt="和我的猫猫">
+## License  
 [MIT](https://github.com/Nefertarii/WebServer/blob/master/LICENSE) © Richard Littauer   

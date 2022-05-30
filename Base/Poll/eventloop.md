@@ -1,0 +1,5 @@
+采用的模型是one loop per thread，因此每个线程至多有一个eventloop，并在创建时会包含该线程的所属(threadid)  
+作为事件分发器，Eventloop本身不处理事件，而是通过协调使用Channel类和Poll类来处理  
+每个Channel对象只属于一个Eventloop，只负责一个描述符(fd)，但他只用于事件的分发，并不实际拥有该fd，也不会在析构时关闭该fd，Channel通过将不同的IO事件分为不同的回调(read_callback/write_callback)，用std::function表示    
+Poller使用epoll的机制进行IO多路复用，作为Eventloop的间接成员，其生命周期与Eventloop相同，且仅供其拥有的Eventloop(ownerloop)使用，因此无需加锁  
+Timerqueue因为需要能高效的组织未到期的Timer，能快速根据当前时间找到已到期的Timer，并且能高效添加和删除Timer，使用了标准库的Set

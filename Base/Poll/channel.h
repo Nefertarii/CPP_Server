@@ -12,15 +12,12 @@ class TimeStamp;
 
 namespace Poll {
 class EventLoop;
-} // namespace Poll
-
-namespace Sockets {
 class Channel : Noncopyable {
 private:
     using EventCallBack     = std::function<void()>;
     using ReadEventCallBack = std::function<void(Time::TimeStamp)>;
     void Update();
-    Poll::EventLoop* loop;
+    EventLoop* loop;
     const int fd;
     bool in_loop;
     bool event_handling;
@@ -65,7 +62,7 @@ public:
     ~Channel();
 };
 
-} // namespace Sockets
+} // namespace Poll
 } // namespace Wasi
 
 #endif // !NET_CHANNEL_H_

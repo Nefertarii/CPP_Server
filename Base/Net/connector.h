@@ -41,7 +41,7 @@ private:
     int retry_delay_ms;
     bool connect;
     States state;
-    std::unique_ptr<Channel> channel;
+    std::unique_ptr<Poll::Channel> channel;
     NewConnectionCallback new_connection_callback;
 
 public:

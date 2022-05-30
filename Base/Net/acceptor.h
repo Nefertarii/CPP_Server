@@ -1,9 +1,9 @@
 #ifndef SOCKTES_ACCEPTOR_H_
 #define SOCKTES_ACCEPTOR_H_
 
-#include "channel.h"
 #include "inetaddress.h"
 #include "socket.h"
+#include <Base/Poll/channel.h>
 #include <Base/noncopyable.h>
 
 namespace Wasi {
@@ -17,9 +17,9 @@ using NewConnectCallback = std::function<void(int, const InetAddress&)>;
 class Acceptor : Noncopyable {
 private:
     void Handle_read();
-    Poll::EventLoop* loop;  
+    Poll::EventLoop* loop;
     Socket accept_socket;
-    Channel accept_channel;
+    Poll::Channel accept_channel;
     NewConnectCallback callback;
     bool listening;
     int idle_fd;

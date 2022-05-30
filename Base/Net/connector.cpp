@@ -1,6 +1,6 @@
 #include "connector.h"
-#include "channel.h"
 #include "socketapi.h"
+#include <Base/Poll/channel.h>
 #include <Base/Poll/eventloop.h>
 #include <Base/Timer/timerid.h>
 #include <Log/logging.h>
