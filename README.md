@@ -1,7 +1,7 @@
 # C++ Server
+参照muduo网络库，在使用C++17标准库的条件下重新制作了一遍    
 [用于测试的服务器网站](http://webwasi.com/)      
-[更新日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)
-参照muduo网络库，在仅使用C++17标准库的条件下重新制作了一遍    
+[更新日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)  
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
 ## 目录
