@@ -1,5 +1,7 @@
 # C++ Server
+一个适配Web页面的小型网络库  
 参照muduo网络库，在使用C++17标准库的条件下重新制作了一遍    
+
 [用于测试的服务器网站](http://webwasi.com/)      
 [更新日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)  
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
@@ -34,17 +36,10 @@ TcpClient类似与TcpServer但只管理一个TcpConnection
 Logger通过一个vector\<Sink\>来记录保存日志，且能分发至不同的Sink方便使用   
 Logging中有一个静态logger用于默认的日志写入，方便使用  
  
-## Background  
-用于学习的一个简易C++ TCP服务器  
-在学习完相关知识后想将其整合，于是想到制作一个由多进程+多线程的服务器程序  
-在选择后，对照muduo一步步进行修改完善,在未使用其包含的boost三方库情况下用标准库完成了这个项目  
-配套有日志库，网络库，一个线程池及一些容器结构
-(作为我的第一个大型规划，后续会不断更新)     
-
 ## Install  
 项目使用的C++17需要更新GCC至少至9.1   
 ```apt install GCC```   
-项目采用Makefile进行编译，只需下载后即可使用     
+项目采用Makefile进行编译，没有使用其他三方库，只需下载编译后即可使用     
 
 ## Usage  
 在主文件夹下使用```make```进行编译   
@@ -57,6 +52,13 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 ## Extra sections  
 [EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Base/Poll/eventloop.md)  
 [TcpServer详细](https://github.com/Nefertarii/WebServer/blob/master/Net/Tcp/tcpserver.md)  
+
+## Background  
+用于学习的一个简易C++ TCP服务器  
+在学习完相关知识后想将其整合，于是想到制作一个由多进程+多线程的服务器程序  
+在选择后，对照muduo一步步进行修改完善,在未使用其包含的boost三方库情况下用标准库完成了这个项目  
+配套有日志库，网络库，一个线程池及一些容器结构 
+后续也会不断更新  
 
 ## Security  
 目前并未进行完整的项目测试，如果发现问题欢迎提交问题   
