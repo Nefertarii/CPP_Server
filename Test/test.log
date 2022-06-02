@@ -752,3 +752,113 @@ If-Modified-Since: Thu, 03 Mar 2022 22:21:08 GMT
 [2022-05-26 17:18:33.683] [Thread:9717] [tcpconnection.cpp:383 ~TcpConnection()] [INFO] TcpConnection[httpserver-#12] dtor at 0x55d3e96ee2f0 fd:20 state:disconnected
 [2022-05-26 17:18:38.178] [Thread:9718] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
 [2022-05-26 17:18:38.178] [Thread:9718] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:21.921] [Thread:12136] [poller.cpp:103 Update_channel()] [DEBUG] fd = 5 events = 3 index = -1
+[2022-06-02 21:01:21.921] [Thread:12136] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:5 event:5
+[2022-06-02 21:01:21.921] [Thread:12136] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7ffcf4cd2580 in thread:12136
+[2022-06-02 21:01:21.921] [Thread:12136] [poller.cpp:103 Update_channel()] [DEBUG] fd = 3 events = 3 index = -1
+[2022-06-02 21:01:21.921] [Thread:12136] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:3 event:3
+[2022-06-02 21:01:21.921] [Thread:12136] [poller.cpp:103 Update_channel()] [DEBUG] fd = 6 events = 3 index = -1
+[2022-06-02 21:01:21.921] [Thread:12136] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:6 event:6
+[2022-06-02 21:01:21.921] [Thread:12136] [thread.cpp:31 Thread()] [INFO] Thread: httpserver0 Create
+[2022-06-02 21:01:21.921] [Thread:12136] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-06-02 21:01:21.922] [Thread:12137] [poller.cpp:103 Update_channel()] [DEBUG] fd = 10 events = 3 index = -1
+[2022-06-02 21:01:21.974] [Thread:12137] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:10 event:10
+[2022-06-02 21:01:21.974] [Thread:12137] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f01c6b97ae0 in thread:12137
+[2022-06-02 21:01:21.974] [Thread:12137] [poller.cpp:103 Update_channel()] [DEBUG] fd = 8 events = 3 index = -1
+[2022-06-02 21:01:21.974] [Thread:12137] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:8 event:8
+[2022-06-02 21:01:21.974] [Thread:12136] [thread.cpp:31 Thread()] [INFO] Thread: httpserver1 Create
+[2022-06-02 21:01:21.974] [Thread:12136] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-06-02 21:01:21.974] [Thread:12138] [poller.cpp:103 Update_channel()] [DEBUG] fd = 13 events = 3 index = -1
+[2022-06-02 21:01:21.974] [Thread:12138] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:13 event:13
+[2022-06-02 21:01:21.974] [Thread:12138] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f01c6396ae0 in thread:12138
+[2022-06-02 21:01:21.974] [Thread:12138] [poller.cpp:103 Update_channel()] [DEBUG] fd = 11 events = 3 index = -1
+[2022-06-02 21:01:21.974] [Thread:12138] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:11 event:11
+[2022-06-02 21:01:21.974] [Thread:12136] [thread.cpp:31 Thread()] [INFO] Thread: httpserver2 Create
+[2022-06-02 21:01:21.974] [Thread:12136] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-06-02 21:01:21.975] [Thread:12139] [poller.cpp:103 Update_channel()] [DEBUG] fd = 16 events = 3 index = -1
+[2022-06-02 21:01:21.975] [Thread:12139] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:16 event:16
+[2022-06-02 21:01:21.975] [Thread:12139] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f01c5b95ae0 in thread:12139
+[2022-06-02 21:01:21.975] [Thread:12139] [poller.cpp:103 Update_channel()] [DEBUG] fd = 14 events = 3 index = -1
+[2022-06-02 21:01:21.975] [Thread:12139] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:14 event:14
+[2022-06-02 21:01:21.975] [Thread:12136] [thread.cpp:31 Thread()] [INFO] Thread: httpserver3 Create
+[2022-06-02 21:01:21.975] [Thread:12136] [thread.cpp:41 Start()] [INFO] thread:0 start
+[2022-06-02 21:01:21.975] [Thread:12140] [poller.cpp:103 Update_channel()] [DEBUG] fd = 19 events = 3 index = -1
+[2022-06-02 21:01:21.975] [Thread:12140] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:19 event:19
+[2022-06-02 21:01:21.975] [Thread:12140] [eventloop.cpp:70 EventLoop()] [INFO] EventLoop created:0x7f01c5394ae0 in thread:12140
+[2022-06-02 21:01:21.975] [Thread:12140] [poller.cpp:103 Update_channel()] [DEBUG] fd = 17 events = 3 index = -1
+[2022-06-02 21:01:21.975] [Thread:12140] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:17 event:17
+[2022-06-02 21:01:21.975] [Thread:12136] [httpserver.cpp:79 Start()] [INFO] HttpServer [httpserver] starts listening on 127.0.0.1:8000
+[2022-06-02 21:01:26.978] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:26.978] [Thread:12136] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:26.978] [Thread:12138] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:26.979] [Thread:12138] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:26.978] [Thread:12139] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:27.008] [Thread:12139] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:26.978] [Thread:12137] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:27.008] [Thread:12137] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:26.978] [Thread:12140] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:27.008] [Thread:12140] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:31.981] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:31.981] [Thread:12136] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:32.009] [Thread:12137] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:32.009] [Thread:12137] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:32.009] [Thread:12138] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:32.009] [Thread:12138] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:32.013] [Thread:12140] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:32.013] [Thread:12140] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:32.013] [Thread:12139] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:32.013] [Thread:12139] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:36.987] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:36.987] [Thread:12136] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:37.015] [Thread:12137] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:37.015] [Thread:12137] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:37.015] [Thread:12140] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:37.015] [Thread:12140] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:37.015] [Thread:12138] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:37.015] [Thread:12138] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:37.018] [Thread:12139] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:37.018] [Thread:12139] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:41.989] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:41.989] [Thread:12136] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:42.017] [Thread:12138] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:42.017] [Thread:12138] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:42.017] [Thread:12137] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:42.017] [Thread:12137] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:42.019] [Thread:12140] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:42.019] [Thread:12140] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:42.022] [Thread:12139] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:42.022] [Thread:12139] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:46.862] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-06-02 21:01:46.862] [Thread:12136] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-06-02 21:01:46.862] [Thread:12136] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#1] from127.0.0.1:35386
+[2022-06-02 21:01:46.862] [Thread:12136] [poller.cpp:103 Update_channel()] [DEBUG] fd = 20 events = 3 index = -1
+[2022-06-02 21:01:46.862] [Thread:12136] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:20 event:20
+[2022-06-02 21:01:46.863] [Thread:12136] [httpserver.cpp:19 Connection()] [INFO] Get connection
+[2022-06-02 21:01:46.863] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:1
+[2022-06-02 21:01:46.863] [Thread:12136] [poller.cpp:82 Poll()] [DEBUG] 1 events happended.
+[2022-06-02 21:01:46.863] [Thread:12136] [tcpserver.cpp:18 New_connection()] [INFO] New_connection httpserver] new connection [httpserver-#2] from127.0.0.1:35388
+[2022-06-02 21:01:46.863] [Thread:12136] [poller.cpp:103 Update_channel()] [DEBUG] fd = 21 events = 3 index = -1
+[2022-06-02 21:01:46.863] [Thread:12136] [poller.cpp:54 Update()] [DEBUG] epoll_ctl op:Epoll add fd:21 event:21
+[2022-06-02 21:01:46.863] [Thread:12136] [httpserver.cpp:19 Connection()] [INFO] Get connection
+[2022-06-02 21:01:47.021] [Thread:12137] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:47.021] [Thread:12137] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:47.021] [Thread:12138] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:47.021] [Thread:12138] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:47.021] [Thread:12140] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:47.021] [Thread:12140] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:47.032] [Thread:12139] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:47.032] [Thread:12139] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:51.864] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:51.864] [Thread:12136] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:52.026] [Thread:12137] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:52.026] [Thread:12137] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:52.026] [Thread:12140] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:52.026] [Thread:12138] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:52.026] [Thread:12138] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:52.026] [Thread:12140] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:52.037] [Thread:12139] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:52.037] [Thread:12139] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:56.866] [Thread:12136] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:56.866] [Thread:12136] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.
+[2022-06-02 21:01:57.029] [Thread:12137] [poller.cpp:77 Poll()] [DEBUG] num_events total count:0
+[2022-06-02 21:01:57.029] [Thread:12137] [poller.cpp:85 Poll()] [DEBUG] Nothing happend.

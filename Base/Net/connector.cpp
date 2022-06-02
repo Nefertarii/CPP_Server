@@ -73,7 +73,7 @@ void Connector::Connect() {
 void Connector::Connecting(int sockfd) {
     Set_state(CONNECTING);
     assert(!channel);
-    channel.reset(new Channel(loop, sockfd));
+    channel.reset(new Poll::Channel(loop, sockfd));
     channel->Set_write_callback(std::bind(&Connector::Handle_write, this));
     channel->Set_error_callback(std::bind(&Connector::Handle_error, this));
     channel->Enable_writing();

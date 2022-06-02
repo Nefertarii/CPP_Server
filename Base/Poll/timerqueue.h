@@ -1,7 +1,7 @@
 #ifndef TIMER_TIMERQUEUE_H_
 #define TIMER_TIMERQUEUE_H_
 
-#include <Base/Net/channel.h>
+#include <Base/Poll/channel.h>
 #include <Base/Timer/timestamp.h>
 #include <Base/noncopyable.h>
 #include <functional>
@@ -31,7 +31,7 @@ private:
     void Add_timer_in_loop(Time::Timer* timer);
     Poll::EventLoop* loop;
     const int timerfd;
-    Sockets::Channel timerfd_channel;
+    Channel timerfd_channel;
     TimerList timers;
     ActiveTimerSet active_timers;
     ActiveTimerSet cancel_timers;

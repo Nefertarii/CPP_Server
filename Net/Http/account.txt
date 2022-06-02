@@ -1,0 +1,16 @@
+I 10000000
+E email
+P passwd
+A alias
+N none
+N none
+N none
+----
+I 10000000
+E hncsgwc@gmail.com
+P 123456
+A wasi
+N none
+N none
+N none
+----

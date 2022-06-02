@@ -46,6 +46,7 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 使用```./Wasi_Server```即可运行  
 若需修改参数可以在Net文件夹下的setting.conf文件中进行设置  
 项目内还包含有Test文件夹包含了其中类的一些操作示例，在Test文件夹下使用```make```即可   
+如果需要包含至其他项目，可以考虑包含头文件并使用build/lib 目录下的libCPPServer.a静态库  
 *如使用默认设置需要sudo权限以绑定端口   
 *在使用make时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化  
 
@@ -68,6 +69,7 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 
 ## Contributing  
 这个项目会感谢所有做出帮助的人  
-<img src="https://avatars.githubusercontent.com/u/47806751?v=4" height="60" width="60" alt="和我的猫猫">
+<img src="https://avatars.githubusercontent.com/u/47806751?v=4" height="60" width="60" alt="和我的猫猫">   
+
 ## License  
 [MIT](https://github.com/Nefertarii/WebServer/blob/master/LICENSE) © Richard Littauer   

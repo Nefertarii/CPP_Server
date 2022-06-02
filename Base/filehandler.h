@@ -1,12 +1,12 @@
-#ifndef LOG_FILEHANDLER_H_
-#define LOG_FILEHANDLER_H_
+#ifndef BASE_FILEHANDLER_H_
+#define BASE_FILEHANDLER_H_
 
 #include <fstream>
 #include <functional>
 #include <string>
 
 namespace Wasi {
-namespace Log {
+namespace Base {
 
 struct FileEvents {
     std::function<void(std::string& filename)> before_open;
@@ -37,12 +37,13 @@ public:
     void Create(std::string file_name_);
     void Flush();
     void Write(const std::string& buf);
+    int Read(std::string& buf, size_t start = 0, size_t size = 4096);
     void Close();
     long int Get_file_size();
     std::string Get_file_name() const;
     ~FileHandler();
 };
 }
-} // namespace Wasi::Log
+} // namespace Wasi::Base
 
-#endif
+#endif // !BASE_FILEHANDLER_H_

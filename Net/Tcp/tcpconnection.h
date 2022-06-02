@@ -15,10 +15,10 @@ struct tcp_info;
 namespace Wasi {
 namespace Poll {
 class EventLoop;
+class Channel;
 } // namespace Poll
 
 namespace Sockets {
-class Channel;
 class Socket;
 } // namespace Sockets
 
@@ -63,7 +63,7 @@ private:
     Base::FileStat file;
     std::any context;
     std::unique_ptr<Sockets::Socket> socket;
-    std::unique_ptr<Sockets::Channel> channel;
+    std::unique_ptr<Poll::Channel> channel;
     const Sockets::InetAddress local_addr;
     const Sockets::InetAddress peer_addr;
     ConnectionCallback connection_callback;

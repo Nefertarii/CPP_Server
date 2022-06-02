@@ -2,7 +2,7 @@
 DIR_NAME = Http
 
 #list of source files (with whitespace between them)
-SRC_FILES := httpcontext.cpp httprequest.cpp httprespone.cpp httpserver.cpp
+SRC_FILES := httpcontext.cpp httprequest.cpp httprespone.cpp httpserver.cpp httpprocess.cpp httpaccount.cpp
 
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))

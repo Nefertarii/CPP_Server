@@ -18,14 +18,14 @@ private:
     std::atomic<uint> count;
     std::atomic<uint> suc_count;
     std::string logs;
-    FileHandler filehandler;
+    Base::FileHandler filehandler;
     void Fileout();
     void Init_open(std::string filename);
 
 public:
     FileSink(std::string filename);
     FileSink(LogFormat logformat, std::string filename);
-    FileSink(LogFormat logformat, std::string filename, FileEvents events);
+    FileSink(LogFormat logformat, std::string filename, Base::FileEvents events);
     void Logger(LogMsg& logmsg);
     void Flush();
     void Set_format(LogFormat logformat);

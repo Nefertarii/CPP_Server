@@ -7,7 +7,7 @@
 #include <thread>
 
 using namespace Wasi;
-using namespace Wasi::Log;
+using namespace Wasi::Base;
 
 FileHandler::FileHandler() :
     open_tries(5),
@@ -72,6 +72,14 @@ void FileHandler::Write(const std::string& buf) {
         return;
     }
     throw Exception("FileHandler::Write() Failed Write " + file_name + "\n", errno);
+}
+
+int FileHandler::Read(std::string& buf, size_t start, size_t size) {
+    file_stream.seekg(start);
+    char tmp[size];
+    file_stream.read(tmp, size);
+    buf = std::string(tmp);
+    return file_stream.gcount();
 }
 
 void FileHandler::Close() {

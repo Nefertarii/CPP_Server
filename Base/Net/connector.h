@@ -9,10 +9,10 @@
 namespace Wasi {
 namespace Poll {
 class EventLoop;
+class Channel;
 } // namespace Poll
 
 namespace Sockets {
-class Channel;
 using NewConnectionCallback = std::function<void(int)>;
 
 class Connector : Noncopyable,

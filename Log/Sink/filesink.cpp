@@ -50,7 +50,7 @@ FileSink::FileSink(LogFormat logformat, std::string filename) :
     Init_open(filename);
 }
 
-FileSink::FileSink(LogFormat logformat, std::string filename, FileEvents events) :
+FileSink::FileSink(LogFormat logformat, std::string filename, Base::FileEvents events) :
     count(0),
     suc_count(0),
     filehandler(events) {
