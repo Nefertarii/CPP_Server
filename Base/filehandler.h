@@ -37,9 +37,10 @@ public:
     void Create(std::string file_name_);
     void Flush();
     void Write(const std::string& buf);
-    int Read(std::string& buf, size_t start = 0, size_t size = 4096);
+    size_t Read(std::string& buf, size_t start = 0, size_t size = 4096);
+    size_t Get_line(std::string& buf, size_t line);
     void Close();
-    long int Get_file_size();
+    size_t Get_file_size();
     std::string Get_file_name() const;
     ~FileHandler();
 };

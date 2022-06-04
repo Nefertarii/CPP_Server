@@ -3,7 +3,7 @@ DIR_NAME = CPPServer
 
 #list of source files (with whitespace between them)
 SRC_FILES := test.cpp test2.cpp test3.cpp test4.cpp test5.cpp \
-	test6.cpp test7.cpp test8.cpp test9.cpp test10.cpp
+	test6.cpp test7.cpp test8.cpp test9.cpp test10.cpp Taccount.cpp
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
 #Target files
@@ -39,7 +39,7 @@ NET:
 	@cd $($@) && make all $(MAKEFLAGS)
 PACKAGE:
 	@echo "$(ORANGE)ar package: all static library$(RESET)"
-	cd $(BUILD) && ar -cr lib$(DIR_NAME).a $(shell find $(shell pwd)/$(BUILD) -name '*.o')
+	@cd $(BUILD) && ar -cr lib$(DIR_NAME).a $(shell find $(shell pwd)/$(BUILD) -name '*.o')
 	@cd $(BUILD) && mv lib$(DIR_NAME).a lib/lib$(DIR_NAME).a
 	@echo "$(GREEN)All compile done.$(RESET)"
 
@@ -65,6 +65,9 @@ test9: test9.cpp
 test10: test10.cpp
 	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
 
+Taccount: Taccount.cpp $(shell pwd)/../build/lib/lib$(DIR_NAME).a
+	$(CC) -c $(FLAGS) $<
+	$(CC) $(FLAGS) -L$(shell pwd)/../build/lib -o $@ $@.o -l$(DIR_NAME)
 
 .PHONY : clean
 clean:
