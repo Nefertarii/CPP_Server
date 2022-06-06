@@ -3,11 +3,24 @@
 #include <chrono>
 #include <cstring>
 #include <iostream>
+#include <string>
 #include <sys/stat.h>
 #include <thread>
 
 using namespace Wasi;
 using namespace Wasi::Base;
+
+void FileHandler::Open_read() {
+    file_stream.flush();
+    file_stream.close();
+    file_stream.open(file_name, std::ios::binary | std::ios::in);
+}
+
+void FileHandler::Open_write() {
+    file_stream.flush();
+    file_stream.close();
+    file_stream.open(file_name, std::ios::binary | std::ios::in | std::ios::out | std::ios::ate);
+}
 
 FileHandler::FileHandler() :
     open_tries(5),
@@ -31,9 +44,9 @@ void FileHandler::Open(std::string file_name_, bool trunc) {
     }
     for (uint i = 0; i < open_tries; i++) {
         if (trunc) {
-            file_stream.open(file_name.c_str(), std::ios::trunc | std::ios::binary | std::ios::out);
+            file_stream.open(file_name.c_str());
         } else {
-            file_stream.open(file_name.c_str(), std::ios::ate | std::ios::binary | std::ios::in | std::ios::out);
+            file_stream.open(file_name.c_str());
         }
         if (file_stream) {
             if (file_events.after_open) {
@@ -45,13 +58,6 @@ void FileHandler::Open(std::string file_name_, bool trunc) {
         continue;
     }
     throw Exception("FileHandler() Failed open " + file_name + " for writing:", errno);
-}
-
-void FileHandler::Reopen(bool trunc) {
-    if (file_name.empty()) {
-        throw Exception("FileHandler::Reopen() filename is empty.\n");
-    }
-    Open(file_name, trunc);
 }
 
 void FileHandler::Create(std::string file_name_) {
@@ -67,7 +73,11 @@ void FileHandler::Flush() {
     file_stream.flush();
 }
 
-void FileHandler::Write(const std::string& buf) {
+void FileHandler::Write(const std::string& buf, size_t start) {
+    Open_write();
+    if (start != UINT_LEAST64_MAX) {
+        file_stream.seekp(start);
+    }
     if (file_stream.write(buf.c_str(), buf.size())) {
         return;
     }
@@ -75,8 +85,9 @@ void FileHandler::Write(const std::string& buf) {
 }
 
 size_t FileHandler::Read(std::string& buf, size_t start, size_t size) {
+    Open_read();
     file_stream.seekg(start);
-    char tmp[size];
+    char tmp[size + 1] = {0};
     file_stream.read(tmp, size);
     buf = std::string(tmp);
     return file_stream.gcount();
@@ -114,6 +125,19 @@ void FileHandler::Close() {
             file_events.after_close(file_name);
         }
     }
+}
+
+size_t FileHandler::Find(std::string str) {
+    std::string line;
+    size_t line_posi = 0;
+    while (std::getline(file_stream, line, '\n')) {
+        size_t n = line.find(str, 0);
+        if (n != std::string::npos) {
+            return line_posi + n;
+        }
+        line_posi += line.size() + 1;
+    }
+    return std::string::npos;
 }
 
 size_t FileHandler::Get_file_size() {

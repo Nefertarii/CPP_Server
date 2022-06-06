@@ -1,5 +1,6 @@
 #include "httpaccount.h"
 #include <Base/filehandler.h>
+
 #include <iostream>
 
 using namespace Wasi;
@@ -14,11 +15,17 @@ HttpAccount::HttpAccount(std::string account_file_name) :
     account_file.Close();
 }
 
-std::string HttpAccount::Find_id() { return ""; }
+bool HttpAccount::Find_id(std::string str, size_t beg, size_t end) {
+    return true;
+}
 
-std::string HttpAccount::Find_email() { return ""; }
+bool HttpAccount::Find_email(std::string str, size_t beg, size_t end) {
+    return true;
+}
 
-std::string HttpAccount::Find_passwd() { return ""; }
+bool HttpAccount::Find_passwd(std::string str, size_t beg, size_t end) {
+    return true;
+}
 
 bool HttpAccount::Login(std::string email, std::string password) {
     account_file.Reopen();

@@ -38,9 +38,9 @@ private:
     AccountInfo tmp_account; // process use
     Base::FileHandler account_file;
     std::string tmp_str;
-    std::string Find_id();
-    std::string Find_email();
-    std::string Find_passwd();
+    bool Find_id(std::string str, size_t begin = 0, size_t end = UINT_LEAST64_MAX);
+    bool Find_email(std::string str, size_t begin = 0, size_t end = UINT_LEAST64_MAX);
+    bool Find_passwd(std::string str, size_t begin = 0, size_t end = UINT_LEAST64_MAX);
 
 public:
     HttpAccount(std::string account_file_name);

@@ -28,18 +28,20 @@ private:
     std::fstream file_stream;
     uint open_tries;
     uint open_interval; // ms
+    inline void Open_read();
+    inline void Open_write();
 
 public:
     FileHandler();
     FileHandler(const FileEvents& filevents);
     void Open(std::string file_name_, bool trunc = false);
-    void Reopen(bool trunc = false);
     void Create(std::string file_name_);
     void Flush();
-    void Write(const std::string& buf);
+    void Write(const std::string& buf, size_t start = UINT_LEAST64_MAX);
     size_t Read(std::string& buf, size_t start = 0, size_t size = 4096);
     size_t Get_line(std::string& buf, size_t line);
     void Close();
+    size_t Find(std::string str);
     size_t Get_file_size();
     std::string Get_file_name() const;
     ~FileHandler();
