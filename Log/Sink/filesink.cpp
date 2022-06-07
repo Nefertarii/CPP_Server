@@ -8,7 +8,6 @@ using namespace Wasi::Log;
 
 void FileSink::Fileout() {
     try {
-        filehandler.Reopen();
         filehandler.Write(logs);
         suc_count += count;
         count = 0;

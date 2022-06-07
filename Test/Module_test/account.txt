@@ -6,7 +6,7 @@ N empty
 N l=10   
 N t=130  
 ---------
-I 1000001
+I 1000000
 E hncsgwc@gmail.com                    
 P 123456           
 A wasi             
@@ -14,5 +14,3 @@ N none
 N none   
 N none   
 ---------
-
-add a new line

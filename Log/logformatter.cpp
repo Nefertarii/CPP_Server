@@ -1,8 +1,6 @@
 #include "logformatter.h"
-#include <Base/Timer/clock.h>
 #include "fontcolor.h"
-
-#include <iostream>
+#include <Base/Timer/clock.h>
 
 using namespace Wasi;
 using namespace Wasi::Log;
@@ -12,14 +10,14 @@ LogFormat::LogFormat() {
     print_thread_id                         = false;
     print_source_location                   = false;
     data_format                             = "%Y-%m-%d %H:%M:%S";
-    consoles_color[LogLevel::UNINITIALIZED] = WHITE;
-    consoles_color[LogLevel::NONE]          = WHITE;
-    consoles_color[LogLevel::DBG]           = BLUE;
-    consoles_color[LogLevel::INFO]          = GREEN;
-    consoles_color[LogLevel::WARN]          = ORANGE;
-    consoles_color[LogLevel::ERR]           = BOLDORANGE;
-    consoles_color[LogLevel::CRITICAL]      = RED;
-    consoles_color[LogLevel::FATAL]         = BOLDRED;
+    consoles_color[LogLevel::UNINITIALIZED] = FONT_COLOR_WHITE;
+    consoles_color[LogLevel::NONE]          = FONT_COLOR_WHITE;
+    consoles_color[LogLevel::DBG]           = FONT_COLOR_BLUE;
+    consoles_color[LogLevel::INFO]          = FONT_COLOR_GREEN;
+    consoles_color[LogLevel::WARN]          = FONT_COLOR_ORANGE;
+    consoles_color[LogLevel::ERR]           = FONT_COLOR_BOLDORANGE;
+    consoles_color[LogLevel::CRITICAL]      = FONT_COLOR_RED;
+    consoles_color[LogLevel::FATAL]         = FONT_COLOR_BOLDRED;
 }
 
 std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
@@ -70,7 +68,7 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
     tmp_logmsg += logmsg.Get_level();
     tmp_logmsg += "]";
     if (log_format.print_color) {
-        tmp_logmsg += RESET;
+        tmp_logmsg += FONT_COLOR_RESET;
     }
     tmp_logmsg += ' ';
     // detail
