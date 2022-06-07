@@ -13,10 +13,10 @@ void login_test() {
 
 void reg_test() {
     Http::HttpAccount accounts("account.txt");
-    if (accounts.Regsiter("hncsgwc2@gmail.com", "123456", "wasi"))
+    if (accounts.Regsiter("hncsgwc4@gmail.com", "123456", "wasi"))
         cout << "ture\n";
 }
 
 int main() {
-    login_test();
+    reg_test();
 }

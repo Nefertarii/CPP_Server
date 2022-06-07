@@ -41,6 +41,7 @@ bool HttpAccount::Regsiter(std::string email, std::string password, std::string 
     if (ret == std::string::npos) {
         std::string account_info;
         // ID
+        user_id_now++;
         account_info += "I " + std::to_string(user_id_now) + "\n";
         // Email
         int space_num = 37 - email.size();
@@ -58,13 +59,14 @@ bool HttpAccount::Regsiter(std::string email, std::string password, std::string 
         account_info += Space_fill(space_num);
         account_info += "\n";
         // Empty
-        account_info += "N none   ";
-        account_info += "N none   ";
-        account_info += "N none   ";
-        account_info += "----------";
+        account_info += "N none   \n";
+        account_info += "N none   \n";
+        account_info += "N none   \n";
+        account_info += "---------\n";
         account_file.Write(account_info);
         log += " regsiter success\n";
         LOG_INFO(log);
+        account_file.Write(std::to_string(user_id_now), 2);
         return true;
     }
     log += " regsiter fail\n";
