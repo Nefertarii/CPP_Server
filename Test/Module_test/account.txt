@@ -1,40 +1,40 @@
-I 1000004
-E email l=40                           
-P passwd l=20      
-A alias l=20       
-N empty  
-N l=10   
-N t=130  
----------
-I 1000001
-E hncsgwc@gmail.com                    
-P 123456           
-A wasi             
-N none   
-N none   
-N none   
----------
-I 1000002
-E hncsgwc2@gmail.com                   
-P 123456           
-A wasi             
-N none   
-N none   
-N none   
----------
-I 1000003
-E hncsgwc3@gmail.com                   
-P 123456           
-A wasi             
-N none   
-N none   
-N none   
----------
-I 1000004
-E hncsgwc4@gmail.com                   
-P 123456           
-A wasi             
-N none   
-N none   
-N none   
----------
+I:1000004
+E:email l=40===========================
+P:passwd l=20======
+A:alias l=20=======
+N:empty==
+N:l 10===
+N:t 130==
+=========
+I:1000001
+E:hncsgwc@gmail.com====================
+P:654321===========
+A:wasi=============
+N:none===
+N:none===
+N:none===
+=========
+I:1000002
+E:hncsgwc2@gmail.com===================
+P:123456===========
+A:wasi=============
+N:none===
+N:none===
+N:none===
+=========
+I:1000003
+E:hncsgwc3@gmail.com===================
+P:123456===========
+A:wasi=============
+N:none===
+N:none===
+N:none===
+=========
+I:1000004
+E:hncsgwc4@gmail.com===================
+P:6543211==========
+A:wasi=============
+N:none===
+N:none===
+N:none===
+=========

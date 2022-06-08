@@ -44,7 +44,7 @@ public:
     HttpAccount(std::string account_file_name);
     bool Login(std::string email, std::string password);
     bool Regsiter(std::string email, std::string password, std::string username);
-    bool Change_passwd(std::string email, std::string oldpassword, std::string password);
+    bool Change_passwd(std::string email, std::string oldpassword, std::string newpassword);
     bool Change_other();
     ~HttpAccount();
 };

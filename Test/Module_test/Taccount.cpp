@@ -17,6 +17,14 @@ void reg_test() {
         cout << "ture\n";
 }
 
+void change_test() {
+    Http::HttpAccount accounts("account.txt");
+    if (accounts.Change_passwd("hncsgwc@gmail.com", "123456", "654321"))
+        cout << "ture\n";
+}
+
 int main() {
-    reg_test();
+    login_test();
+    change_test();
+    login_test();
 }
