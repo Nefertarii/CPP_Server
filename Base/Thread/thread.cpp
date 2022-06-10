@@ -1,5 +1,5 @@
-#include <Log/logging.h>
 #include "thread.h"
+#include <Log/logging.h>
 #include <cstring>
 #include <errno.h>
 #include <exception>
@@ -37,8 +37,7 @@ void Thread::Start() {
         return;
     }
     try {
-        started = true;
-        LOG_INFO("thread:" + std::to_string(tid) + " start");
+        started     = true;
         thread_core = std::thread(thread_func);
     } catch (const std::exception& e) {
         started = false;

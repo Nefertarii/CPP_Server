@@ -97,12 +97,6 @@ void HttpRequest::Parse(std::string message) {
                 post_method = PostMethod::RESET;
             } else if (path == "/register") {
                 post_method = PostMethod::REGISTER;
-            } else if (path == "/vote") {
-                post_method = PostMethod::VOTE;
-            } else if (path == "/comment") {
-                post_method = PostMethod::COMMENT;
-            } else if (path == "/content") {
-                post_method = PostMethod::CONTENT;
             } else {
                 post_method = PostMethod::UNKNOWN;
                 return;

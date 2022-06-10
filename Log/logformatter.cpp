@@ -36,15 +36,38 @@ std::string LogFormatter::process_date(long timestamp_ms, const char* format) {
         return str_time + "." + std::to_string(time_ms);
 }
 
-LogFormatter::LogFormatter() {}
+LogFormatter::LogFormatter() :
+    tmp_logmsg() {
+    log_format.print_color                             = true;
+    log_format.print_thread_id                         = false;
+    log_format.print_source_location                   = false;
+    log_format.data_format                             = "%Y-%m-%d %H:%M:%S";
+    log_format.consoles_color[LogLevel::UNINITIALIZED] = FONT_COLOR_WHITE;
+    log_format.consoles_color[LogLevel::NONE]          = FONT_COLOR_WHITE;
+    log_format.consoles_color[LogLevel::DBG]           = FONT_COLOR_BLUE;
+    log_format.consoles_color[LogLevel::INFO]          = FONT_COLOR_GREEN;
+    log_format.consoles_color[LogLevel::WARN]          = FONT_COLOR_ORANGE;
+    log_format.consoles_color[LogLevel::ERR]           = FONT_COLOR_BOLDORANGE;
+    log_format.consoles_color[LogLevel::CRITICAL]      = FONT_COLOR_RED;
+    log_format.consoles_color[LogLevel::FATAL]         = FONT_COLOR_BOLDRED;
+}
 
 std::string LogFormatter::Format(LogMsg& logmsg) {
     // [date]
     tmp_logmsg.clear();
-    tmp_logmsg = '[';
+    if (log_format.print_color) {
+        tmp_logmsg += FONT_COLOR_GREEN;
+    }
+    tmp_logmsg += '[';
     tmp_logmsg += process_date(logmsg.Get_date(), log_format.data_format);
     tmp_logmsg += "] ";
+    if (log_format.print_color) {
+        tmp_logmsg += FONT_COLOR_RESET;
+    }
     // [thread]
+    if (log_format.print_color) {
+        tmp_logmsg += FONT_COLOR_BLUE;
+    }
     if (log_format.print_thread_id) {
         if (logmsg.Get_thread_id() != 0) {
             tmp_logmsg += "[Thread:";
@@ -52,12 +75,21 @@ std::string LogFormatter::Format(LogMsg& logmsg) {
             tmp_logmsg += "] ";
         }
     }
+    if (log_format.print_color) {
+        tmp_logmsg += FONT_COLOR_RESET;
+    }
     // [file:line func()]
     if (log_format.print_source_location) {
         if (logmsg.Get_source_location().size() != 0) {
+            if (log_format.print_color) {
+                tmp_logmsg += FONT_COLOR_BLUE;
+            }
             tmp_logmsg += '[';
             tmp_logmsg += logmsg.Get_source_location();
             tmp_logmsg += "] ";
+            if (log_format.print_color) {
+                tmp_logmsg += FONT_COLOR_RESET;
+            }
         }
     }
     // [level]

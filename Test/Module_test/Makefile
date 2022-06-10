@@ -15,11 +15,15 @@ VPATH = $(BUILD)
 BASE = ../../Base
 LOG = ../../Log
 NET = ../../Net
-
 CC = g++
 HEADFILE = $(shell pwd)/../../
 LIBFILE = $(shell pwd)/$(BUILD)/lib
-FLAGS = -I $(HEADFILE) -pthread -std=c++17 -Og -Wall -g
+MODE = 
+ifeq ($(MODE), DEBUG)
+FLAGS = -I $(HEADFILE) -pthread -std=c++17 -O2 -Wall -g
+else
+FLAGS = -I $(HEADFILE) -pthread -std=c++17 -Og -DNOPRINTDEBUG -Wall -g
+endif
 MAKEFLAGS = --no-print-directory
 GREEN = "\\033[32m"
 ORANGE  = "\\033[33m"
@@ -28,8 +32,14 @@ RESET = "\\033[0m"
 export CC FLAGS MAKEFLAGS GREEN ORANGE BLUE RESET
 
 # compile all object file
-all: BASE LOG NET PACKAGE
+all: PRINT BASE LOG NET PACKAGE
 
+PRINT:
+ifeq ($(MODE), DEBUG)
+	@echo "$(GREEN)\t\t\t\tmake mode=DEBUG$(RESET)"
+else
+	@echo "$(GREEN)\t\t\t\tmake mode=NORMAL$(RESET)"
+endif
 BASE:
 	@cd $($@) && make all $(MAKEFLAGS)
 LOG:
@@ -43,11 +53,17 @@ PACKAGE:
 	@echo "$(GREEN)All compile done.$(RESET)"
 
 Tfilehandler: Tfilehandler.cpp $(shell pwd)/$(BUILD)/lib/lib$(DIR_NAME).a
-	$(CC) -c $(FLAGS) $<
-	$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
 Taccount: Taccount.cpp $(shell pwd)/$(BUILD)/lib/lib$(DIR_NAME).a
-	$(CC) -c $(FLAGS) $<
-	$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
+Thttpserver: Thttpserver.cpp $(shell pwd)/$(BUILD)/lib/lib$(DIR_NAME).a
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
 
 
 .PHONY : clean

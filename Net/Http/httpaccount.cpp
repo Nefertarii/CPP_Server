@@ -1,5 +1,5 @@
 #include "httpaccount.h"
-#include <Base/filehandler.h>
+#include "httpenum.h"
 #include <Log/logging.h>
 #include <iostream>
 
@@ -8,6 +8,10 @@ using namespace Wasi::Http;
 
 std::string HttpAccount::Space_fill(int n) {
     return std::string(n, '=');
+}
+
+HttpAccount::HttpAccount() :
+    user_id_now(0) {
 }
 
 HttpAccount::HttpAccount(std::string account_file_name) :
@@ -19,10 +23,20 @@ HttpAccount::HttpAccount(std::string account_file_name) :
     account_file.Close();
 }
 
+void HttpAccount::Select_file(std::string account_file_name) {
+    account_file.Open(account_file_name);
+    std::string tmp_str;
+    account_file.Read(tmp_str, 2, 7);
+    user_id_now = std::stoi(tmp_str);
+    account_file.Close();
+}
+
 bool HttpAccount::Login(std::string email, std::string password) {
+    if (user_id_now == 0) { return false; }
     std::string log = "email:" + email;
     size_t ret      = account_file.Find("E:" + email);
     if (ret != std::string::npos) {
+        // 40 = email line length
         size_t beg                    = 40 + ret;
         std::string contrast_password = "P:" + password + Space_fill(17 - password.size());
         if (account_file.Find(contrast_password, beg, 20) != std::string::npos) {
@@ -37,6 +51,7 @@ bool HttpAccount::Login(std::string email, std::string password) {
 }
 
 bool HttpAccount::Regsiter(std::string email, std::string password, std::string username) {
+    if (user_id_now == 0) { return false; }
     std::string log = "email:" + email;
     size_t ret      = account_file.Find("E:" + email);
     if (ret == std::string::npos) {
@@ -76,6 +91,7 @@ bool HttpAccount::Regsiter(std::string email, std::string password, std::string 
 }
 
 bool HttpAccount::Change_passwd(std::string email, std::string oldpassword, std::string newpassword) {
+    if (user_id_now == 0) { return false; }
     std::string log = "email:" + email;
     size_t ret      = account_file.Find("E:" + email);
     if (ret != std::string::npos) {
@@ -94,5 +110,27 @@ bool HttpAccount::Change_passwd(std::string email, std::string oldpassword, std:
 }
 
 bool HttpAccount::Change_other() { return false; }
+
+AccountInfo HttpAccount::Get_account(std::string id) {
+    if (user_id_now == 0) { return AccountInfo(); }
+    std::string log = "user:" + id;
+    size_t ret      = account_file.Find("I:" + id);
+    if (ret != std::string::npos) {
+        size_t beg = 70 + ret + 2;
+        account_file.Read(tmp_account.user_alias, beg, 17);
+        int length = tmp_account.user_alias.find_first_of('=');
+
+        tmp_account.user_id = id;
+        tmp_account.user_alias.assign(tmp_account.user_alias, 0, length);
+        tmp_account.user_image = user_image_dir + id + ".png";
+
+        log += " return";
+        LOG_INFO(log)
+        return tmp_account;
+    }
+    log += " not found";
+    LOG_INFO(log);
+    return AccountInfo();
+}
 
 HttpAccount::~HttpAccount() {}

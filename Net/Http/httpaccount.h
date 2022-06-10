@@ -10,10 +10,11 @@ namespace Wasi {
 namespace Http {
 
 struct AccountInfo {
-    int user_id;
+    std::string user_id;
     std::string user_email;
     std::string user_password;
     std::string user_alias;
+    std::string user_image;
     // image = dir + id
     // ...
 };
@@ -41,11 +42,14 @@ private:
     std::string Space_fill(int n);
 
 public:
+    HttpAccount();
     HttpAccount(std::string account_file_name);
+    void Select_file(std::string account_file_name);
     bool Login(std::string email, std::string password);
     bool Regsiter(std::string email, std::string password, std::string username);
     bool Change_passwd(std::string email, std::string oldpassword, std::string newpassword);
     bool Change_other();
+    AccountInfo Get_account(std::string id);
     ~HttpAccount();
 };
 

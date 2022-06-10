@@ -3,6 +3,7 @@
 #include "httpcontext.h"
 #include "httprequest.h"
 #include "httprespone.h"
+#include "httpserver.h"
 #include <Base/Timer/clock.h>
 #include <Log/logging.h>
 #include <Net/Tcp/tcpconnection.h>
@@ -11,9 +12,7 @@
 using namespace Wasi;
 using namespace Wasi::Http;
 
-// std::string Wasi::Http::local_dir = "/home/nefertarii/vscode/HTML";
-
-int Http::Parse_request(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Parse_request(const Server::TcpConnectionPtr& conn) {
     // Preaccess phase: IP control(black list)
     // ...
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
@@ -25,14 +24,14 @@ int Http::Parse_request(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-int Http::Get_process(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Get_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     // Base::FileStat* conn_file_stat            = conn->Get_file_stat();
     if (conn_request->is_file) {
         struct stat sys_file_stat;
-        conn_respone->respone_file = local_dir + conn_request->path + conn_request->target;
+        conn_respone->respone_file = html_dir + conn_request->path + conn_request->target;
         LOG_DEBUG("File:" + conn_respone->respone_file);
         if (stat(conn_respone->respone_file.c_str(), &sys_file_stat) < 0) {
             LOG_ERROR("Can't find file:" + conn_respone->respone_file);
@@ -68,24 +67,16 @@ int Http::Get_process(const Server::TcpConnectionPtr& conn) {
     }
 }
 
-int Http::Post_process(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     switch (conn_request->post_method) {
     case PostMethod::LOGIN: { // email & password
         LOG_DEBUG("post login");
-        // client->respone_body = "{\"Login\":[";
-        // if (accountctrl.Login(data[0], data[1])) {
-        //     client->respone_body += JsonSpliced({"state", "success"});
-        //     client->respone_body += ",";
-        //     client->respone_body += accountctrl.GetAccountInfo(data[0]);
-        // } else {
-        //     client->respone_body += JsonSpliced({"state", "false"});
-        // }
-        // client->respone_body += "]}";
-        // client->http_state = OK;
-        // processctrl.CreateResponeHead(client);
+        std::string email, password;
+        email = conn_request->body.find_first_of('&');
+        // account.Login();
         break;
     }
     case PostMethod::RESET: { // email & oldpassword & password
@@ -94,18 +85,6 @@ int Http::Post_process(const Server::TcpConnectionPtr& conn) {
     }
     case PostMethod::REGISTER: { // email & password & username
         LOG_DEBUG("post register");
-        break;
-    }
-    case PostMethod::VOTE: {
-        LOG_DEBUG("post vote");
-        break;
-    }
-    case PostMethod::COMMENT: {
-        LOG_DEBUG("post comment");
-        break;
-    }
-    case PostMethod::CONTENT: {
-        LOG_DEBUG("post content");
         break;
     }
     default: {
@@ -119,7 +98,7 @@ int Http::Post_process(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-int Http::Process_request(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Process_request(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -145,7 +124,7 @@ int Http::Process_request(const Server::TcpConnectionPtr& conn) {
     return -1;
 }
 
-int Http::Prepare_respone(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Prepare_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -275,14 +254,14 @@ int Http::Prepare_respone(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-int Http::Send_respone(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Send_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     conn->Send(conn_respone->prepare_respone_head);
     return 0;
 }
 
-int Http::Set_404_page(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Set_404_page(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -299,7 +278,7 @@ int Http::Set_404_page(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-int Http::Send_bad_respone(const Server::TcpConnectionPtr& conn) {
+int Http::HttpProcess::Send_bad_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -318,49 +297,44 @@ int Http::Send_bad_respone(const Server::TcpConnectionPtr& conn) {
         conn_respone->prepare_respone_head += Time::Clock::To_string_sec(conn_respone->respone_head.date, "%a, %d %b %G %T GMT\r\n");
         conn_respone->prepare_respone_head += "\r\n";
 
-        LOG_INFO("Post process error, Send bad respone");
+        LOG_INFO("Post processed error, Send bad respone");
     }
     Send_respone(conn);
     return 0;
 }
 
-void Http::Request_process(const Server::TcpConnectionPtr& conn) {
+void Http::HttpProcess::Request_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     std::string msg                           = conn->Get_peer_address().To_string_ip_port();
     // parse_request
     if (Parse_request(conn) < 0) {
-        msg += " request phase: parse request fail";
-        // LOG_DEBUG("Path: " + conn_request->path);
-        // LOG_DEBUG("Target: " + conn_request->target);
-        // LOG_DEBUG("Http version: " + conn_request->version);
-        // LOG_DEBUG("Request method: " + conn_request->method);
-        // LOG_DEBUG("Request post method: " + conn_request->post_method);
+        msg += " Request phase: parse request fail";
         LOG_ERROR(msg);
         Send_bad_respone(conn);
         return;
     }
     // process_request
     if (Process_request(conn) < 0) {
-        msg += " request phase: process request fail";
+        msg += " Request phase fail: processed request";
         LOG_ERROR(msg);
         Send_bad_respone(conn);
         return;
     }
     // prepare_respone
     if (Prepare_respone(conn) < 0) {
-        msg += " request phase: prepare respone fail";
+        msg += " Request phase fail: prepare respone";
         LOG_ERROR(msg);
         Send_bad_respone(conn);
         return;
     }
     // send_respone
     if (Send_respone(conn) < 0) {
-        msg += " request phase: send respone fail";
+        msg += " Request phase fail: send respone";
         LOG_ERROR(msg);
         return;
     }
-    msg += " request process success.";
+    msg += " Request processed successfully.";
     LOG_INFO(msg);
 }

@@ -1,6 +1,7 @@
 # C++ Server
-一个适配Web页面的小型网络库  
-参照muduo网络库，在使用C++17标准库的条件下重新制作了一遍    
+一个适配Web页面的小型WebServer  
+其核心参照muduo网络库，但是在使用C++17标准的情况下重新制作了一遍    
+项目中的命名和操作比较简单易懂，方便阅读和自行修改   
 
 [用于测试的服务器网站](http://webwasi.com/)      
 [更新日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)  
@@ -44,11 +45,13 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 ## Usage  
 在主文件夹下使用```make```进行编译   
 使用```./Wasi_Server```即可运行  
-若需修改参数可以在Net文件夹下的setting.conf文件中进行设置  
-项目内还包含有Test文件夹包含了其中类的一些操作示例，在Test文件夹下使用```make```即可   
-如果需要包含至其他项目，可以考虑包含头文件并使用build/lib 目录下的libCPPServer.a静态库  
-*如使用默认设置需要sudo权限以绑定端口   
-*在使用make时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化  
+若需修改参数可以在Net文件夹下的httpenum.h文件中进行设置  
+(需要更改本地html目录地址)   
+项目内还包含有Test文件夹包含了其中类的一些操作示例，在Test文件夹下使用```make```后   
+再使用```make (file name)```编译不同的测试程序    
+如果需要包含至其他项目，可以考虑包含相应头文件并使用 build/lib 目录下的 libCPPServer.a 静态库  
+*如使用0～1024端口需要sudo权限以绑定端口   
+*在使用时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化  
 
 ## Extra sections  
 [EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Base/Poll/eventloop.md)  
@@ -58,8 +61,8 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 用于学习的一个简易C++ TCP服务器  
 在学习完相关知识后想将其整合，于是想到制作一个由多进程+多线程的服务器程序  
 在选择后，对照muduo一步步进行修改完善,在未使用其包含的boost三方库情况下用标准库完成了这个项目  
-配套有日志库，网络库，一个线程池及一些容器结构 
-后续也会不断更新  
+配套有日志库，网络库，一个线程池及一些容器结构   
+后续会不断更新  
 
 ## Security  
 目前并未进行完整的项目测试，如果发现问题欢迎提交问题   
