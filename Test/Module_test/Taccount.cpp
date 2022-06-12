@@ -6,9 +6,8 @@ using namespace Wasi;
 using namespace std;
 
 void login_test() {
-    Http::HttpAccount accounts("account.txt");
-    if (accounts.Login("hncsgwc@gmail.com", "123456") == true)
-        cout << "true\n";
+    Http::HttpAccount accounts("/home/nefertarii/vscode/CPP_Server/Test/Userinfo/account.txt");
+    std::cout << "get id:" << accounts.Login("hncsgwc@gmail.com", "654321") << "\n";
 }
 
 void reg_test() {
@@ -24,7 +23,5 @@ void change_test() {
 }
 
 int main() {
-    login_test();
-    change_test();
     login_test();
 }

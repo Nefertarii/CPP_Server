@@ -16,7 +16,7 @@ namespace Http {
 
 class HttpProcess {
 public:
-    static HttpAccount account;
+    inline static HttpAccount account;
     static int Parse_request(const Server::TcpConnectionPtr& conn);
     static int Get_process(const Server::TcpConnectionPtr& conn);
     static int Post_process(const Server::TcpConnectionPtr& conn);

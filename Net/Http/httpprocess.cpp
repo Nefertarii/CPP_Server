@@ -10,7 +10,6 @@
 #include <sys/stat.h>
 
 using namespace Wasi;
-using namespace Wasi::Http;
 
 int Http::HttpProcess::Parse_request(const Server::TcpConnectionPtr& conn) {
     // Preaccess phase: IP control(black list)
@@ -74,10 +73,23 @@ int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     switch (conn_request->post_method) {
     case PostMethod::LOGIN: { // email & password
         LOG_DEBUG("post login");
-        std::string email, password;
-        email = conn_request->body.find_first_of('&');
-        // account.Login();
-        break;
+        size_t body_length = conn_request->body.size();
+        if (body_length <= 4 || body_length > 54) { return false; }
+        size_t middle = conn_request->body.find_first_of('&');
+        if (middle == std::string::npos) { return -1; }
+        std::string email(conn_request->body, 0, middle);
+        std::string password(conn_request->body, middle + 1, body_length);
+        std::string user_id = account.Login(email, password);
+        if (user_id.empty()) { return -1; }
+        AccountInfo user_info      = account.Get_account(user_id);
+        conn_respone->respone_body = "{\"state\":\"success\",";
+        conn_respone->respone_body += "\"AccountImage\":\"";
+        conn_respone->respone_body += user_info.user_image;
+        conn_respone->respone_body += "\",";
+        conn_respone->respone_body += "\"AccountAlias\":\"";
+        conn_respone->respone_body += user_info.user_alias;
+        conn_respone->respone_body += "\"}";
+        // add suceess json to body
     }
     case PostMethod::RESET: { // email & oldpassword & password
         LOG_DEBUG("post reset");
@@ -85,6 +97,7 @@ int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     }
     case PostMethod::REGISTER: { // email & password & username
         LOG_DEBUG("post register");
+        // add suceess json
         break;
     }
     default: {
@@ -92,9 +105,9 @@ int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
         return -1;
     }
     }
-    // fill HttpRequest body
     // fill HttpRequest
-    conn_respone->respone_head.date = Time::Clock::Nowtime_sec();
+    conn_respone->respone_head.code_num = HttpCode::CODE200;
+    conn_respone->respone_head.date     = Time::Clock::Nowtime_sec();
     return 0;
 }
 

@@ -31,8 +31,8 @@ void HttpAccount::Select_file(std::string account_file_name) {
     account_file.Close();
 }
 
-bool HttpAccount::Login(std::string email, std::string password) {
-    if (user_id_now == 0) { return false; }
+std::string HttpAccount::Login(std::string email, std::string password) {
+    if (user_id_now == 0) { return ""; }
     std::string log = "email:" + email;
     size_t ret      = account_file.Find("E:" + email);
     if (ret != std::string::npos) {
@@ -42,12 +42,14 @@ bool HttpAccount::Login(std::string email, std::string password) {
         if (account_file.Find(contrast_password, beg, 20) != std::string::npos) {
             log += " login success";
             LOG_INFO(log);
-            return true;
+            std::string user_id;
+            account_file.Read(user_id, ret - 8, 7);
+            return user_id;
         }
     }
     log += " try login fail";
     LOG_INFO(log)
-    return false;
+    return "";
 }
 
 bool HttpAccount::Regsiter(std::string email, std::string password, std::string username) {
@@ -122,9 +124,9 @@ AccountInfo HttpAccount::Get_account(std::string id) {
 
         tmp_account.user_id = id;
         tmp_account.user_alias.assign(tmp_account.user_alias, 0, length);
-        tmp_account.user_image = user_image_dir + id + ".png";
+        tmp_account.user_image = user_image_dir + "/" + id + ".png";
 
-        log += " return";
+        log += " found";
         LOG_INFO(log)
         return tmp_account;
     }

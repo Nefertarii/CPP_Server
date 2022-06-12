@@ -1,0 +1,22 @@
+@import "Color.css";
+
+Footer {
+    margin: auto;
+    width: 100%;
+    height: 5rem;
+    color: var(--font); }
+.Github-link {
+    height: auto;
+    width: 100%;
+    text-align: center;
+    color: var(--font-light);
+    margin-top: 1rem; }
+.Github-svg {
+    position: relative;
+    top: 2px;
+    fill: var(--white) }   
+.CN-bei-an {
+    height: auto;
+    width: 100%;
+    text-align: center;
+    color: var(--font-light); }
