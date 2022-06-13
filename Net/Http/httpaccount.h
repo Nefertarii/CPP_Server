@@ -50,7 +50,9 @@ public:
     bool Regsiter(std::string email, std::string password, std::string username);
     bool Change_passwd(std::string email, std::string oldpassword, std::string newpassword);
     bool Change_other();
-    AccountInfo Get_account(std::string id);
+    bool Find_account_id(std::string id);
+    bool Find_account_email(std::string email);
+    AccountInfo Get_account_by_id(std::string id);
     ~HttpAccount();
 };
 

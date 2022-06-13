@@ -10,8 +10,11 @@
 #include <sys/stat.h>
 
 using namespace Wasi;
+using namespace Http;
 
-int Http::HttpProcess::Parse_request(const Server::TcpConnectionPtr& conn) {
+std::shared_ptr<HttpAccount> HttpProcess::account = std::make_shared<HttpAccount>(account_dir);
+
+int HttpProcess::Parse_request(const Server::TcpConnectionPtr& conn) {
     // Preaccess phase: IP control(black list)
     // ...
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
@@ -23,7 +26,7 @@ int Http::HttpProcess::Parse_request(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-int Http::HttpProcess::Get_process(const Server::TcpConnectionPtr& conn) {
+int HttpProcess::Get_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -66,7 +69,7 @@ int Http::HttpProcess::Get_process(const Server::TcpConnectionPtr& conn) {
     }
 }
 
-int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
+int HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -74,14 +77,14 @@ int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     case PostMethod::LOGIN: { // email & password
         LOG_DEBUG("post login");
         size_t body_length = conn_request->body.size();
-        if (body_length <= 4 || body_length > 54) { return false; }
+        if (body_length <= 4 || body_length > 54) { return -1; }
         size_t middle = conn_request->body.find_first_of('&');
         if (middle == std::string::npos) { return -1; }
         std::string email(conn_request->body, 0, middle);
         std::string password(conn_request->body, middle + 1, body_length);
-        std::string user_id = account.Login(email, password);
+        std::string user_id = account->Login(email, password);
         if (user_id.empty()) { return -1; }
-        AccountInfo user_info      = account.Get_account(user_id);
+        AccountInfo user_info      = account->Get_account_by_id(user_id);
         conn_respone->respone_body = "{\"state\":\"success\",";
         conn_respone->respone_body += "\"AccountImage\":\"";
         conn_respone->respone_body += user_info.user_image;
@@ -89,6 +92,8 @@ int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
         conn_respone->respone_body += "\"AccountAlias\":\"";
         conn_respone->respone_body += user_info.user_alias;
         conn_respone->respone_body += "\"}";
+        conn_respone->respone_head.content_type = FileType::JSON;
+        break;
         // add suceess json to body
     }
     case PostMethod::RESET: { // email & oldpassword & password
@@ -97,8 +102,20 @@ int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     }
     case PostMethod::REGISTER: { // email & password & username
         LOG_DEBUG("post register");
-        // add suceess json
+        // parse body
+        // length judge
+        // find email
+        // regsiter
         break;
+    }
+    case PostMethod::ACCOUNTFIND: {
+        LOG_DEBUG("post find account");
+        if (account->Find_account_email(conn_request->body) == false) {
+            conn_respone->respone_body              = "{\"state\":\"success\"}";
+            conn_respone->respone_head.content_type = FileType::JSON;
+            break;
+        }
+        return -1;
     }
     default: {
         LOG_DEBUG("post unknown");
@@ -106,12 +123,13 @@ int Http::HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     }
     }
     // fill HttpRequest
-    conn_respone->respone_head.code_num = HttpCode::CODE200;
-    conn_respone->respone_head.date     = Time::Clock::Nowtime_sec();
+    conn_respone->respone_head.code_num       = HttpCode::CODE200;
+    conn_respone->respone_head.content_length = conn_respone->respone_body.size();
+    conn_respone->respone_head.date           = Time::Clock::Nowtime_sec();
     return 0;
 }
 
-int Http::HttpProcess::Process_request(const Server::TcpConnectionPtr& conn) {
+int HttpProcess::Process_request(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -137,7 +155,7 @@ int Http::HttpProcess::Process_request(const Server::TcpConnectionPtr& conn) {
     return -1;
 }
 
-int Http::HttpProcess::Prepare_respone(const Server::TcpConnectionPtr& conn) {
+int HttpProcess::Prepare_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -267,14 +285,14 @@ int Http::HttpProcess::Prepare_respone(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-int Http::HttpProcess::Send_respone(const Server::TcpConnectionPtr& conn) {
+int HttpProcess::Send_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
     conn->Send(conn_respone->prepare_respone_head);
     return 0;
 }
 
-int Http::HttpProcess::Set_404_page(const Server::TcpConnectionPtr& conn) {
+int HttpProcess::Set_404_page(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -291,7 +309,7 @@ int Http::HttpProcess::Set_404_page(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-int Http::HttpProcess::Send_bad_respone(const Server::TcpConnectionPtr& conn) {
+int HttpProcess::Send_bad_respone(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();
@@ -316,7 +334,7 @@ int Http::HttpProcess::Send_bad_respone(const Server::TcpConnectionPtr& conn) {
     return 0;
 }
 
-void Http::HttpProcess::Request_process(const Server::TcpConnectionPtr& conn) {
+void HttpProcess::Request_process(const Server::TcpConnectionPtr& conn) {
     HttpContext conn_context                  = std::any_cast<HttpContext>(conn->Get_context());
     std::shared_ptr<HttpRequest> conn_request = conn_context.Get_request();
     std::shared_ptr<HttpRespone> conn_respone = conn_context.Get_respone();

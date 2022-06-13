@@ -113,7 +113,31 @@ bool HttpAccount::Change_passwd(std::string email, std::string oldpassword, std:
 
 bool HttpAccount::Change_other() { return false; }
 
-AccountInfo HttpAccount::Get_account(std::string id) {
+bool HttpAccount::Find_account_id(std::string id) {
+    std::string log = "user:" + id;
+    if (account_file.Find("I:" + id) != std::string::npos) {
+        log += " found";
+        LOG_DEBUG(log);
+        return true;
+    }
+    log += " not found";
+    LOG_DEBUG(log);
+    return false;
+}
+
+bool HttpAccount::Find_account_email(std::string email) {
+    std::string log = "email:" + email;
+    if (account_file.Find("E:" + email) != std::string::npos) {
+        log += " found";
+        LOG_DEBUG(log);
+        return true;
+    }
+    log += " not found";
+    LOG_DEBUG(log);
+    return false;
+}
+
+AccountInfo HttpAccount::Get_account_by_id(std::string id) {
     if (user_id_now == 0) { return AccountInfo(); }
     std::string log = "user:" + id;
     size_t ret      = account_file.Find("I:" + id);

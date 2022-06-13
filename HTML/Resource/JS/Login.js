@@ -15,41 +15,46 @@ console.log(Logindata);
 if (Logindata == null) {
     ;
 } else {
-    if (Logindata.Login[0].state === "success") {
+    if (Logindata.state === "success") {
         login_fail.style.display = "none";
         login_success.style.display = "block";
-        avatar.style.backgroundImage = "url(../" + Logindata.Login[1].AccountImage + ")";
-        login_success_username.innerHTML = Logindata.Login[1].AccountAlias;
+        avatar.style.backgroundImage = "url(" + Logindata.AccountImage + ")";
+        login_success_username.innerHTML = Logindata.AccountAlias;
     }  
 }
 
+function change_login_button() { 
+    login_button.className = "submit-continue";
+} 
+
 login_button.onclick = function () {
-    login_button.className = "submit-wait";
 	let login_name = document.getElementById("username").value;
-	let login_passwd = document.getElementById("password").value;
+    let login_passwd = document.getElementById("password").value;
+    login_button.className = "submit-wait";
     var tmp = login_name + "&" + login_passwd;
     login.open("POST", "login", true);
-    console.log(tmp);
-	login.send(tmp);
+    login.send(tmp);
+    
+    setTimeout(change_login_button, 7000);
 }
 var returnObj;
 login.onreadystatechange = function () {
+    console.log("call onreadystatechange");
+    console.log(login.readyState);
     if (login.readyState == 4 && login.status == 200) {
+        
         returnObj = eval("(" + login.responseText + ")");
-		if (returnObj.Login[0].state === "success") {
+		if (returnObj.state === "success") {
 			login_fail.style.display = "none";
 			login_success.style.display = "block";
-			avatar.style.backgroundImage = "url(" + returnObj.Login[1].AccountImage + ")";
-            login_success_username.innerHTML = returnObj.Login[1].AccountAlias;
+			avatar.style.backgroundImage = "url(" + returnObj.AccountImage + ")";
+            login_success_username.innerHTML = returnObj.AccountAlias;
             localStorage;
             str_login_data = JSON.stringify(returnObj);
-            localStorage.setItem("Logindata",str_login_data)
-        } else {
-            window.alert("登录失败 密码或邮箱错误");
-            valuesubmit.className = "submit-continue";
-        }
-	} else {
-        valuesubmit.className = "submit-continue";
+            localStorage.setItem("Logindata", str_login_data)
+            return;
+        } 
+        window.alert("登陆失败，邮箱或密码错误");
     }
 };
 

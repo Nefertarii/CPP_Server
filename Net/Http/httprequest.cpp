@@ -83,26 +83,28 @@ void HttpRequest::Parse(std::string message) {
     }
 
     if (tmp_posi != std::string::npos) {
-        if (method == Method::GET) { // http path
-            tmp_posi = path.find_last_of('/');
+        tmp_posi = path.find_last_of('/');
+        if (method == Method::GET) {             // http path
             if (tmp_posi != std::string::npos) { // get path & target
                 tmp_posi += 1;
                 target = path.substr(tmp_posi, path.size());
                 path.assign(path.begin(), path.begin() + tmp_posi);
             }
         } else if (method == Method::POST) {
+            path = path.substr(tmp_posi, path.size() - tmp_posi);
             if (path == "/login") {
                 post_method = PostMethod::LOGIN;
             } else if (path == "/reset") {
                 post_method = PostMethod::RESET;
             } else if (path == "/register") {
                 post_method = PostMethod::REGISTER;
+            } else if (path == "/regsiter_email") {
+                post_method = PostMethod::ACCOUNTFIND;
             } else {
                 post_method = PostMethod::UNKNOWN;
                 return;
             }
-            // else if (path == "/readcount") {
-            //     post_method = PostMethod::;
+
             // } else if (path == "/verification") {
             //     post_method = PostMethod::;
             // }

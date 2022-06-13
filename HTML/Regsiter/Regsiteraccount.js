@@ -56,12 +56,12 @@ emailcontinue.onclick = function () {
     var register = new XMLHttpRequest();
 	let register_email = emailInput.value;
 	var info = register_email;
-	register.open("POST", "register", true);
+	register.open("POST", "regsiter_email", true);
     register.send(info);
     setTimeout(function () {
         if (register.readyState == 4 && register.status == 200) {
             returnObj = eval("(" + register.responseText + ")");
-            if (returnObj.RegsiterFind[0].state === "success") {
+            if (returnObj.state === "success") {
                 emailarrow.innerHTML = "✓";
                 emailarrow.style.color = "var(--bg-green)";
                 inputemail = true;
