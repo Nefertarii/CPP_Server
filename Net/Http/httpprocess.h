@@ -5,6 +5,7 @@
 #include "httpenum.h"
 #include <memory>
 #include <string>
+#include <regex>
 
 namespace Wasi {
 namespace Server {
@@ -16,7 +17,10 @@ namespace Http {
 
 class HttpProcess {
 private:
-    static std::shared_ptr<HttpAccount> account;
+    static HttpAccount account;
+    static std::regex email_pattern;
+    static std::regex passwd_pattern;
+    static std::regex name_pattern;
 
 public:
     static int Parse_request(const Server::TcpConnectionPtr& conn);

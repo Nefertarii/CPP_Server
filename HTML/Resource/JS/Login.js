@@ -39,10 +39,7 @@ login_button.onclick = function () {
 }
 var returnObj;
 login.onreadystatechange = function () {
-    console.log("call onreadystatechange");
-    console.log(login.readyState);
-    if (login.readyState == 4 && login.status == 200) {
-        
+    if (login.readyState == 4 && login.status == 200) { 
         returnObj = eval("(" + login.responseText + ")");
 		if (returnObj.state === "success") {
 			login_fail.style.display = "none";

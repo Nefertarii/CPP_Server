@@ -127,10 +127,12 @@ bool HttpAccount::Find_account_id(std::string id) {
 
 bool HttpAccount::Find_account_email(std::string email) {
     std::string log = "email:" + email;
-    if (account_file.Find("E:" + email) != std::string::npos) {
-        log += " found";
-        LOG_DEBUG(log);
-        return true;
+    if (email.length() < 17 && email.length() > 4) {
+        if (account_file.Find("E:" + email) != std::string::npos) {
+            log += " found";
+            LOG_DEBUG(log);
+            return true;
+        }
     }
     log += " not found";
     LOG_DEBUG(log);

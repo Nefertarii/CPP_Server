@@ -1,14 +1,3 @@
-function randomNum(min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
-}
-//生成随机颜色RGB分量
-function randomColor(min, max) {
-    var _r = randomNum(min, max);
-    var _g = randomNum(min, max);
-    var _b = randomNum(min, max);
-    return "rgb(" + _r + "," + _g + "," + _b + ")";
-}
-
 var board = document.getElementsByClassName("card-list")[0];
 board.style.height = "120px";
 
@@ -21,22 +10,26 @@ var passwdone = "false";
 var usernamedone = "false";
 var verifydone = "false";
 var promptLabel = document.getElementsByClassName("badinput-prompt")[0];
-var pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+var email_Pattern = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+var passwd_Pattern = /^[a-zA-Z0-9_-]{6,16}$/;
+var name_Pattern = /^[a-zA-Z0-9_-]{4,16}$/;
+var register = new XMLHttpRequest();
 //✕ ✓ →
+
 var emailInput = document.getElementsByClassName("input-email")[0];
 var emailarrow = document.getElementById("arrow-email");
-var emailcontinue = document.getElementById("continue-email");
+var emailcontinuebutton = document.getElementById("continue-email");
 emailInput.addEventListener("keydown", EmailDetect);
 function EmailDetect() {
     setTimeout(inline, 500);
-    function inline() { 
+    function inline() {
         let emailvaule = emailInput.value;
-        if (pattern.test(emailvaule) == true) {
+        if (email_Pattern.test(emailvaule) === true) {
             emailarrow.innerHTML = "✓";
             emailarrow.style.color = "var(--bg-green)";
             promptLabel.style.visibility = "hidden";
             inputemail = true;
-            emailcontinue.className = "continue-success";
+            emailcontinuebutton.className = "continue-success";
         } else if (emailvaule.length == 0) {
             emailarrow.innerHTML = "→";
             emailarrow.style.color = "var(--bg-pink)";
@@ -52,20 +45,25 @@ function EmailDetect() {
         Alldetect();
     }
 }
-emailcontinue.onclick = function () {
+emailcontinuebutton.onclick = function () {
+    emailcontinuebutton.className = "continue-wait"
+    setTimeout(server_timeout, 5000);
+    function server_timeout() {
+        emailcontinuebutton.className = "continue";
+    }
     var register = new XMLHttpRequest();
-	let register_email = emailInput.value;
-	var info = register_email;
-	register.open("POST", "regsiter_email", true);
+    let register_email = emailInput.value;
+    var info = register_email;
+    register.open("POST", "regsiter_email", true);
     register.send(info);
     setTimeout(function () {
         if (register.readyState == 4 && register.status == 200) {
-            returnObj = eval("(" + register.responseText + ")");
+            var returnObj = eval("(" + register.responseText + ")");
             if (returnObj.state === "success") {
                 emailarrow.innerHTML = "✓";
                 emailarrow.style.color = "var(--bg-green)";
                 inputemail = true;
-                emailcontinue.style.visibility = "hidden";
+                emailcontinuebutton.style.visibility = "hidden";
                 board.style.height = "220px";
                 emaildone = "true";
             } else {
@@ -73,7 +71,7 @@ emailcontinue.onclick = function () {
                 emailarrow.style.color = "var(--bg-red)";
                 promptLabel.style.visibility = "visible";
                 promptLabel.innerHTML = "邮箱已被使用";
-                emailcontinue.className = "continue";
+                emailcontinuebutton.className = "continue";
                 inputemail = false;
             }
         }
@@ -86,9 +84,9 @@ var passwdcontinue = document.getElementById("continue-password");
 passwdInput.addEventListener("keydown", PasswdDetect);
 function PasswdDetect() {
     setTimeout(inline, 500);
-    function inline() { 
+    function inline() {
         let passwdvaule = passwdInput.value;
-        if (passwdvaule.length >= 8) {
+        if (passwd_Pattern.test(passwdvaule) === true) {
             passwdarrow.innerHTML = "✓";
             passwdarrow.style.color = "var(--bg-green)";
             promptLabel.style.visibility = "hidden";
@@ -105,13 +103,13 @@ function PasswdDetect() {
             passwdarrow.innerHTML = "✕";
             passwdarrow.style.color = "var(--bg-red)";
             promptLabel.style.visibility = "visible";
-            promptLabel.innerHTML = "密码不合法(需要至少8个字符)";
+            promptLabel.innerHTML = "密码不合法(需要6~16个字符，且不可用除'_'之外的特殊符号)";
             inputpasswd = false;
         }
         Alldetect();
     }
 }
-passwdcontinue.onclick = function(){
+passwdcontinue.onclick = function () {
     if (passwdone === "false") {
         passwdcontinue.style.visibility = "hidden";
         board.style.height = "320px";
@@ -125,9 +123,9 @@ var usernamecontinue = document.getElementById("continue-username");
 usernameInput.addEventListener("keydown", UsernameDetect);
 function UsernameDetect() {
     setTimeout(inline, 500);
-    function inline() { 
+    function inline() {
         let usernamevaule = usernameInput.value;
-        if (usernamevaule.length >= 4) {
+        if (name_Pattern.test(usernamevaule) === true) {
             usernamearrow.innerHTML = "✓";
             usernamearrow.style.color = "var(--bg-green)";
             promptLabel.style.visibility = "hidden";
@@ -144,13 +142,13 @@ function UsernameDetect() {
             usernamearrow.innerHTML = "✕";
             usernamearrow.style.color = "var(--bg-red)";
             promptLabel.style.visibility = "visible";
-            promptLabel.innerHTML = "用户名不合法(至少需要4个字符)";
+            promptLabel.innerHTML = "用户名不合法(需要4~16个字符，且不可用除'_'之外的特殊符号)";
             inputusername = false;
         }
         Alldetect();
     }
 }
-usernamecontinue.onclick = function(){
+usernamecontinue.onclick = function () {
     if (usernamedone === "false") {
         usernamecontinue.style.visibility = "hidden";
         board.style.height = "500px";
@@ -159,9 +157,21 @@ usernamecontinue.onclick = function(){
 }
 
 var verifycode;
-document.getElementsByClassName("div-verifypic")[0].onclick = function(){
+document.getElementsByClassName("div-verifypic")[0].onclick = function () {
     verifycode = drawPic();
 }
+
+function randomNum(min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+}//生成随机颜色RGB分量
+
+function randomColor(min, max) {
+    var _r = randomNum(min, max);
+    var _g = randomNum(min, max);
+    var _b = randomNum(min, max);
+    return "rgb(" + _r + "," + _g + "," + _b + ")";
+}
+
 function drawPic() {
     //获取canvas
     var verifycodepic = document.getElementById("canvas-verify");
@@ -203,6 +213,7 @@ function drawPic() {
     }
     return picTxt; //返回随机数字符串
 }
+
 verifycode = drawPic();
 
 var verifyInput = document.getElementsByClassName("input-verifycode")[0];
@@ -218,7 +229,7 @@ function VerifyDetect() {
             verifyarrow.style.color = "var(--bg-green)";
             promptLabel.style.visibility = "hidden";
             inputverify = true;
-        } else if(verifyvaule.length == 0) {
+        } else if (verifyvaule.length == 0) {
             verifyarrow.innerHTML = "→";
             verifyarrow.style.color = "var(--bg-pink)";
             promptLabel.style.visibility = "hidden";
@@ -234,31 +245,40 @@ function VerifyDetect() {
     }
 }
 function Alldetect() {
-    if (inputemail == true && inputpasswd == true && inputusername == true && inputverify == true) {
+    if (inputemail == true &&
+        inputpasswd == true &&
+        inputusername == true &&
+        inputverify == true) {
         valuesubmit.className = "continue-success";
     } else {
         valuesubmit.className = "continue";
     }
 }
 
-var register = new XMLHttpRequest();
+
 valuesubmit.onclick = function () {
-	let register_email = emailInput.value;
+    let register_email = emailInput.value;
     let register_passwd = passwdInput.value;
     let register_name = usernameInput.value;
     valuesubmit.className = "continue";
-	var info = register_email + "&" + register_passwd + "&" + register_name;
-	register.open("POST", "register", true);
+    var info = register_email + "&" + register_passwd + "&" + register_name;
+    register.open("POST", "register", true);
     register.send(info);
+
+}
+
+register.onreadystatechange = function () {
     if (register.readyState == 4 && register.status == 200) {
-        returnObj = eval("(" + register.responseText + ")");
-        if (returnObj.Regsiter[0].state === "success") {
-            window.alert("注册成功 3S后返回主页");
-            setTimeout(function (){
-                window.location.href = "http://159.75.51.91:8000/";
+        var returnObj = eval("(" + register.responseText + ")");
+        if (returnObj.state === "success") {
+            window.alert("注册成功 稍后将返回主页");
+            setTimeout(function () {
+                window.location.href = "http://webwasi.com/";
             }, 2000);
-        } else {
-            window.alert("注册失败 账号信息输入非法");
+            return;
         }
+        window.alert("注册失败 账号信息输入非法");
+        verifycode = drawPic();
     }
 }
+

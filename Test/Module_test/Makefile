@@ -36,9 +36,9 @@ all: PRINT BASE LOG NET PACKAGE
 
 PRINT:
 ifeq ($(MODE), DEBUG)
-	@echo "$(GREEN)\t\t\t\tmake mode=DEBUG$(RESET)"
+	@echo "$(GREEN)\t\t\t\tMAKE MODE=DEBUG$(RESET)"
 else
-	@echo "$(GREEN)\t\t\t\tmake mode=NORMAL$(RESET)"
+	@echo "$(GREEN)\t\t\t\tMAKE MODE=NORMAL$(RESET)"
 endif
 BASE:
 	@cd $($@) && make all $(MAKEFLAGS)

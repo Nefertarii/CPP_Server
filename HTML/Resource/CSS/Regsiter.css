@@ -1,59 +1,73 @@
-@import "../Resource/CSS/Color.css";
+@import "Color.css";
 
-a:link,a:visited {
-	color: var(--font-light);
-	text-decoration: none; }
-a:hover,a:active {
-	color: var(--white);
-	text-decoration: none; }
+a:link,
+a:visited {
+    color: var(--font-light);
+    text-decoration: none;
+}
 
-input, input:hover, input:focus {
+a:hover,
+a:active {
+    color: var(--white);
+    text-decoration: none;
+}
+
+input,
+input:hover,
+input:focus {
     background-color: var(--bg-black-light);
     border: 0;
     outline: 0;
     color: var(--white);
     caret-color: var(--white);
-    padding: 4px 10px; }
+    padding: 4px 10px;
+}
 
 Main {
     position: relative;
     width: 100%;
     height: 75%;
-    margin: auto; }
+    margin: auto;
+}
 
 .card-list {
     overflow: hidden;
     position: relative;
     z-index: 100;
     text-align: center;
-	margin: auto;
+    margin: auto;
     padding: 1rem;
     min-width: 550px;
-	width: 60%;
+    width: 60%;
     max-width: 800px;
     height: 0;
     max-height: 1200px;
     background-color: var(--bg-black-light);
     box-shadow: var(--boxshadow-blue) 0px 0px 5px 2px;
-	border-radius: 0.25rem;
-	color: var(--font-green);
-    transition: height 1s; }
+    border-radius: 0.25rem;
+    color: var(--font-green);
+    transition: height 1s;
+}
+
 .card {
     text-align: left;
-    padding: 2rem; }
+    padding: 2rem;
+}
+
 .badinput-prompt {
     font-size: large;
     color: var(--font-dark);
     z-index: 100;
     text-align: left;
-	margin: auto;
+    margin: auto;
     margin-top: 20px;
     min-width: 550px;
-	width: 60%;
+    width: 60%;
     max-width: 800px;
     height: 0%;
     max-height: 90%;
-    transition: height 1s; }
+    transition: height 1s;
+}
 
 
 .arrow {
@@ -61,7 +75,9 @@ Main {
     padding-top: 4px;
     color: var(--bg-pink);
     height: 24px;
-    width: 24px; }
+    width: 24px;
+}
+
 .continue {
     height: 32px;
     padding: 5px 12px;
@@ -69,8 +85,10 @@ Main {
     color: var(--font-dark);
     border: var(--font-dark) solid 1px;
     border-radius: 6px;
-    pointer-events:none;
-    outline: none; }
+    pointer-events: none;
+    outline: none;
+}
+
 .continue-success {
     height: 32px;
     padding: 5px 12px;
@@ -78,70 +96,109 @@ Main {
     color: var(--bg-green);
     border: var(--bg-green) solid 1px;
     border-radius: 6px;
-    outline: none; }
-.continue-success:hover, .continue-success:focus {
+    outline: none;
+}
+
+.continue-success:hover,
+.continue-success:focus {
     color: var(--bg-green-dark);
     border: var(--bg-green-dark) solid 1px;
-    cursor: pointer; }
+    cursor: pointer;
+}
+
+.continue-wait {
+    height: 32px;
+    padding: 5px 12px;
+    border: var(--font-dark) solid 1px;
+    border-radius: 6px;
+    pointer-events: none;
+    outline: none;
+	background-color: var(--black);
+	color: var(--bg-gray);
+}
 
 
 .title-email {
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+}
+
 .div-email {
     height: 32px;
     display: flex;
-    text-align: left; }
+    text-align: left;
+}
+
 .input-email {
     font-size: large;
     height: 24px;
-    width: 80%; }
+    width: 80%;
+}
 
 
 .title-password {
     margin-top: 40px;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+}
+
 .div-password {
     height: 32px;
     display: flex;
-    text-align: left; }
+    text-align: left;
+}
+
 .input-password {
     font-size: large;
     height: 24px;
-    width: 80%; }
+    width: 80%;
+}
 
 
 .title-username {
     margin-top: 40px;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+}
+
 .div-username {
     height: 32px;
     display: flex;
-    text-align: left; }
+    text-align: left;
+}
+
 .input-username {
     font-size: large;
     height: 24px;
-    width: 80%; }
+    width: 80%;
+}
 
 
 .title-verify {
     margin-top: 40px;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+}
+
 .div-verifycode {
     height: 32px;
     display: flex;
-    text-align: left; }
+    text-align: left;
+}
+
 .div-verifypic {
     margin-left: 24px;
     height: 50px;
     width: 120px;
     display: flex;
-    text-align: left; }
+    text-align: left;
+}
+
 .input-verifycode {
     font-size: large;
     height: 24px;
-    width: 80%; }
+    width: 80%;
+}
+
 #canvas {
     vertical-align: middle;
     box-sizing: border-box;
     border: 1px solid #ddd;
-    cursor: pointer; }
+    cursor: pointer;
+}

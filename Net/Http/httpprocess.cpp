@@ -7,12 +7,16 @@
 #include <Base/Timer/clock.h>
 #include <Log/logging.h>
 #include <Net/Tcp/tcpconnection.h>
+#include <regex>
 #include <sys/stat.h>
 
 using namespace Wasi;
 using namespace Http;
 
-std::shared_ptr<HttpAccount> HttpProcess::account = std::make_shared<HttpAccount>(account_dir);
+HttpAccount HttpProcess::account(account_dir);
+std::regex HttpProcess::email_pattern("([A-Za-z0-9_\\-\\.])+\\@([A-Za-z0-9_\\-\\.])+\\.([A-Za-z]{2,4})");
+std::regex HttpProcess::passwd_pattern("[a-zA-Z0-9_]{6,16}");
+std::regex HttpProcess::name_pattern("[a-zA-Z0-9_]{4,16}");
 
 int HttpProcess::Parse_request(const Server::TcpConnectionPtr& conn) {
     // Preaccess phase: IP control(black list)
@@ -78,13 +82,13 @@ int HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
         LOG_DEBUG("post login");
         size_t body_length = conn_request->body.size();
         if (body_length <= 4 || body_length > 54) { return -1; }
-        size_t middle = conn_request->body.find_first_of('&');
-        if (middle == std::string::npos) { return -1; }
-        std::string email(conn_request->body, 0, middle);
-        std::string password(conn_request->body, middle + 1, body_length);
-        std::string user_id = account->Login(email, password);
+        size_t and1 = conn_request->body.find_first_of('&');
+        if (and1 == std::string::npos) { return -1; }
+        std::string email(conn_request->body, 0, and1);
+        std::string password(conn_request->body, and1 + 1, body_length);
+        std::string user_id = account.Login(email, password);
         if (user_id.empty()) { return -1; }
-        AccountInfo user_info      = account->Get_account_by_id(user_id);
+        AccountInfo user_info      = account.Get_account_by_id(user_id);
         conn_respone->respone_body = "{\"state\":\"success\",";
         conn_respone->respone_body += "\"AccountImage\":\"";
         conn_respone->respone_body += user_info.user_image;
@@ -93,6 +97,7 @@ int HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
         conn_respone->respone_body += user_info.user_alias;
         conn_respone->respone_body += "\"}";
         conn_respone->respone_head.content_type = FileType::JSON;
+
         break;
         // add suceess json to body
     }
@@ -102,15 +107,24 @@ int HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     }
     case PostMethod::REGISTER: { // email & password & username
         LOG_DEBUG("post register");
-        // parse body
-        // length judge
-        // find email
-        // regsiter
+        size_t body_length = conn_request->body.size();
+        if (body_length <= 10 || body_length > 73) { return -1; }
+        size_t and1 = conn_request->body.find_first_of('&');
+        std::string email(conn_request->body, 0, and1);
+        size_t and2 = conn_request->body.find_first_of('&', and1);
+        std::string password(conn_request->body, and1 + 1, and2);
+        std::string alias(conn_request->body, and2 + 1, body_length);
+        if (std::regex_match(email, email_pattern) == false) { return -1; }
+        if (std::regex_match(password, passwd_pattern) == false) { return -1; }
+        if (std::regex_match(alias, name_pattern) == false) { return -1; }
+        if (account.Regsiter(email, password, alias) == false) { return -1; }
+        conn_respone->respone_body                = "{\"state\":\"success\"}";
+        conn_respone->respone_head.content_type = FileType::JSON;
         break;
     }
     case PostMethod::ACCOUNTFIND: {
         LOG_DEBUG("post find account");
-        if (account->Find_account_email(conn_request->body) == false) {
+        if (account.Find_account_email(conn_request->body) == false) {
             conn_respone->respone_body              = "{\"state\":\"success\"}";
             conn_respone->respone_head.content_type = FileType::JSON;
             break;
