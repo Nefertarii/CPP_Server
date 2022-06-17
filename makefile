@@ -1,8 +1,8 @@
 # CPP_Server
-DIR_NAME = CPP_Server
+DIR_NAME = CPPServer
 
 #list of source files (with whitespace between them)
-SRC_FILES := CPP_Server.cpp
+SRC_FILES := CPPServer.cpp
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
 #Target files
@@ -32,7 +32,7 @@ PUSH_COMMENT =
 export CC FLAGS MAKEFLAGS GREEN ORANGE BLUE RESET
 
 # compile all object file
-all: PRINT BASE LOG NET PACKAGE CPP_Server
+all: PRINT BASE LOG NET PACKAGE CPPServer
 
 PRINT:
 ifeq ($(MODE), DEBUG)
@@ -52,7 +52,7 @@ PACKAGE:
 	@cd $(BUILD) && mv lib$(DIR_NAME).a lib/lib$(DIR_NAME).a
 	@echo "$(GREEN)All compile done.$(RESET)"
 	
-CPP_Server: CPP_Server.cpp $(shell pwd)/$(BUILD)/lib/lib$(DIR_NAME).a
+CPPServer: CPPServer.cpp $(shell pwd)/$(BUILD)/lib/lib$(DIR_NAME).a
 	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
 	@$(CC) -c $(FLAGS) $<
 	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
