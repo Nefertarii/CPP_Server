@@ -113,8 +113,8 @@ Main {
     border-radius: 6px;
     pointer-events: none;
     outline: none;
-	background-color: var(--black);
-	color: var(--bg-gray);
+    background-color: var(--black);
+    color: var(--bg-gray);
 }
 
 

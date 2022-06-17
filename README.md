@@ -54,11 +54,10 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 *在使用时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化  
 
 ## Extra sections  
-[EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Base/Poll/eventloop.md)  
-[TcpServer详细](https://github.com/Nefertarii/WebServer/blob/master/Net/Tcp/tcpserver.md)  
+[EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Test/Module_test/eventloop.md)  
+[TcpServer详细](https://github.com/Nefertarii/WebServer/blob/master/Test/Module_test/tcpserver.md)  
 
 ## Background  
-用于学习的一个简易C++ TCP服务器  
 在学习完相关知识后想将其整合，于是想到制作一个由多进程+多线程的服务器程序  
 在选择后，对照muduo一步步进行修改完善,在未使用其包含的boost三方库情况下用标准库完成了这个项目  
 配套有日志库，网络库，一个线程池及一些容器结构   
