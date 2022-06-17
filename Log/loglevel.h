@@ -5,7 +5,6 @@
 
 namespace Wasi {
 namespace Log {
-
 enum class LogLevel : uint32_t {
     UNINITIALIZED = 0,          // uinit
     NONE          = 1,          // none

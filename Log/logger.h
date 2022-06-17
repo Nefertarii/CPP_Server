@@ -9,7 +9,6 @@
 
 namespace Wasi {
 namespace Log {
-
 using ErrorHandler = std::function<void()>;
 using SinkPtr      = std::shared_ptr<LogSink>;
 using SinkInitList = std::initializer_list<SinkPtr>;

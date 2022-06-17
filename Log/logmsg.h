@@ -6,7 +6,6 @@
 
 namespace Wasi {
 namespace Log {
-
 class LogMsg {
 private:
     bool formatted;

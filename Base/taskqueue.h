@@ -8,7 +8,6 @@
 
 namespace Wasi {
 namespace Base {
-
 using Task = std::function<void()>;
 
 class TaskQueue {

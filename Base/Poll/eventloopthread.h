@@ -8,7 +8,6 @@
 
 namespace Wasi {
 namespace Poll {
-
 class EventLoop;
 
 using ThreadInitCallback = std::function<void(EventLoop*)>;

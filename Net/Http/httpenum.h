@@ -5,7 +5,6 @@
 
 namespace Wasi {
 namespace Http {
-
 inline static std::string html_dir       = "/home/nefertarii/vscode/CPP_Server/HTML";
 inline static std::string user_image_dir = "/Resource/Userimage"; // html dir + image_dir
 inline static std::string account_dir    = "/home/nefertarii/vscode/CPP_Server/Test/Userinfo/account.txt";

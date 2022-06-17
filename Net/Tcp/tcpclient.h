@@ -9,23 +9,18 @@
 
 namespace Wasi {
 namespace Poll {
-
 class EventLoop;
-
 } // namespace Poll
+
 namespace Sockets {
-
 class InetAddress;
-
 class Connector;
-
 } // namespace Sockets
-namespace Server {
 
+namespace Server {
 using ConnectorPtr = std::shared_ptr<Sockets::Connector>;
 
 void Remove_connection(Poll::EventLoop* loop, const TcpConnectionPtr& conn);
-
 void Remove_connector(const ConnectorPtr& connector);
 
 class TcpClient : Noncopyable {

@@ -9,9 +9,9 @@
 
 namespace Wasi {
 namespace Poll {
-
 class EventLoop;
 class EventLoopThread;
+
 using ThreadInitCallback = std::function<void(EventLoop*)>;
 
 class EventLoopThreadPool : Noncopyable {
@@ -23,7 +23,6 @@ private:
     EventLoop* baseloop;
     std::vector<std::unique_ptr<EventLoopThread>> threads;
     std::vector<EventLoop*> loops;
-
     // std::vector<std::unique_ptr<EventLoopThread>> threads;
 
 public:

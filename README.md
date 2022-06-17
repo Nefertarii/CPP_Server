@@ -54,15 +54,15 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 *在使用时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化  
 
 ## Extra sections  
-[EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Test/Module_test/eventloop.md)  
-[TcpServer详细](https://github.com/Nefertarii/WebServer/blob/master/Test/Module_test/tcpserver.md)  
+[EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Test/Module_test/MD/eventloop.md)  
+[TcpServer详细](https://github.com/Nefertarii/WebServer/blob/master/Test/Module_test/MD/tcpserver.md)  
 
 ## Background  
 在学习完相关知识后想将其整合，于是想到制作一个由多进程+多线程的服务器程序  
-在选择后，对照muduo一步步进行修改完善,在未使用其包含的boost三方库情况下用标准库完成了这个项目  
+在选择方向后，对照muduo一步步进行修改完善，并在未使用其包含的boost三方库情况下用标准库完成了这个项目  
 配套有日志库，网络库，一个线程池及一些容器结构   
 日志库参考了spdlog和folly的日志库，网页的设计也是对照Github进行的仿写  
-项目后续会不断更新    
+项目目前仅做WebServer使用，后续会不断更新    
 
 ## Security  
 目前还有许多隐藏的问题和不周的写法，如果发现欢迎提交Issues   

@@ -9,7 +9,6 @@
 
 namespace Wasi {
 namespace Log {
-
 class LogMsg;
 
 class LogSink {

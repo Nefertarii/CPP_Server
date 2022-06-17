@@ -5,7 +5,6 @@
 
 namespace Wasi {
 namespace Http {
-
 class HttpRespone {
 public:
     ResponeHead respone_head;

@@ -8,7 +8,6 @@
 
 namespace Wasi {
 namespace Http {
-
 struct AccountInfo {
     std::string user_id;
     std::string user_email;

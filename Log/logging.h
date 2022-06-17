@@ -22,7 +22,6 @@
 
 namespace Wasi {
 namespace Log {
-
 class Logging {
 private:
     static const char* default_logger_name;

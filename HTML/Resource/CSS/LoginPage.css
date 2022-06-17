@@ -1,4 +1,4 @@
-@import "../Resource/CSS/Color.css";
+@import "Color.css";
 
 * {
 	box-sizing: border-box;
@@ -51,7 +51,7 @@ Footer {
 	width: 5rem;
 	border-radius: 50%;
 	margin: auto;
-	background-image: url(../Resource/Image/gif/EatChicken.gif);
+	background-image: url(../Image/gif/EatChicken.gif);
 	background-position-x: -3rem;
 }
 

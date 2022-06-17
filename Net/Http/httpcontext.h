@@ -5,7 +5,6 @@
 
 namespace Wasi {
 namespace Http {
-
 class HttpRequest;
 class HttpRespone;
 

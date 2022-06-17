@@ -11,14 +11,11 @@
 
 namespace Wasi {
 namespace Poll {
-
 class EventLoop;
 class EventLoopThreadPool;
-
 } // namespace Poll
 
 namespace Server {
-
 using ConnectionMap      = std::map<std::string, TcpConnectionPtr>;
 using ThreadInitCallback = std::function<void(Poll::EventLoop*)>;
 

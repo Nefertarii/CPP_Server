@@ -48,10 +48,11 @@ void Poller::Update(int operation, Channel* channel) {
     event.events    = channel->Events();
     event.data.ptr  = channel;
     int fd          = channel->Fd();
-    std::string msg = "epoll_ctl op:" + std::string(Operation_to_string(operation))
-                      + " fd:" + std::to_string(fd)
-                      + " event:" + std::to_string(channel->Fd());
-    LOG_DEBUG(msg);
+    std::string msg;
+    // msg = "epoll_ctl op:" + std::string(Operation_to_string(operation))
+    //                   + " fd:" + std::to_string(fd)
+    //                   + " event:" + std::to_string(channel->Fd());
+    // LOG_DEBUG(msg);
     if (epoll_ctl(epollfd, operation, fd, &event) < 0) {
         if (operation == EPOLL_CTL_DEL) {
             msg = "epoll_ctl op:" + std::string(Operation_to_string(operation))
@@ -74,15 +75,15 @@ Poller::Poller(EventLoop* loop) :
 
 Wasi::Time::TimeStamp Poller::Poll(int timeout_ms, ChannelList* active_channels) {
     int num_events = epoll_wait(epollfd, &*events.begin(), (int)events.size(), timeout_ms);
-    LOG_DEBUG("num_events total count:" + std::to_string(num_events));
+    // LOG_DEBUG("num_events total count:" + std::to_string(num_events));
     int errno_ = errno;
     Wasi::Time::TimeStamp now(Wasi::Time::Clock::Nowtime_ms());
     if (num_events > 0) {
         Fill_active_channel(num_events, active_channels);
-        LOG_DEBUG(std::to_string(num_events) + " events happended.");
+        // LOG_DEBUG(std::to_string(num_events) + " events happended.");
         if ((size_t)num_events == events.size()) { events.resize(events.size() * 2); }
     } else if (num_events == 0) {
-        LOG_DEBUG("Nothing happend.");
+        // LOG_DEBUG("Nothing happend.");
     } else {
         if (errno_ != EINTR) {
             errno = errno_;

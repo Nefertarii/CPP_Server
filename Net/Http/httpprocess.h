@@ -14,7 +14,6 @@ using TcpConnectionPtr = std::shared_ptr<Server::TcpConnection>;
 } // namespace Server
 
 namespace Http {
-
 class HttpProcess {
 private:
     static HttpAccount account;

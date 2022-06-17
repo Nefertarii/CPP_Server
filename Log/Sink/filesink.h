@@ -10,7 +10,6 @@
 
 namespace Wasi {
 namespace Log {
-
 class FileSink : public LogSink,
                  Noncopyable {
 private:

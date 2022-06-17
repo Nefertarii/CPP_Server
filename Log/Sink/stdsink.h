@@ -8,7 +8,6 @@
 
 namespace Wasi {
 namespace Log {
-
 class StdSink : public LogSink,
                 Noncopyable {
 private:

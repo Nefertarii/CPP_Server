@@ -11,7 +11,6 @@
 
 namespace Wasi {
 namespace Base {
-
 using Function = std::function<void()>;
 
 // struct ThreadData {

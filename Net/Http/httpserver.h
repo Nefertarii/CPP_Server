@@ -8,7 +8,6 @@
 
 namespace Wasi {
 namespace Http {
-
 // using HttpCallback = std::function<void(const HttpRequest&, HttpRespone*)>;
 using ParseCompleteCallBack = std::function<void()>;
 

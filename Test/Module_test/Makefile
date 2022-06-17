@@ -64,7 +64,10 @@ Thttpserver: Thttpserver.cpp $(shell pwd)/$(BUILD)/lib/lib$(DIR_NAME).a
 	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
 	@$(CC) -c $(FLAGS) $<
 	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
-
+Tclient: Tclient.cpp $(shell pwd)/$(BUILD)/lib/lib$(DIR_NAME).a
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
 
 .PHONY : clean
 clean:

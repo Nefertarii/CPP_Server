@@ -5,7 +5,6 @@
 
 namespace Wasi {
 namespace Http {
-
 // using Headers = std::map<std::string, std::string>;
 
 class HttpRequest {
