@@ -40,7 +40,7 @@ void Logging::Fatal(std::string detail, int tid, std::string file, std::string f
 
 void Logging::Change_default_logger(SinkPtr sink) {
     std::lock_guard<std::mutex> lk(Logging::global_logger_mtx);
-    LOG_DEBUG("Change log");
+    LOG_INFO("Change log");
     default_logger->Remove(0);
     default_logger->Push_back(sink);
 }

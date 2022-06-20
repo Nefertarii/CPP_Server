@@ -12,7 +12,7 @@ void HttpRespone::Init() {
     respone_head.charset            = HttpCharset::UNKNOWN;
     respone_head.http_version       = HttpVersion::UNKNOWN;
     respone_head.code_num           = HttpCode::CODE404;
-    respone_head.server             = "Test Server";
+    respone_head.server             = "C++ Server";
     respone_head.connection         = ConnectionType::UNKNOWN;
     respone_head.keep_alive_timeout = 0;
     respone_head.keep_alive_max     = 0;

@@ -59,7 +59,6 @@ bool HttpAccount::Regsiter(std::string email, std::string password, std::string 
     if (ret == std::string::npos) {
         std::string account_info;
         // ID
-        user_id_now++;
         account_info += "I:" + std::to_string(user_id_now) + "\n";
         // Email
         int space_num = 37 - email.size();
@@ -84,6 +83,7 @@ bool HttpAccount::Regsiter(std::string email, std::string password, std::string 
         account_file.Write(account_info);
         log += " regsiter success\n";
         LOG_INFO(log);
+        user_id_now++;
         account_file.Write(std::to_string(user_id_now), 2);
         return true;
     }
@@ -150,7 +150,8 @@ AccountInfo HttpAccount::Get_account_by_id(std::string id) {
 
         tmp_account.user_id = id;
         tmp_account.user_alias.assign(tmp_account.user_alias, 0, length);
-        tmp_account.user_image = user_image_dir + "/" + id + ".png";
+        // tmp_account.user_image = user_image_dir + "/" + id + ".png";
+        tmp_account.user_image = user_image_dir + "/1000001.png";
 
         log += " found";
         LOG_INFO(log)

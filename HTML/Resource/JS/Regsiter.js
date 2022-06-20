@@ -277,7 +277,9 @@ register.onreadystatechange = function () {
             }, 2000);
             return;
         }
-        window.alert("注册失败 账号信息输入非法");
+    }
+    if (register.readyState == 4 && register.status == 403) {
+        window.alert("注册失败 账号信息输入非法，请刷新页面");
         verifycode = drawPic();
     }
 }

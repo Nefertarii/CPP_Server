@@ -80,14 +80,24 @@ int HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     switch (conn_request->post_method) {
     case PostMethod::LOGIN: { // email & password
         LOG_DEBUG("post login");
+        LOG_DEBUG(conn_request->body);
         size_t body_length = conn_request->body.size();
-        if (body_length <= 4 || body_length > 54) { return -1; }
+        if (body_length <= 4 || body_length > 54) {
+            LOG_DEBUG("user login data length illegal");
+            return -1;
+        }
         size_t and1 = conn_request->body.find_first_of('&');
-        if (and1 == std::string::npos) { return -1; }
+        if (and1 == std::string::npos) {
+            LOG_DEBUG("user login data illegal");
+            return -1;
+        }
         std::string email(conn_request->body, 0, and1);
         std::string password(conn_request->body, and1 + 1, body_length);
         std::string user_id = account.Login(email, password);
-        if (user_id.empty()) { return -1; }
+        if (user_id.empty()) {
+            LOG_DEBUG("user login fail, not this user");
+            return -1;
+        }
         AccountInfo user_info      = account.Get_account_by_id(user_id);
         conn_respone->respone_body = "{\"state\":\"success\",";
         conn_respone->respone_body += "\"AccountImage\":\"";
@@ -97,9 +107,7 @@ int HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
         conn_respone->respone_body += user_info.user_alias;
         conn_respone->respone_body += "\"}";
         conn_respone->respone_head.content_type = FileType::JSON;
-
         break;
-        // add suceess json to body
     }
     case PostMethod::RESET: { // email & oldpassword & password
         LOG_DEBUG("post reset");
@@ -107,18 +115,36 @@ int HttpProcess::Post_process(const Server::TcpConnectionPtr& conn) {
     }
     case PostMethod::REGISTER: { // email & password & username
         LOG_DEBUG("post register");
+        LOG_DEBUG(conn_request->body);
         size_t body_length = conn_request->body.size();
-        if (body_length <= 10 || body_length > 73) { return -1; }
+        if (body_length <= 10 || body_length > 73) {
+            LOG_DEBUG("user register data length illegal");
+            return -1;
+        }
         size_t and1 = conn_request->body.find_first_of('&');
         std::string email(conn_request->body, 0, and1);
+        and1 += 1;
         size_t and2 = conn_request->body.find_first_of('&', and1);
-        std::string password(conn_request->body, and1 + 1, and2);
-        std::string alias(conn_request->body, and2 + 1, body_length);
-        if (std::regex_match(email, email_pattern) == false) { return -1; }
-        if (std::regex_match(password, passwd_pattern) == false) { return -1; }
-        if (std::regex_match(alias, name_pattern) == false) { return -1; }
-        if (account.Regsiter(email, password, alias) == false) { return -1; }
-        conn_respone->respone_body                = "{\"state\":\"success\"}";
+        std::string password(conn_request->body, and1, and2 - and1);
+        and2 += 1;
+        std::string alias(conn_request->body, and2, body_length);
+        if (std::regex_match(email, email_pattern) == false) {
+            LOG_DEBUG("user register email illegal");
+            return -1;
+        }
+        if (std::regex_match(password, passwd_pattern) == false) {
+            LOG_DEBUG("user register password illegal");
+            return -1;
+        }
+        if (std::regex_match(alias, name_pattern) == false) {
+            LOG_DEBUG("user register alias illegal");
+            return -1;
+        }
+        if (account.Regsiter(email, password, alias) == false) {
+            LOG_INFO("user register fail, same user already exists");
+            return -1;
+        }
+        conn_respone->respone_body              = "{\"state\":\"success\"}";
         conn_respone->respone_head.content_type = FileType::JSON;
         break;
     }
@@ -179,10 +205,18 @@ int HttpProcess::Prepare_respone(const Server::TcpConnectionPtr& conn) {
     // version code
     tmp_string.clear();
     switch (conn_respone->respone_head.http_version) {
-    case HttpVersion::HTTP10: tmp_string = "HTTP/1.0 "; break;
-    case HttpVersion::HTTP11: tmp_string = "HTTP/1.1 "; break;
-    case HttpVersion::HTTP20: tmp_string = "HTTP/2.0 "; break;
-    default: tmp_string = "HTTP/1.0 "; break;
+    case HttpVersion::HTTP10:
+        tmp_string = "HTTP/1.0 ";
+        break;
+    case HttpVersion::HTTP11:
+        tmp_string = "HTTP/1.1 ";
+        break;
+    case HttpVersion::HTTP20:
+        tmp_string = "HTTP/2.0 ";
+        break;
+    default:
+        tmp_string = "HTTP/1.0 ";
+        break;
     }
 
     switch (conn_respone->respone_head.code_num) {

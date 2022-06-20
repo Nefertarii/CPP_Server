@@ -31,6 +31,7 @@ public:
     void Start(const ThreadInitCallback& cb = ThreadInitCallback());
     EventLoop* Get_loop();
     std::string Get_name() const;
+    int Get_thread_num() const;
     bool Started();
     ~EventLoopThreadPool();
 };

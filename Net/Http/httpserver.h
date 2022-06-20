@@ -17,7 +17,6 @@ private:
     // Server::TcpServer process_server;
     std::shared_ptr<Poll::EventLoopThreadPool> thread_pool;
     std::vector<HttpContext> contexts;
-
     void Connection(const Server::TcpConnectionPtr& conn);
     void Message(const Server::TcpConnectionPtr& conn);
     void Write_complete(const Server::TcpConnectionPtr& conn);

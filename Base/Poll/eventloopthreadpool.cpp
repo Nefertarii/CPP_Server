@@ -46,6 +46,8 @@ EventLoop* EventLoopThreadPool::Get_loop() {
 
 std::string EventLoopThreadPool::Get_name() const { return name; }
 
+int EventLoopThreadPool::Get_thread_num() const { return num_threads; }
+
 bool EventLoopThreadPool::Started() { return started; }
 
 EventLoopThreadPool::~EventLoopThreadPool() {}

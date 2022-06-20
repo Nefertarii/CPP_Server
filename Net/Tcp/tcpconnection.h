@@ -80,9 +80,9 @@ public:
     const std::string& Get_name() const;
     const Sockets::InetAddress& Get_local_address() const;
     const Sockets::InetAddress& Get_peer_address() const;
-    // input buffer read message
+    // input buffer = read message
     Base::Buffer* Get_input_buffer();
-    // output buffer write message
+    // output buffer = write message
     Base::Buffer* Get_output_buffer();
     Base::FileStat* Get_file_stat();
     std::string Get_tcp_info() const;

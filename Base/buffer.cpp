@@ -46,7 +46,7 @@ Buffer::BufferState Buffer::State() const { return state; }
 
 void Buffer::Add_index(size_t num) {
     size_t remaining = buffer.length() - index;
-    assert(num <= remaining);
+    // assert(num <= remaining);
     if (num < remaining) {
         index += num;
     } else {

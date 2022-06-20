@@ -84,7 +84,7 @@ struct ResponeHead {
     ResponeHead() :
         http_version(HttpVersion::UNKNOWN),
         code_num(HttpCode::CODE404),
-        server("C++_Http_Server"),
+        server("C++ Server"),
         connection(ConnectionType::UNKNOWN),
         keep_alive_timeout(0),
         keep_alive_max(0),

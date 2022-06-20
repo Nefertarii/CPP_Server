@@ -121,14 +121,22 @@ void TcpConnection::Send_file_in_loop() {
         return;
     }
     if (!channel->Is_writing() && file.Remaning() > 0) {
-        if (sendfile(socket->Fd(), file.filefd, &file.file_offset, 4096) > 0) {
-            if (file.Remaning() > 0 && write_complete_callback) {
-                loop->Queue_in_loop(std::bind(write_complete_callback, shared_from_this()));
+        if (sendfile(socket->Fd(), file.filefd, &file.file_offset, 15000) > 0) {
+            if (file.Remaning() > 0) {
+                // std::this_thread::sleep_for(std::chrono::milliseconds(30));
+                loop->Queue_in_loop(std::bind(&TcpConnection::Send_file_in_loop, shared_from_this()));
+                return;
             }
-            if (file.Remaning() == 0) {
+            if (write_complete_callback) {
                 close(file.filefd);
                 file.Init();
+                loop->Queue_in_loop(std::bind(write_complete_callback, shared_from_this()));
+                return;
             }
+            std::string log = "request file:" + file.file_name + " send done";
+            LOG_INFO(log);
+            close(file.filefd);
+            file.Init();
         } else {
             if (errno != EWOULDBLOCK) {
                 LOG_ERROR("Send file error " + std::string(strerror(errno)));
@@ -139,8 +147,7 @@ void TcpConnection::Send_file_in_loop() {
         }
     }
     // high_water_mark
-    if (fault == true)
-        ;
+    if (fault == true) { LOG_INFO("High water"); }
 }
 
 void TcpConnection::Shutdown_in_loop() {
@@ -275,26 +282,16 @@ void TcpConnection::Send(const char* message, size_t len) {
 
 void TcpConnection::Sendfile(const std::string filename) {
     if (filename.empty()) { return; }
-    if (filename == file.file_name) {
-        if (state == CONNECTED) {
-            if (loop->Is_in_loop_thread()) {
-                Send_file_in_loop();
-            } else {
-                loop->Run_in_loop(std::bind(&TcpConnection::Send_file_in_loop, this));
-            }
-        }
-    } else {
-        struct stat sys_file_stat;
-        stat(filename.c_str(), &sys_file_stat);
-        file.file_name = filename.c_str();
-        file.file_size = sys_file_stat.st_size;
-        file.filefd    = open(filename.c_str(), O_RDONLY);
-        if (state == CONNECTED) {
-            if (loop->Is_in_loop_thread()) {
-                Send_file_in_loop();
-            } else {
-                loop->Run_in_loop(std::bind(&TcpConnection::Send_file_in_loop, this));
-            }
+    struct stat sys_file_stat;
+    stat(filename.c_str(), &sys_file_stat);
+    file.file_name = filename.c_str();
+    file.file_size = sys_file_stat.st_size;
+    file.filefd    = open(filename.c_str(), O_RDONLY);
+    if (state == CONNECTED) {
+        if (loop->Is_in_loop_thread()) {
+            Send_file_in_loop();
+        } else {
+            loop->Run_in_loop(std::bind(&TcpConnection::Send_file_in_loop, this));
         }
     }
 }

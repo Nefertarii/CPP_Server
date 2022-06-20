@@ -51,7 +51,7 @@ Logging中有一个静态logger用于默认的日志写入，方便使用
 再使用```make (file name)```编译不同的测试程序    
 如果需要包含至其他项目，可以考虑包含相应头文件并使用 build/lib 目录下的 libCPPServer.a 静态库  
 *如使用0～1024端口需要sudo权限以绑定端口   
-*在使用时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化  
+*在使用时可以使用```make MODE=DEBUG```可以对DEBUG日志进行输出且采用Og优化   
 
 ## Extra sections  
 [EventLoop详细](https://github.com/Nefertarii/WebServer/blob/master/Test/Module_test/MD/eventloop.md)  

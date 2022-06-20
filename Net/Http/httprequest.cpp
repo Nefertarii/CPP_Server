@@ -104,7 +104,6 @@ void HttpRequest::Parse(std::string message) {
                 post_method = PostMethod::UNKNOWN;
                 return;
             }
-
             // } else if (path == "/verification") {
             //     post_method = PostMethod::;
             // }

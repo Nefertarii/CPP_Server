@@ -34,8 +34,7 @@ login_button.onclick = function () {
     var tmp = login_name + "&" + login_passwd;
     login.open("POST", "login", true);
     login.send(tmp);
-
-    setTimeout(change_login_button, 7000);
+    setTimeout(change_login_button, 5000);
 }
 var returnObj;
 login.onreadystatechange = function () {
@@ -51,7 +50,10 @@ login.onreadystatechange = function () {
             localStorage.setItem("Logindata", str_login_data)
             return;
         }
+    }
+    if (login.readyState == 4 && login.status == 403) {
         window.alert("登陆失败，邮箱或密码错误");
+        login_button.className = "submit-continue";
     }
 };
 
