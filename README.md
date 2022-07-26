@@ -3,7 +3,7 @@
 其核心参照muduo网络库，但是在使用C++17标准的情况下重新制作了一遍    
 项目中的命名和操作比较简单易懂，方便阅读和自行修改   
 
-[用于测试的服务器网站](http://webwasi.com/)      
+[用于测试的服务器网站](http://106.55.10.242:8000) (原网页域名到期更换成了直接使用ip地址)      
 [更新日志](https://github.com/Nefertarii/WebServer/blob/master/ChangeLog.md)  
 [![license](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
