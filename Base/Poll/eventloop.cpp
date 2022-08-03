@@ -7,6 +7,7 @@
 #include <Base/Timer/timestamp.h>
 #include <Log/logging.h>
 #include <cassert>
+#include <iostream>
 #include <signal.h>
 #include <sstream>
 #include <sys/eventfd.h>
@@ -98,6 +99,7 @@ void EventLoop::Quit() {
     quit = true;
     LOG_INFO("eventloop earse");
     if (!Is_in_loop_thread()) { Wake_up(); }
+    std::cout << "eventloop in thread:" << gettid() << " quit\n";
 }
 
 Time::TimeStamp EventLoop::Poll_return_time() const {

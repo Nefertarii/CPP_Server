@@ -3,7 +3,7 @@ DIR_NAME = CPPServer
 
 #list of source files (with whitespace between them)
 SRC_FILES := test.cpp test2.cpp test3.cpp test4.cpp test5.cpp \
-	test6.cpp test7.cpp test8.cpp test9.cpp test10.cpp Taccount.cpp
+	test6.cpp test7.cpp test8.cpp test9.cpp test10.cpp
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
 #Target files
@@ -43,27 +43,14 @@ PACKAGE:
 	@cd $(BUILD) && mv lib$(DIR_NAME).a lib/lib$(DIR_NAME).a
 	@echo "$(GREEN)All compile done.$(RESET)"
 
-test: test.cpp
-	$(CC) -c -I $(HEADFILE) $(FLAGS) $< -o $(BUILD)/$@.o
-test2: test2.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
-test3: test3.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
-test4: test4.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
-test5: test5.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
-test6: test6.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
-test7: test7.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
-test8: test8.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
 test9: test9.cpp
-	$(CC) -c $(FLAGS) $<
-	$(CC) $(FLAGS) -L$(shell pwd)/../build/lib -o test9 test9.o -l$(DIR_NAME)
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
 test10: test10.cpp
-	$(CC) -c $(FLAGS) $< -o $(BUILD)/$@.o
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
 
 Taccount: Taccount.cpp $(shell pwd)/../build/lib/lib$(DIR_NAME).a
 	$(CC) -c $(FLAGS) $<

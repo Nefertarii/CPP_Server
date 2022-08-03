@@ -8,7 +8,6 @@ using namespace std;
 using namespace Wasi;
 
 Poll::EventLoop* global_loop = nullptr;
-bool running                 = false;
 
 std::string Get_input() {
     std::string tmp;
@@ -34,39 +33,12 @@ void Webserver() {
     server_loop.Loop();
 }
 
-bool Webserver_stop() {
-    if (running == false) {
-        cout << "Server is not running\n";
-        return false;
-    } else {
-        global_loop->Quit();
-        running = false;
-        cout << "Server is stop now\n";
-        return true;
-    }
-}
-
-bool Webserver_start() {
-    if (running == false) {
-        cout << "Ready to start server\n";
-        running = true;
-        Base::Thread server_thread(Webserver, "server thread");
-        server_thread.Start();
-        return true;
-    } else {
-        cout << "Server is running\n";
-        return false;
-    }
-}
-
 void Control_func() {
     std::string command;
-    int times = 0;
+    bool running = false;
+
     cout << "Server control(type 'help' see command list): ";
     while (1) {
-        if (times++) {
-            cout << "Server control:";
-        }
         command = Get_input();
         if (command == "help") {
             cout << "'start' : start server\n";
@@ -76,20 +48,35 @@ void Control_func() {
         } else if (command == "list") {
             // cout list info
         } else if (command == "stop") {
-            Webserver_stop();
+            global_loop->Quit();
+            running = false;
         } else if (command == "start") {
-            Webserver_start();
+            if (running == false) {
+                cout << "start run server\n";
+                running = true;
+                Base::Thread server_thread(Webserver, "server thread");
+                server_thread.Start();
+            } else {
+                cout << "server is running\n";
+            }
         } else if (command == "reboot") {
-            Webserver_stop();
+            global_loop->Quit();
+            running = false;
             cout << "Reboot in 3 seconds.\n";
             this_thread::sleep_for(chrono::seconds(3));
-            cout << "Rebooting...\n";
-            Webserver_start();
-        } else if (command == "quit") {
-            if (Webserver_stop() == true) {
-                cout << "Wait saving data.\n";
-                this_thread::sleep_for(chrono::seconds(3));
+            cout << "Rebooting...";
+            if (running == false) {
+                cout << "start run server\n";
+                Base::Thread server_thread(Webserver, "server thread");
+                server_thread.Start();
+            } else {
+                cout << "server is running\n";
             }
+        } else if (command == "quit") {
+            global_loop->Quit();
+            running = false;
+            cout << "Wait saving data.\n";
+            this_thread::sleep_for(chrono::seconds(3));
             cout << "Server quit.\n";
             break;
         } else {
