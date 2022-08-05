@@ -15,4 +15,4 @@ void FileStat::Init() {
     file_size   = 0;
 }
 
-long FileStat::Remaning() { return file_size - file_offset; }
+long FileStat::Remaining() { return file_size - file_offset; }

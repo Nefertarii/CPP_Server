@@ -47,6 +47,7 @@ private:
     void Handle_error();
     void Send_in_loop();
     void Send_file_in_loop();
+    // void Send_file_in_loop2(); // have some problem
     void Shutdown_in_loop();
     void Force_close_in_loop();
     void Set_state(ConnState state_);
@@ -95,6 +96,7 @@ public:
     void Send(const std::string message, size_t len);
     void Send(const char* message, size_t len);
     void Sendfile(const std::string filename);
+    // void Sendfile2(const std::string filename); //have some problem
     void Shutdown();
     void Force_close();
     void Force_close_delay(double seconds);

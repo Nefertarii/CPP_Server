@@ -7,7 +7,7 @@ using namespace Wasi;
 using namespace std;
 
 void Connection(const Server::TcpConnectionPtr& conn) {
-    std::string msg = "GET /Resource/CSS/Footer.css HTTP/1.1";
+    std::string msg = "GET / HTTP/1.1";
     conn->Send(msg);
 }
 

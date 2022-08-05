@@ -4,6 +4,7 @@
 #include <assert.h>
 #include <sys/uio.h>
 #include <unistd.h>
+#include <cstring>
 
 using namespace Wasi;
 using namespace Wasi::Base;
@@ -101,7 +102,26 @@ ssize_t Buffer::Read_fd(int fd, int* tmp_errno) {
         Append(extrabuf, read);
         return read;
     }
-    LOG_INFO("Buffer::Read_fd() Buffer state is WRITE.");
+    LOG_INFO("Read fd fail, Buffer state is WRITE.");
+    return 0;
+}
+
+size_t Buffer::Write_fd(int fd, int* tmp_errno) {
+    if (state == WRITE) {
+        iovec vec;
+        char extrabuf[buffer.size()+1];
+        strcpy(extrabuf, buffer.c_str());
+        vec.iov_base = extrabuf;
+        vec.iov_len = sizeof(extrabuf);
+        const int iovcnt   = 1;
+        const size_t write = writev(fd, &vec, iovcnt);
+        if (write < 0) {
+            *tmp_errno = errno;
+            return 0;
+        }
+        return write;
+    }
+    LOG_INFO("Write fd fail, Buffer state is READ.");
     return 0;
 }
 

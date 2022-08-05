@@ -47,10 +47,7 @@ function EmailDetect() {
 }
 emailcontinuebutton.onclick = function () {
     emailcontinuebutton.className = "continue-wait"
-    setTimeout(server_timeout, 5000);
-    function server_timeout() {
-        emailcontinuebutton.className = "continue";
-    }
+    setTimeout(function () { emailcontinuebutton.className = "continue"; }, 5000);
     var register = new XMLHttpRequest();
     let register_email = emailInput.value;
     var info = register_email;
@@ -271,15 +268,15 @@ register.onreadystatechange = function () {
     if (register.readyState == 4 && register.status == 200) {
         var returnObj = eval("(" + register.responseText + ")");
         if (returnObj.state === "success") {
-            window.alert("注册成功 稍后将返回主页");
+            window.alert("注册成功，稍后将返回主页");
             setTimeout(function () {
-                window.location.href = "http://webwasi.com/";
+                window.location.href = "http://106.55.10.242:8000/";
             }, 2000);
             return;
         }
     }
     if (register.readyState == 4 && register.status == 403) {
-        window.alert("注册失败 账号信息输入非法，请刷新页面");
+        window.alert("注册失败，账号信息已重复或输入非法，请刷新页面后重试");
         verifycode = drawPic();
     }
 }

@@ -26,7 +26,7 @@ void Webserver() {
     // Log::Logging::Change_default_logger(make_shared<Log::FileSink>("test.log"));
     Poll::EventLoop server_loop;
     global_loop = &server_loop;
-    Sockets::InetAddress linsten("127.0.0.1", 8000);
+    Sockets::InetAddress linsten("0.0.0.0", 8000);
     Http::HttpServer webserver(&server_loop, linsten, "webserver");
     // webserver.Set_thread_num(1);
     webserver.Start();

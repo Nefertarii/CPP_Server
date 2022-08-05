@@ -14,7 +14,7 @@ public:
     long file_size;
     FileStat();
     void Init();
-    long Remaning();
+    long Remaining();
 };
 
 }

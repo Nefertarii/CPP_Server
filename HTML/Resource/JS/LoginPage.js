@@ -29,7 +29,7 @@ login.onreadystatechange = function () {
             localStorage.setItem("Logindata", str_login_data)
             window.alert("登陆成功");
             setTimeout(function () {
-                window.location.href = "http://webwasi.com/";
+                window.location.href = "http://106.55.10.242:8000/";
             }, 2000);
             return;
         }

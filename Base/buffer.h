@@ -45,6 +45,7 @@ public:
     Buffer& operator=(const std::string& str);
     Buffer& operator+=(const Buffer&);
     ssize_t Read_fd(int fd, int* tmp_errno);
+    size_t Write_fd(int fd, int* tmp_errno);     //Buffer size when writing should be less 65535
     std::string Content();
     ~Buffer();
 };

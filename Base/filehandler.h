@@ -4,6 +4,7 @@
 #include <fstream>
 #include <functional>
 #include <string>
+#include "buffer.h"
 
 namespace Wasi {
 namespace Base {
@@ -39,6 +40,8 @@ public:
     void Flush();
     void Write(const std::string& buf, size_t start = UINT_LEAST64_MAX);
     size_t Read(std::string& buf, size_t start = 0, size_t size = 4096);
+    size_t Read(Base::Buffer& buf, size_t start = 0, size_t size = 4096);
+    size_t Read(char* buf, size_t start = 0, size_t size = 4096);
     void Close();
     size_t Get_file_size();
     std::string Get_file_name() const;

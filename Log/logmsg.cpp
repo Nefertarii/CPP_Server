@@ -78,7 +78,7 @@ LogMsg::LogMsg(std::string log) :
     std::string tmp_date = Process(log, ']'); // get date
     date                 = Process(tmp_date);
     level                = Process(log, ']'); // get level
-    detail               = log;               // remaning detail
+    detail               = log;               // remaining detail
     if (detail[detail.size() - 1] == '\n') {
         detail.erase(detail.end() - 1);
     }

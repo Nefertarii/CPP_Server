@@ -48,9 +48,9 @@ public:
     void Loop();
     void Quit();
     Time::TimeStamp Poll_return_time() const;
-    Time::TimerId Run_at(const Time::TimeStamp& time, Functors callback);
-    Time::TimerId Run_after(double delay, Functors callback);
-    Time::TimerId Run_every(double interval, Functors callback);
+    Time::TimerId Run_at(const Time::TimeStamp& time, Functors callback); // time = us
+    Time::TimerId Run_after(double delay, Functors callback);             // time = us
+    Time::TimerId Run_every(double interval, Functors callback);          // time = us
     void Update_channel(Channel* channel);
     void Remove_channel(Channel* channel);
     void Assert_in_loop_thread();

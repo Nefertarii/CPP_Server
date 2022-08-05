@@ -96,6 +96,24 @@ size_t FileHandler::Read(std::string& buf, size_t start, size_t size) {
     return file_stream.gcount();
 }
 
+size_t FileHandler::Read(Base::Buffer& buf, size_t start, size_t size) {
+    Open_read();
+    file_stream.seekg(start);
+    char tmp[size + 1] = {0};
+    file_stream.read(tmp, size);
+    buf = std::string(tmp);
+    Close();
+    return file_stream.gcount();
+}
+
+size_t FileHandler::Read(char* buf, size_t start, size_t size) {
+    Open_read();
+    file_stream.seekg(start);
+    file_stream.read(buf, size);
+    Close();
+    return file_stream.gcount();
+}
+
 void FileHandler::Close() {
     if (file_stream) {
         if (file_events.before_close) {
