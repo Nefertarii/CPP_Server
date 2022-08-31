@@ -101,7 +101,7 @@ void Poller::Update_channel(Channel* channel) {
     std::string msg = "fd = " + std::to_string(channel->Fd())
                       + " events = " + std::to_string(channel->Events())
                       + " index = " + std::to_string(index);
-    LOG_DEBUG(msg);
+    // LOG_DEBUG(msg);
     if (index == NEW || index == DELETED) {
         // a new one, add with EPOLL_CTL_ADD
         int fd = channel->Fd();

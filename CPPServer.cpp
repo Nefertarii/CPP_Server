@@ -4,7 +4,6 @@
 #include <Net/Http/httpserver.h>
 #include <iostream>
 
-using namespace std;
 using namespace Wasi;
 
 Poll::EventLoop* global_loop = nullptr;
@@ -23,38 +22,38 @@ std::string Get_input() {
 }
 
 void Webserver() {
-    // Log::Logging::Change_default_logger(make_shared<Log::FileSink>("test.log"));
+    Log::Logging::Change_default_logger(std::make_shared<Log::FileSink>("test.log"));
     Poll::EventLoop server_loop;
     global_loop = &server_loop;
     Sockets::InetAddress linsten("0.0.0.0", 8000);
     Http::HttpServer webserver(&server_loop, linsten, "webserver");
     // webserver.Set_thread_num(1);
     webserver.Start();
-    cout << "server start.\n";
+    std::cout << "server start.\n";
     server_loop.Loop();
 }
 
 bool Webserver_stop() {
     if (running == false) {
-        cout << "Server is not running\n";
+        std::cout << "Server is not running\n";
         return false;
     } else {
         global_loop->Quit();
         running = false;
-        cout << "Server is stop now\n";
+        std::cout << "Server is stop now\n";
         return true;
     }
 }
 
 bool Webserver_start() {
     if (running == false) {
-        cout << "Ready to start server\n";
+        std::cout << "Ready to start server\n";
         running = true;
         Base::Thread server_thread(Webserver, "server thread");
         server_thread.Start();
         return true;
     } else {
-        cout << "Server is running\n";
+        std::cout << "Server is running\n";
         return false;
     }
 }
@@ -62,17 +61,17 @@ bool Webserver_start() {
 void Control_func() {
     std::string command;
     int times = 0;
-    cout << "Server control(type 'help' see command list): ";
+    std::cout << "Server control(type 'help' see command list): ";
     while (1) {
         if (times++) {
-            cout << "Server control:";
+            std::cout << "Server control:";
         }
         command = Get_input();
         if (command == "help") {
-            cout << "'start' : start server\n";
-            cout << "'stop'  : stop server\n";
-            cout << "'reboot': reboot server\n";
-            cout << "'quit'  : quit program\n";
+            std::cout << "'start' : start server\n";
+            std::cout << "'stop'  : stop server\n";
+            std::cout << "'reboot': reboot server\n";
+            std::cout << "'quit'  : quit program\n";
         } else if (command == "list") {
             // cout list info
         } else if (command == "stop") {
@@ -81,19 +80,19 @@ void Control_func() {
             Webserver_start();
         } else if (command == "reboot") {
             Webserver_stop();
-            cout << "Reboot in 3 seconds.\n";
-            this_thread::sleep_for(chrono::seconds(3));
-            cout << "Rebooting...\n";
+            std::cout << "Reboot in 3 seconds.\n";
+            std::this_thread::sleep_for(std::chrono::seconds(3));
+            std::cout << "Rebooting...\n";
             Webserver_start();
         } else if (command == "quit") {
             if (Webserver_stop() == true) {
-                cout << "Wait saving data.\n";
-                this_thread::sleep_for(chrono::seconds(3));
+                std::cout << "Wait saving data.\n";
+                std::this_thread::sleep_for(std::chrono::seconds(3));
             }
-            cout << "Server quit.\n";
+            std::cout << "Server quit.\n";
             break;
         } else {
-            cout << "Undefined command: " << command << ".  Try 'help'.\n";
+            std::cout << "Undefined command: " << command << ".  Try 'help'.\n";
         }
     }
 }

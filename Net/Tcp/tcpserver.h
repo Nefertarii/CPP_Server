@@ -43,7 +43,7 @@ public:
         REUSEPORT
     };
     TcpServer(Poll::EventLoop* loop_, const Sockets::InetAddress& listenaddr,
-              const std::string& name_, OptReusePort opt);
+              const std::string& name_, OptReusePort opt = NOREUSEPORT);
     const std::string& Get_ip_port();
     const std::string& Get_name();
     Poll::EventLoop* Get_loop();
@@ -52,7 +52,7 @@ public:
     void Set_connection_callback(const ConnectionCallback& callback_);
     //当通信套接字可读时进行回调 (epoll)
     void Set_message_callback(const MessageCallback& callback_);
-    //当通信套接字可写时进行回调 (epoll)
+    //当通信套接字发送缓存清空时进行回调 (epoll)
     void Set_write_complete_callback(const WriteCompleteCallback& callback_);
     void Set_thread_init_callback(const ThreadInitCallback& callback);
     void Set_thread_num(int num);

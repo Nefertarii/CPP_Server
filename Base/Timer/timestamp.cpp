@@ -12,6 +12,7 @@ TimeStamp::TimeStamp() :
 TimeStamp::TimeStamp(long microseconds) :
     time(microseconds) {}
 
+//返回毫秒时间戳
 long TimeStamp::Microseconds_since_epoch() { return time; }
 
 void TimeStamp::Swap(TimeStamp& other) {

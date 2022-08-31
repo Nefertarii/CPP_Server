@@ -1,13 +1,7 @@
-#include "../Net/Base/Head/buffer.h"
-#include "../Net/Poll/Head/channel.h"
-#include "../Net/Poll/Head/eventloop.h"
-#include "../Net/Server/Head/tcpclient.h"
-#include "../Net/Server/Head/tcpconnection.h"
-#include "../Net/Sockets/Head/connector.h"
-#include "../Net/Sockets/Head/inetaddress.h"
-#include "../Net/Sockets/Head/socketapi.h"
-#include "../Timer/Head/clock.h"
-#include "../Timer/Head/timerid.h"
+#include <Base/Poll/eventloop.h>
+#include <Net/Tcp/tcpclient.h>
+#include <Net/Tcp/tcpserver.h>
+#include <Base/Timer/clock.h>
 #include <algorithm>
 #include <cstring>
 #include <iostream>
@@ -16,6 +10,8 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <vector>
+#include <thread>
+#include <arpa/inet.h>
 
 using namespace std;
 using namespace Wasi::Base;
@@ -70,7 +66,7 @@ void process(TcpClient* client) {
 void func1() {
     signal(SIGPIPE, SIG_IGN);
     EventLoop loop;
-    InetAddress servaddr("127.0.0.1", 8000);
+    InetAddress servaddr("127.0.0.1", 9999);
     TcpClient client(&loop, servaddr, "client1");
     client.Set_connection_callback(Connection);
     client.Set_message_callback(Message);

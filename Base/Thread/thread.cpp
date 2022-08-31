@@ -27,7 +27,7 @@ Thread::Thread(Function func, const std::string& name_) :
     tid(0),
     thread_core() {
     Set_default_name();
-    std::string msg = "Thread: " + name + " Create";
+    std::string msg = "Thread:" + name + " create";
     LOG_INFO(msg);
 }
 
@@ -66,7 +66,7 @@ pid_t Thread::Get_tid() const { return tid; }
 const std::string& Thread::Get_name() const { return name; }
 
 Thread::~Thread() {
-    LOG_INFO("Thread:" + name + " earse");
+    LOG_INFO("Thread:" + name + " detach");
     if (started && !joined) {
         thread_core.detach();
     }

@@ -3,7 +3,8 @@ DIR_NAME = CPPServer
 
 #list of source files (with whitespace between them)
 SRC_FILES := test.cpp test2.cpp test3.cpp test4.cpp test5.cpp \
-	test6.cpp test7.cpp test8.cpp test9.cpp test10.cpp
+	test6.cpp test7.cpp test8.cpp test9.cpp test10.cpp \
+	tcpserver_test.cpp tcpclient_test.cpp
 #Object files
 OBJECTS = $(patsubst %.cpp, %.o, $(SRC_FILES))
 #Target files
@@ -43,6 +44,19 @@ PACKAGE:
 	@cd $(BUILD) && mv lib$(DIR_NAME).a lib/lib$(DIR_NAME).a
 	@echo "$(GREEN)All compile done.$(RESET)"
 
+
+tcpserver_test: tcpserver_test.cpp
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
+tcpclient_test: tcpclient_test.cpp
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
+test5: test5.cpp
+	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
+	@$(CC) -c $(FLAGS) $<
+	@$(CC) $(FLAGS) -L$(shell pwd)/$(BUILD)/lib -o $@ $@.o -l$(DIR_NAME)
 test9: test9.cpp
 	@echo "$(BLUE)Compile $(notdir $@)$(RESET)"
 	@$(CC) -c $(FLAGS) $<
