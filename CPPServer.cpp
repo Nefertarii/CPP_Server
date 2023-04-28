@@ -5,6 +5,7 @@
 #include <iostream>
 
 using namespace Wasi;
+using namespace std;
 
 Poll::EventLoop* global_loop = nullptr;
 bool running                 = false;
