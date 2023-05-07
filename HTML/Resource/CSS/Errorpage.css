@@ -1,0 +1,15 @@
+.notfound {
+	padding-top: 12rem;
+	min-width: 30rem;
+	color: white;
+}
+
+.gif {
+	padding-top: 1rem;
+	background-image: url(../Image/gif/John_Travolta_Not_Found.gif);
+	background-repeat: no-repeat;
+	width: 480px;
+	height: 204px;
+	text-align: center;
+	margin: auto;
+}

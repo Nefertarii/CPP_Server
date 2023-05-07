@@ -1,0 +1,199 @@
+[2023-05-07 02:10:02.106][Thread:1622130][webserver.cpp:96 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:10:02.106][Thread:1622189][webserver.cpp:74 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:10:02.106][Thread:1622189][webserver.cpp:75 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/Setting/server_setting
+[2023-05-07 02:10:07.106][Thread:1622189][webserver.cpp:78 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:10:12.777][Thread:1622130][webserver.cpp:108 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:10:15.889][Thread:1622130][webserver.cpp:108 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:10:18.889][Thread:1622130][webserver.cpp:96 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:10:18.889][Thread:1622284][webserver.cpp:74 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:10:18.889][Thread:1622284][webserver.cpp:75 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/Setting/server_setting
+[2023-05-07 02:10:23.890][Thread:1622284][webserver.cpp:78 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:10:26.004][Thread:1622130][webserver.cpp:108 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:10:27.169][Thread:1622130][webserver.cpp:108 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:14:41.447][Thread:1623501][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:14:41.448][Thread:1623504][webserver.cpp:75 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:14:41.448][Thread:1623504][webserver.cpp:76 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/Setting/server_setting
+[2023-05-07 02:14:46.448][Thread:1623504][webserver.cpp:79 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:15:29.834][Thread:1623501][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:15:45.270][Thread:1623775][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:15:45.270][Thread:1623783][webserver.cpp:75 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:15:45.270][Thread:1623783][webserver.cpp:76 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/Setting/server_setting
+[2023-05-07 02:15:46.657][Thread:1623775][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:15:57.166][Thread:1623814][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:15:57.166][Thread:1623820][webserver.cpp:75 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:15:57.166][Thread:1623820][webserver.cpp:76 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/Setting/server_setting
+[2023-05-07 02:16:02.167][Thread:1623820][webserver.cpp:79 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:16:56.412][Thread:1623814][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:16:59.412][Thread:1623814][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:16:59.413][Thread:1624366][webserver.cpp:75 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:16:59.413][Thread:1624366][webserver.cpp:76 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/Setting/server_setting
+[2023-05-07 02:17:04.413][Thread:1624366][webserver.cpp:79 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:17:09.648][Thread:1623814][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:19:34.540][Thread:1625279][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:19:34.540][Thread:1625286][webserver.cpp:75 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:19:34.540][Thread:1625286][webserver.cpp:76 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build../Setting/server_setting
+[2023-05-07 02:19:39.541][Thread:1625286][webserver.cpp:79 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:19:43.516][Thread:1625279][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:19:45.904][Thread:1625279][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:19:47.381][Thread:1625279][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:19:49.925][Thread:1625279][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:19:56.752][Thread:1625436][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:19:56.753][Thread:1625437][webserver.cpp:75 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:19:56.753][Thread:1625437][webserver.cpp:76 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/../Setting/server_setting
+[2023-05-07 02:20:01.753][Thread:1625437][webserver.cpp:79 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:32:16.879][Thread:1625436][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:32:19.284][Thread:1625436][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 02:33:19.614][Thread:1629141][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 02:33:19.615][Thread:1629169][webserver.cpp:75 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 02:33:19.615][Thread:1629169][webserver.cpp:76 WebServer()][INFO] reading setting file:/home/ubuntu/Server/buildserver_setting.txt
+[2023-05-07 02:33:24.615][Thread:1629169][webserver.cpp:79 WebServer()][FATAL] please check file, setting file can't find
+[2023-05-07 02:33:45.825][Thread:1629141][webserver.cpp:110 WebserverStop()][INFO] Server is not running
+[2023-05-07 16:12:33.026][Thread:1851390][webserver.cpp:103 WebserverStart()][INFO] Ready to start server
+[2023-05-07 16:12:33.026][Thread:1851391][webserver.cpp:76 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 16:12:33.026][Thread:1851391][webserver.cpp:77 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/server_setting.txt
+[2023-05-07 16:12:33.026][Thread:1851391][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f00a6627cb0 created in thread:1851391
+[2023-05-07 16:12:33.026][Thread:1851391][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f00a6627d40 created in thread:1851391
+[2023-05-07 16:12:33.026][Thread:1851391][httpserver.cpp:125 Start()][INFO] HttpServer [Wasi's Server] start listening on 0.0.0.0:8000
+[2023-05-07 16:12:33.026][Thread:1851392][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f00a5e26c90 created in thread:1851392
+[2023-05-07 16:12:33.026][Thread:1851393][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f00a5625c90 created in thread:1851393
+[2023-05-07 16:12:33.026][Thread:1851394][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f00a4e24c90 created in thread:1851394
+[2023-05-07 16:12:33.026][Thread:1851395][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f0097ffec90 created in thread:1851395
+[2023-05-07 16:12:33.026][Thread:1851391][webserver.cpp:95 WebServer()][INFO] server start
+[2023-05-07 16:13:04.081][Thread:1851391][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23387
+[2023-05-07 16:13:04.081][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23387 now is connected
+[2023-05-07 16:13:04.081][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/index.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:04.082][Thread:1851391][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23388
+[2023-05-07 16:13:04.082][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23388 now is connected
+[2023-05-07 16:13:05.461][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Background.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.462][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Followleft.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.476][Thread:1851391][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23393
+[2023-05-07 16:13:05.476][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23393 now is connected
+[2023-05-07 16:13:05.476][Thread:1851391][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23391
+[2023-05-07 16:13:05.476][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23391 now is connected
+[2023-05-07 16:13:05.476][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Footer.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.477][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/index.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.480][Thread:1851391][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23394
+[2023-05-07 16:13:05.480][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23394 now is connected
+[2023-05-07 16:13:05.480][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Login.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.481][Thread:1851391][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23392
+[2023-05-07 16:13:05.481][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23392 now is connected
+[2023-05-07 16:13:05.481][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Bgstar.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.505][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.506][Thread:1851391][filestat.cpp:39 SetFileStat()][ERROR] can't find file:/home/ubuntu/Server/Resource/HTML/Resource/CSS/Resource/CSS/Color.css
+[2023-05-07 16:13:05.513][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.598][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/Cat1_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.600][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_64.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.606][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/svg/glow.svgagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:05.669][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:11.701][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Errorpage/Page404.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:12.004][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Errorpage.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:12.120][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/gif/John_Travolta_Not_Found.gifagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:12.124][Thread:1851391][tcpconnection.cpp:147 SendFileInLoop()][ERROR] send file to:222.247.153.158:23392 error, code:11
+[2023-05-07 16:13:12.124][Thread:1851391][tcpconnection.cpp:149 SendFileInLoop()][DEBUG] resource in using
+[2023-05-07 16:13:12.174][Thread:1851391][tcpconnection.cpp:147 SendFileInLoop()][ERROR] send file to:222.247.153.158:23392 error, code:11
+[2023-05-07 16:13:12.174][Thread:1851391][tcpconnection.cpp:149 SendFileInLoop()][DEBUG] resource in using
+[2023-05-07 16:13:12.227][Thread:1851391][tcpconnection.cpp:147 SendFileInLoop()][ERROR] send file to:222.247.153.158:23392 error, code:11
+[2023-05-07 16:13:12.227][Thread:1851391][tcpconnection.cpp:149 SendFileInLoop()][DEBUG] resource in using
+[2023-05-07 16:13:12.284][Thread:1851391][tcpconnection.cpp:147 SendFileInLoop()][ERROR] send file to:222.247.153.158:23392 error, code:11
+[2023-05-07 16:13:12.285][Thread:1851391][tcpconnection.cpp:149 SendFileInLoop()][DEBUG] resource in using
+[2023-05-07 16:13:13.841][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/error.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:15.128][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/index.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:15.468][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:15.468][Thread:1851391][filestat.cpp:39 SetFileStat()][ERROR] can't find file:/home/ubuntu/Server/Resource/HTML/Resource/CSS/Resource/CSS/Color.css
+[2023-05-07 16:13:18.359][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Audio/Audio.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:18.657][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Audio.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:18.727][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Audio/NeverGonnaGiveYouUp.mp3agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:18.732][Thread:1851391][tcpconnection.cpp:147 SendFileInLoop()][ERROR] send file to:222.247.153.158:23388 error, code:11
+[2023-05-07 16:13:18.732][Thread:1851391][tcpconnection.cpp:149 SendFileInLoop()][DEBUG] resource in using
+[2023-05-07 16:13:18.782][Thread:1851391][tcpconnection.cpp:147 SendFileInLoop()][ERROR] send file to:222.247.153.158:23388 error, code:11
+[2023-05-07 16:13:18.782][Thread:1851391][tcpconnection.cpp:149 SendFileInLoop()][DEBUG] resource in using
+[2023-05-07 16:13:21.177][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Video/Video.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:21.506][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Video.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:21.517][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Video/Foeversea.mp4agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:26.603][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:26.603][Thread:1851391][filestat.cpp:39 SetFileStat()][ERROR] can't find file:/home/ubuntu/Server/Resource/HTML/Resource/CSS/Resource/CSS/Color.css
+[2023-05-07 16:13:44.410][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/index.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.445][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Followleft.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.448][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/index.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.454][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Background.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.455][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Footer.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.495][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.503][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Bgstar.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.504][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Login.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.525][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.525][Thread:1851391][filestat.cpp:39 SetFileStat()][ERROR] can't find file:/home/ubuntu/Server/Resource/HTML/Resource/CSS/Resource/CSS/Color.css
+[2023-05-07 16:13:44.542][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/Cat1_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.576][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_64.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.576][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/svg/glow.svgagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:44.638][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:45.849][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:13:45.849][Thread:1851391][filestat.cpp:39 SetFileStat()][ERROR] can't find file:/home/ubuntu/Server/Resource/HTML/Resource/CSS/Resource/CSS/Color.css
+[2023-05-07 16:14:49.077][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/index.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.105][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Followleft.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.105][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Background.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.108][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Footer.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.109][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/index.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.154][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.173][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Bgstar.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.180][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Login.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.222][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/svg/glow.svgagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.227][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/Cat1_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.234][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_64.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:14:49.311][Thread:1851391][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:15:51.833][Thread:1851390][eventloop.cpp:95 Quit()][INFO] eventLoop:0x7f00a6627d40  earse in thread:1851391
+[2023-05-07 16:15:51.833][Thread:1851390][eventloop.cpp:135 IsInLoopThread()][WARNING] eventLoop thread:1851391 not current, Should be: 1851390
+[2023-05-07 16:15:51.833][Thread:1851390][webserver.cpp:120 WebserverStop()][INFO] Server is stop now
+[2023-05-07 16:15:51.833][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23387 now is disconnected
+[2023-05-07 16:15:51.833][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23388 now is disconnected
+[2023-05-07 16:15:51.833][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23393 now is disconnected
+[2023-05-07 16:15:51.833][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23391 now is disconnected
+[2023-05-07 16:15:51.833][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23394 now is disconnected
+[2023-05-07 16:15:51.834][Thread:1851391][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23392 now is disconnected
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:95 Quit()][INFO] eventLoop:0x7f00a5e26c90  earse in thread:1851392
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:135 IsInLoopThread()][WARNING] eventLoop thread:1851392 not current, Should be: 1851391
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:95 Quit()][INFO] eventLoop:0x7f00a5625c90  earse in thread:1851393
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:135 IsInLoopThread()][WARNING] eventLoop thread:1851393 not current, Should be: 1851391
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:95 Quit()][INFO] eventLoop:0x7f00a4e24c90  earse in thread:1851394
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:135 IsInLoopThread()][WARNING] eventLoop thread:1851394 not current, Should be: 1851391
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:95 Quit()][INFO] eventLoop:0x7f0097ffec90  earse in thread:1851395
+[2023-05-07 16:15:51.834][Thread:1851391][eventloop.cpp:135 IsInLoopThread()][WARNING] eventLoop thread:1851395 not current, Should be: 1851391
+[2023-05-07 16:16:21.556][Thread:1852566][webserver.cpp:98 WebserverStart()][INFO] Ready to start server
+[2023-05-07 16:16:21.556][Thread:1852570][webserver.cpp:76 WebServer()][INFO] server start in dir:/home/ubuntu/Server/build
+[2023-05-07 16:16:21.556][Thread:1852570][webserver.cpp:77 WebServer()][INFO] reading setting file:/home/ubuntu/Server/build/server_setting.txt
+[2023-05-07 16:16:21.557][Thread:1852570][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f8efe4fdcb0 created in thread:1852570
+[2023-05-07 16:16:21.557][Thread:1852570][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f8efe4fdd40 created in thread:1852570
+[2023-05-07 16:16:21.557][Thread:1852570][httpserver.cpp:125 Start()][INFO] HttpServer [Wasi's Server] start listening on 0.0.0.0:8000
+[2023-05-07 16:16:21.557][Thread:1852571][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f8efdcfcc90 created in thread:1852571
+[2023-05-07 16:16:21.557][Thread:1852572][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f8efd4fbc90 created in thread:1852572
+[2023-05-07 16:16:21.557][Thread:1852573][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f8efccfac90 created in thread:1852573
+[2023-05-07 16:16:21.557][Thread:1852574][eventloop.cpp:60 EventLoop()][INFO] eventLoop:0x7f8eefffec90 created in thread:1852574
+[2023-05-07 16:16:21.557][Thread:1852570][webserver.cpp:90 WebServer()][INFO] server start
+[2023-05-07 16:16:25.225][Thread:1852570][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23474
+[2023-05-07 16:16:25.225][Thread:1852570][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23474 now is connected
+[2023-05-07 16:16:25.229][Thread:1852570][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23473
+[2023-05-07 16:16:25.229][Thread:1852570][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23473 now is connected
+[2023-05-07 16:16:25.229][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/index.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.260][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Background.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.265][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Followleft.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.274][Thread:1852570][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23477
+[2023-05-07 16:16:25.274][Thread:1852570][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23477 now is connected
+[2023-05-07 16:16:25.274][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Footer.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.280][Thread:1852570][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23476
+[2023-05-07 16:16:25.281][Thread:1852570][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23476 now is connected
+[2023-05-07 16:16:25.281][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/index.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.310][Thread:1852570][tcpserver.cpp:15 NewConnection()][INFO] new connection from:222.247.153.158:23475
+[2023-05-07 16:16:25.310][Thread:1852570][tcpconnection.cpp:195 SetState()][DEBUG] 222.247.153.158:23475 now is connected
+[2023-05-07 16:16:25.320][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Color.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.333][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Bgstar.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.342][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Login.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.407][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/Cat1_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.411][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_64.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.421][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/svg/glow.svgagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:25.513][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/Image/png/logo_32.pngagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:30.846][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/index.htmlagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:30.893][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Followleft.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:30.895][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/index.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:30.897][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Background.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:30.898][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/CSS/Footer.cssagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:30.940][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Login.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36
+[2023-05-07 16:16:30.940][Thread:1852570][httpprocess.cpp:94 ParseRequest()][INFO] peer_addr 222.247.153.158 requesttarget:/Resource/JS/Bgstar.jsagent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36

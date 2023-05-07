@@ -1,0 +1,66 @@
+@import "Color.css";
+
+html,
+body {
+    margin: 0%;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #040D21;
+    background-image: url(../Image/svg/glow.svg);
+    background-size: 200%;
+    background-position-x: 50%;
+    background-position-y: 50%;
+}
+
+Header {
+    width: 100%;
+    margin: auto;
+    height: 5rem;
+    text-align: center;
+    padding-top: 1rem;
+    color: var(--font-light);
+}
+
+@keyframes animStar {
+    from {
+        transform: translateY(0)
+    }
+
+    to {
+        transform: translateY(-2000px)
+    }
+}
+
+@media(prefers-reduced-motion) {
+
+    .bg-stars-1,
+    .bg-stars-2,
+    .bg-stars-3 {
+        animation: none
+    }
+}
+
+.bg-stars {
+    flex: auto;
+    position: relative;
+    box-shadow: solid;
+}
+
+#bg-stars-1 {
+    background: transparent;
+    width: 1px;
+    height: 1px;
+    animation: animStar 100s linear infinite;
+}
+
+#bg-stars-2 {
+    width: 2px;
+    height: 2px;
+    animation: animStar 120s linear infinite;
+}
+
+#bg-stars-3 {
+    width: 3px;
+    height: 3px;
+    animation: animStar 150s linear infinite;
+}

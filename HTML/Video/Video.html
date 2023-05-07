@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>音频测试</title>
+    <link type="text/css" rel="stylesheet" href="../Resource/CSS/Background.css" />
+    <link type="text/css" rel="stylesheet" href="../Resource/CSS/Followleft.css" />
+    <link type="text/css" rel="stylesheet" href="../Resource/CSS/Footer.css" />
+    <link type="text/css" rel="stylesheet" href="../Resource/CSS/Video.css" />
+    <link rel="icon" href="../Resource/Image/png/logo_32.png" type="image/x-icon">
+</head>
+
+<body>
+    <Header>
+        <h1>一个网站</h1>
+    </Header>
+    <Main>
+        <div class="Follow-left" id="Follow-left-admission">
+            <div class="Follow-left-Login-fail">
+                <div class="Empty"></div>
+                <div class="Follow-left-logo" id="avatar-fail"></div>
+                <div class="Empty"></div>
+                <div>邮箱</div>
+                <input class="input-name" id="username" type="text" />
+                <div>密码</div>
+                <input class="input-name" id="password" type="password" />
+                <div class="Empty"></div>
+                <input class="submit-continue" id="login-button" type="button" value="登录" />
+                <div class="Empty"></div>
+                <div>还没有账号? <a href="Regsiter/Regsiter.html">点击注册</a></div>
+            </div>
+            <div class="Follow-left-Login-success">
+                <div class="Empty"></div>
+                <div class="Follow-left-logo" id="avatar-success"></div>
+                <div class="Empty"></div>
+                <div>用户</div>
+                <div class="Empty"></div>
+                <div id="Login-username">User</div>
+                <div class="Empty"></div>
+                <div>前往<a href="Errorpage/Page404.html">个人中心</a></div>
+                <div class="Empty"></div>
+                <input class="submit-continue" id="login-out" type="button" value="注销登录" />
+            </div>
+        </div>
+        <div class="bg-stars">
+            <div id="bg-stars-1"></div>
+            <div id="bg-stars-2"></div>
+            <div id="bg-stars-3"></div>
+        </div>
+        <Main>
+            <div class="card-list">
+                <div class="card">
+                    <video autoplay="true" loop="true" muted="false">
+                        <source src="../Resource/Video/Foeversea.mp4" type="video/mp4" />
+                        Your browser does not support this video format.
+                    </video>
+                </div>
+            </div>
+        </Main>
+    </Main>
+    <Footer>
+        <div class="Github-link">
+            <a href="https://github.com/Nefertarii/" target="_blank">
+                <svg class="Github-svg" fill-rule="evenodd" width="16" height="16">
+                    <path
+                        d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                    </path>
+                </svg>
+                Github:Nefertarii
+            </a>
+        </div>
+        <div class="CN-bei-an">
+            <a href="https://beian.miit.gov.cn/" target="_blank">
+                湘ICP备2021014961号-1
+            </a>
+        </div>
+    </Footer>
+</body>
+<script src="../Resource/JS/Bgstar.js"></script>
+<script src="../Resource/JS/Login.js"></script>
+
+</html>
